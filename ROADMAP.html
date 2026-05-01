@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WH40k Simulator — Roadmap</title>
+<title>Warpsmith — Roadmap</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -127,14 +127,14 @@ details.features > summary { list-style: none; display: none; }
 <div class="wrapper">
 
   <div class="header">
-    <h1><span class="g1">⚔️</span> WH40k Battle Simulator <span class="g2">⟡</span> Roadmap</h1>
-    <div class="sub"><span class="pulse-dot"></span>v0.2.0 · 7 phases · ~68 features · ~240h</div>
+    <h1><span class="g1">🔧</span> Warpsmith <span class="g2">⟡</span> Roadmap</h1>
+    <div class="sub"><span class="pulse-dot"></span>v0.2.0 · 7 phases · ~75 features · ~240h</div>
   </div>
 
   <!-- Stats -->
   <div class="stats">
-    <div class="stat"><div class="val g1">4</div><div class="lbl">Phases Started</div></div>
-    <div class="stat"><div class="val g2">22</div><div class="lbl">Files Complete</div></div>
+    <div class="stat"><div class="val g1">2</div><div class="lbl">Phases Started</div></div>
+    <div class="stat"><div class="val g2">68</div><div class="lbl">Files Complete</div></div>
     <div class="stat"><div class="val g3">360</div><div class="lbl">Wiki Pages</div></div>
     <div class="stat"><div class="val g4">0.2.0</div><div class="lbl">Current Version</div></div>
   </div>
@@ -147,7 +147,7 @@ details.features > summary { list-style: none; display: none; }
       <div class="phase-header" onclick="this.nextElementSibling.nextElementSibling.hidden^=1">
         <div class="phase-bar done"></div>
         <div class="phase-info">
-          <div class="num">Phase 0 · 12 features</div>
+          <div class="num">Phase 0 · 15 features</div>
           <div class="name">📦 Foundation</div>
           <div class="desc">Auth, Wiki, Billing, OAuth, Docs scaffold</div>
         </div>
@@ -169,6 +169,9 @@ details.features > summary { list-style: none; display: none; }
           <div class="feature"><span class="f-status done"></span><span class="f-icon">💳</span><span class="f-name">Billing stubs · Feature Gate · Plans</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">📊</span><span class="f-name">Balance Dataslate v3.4 applied</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">📝</span><span class="f-name">Faction Packs: AdMech + Ork Errata</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🧹</span><span class="f-name">Linting: ruff + mypy + pre-commit</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📄</span><span class="f-name">Feature docs: Phase 1 (12 specs) + Phase 2 (12 specs)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🏷️</span><span class="f-name">Release policy + CHANGELOG</span><span class="f-hours">✅</span></div>
         </div>
       </div>
     </div>
@@ -182,15 +185,15 @@ details.features > summary { list-style: none; display: none; }
           <div class="name">⚙️ Combat Engine</div>
           <div class="desc">Monte Carlo dice · Hit→Wound→Save→Damage→FNP · /api/simulate</div>
         </div>
-        <div class="phase-pct"><span class="pct-active">20%</span></div>
+        <div class="phase-pct"><span class="pct-active">25%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
-      <div class="phase-progress"><div class="fill active"></div></div>
+      <div class="phase-progress"><div class="fill active" style="width:25%"></div></div>
       <div class="features">
         <div class="feature-list">
-          <div class="feature"><span class="f-status wip"></span><span class="f-icon">📦</span><span class="f-name">Unit dataclass (M/T/SV/W/LD/OC)</span><span class="f-deps"></span><span class="f-hours">2h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🔫</span><span class="f-name">Weapon dataclass (S/AP/D/keywords)</span><span class="f-deps"></span><span class="f-hours">1h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🔧</span><span class="f-name">Modifier system (±1, rerolls, caps)</span><span class="f-deps"></span><span class="f-hours">3h</span></div>
+          <div class="feature"><span class="f-status wip"></span><span class="f-icon">📦</span><span class="f-name">Unit dataclass (M/T/SV/W/LD/OC) + invul/FNP/wargear</span><span class="f-deps"></span><span class="f-hours">2h</span></div>
+          <div class="feature"><span class="f-status wip"></span><span class="f-icon">🔫</span><span class="f-name">Weapon dataclass (S/AP/D/keywords) + DiceExpr</span><span class="f-deps"></span><span class="f-hours">1h</span></div>
+          <div class="feature"><span class="f-status wip"></span><span class="f-icon">🔧</span><span class="f-name">Modifier system (±1, rerolls, caps, sustained/lethal)</span><span class="f-deps"></span><span class="f-hours">3h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">📥</span><span class="f-name">Wiki Loader — .md → Unit objects</span><span class="f-deps">SCHEMA.md</span><span class="f-hours">4h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">🎲</span><span class="f-name">Dice pool (NumPy D6 Monte Carlo)</span><span class="f-deps"></span><span class="f-hours">2h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">💥</span><span class="f-name">Combat sequence: Hit→Wound→Save→Damage→FNP</span><span class="f-deps">dice, model</span><span class="f-hours">4h</span></div>
@@ -423,11 +426,11 @@ details.features > summary { list-style: none; display: none; }
     <span><span class="sw empty"></span>Not Started</span>
     <span style="color:#334155;">|</span>
     <span>Phase 0: <span class="sw done"></span> 100%</span>
-    <span>Phase 1: <span class="sw wip"></span> 20%</span>
+    <span>Phase 1: <span class="sw wip"></span> 25%</span>
     <span>Phases 2-7: <span class="sw empty"></span> 0%</span>
   </div>
 
-  <div class="footer">WH40k Battle Simulator · v0.2.0 · 2026-05-01</div>
+  <div class="footer">Warpsmith · v0.2.0 · 2026-05-01</div>
 
 </div>
 

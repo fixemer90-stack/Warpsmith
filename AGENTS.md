@@ -128,9 +128,11 @@ simulator/
 - **Кэш:** pickle-файл Registry для быстрого старта
 
 ### 4. Git
-- Пока не инициализирован (WSL + D: drive issue)
+- Репозиторий: `/mnt/d/Python/.git` (общий с другими проектами)
 - Коммиты: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`
-- Ветки: `main`, `feat/<name>`, `fix/<name>`
+- Ветки: `main`, `feat/<name>`, `fix/<name>`, `docs/<name>`
+- Версионирование: ZeroVer `v0.<PHASE>.<PATCH>` (см. RELEASE.md)
+- PR обязателен для всех изменений в main
 - `.gitignore`: `__pycache__/`, `.env`, `*.db`, `wiki/`
 
 ### 5. Фронт

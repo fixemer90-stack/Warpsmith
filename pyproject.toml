@@ -1,6 +1,6 @@
 [project]
 name = "warpsmith"
-version = "0.2.0"
+version = "0.2.1"
 description = "Warhammer 40,000 Battle Simulator"
 requires-python = ">=3.12"
 
@@ -79,6 +79,8 @@ ignore = [
     "S105",
     # 0.0.0.0 в production — intentional
     "S104",
+    # pickle для локального кэша вики — безопасно
+    "S301",
 ]
 unfixable = ["F841"]  # unused-variable — ручная проверка
 
