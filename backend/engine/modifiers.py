@@ -110,6 +110,12 @@ TAG_TO_MODIFIERS: dict[str, list[Modifier]] = {
     "blast": [
         Modifier("attack_count", "add", 1, source="wargear", condition={"squad_size_min": 5}),
     ],
+    "rapid_fire_1": [
+        Modifier("attack_count", "add", 1, source="wargear", condition={"half_range": True}),
+    ],
+    "rapid_fire_2": [
+        Modifier("attack_count", "add", 2, source="wargear", condition={"half_range": True}),
+    ],
 }
 
 
