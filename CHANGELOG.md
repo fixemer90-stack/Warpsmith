@@ -21,6 +21,18 @@
 
 ## [Unreleased]
 
+### Added
+- **Phase 2: Game System начат!**
+- F2.1 Game State dataclass: `UnitState`, `PlayerState`, `GameState` с позициями, ранами, CP, VP, раундами
+- F2.1 Методы для движения юнитов, повреждений, переходов фаз, определения победителя
+- Тесты `tests/test_game_state.py` для управления состоянием игры
+- F2.2 2D Map: `BattlefieldMap` с NumPy terrain array, deployment zones, objectives
+- F2.2 Mission maps: Dawn of War, Spearhead с правильными зонами развертывания
+- Тесты `tests/test_map.py` для карт, зон развертывания и pathfinding
+- F2.3 Line of Sight: `LineOfSightCalculator` с ray casting алгоритмом
+- F2.3 Методы: `has_line_of_sight()`, `can_shoot_at()`, `can_charge_at()`, cover detection
+- Тесты `tests/test_line_of_sight.py` для видимости и стрельбы
+
 ## [0.2.1] — 2026-05-01
 
 ### Added
