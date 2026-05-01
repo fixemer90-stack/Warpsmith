@@ -1,0 +1,59 @@
+# Changelog — Warpsmith
+
+Все заметные изменения проекта фиксируются в этом файле.
+
+Формат: [Keep a Changelog](https://keepachangelog.com/)
+Версионирование: ZeroVer `v0.<PHASE>.<PATCH>`
+
+---
+
+## [Unreleased]
+
+## [0.2.1] — 2026-05-01
+
+### Added
+- F1.1 `Unit` dataclass: добавлены `invulnerable_save`, `feel_no_pain`, `wargear_options`, `transports`
+- F1.1 `WargearSlot` dataclass для описания слотов варгира и вариантов выбора
+- F1.1 методы `effective_toughness()`, `best_save()`, `max_wounds_in_squad()`
+- Тесты `tests/test_unit.py` для `Unit` и `WargearSlot`
+- F1.2 `DiceExpr` helpers: `parse_dice_expression()`, `resolve_dice()`, `dice_expr_to_str()`
+- Тесты `tests/test_weapon.py` для dice expression parsing и нового `Weapon`
+- F1.3 `backend/engine/modifiers.py`: модификаторы шагов боя, conditional checks, weapon tag mapping, reroll rules
+- Тесты `tests/test_modifiers.py` для `apply_modifiers()`, `build_weapon_modifiers()` и `should_reroll()`
+- F1.4 `backend/loader/parser.py`: парсинг frontmatter, markdown-таблиц и bullet weapon profiles в `Unit`/`Weapon`
+- F1.4 `backend/loader/schema.py`: coercion helpers для wiki frontmatter
+- F1.4 `backend/loader/registry.py`: загрузка даташитов, кэш через pickle, безопасная инициализация singleton registry
+- Тесты `tests/test_parser.py` для frontmatter parsing, markdown weapon tables, registry cache и реального `Boyz.md`
+- F1.5 `backend/engine/dice.py`: `DicePool`, `SimulationStats`, `compute_stats()` и batched Monte Carlo simulation helpers
+- Тесты `tests/test_dice.py` для range checks, reproducibility, `simulate()` и агрегирования статистики
+- RELEASE.md: политика версионирования (ZeroVer), ветвления (GitHub Flow), релизов
+- CHANGELOG.md: история изменений в формате Keep a Changelog
+
+### Changed
+- F1.1 `backend/model/unit.py`: добавлена валидация полей `Unit` через `__post_init__`
+- F1.2 `Weapon` переписан со строкового формата на структурированный контракт: `type`, `range_max`, `attacks_dice`, `skill`, `damage_dice`, `tags`
+- Проект переименован в **Warpsmith**
+- ROADMAP.html: обновлён заголовок, прогресс (25%), Phase 0 расширена до 15 фич
+
+## [0.2.0] — 2026-04-30
+
+### Added
+- **Phase 0: Foundation** — скелет проекта
+- FastAPI scaffold + main.py + структура backend/web/docs
+- JWT auth + bcrypt + httponly cookie middleware
+- Register / Login / Logout routes + формы
+- OAuth Google + VK providers
+- SQLite schema + migration (users, rosters, replays)
+- Wiki vault: 360+ страниц (Orks, Tau, AdMech, rules)
+- C4 · ADR (11) · SRS (7 разделов) · UX docs
+- SVG Icons · ICON_MAP (16 категорий юнитов)
+- base.html + Tailwind CDN + HTMX + Alpine.js
+- Billing stubs · Feature Gate · Free/Premium tiers
+- Balance Dataslate v3.4 updates applied
+- Faction Packs: AdMech (26 стр.) + Ork Errata
+- Linting: ruff + mypy + pre-commit (новое)
+- Feature docs: Phase 1 (12 спеки) + Phase 2 (12 спек)
+
+### Changed
+- Проект переименован в **Warpsmith**
+- pyproject.toml: добавлены ruff, mypy, pre-commit конфиги

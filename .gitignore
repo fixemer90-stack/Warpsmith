@@ -9,6 +9,9 @@ build/
 .mypy_cache/
 .vscode/
 .idea/
+tests/.tmp_parser/
+tests/tmp*/
+tests/__pycache__/
 
 # Virtual env
 .venv/
