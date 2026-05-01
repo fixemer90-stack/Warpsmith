@@ -105,10 +105,20 @@ class WikiRegistry:
     def get_unit(self, name: str) -> Unit | None:
         return self.units.get(name)
 
+    def get_weapon(self, faction: str, weapon_name: str):
+        """Get a weapon by faction and name."""
+        # TODO: Implement proper weapon loading from wiki
+        # For now, return None to indicate weapon not found
+        return None
+
     def list_units(self, faction: str = "") -> list[str]:
         if faction:
             return [name for name, unit in self.units.items() if unit.faction == faction]
         return list(self.units.keys())
+
+    def list_factions(self) -> list[str]:
+        """List all available factions."""
+        return sorted(set(unit.faction for unit in self.units.values()))
 
 
 registry: WikiRegistry | None = None

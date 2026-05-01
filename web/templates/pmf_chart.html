@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-6">
+  <h1 class="text-3xl font-bold mb-6">Round Viewer - PMF Chart</h1>
+
+  <div class="bg-white rounded-lg shadow p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-4">Simulation Results</h2>
+
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div>
+        <strong>Weapon:</strong> <span id="weapon-name">-</span><br>
+        <strong>Target:</strong> <span id="target-name">-</span><br>
+        <strong>Iterations:</strong> <span id="iterations">-</span><br>
+        <strong>Time:</strong> <span id="time">-</span>ms
+      </div>
+      <div>
+        <strong>Mean Damage:</strong> <span id="mean-damage">-</span><br>
+        <strong>Median Damage:</strong> <span id="median-damage">-</span><br>
+        <strong>Kill Probability:</strong> <span id="kill-prob">-</span><br>
+        <strong>Max Damage:</strong> <span id="max-damage">-</span>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <canvas id="pmfChart" width="400" height="200"></canvas>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 text-center">
+      <div class="bg-blue-50 p-4 rounded">
+        <div class="text-2xl font-bold text-blue-600" id="avg-attacks">-</div>
+        <div class="text-sm text-blue-800">Avg Attacks</div>
+      </div>
+      <div class="bg-green-50 p-4 rounded">
+        <div class="text-2xl font-bold text-green-600" id="avg-hits">-</div>
+        <div class="text-sm text-green-800">Avg Hits</div>
+      </div>
+      <div class="bg-red-50 p-4 rounded">
+        <div class="text-2xl font-bold text-red-600" id="avg-unsaved">-</div>
+        <div class="text-sm text-red-800">Avg Unsaved Wounds</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-semibold mb-4">Run New Simulation</h2>
+
+    <form id="simulation-form" class="space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Attacker Faction</label>
+          <select id="attacker-faction" name="attacker_faction" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            <option value="">Select faction...</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Attacker Unit</label>
+          <select id="attacker-unit" name="attacker_unit" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            <option value="">Select unit...</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Weapon Type</label>
+          <select id="weapon-type" name="weapon_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            <option value="ranged">Ranged</option>
+            <option value="melee">Melee</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Weapon</label>
+          <select id="weapon-name" name="weapon_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            <option value="">Select weapon...</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Defender Faction</label>
+          <select id="defender-faction" name="defender_faction" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            <option value="">Select faction...</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Defender Unit</label>
+          <select id="defender-unit" name="defender_unit" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            <option value="">Select unit...</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Distance</label>
+          <input type="number" id="distance" name="distance" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="24">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Squad Size</label>
+          <input type="number" id="squad-size" name="squad_size" value="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Iterations</label>
+          <input type="number" id="iterations" name="n_iterations" value="10000" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+        </div>
+      </div>
+
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+        Run Simulation
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+let pmfChart = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadFactions();
+
+  // Form submission
+  document.getElementById('simulation-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    runSimulation();
+  });
+
+  // Dynamic faction/unit/weapon loading
+  document.getElementById('attacker-faction').addEventListener('change', function() {
+    loadUnits('attacker');
+  });
+  document.getElementById('defender-faction').addEventListener('change', function() {
+    loadUnits('defender');
+  });
+  document.getElementById('attacker-unit').addEventListener('change', function() {
+    loadWeapons();
+  });
+  document.getElementById('weapon-type').addEventListener('change', loadWeapons);
+});
+
+async function loadFactions() {
+  try {
+    const response = await fetch('/api/factions');
+    const data = await response.json();
+    const factions = data.factions;
+
+    const attackerSelect = document.getElementById('attacker-faction');
+    const defenderSelect = document.getElementById('defender-faction');
+
+    factions.forEach(faction => {
+      attackerSelect.innerHTML += `<option value="${faction}">${faction}</option>`;
+      defenderSelect.innerHTML += `<option value="${faction}">${faction}</option>`;
+    });
+  } catch (error) {
+    console.error('Error loading factions:', error);
+  }
+}
+
+async function loadUnits(type) {
+  const faction = document.getElementById(`${type}-faction`).value;
+  const unitSelect = document.getElementById(`${type}-unit`);
+
+  if (!faction) return;
+
+  try {
+    const response = await fetch(`/api/units/${faction}`);
+    const data = await response.json();
+    const units = data.units;
+
+    unitSelect.innerHTML = '<option value="">Select unit...</option>';
+    units.forEach(unit => {
+      unitSelect.innerHTML += `<option value="${unit}">${unit}</option>`;
+    });
+  } catch (error) {
+    console.error('Error loading units:', error);
+  }
+}
+
+async function loadWeapons() {
+  const faction = document.getElementById('attacker-faction').value;
+  const unit = document.getElementById('attacker-unit').value;
+  const weaponType = document.getElementById('weapon-type').value;
+  const weaponSelect = document.getElementById('weapon-name');
+
+  if (!faction || !unit) return;
+
+  try {
+    const response = await fetch(`/api/units/${faction}/${unit}/weapons`);
+    const data = await response.json();
+
+    const weapons = weaponType === 'melee' ? data.melee_weapons : data.ranged_weapons;
+    weaponSelect.innerHTML = '<option value="">Select weapon...</option>';
+    weapons.forEach(weapon => {
+      weaponSelect.innerHTML += `<option value="${weapon}">${weapon}</option>`;
+    });
+  } catch (error) {
+    console.error('Error loading weapons:', error);
+  }
+}
+
+async function runSimulation() {
+  const formData = new FormData(document.getElementById('simulation-form'));
+  const payload = {
+    attacker_faction: formData.get('attacker_faction'),
+    attacker_unit: formData.get('attacker_unit'),
+    defender_faction: formData.get('defender_faction'),
+    defender_unit: formData.get('defender_unit'),
+    weapon_name: formData.get('weapon_name'),
+    weapon_type: formData.get('weapon_type'),
+    distance: formData.get('distance') ? parseInt(formData.get('distance')) : null,
+    squad_size: parseInt(formData.get('squad_size')) || 1,
+    n_iterations: parseInt(formData.get('n_iterations')) || 10000,
+  };
+
+  try {
+    const response = await fetch('/api/simulate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    displayResults(data);
+  } catch (error) {
+    alert('Error running simulation: ' + error.message);
+    console.error('Simulation error:', error);
+  }
+}
+
+function displayResults(data) {
+  // Update text fields
+  document.getElementById('weapon-name').textContent = data.weapon;
+  document.getElementById('target-name').textContent = data.target;
+  document.getElementById('iterations').textContent = data.n_iterations.toLocaleString();
+  document.getElementById('time').textContent = data.simulation_time_ms.toFixed(1);
+  document.getElementById('mean-damage').textContent = data.stats.mean.toFixed(2);
+  document.getElementById('median-damage').textContent = data.stats.median.toFixed(1);
+  document.getElementById('kill-prob').textContent = (data.stats.kill_probability * 100).toFixed(1) + '%';
+  document.getElementById('max-damage').textContent = data.stats.max;
+  document.getElementById('avg-attacks').textContent = data.avg_attacks.toFixed(2);
+  document.getElementById('avg-hits').textContent = data.avg_hits.toFixed(2);
+  document.getElementById('avg-unsaved').textContent = data.avg_unsaved_wounds.toFixed(2);
+
+  // Create/update PMF chart
+  const ctx = document.getElementById('pmfChart').getContext('2d');
+
+  if (pmfChart) {
+    pmfChart.destroy();
+  }
+
+  const labels = data.stats.pmf.map(point => point[0]);
+  const probabilities = data.stats.pmf.map(point => point[1] * 100);
+
+  pmfChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Probability (%)',
+        data: probabilities,
+        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Damage Dealt'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Probability (%)'
+          },
+          beginAtZero: true
+        }
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: 'Probability Mass Function - Damage Distribution'
+        }
+      }
+    }
+  });
+}
+</script>
+{% endblock %}

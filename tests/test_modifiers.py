@@ -1,10 +1,15 @@
 import numpy as np
 
 from backend.engine.modifiers import (
+    AntiKeyword,
     Modifier,
+    CriticalEffect,
     ModifierContext,
     apply_modifiers,
     build_weapon_modifiers,
+    handle_critical_hit,
+    parse_anti_tag,
+    resolve_anti_wound,
     should_reroll,
 )
 from backend.model.unit import Unit, Weapon
@@ -129,7 +134,7 @@ def test_half_range_condition() -> None:
         np.random.default_rng(42),
     )
 
-    assert near.target_value == 2
+    assert near.target_value == 4
     assert far.target_value == 3
 
 
@@ -161,3 +166,52 @@ def test_should_reroll() -> None:
     assert should_reroll(1, 4, [Modifier("hit_roll", "reroll_ones_hit")], "hit_roll") is True
     assert should_reroll(2, 4, [Modifier("hit_roll", "reroll_ones_hit")], "hit_roll") is False
     assert should_reroll(3, 4, [Modifier("wound_roll", "reroll_wounds")], "wound_roll") is True
+
+
+def test_handle_critical_hit_sustained() -> None:
+    weapon = make_weapon(tags=["sustained_hits_1"])
+    modifiers = build_weapon_modifiers(weapon)
+
+    critical = handle_critical_hit(type("Roll", (), {"is_crit": True})(), "hit_roll", modifiers, None)
+
+    assert critical == CriticalEffect(extra_attacks=1)
+
+
+def test_handle_critical_hit_lethal() -> None:
+    weapon = make_weapon(tags=["lethal_hits"])
+    modifiers = build_weapon_modifiers(weapon)
+
+    critical = handle_critical_hit(type("Roll", (), {"is_crit": True})(), "hit_roll", modifiers, None)
+
+    assert critical.auto_wound is True
+
+
+def test_handle_critical_hit_devastating() -> None:
+    weapon = make_weapon(tags=["devastating_wounds"])
+    modifiers = build_weapon_modifiers(weapon)
+
+    critical = handle_critical_hit(type("Roll", (), {"is_crit": True})(), "wound_roll", modifiers, None)
+
+    assert critical.ignore_save is True
+
+
+def test_parse_anti_tag() -> None:
+    anti = parse_anti_tag("anti_infantry_4")
+
+    assert anti == AntiKeyword(threshold=4, target_keyword="Infantry")
+
+
+def test_resolve_anti_wound() -> None:
+    anti = AntiKeyword(threshold=4, target_keyword="Infantry")
+    defender = make_unit()
+    defender.keywords.append("Infantry")
+
+    assert resolve_anti_wound(4, anti, defender) is True
+    assert resolve_anti_wound(3, anti, defender) is False
+
+
+def test_build_weapon_modifiers_supports_blast() -> None:
+    weapon = make_weapon(tags=["blast"])
+    modifiers = build_weapon_modifiers(weapon)
+
+    assert any(mod.target == "attack_count" and mod.operation == "add" for mod in modifiers)

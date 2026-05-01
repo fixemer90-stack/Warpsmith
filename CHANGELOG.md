@@ -26,6 +26,16 @@
 - Тесты `tests/test_parser.py` для frontmatter parsing, markdown weapon tables, registry cache и реального `Boyz.md`
 - F1.5 `backend/engine/dice.py`: `DicePool`, `SimulationStats`, `compute_stats()` и batched Monte Carlo simulation helpers
 - Тесты `tests/test_dice.py` для range checks, reproducibility, `simulate()` и агрегирования статистики
+- F1.6 `backend/engine/combat.py`: `simulate_weapon_attack()`, `CombatResult` и полный pipeline Hit → Wound → Save → Damage → FNP
+- Тесты `tests/test_combat.py` для `Shoota vs Marine`, `Heavy Bolter vs Marine`, natural 1/6 и `Feel No Pain`
+- F1.7 `backend/engine/modifiers.py`: `TAG_TO_MODIFIERS`, `CriticalEffect`, `AntiKeyword`, `parse_anti_tag()` и critical keyword handling
+- F1.7 `backend/engine/combat.py`: интеграция `sustained_hits`, `lethal_hits`, `devastating_wounds`, `blast`, `rapid_fire_*` и `anti_*`
+- Тесты keyword-логики для crit effects, `anti_infantry`, `blast` и `rapid_fire`
+- F1.8 Плазма-оружие: механика перезарядки (overcharge) для плазменных орудий
+- Тесты `tests/test_combat.py` для сравнения обычной и перезаряженной плазмы
+- F1.9 POST `/api/simulate`: эндпоинт для симуляции с PMF-ответом JSON
+- F1.9 `/pmf-chart` страница с Chart.js визуализацией распределения урона
+- Тесты `tests/test_pmf_chart.py` для страницы PMF chart
 - RELEASE.md: политика версионирования (ZeroVer), ветвления (GitHub Flow), релизов
 - CHANGELOG.md: история изменений в формате Keep a Changelog
 

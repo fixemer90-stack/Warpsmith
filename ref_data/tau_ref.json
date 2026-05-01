@@ -1,0 +1,569 @@
+[
+  {
+    "name": "Cadre Fireblade",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "3",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Commander Farsight",
+    "M": "10\"",
+    "T": "5",
+    "Sv": "2+",
+    "W": "8",
+    "Ld": "6+",
+    "OC": "2"
+  },
+  {
+    "name": "Commander In Coldstar Battlesuit",
+    "M": "12\"",
+    "T": "5",
+    "Sv": "3+",
+    "W": "6",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Commander In Enforcer Battlesuit",
+    "M": "8\"",
+    "T": "5",
+    "Sv": "2+",
+    "W": "6",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Commander Shadowsun",
+    "M": "10\"",
+    "T": "4",
+    "Sv": "3+",
+    "W": "6",
+    "Ld": "6+",
+    "OC": "1"
+  },
+  {
+    "name": "Darkstrider",
+    "M": "7\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "3",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Ethereal",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "5+",
+    "W": "3",
+    "Ld": "6+",
+    "OC": "1"
+  },
+  {
+    "name": "Firesight Team",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "4",
+    "Ld": "7+",
+    "OC": "3"
+  },
+  {
+    "name": "Kroot Flesh Shaper",
+    "M": "7\"",
+    "T": "3",
+    "Sv": "6+",
+    "W": "3",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Kroot Lone-Spear",
+    "M": "12\"",
+    "T": "5",
+    "Sv": "5+",
+    "W": "6",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Kroot Trail Shaper",
+    "M": "7\"",
+    "T": "3",
+    "Sv": "6+",
+    "W": "3",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Kroot War Shaper",
+    "M": "7\"",
+    "T": "3",
+    "Sv": "6+",
+    "W": "3",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "The Twin Lance",
+    "M": "10\"",
+    "T": "6",
+    "Sv": "2+",
+    "W": "8",
+    "Ld": "6+",
+    "OC": "2"
+  },
+  {
+    "name": "Aun’shi",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "6+",
+    "W": "3",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Aun’va",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "5+",
+    "W": "5",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Commander In Crisis Battlesuit",
+    "M": "10\"",
+    "T": "5",
+    "Sv": "3+",
+    "W": "5",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Longstrike",
+    "M": "10\"",
+    "T": "10",
+    "Sv": "3+",
+    "W": "14",
+    "Ld": "7+",
+    "OC": "3"
+  },
+  {
+    "name": "Shas’o R’alai",
+    "M": "8\"",
+    "T": "6",
+    "Sv": "3+",
+    "W": "6",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Breacher Team",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Strike Team",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Devilfish",
+    "M": "12\"",
+    "T": "9",
+    "Sv": "3+",
+    "W": "13",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Tidewall Droneport",
+    "M": "4\"",
+    "T": "8",
+    "Sv": "3+",
+    "W": "10",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Tidewall Gunrig",
+    "M": "4\"",
+    "T": "8",
+    "Sv": "3+",
+    "W": "14",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Tidewall Shieldline",
+    "M": "4\"",
+    "T": "8",
+    "Sv": "3+",
+    "W": "10",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Drone Sentry Turret",
+    "M": "-",
+    "T": "8",
+    "Sv": "4+",
+    "W": "4",
+    "Ld": "8+",
+    "OC": "0"
+  },
+  {
+    "name": "Remote Sensor Tower",
+    "M": "-",
+    "T": "8",
+    "Sv": "4+",
+    "W": "4",
+    "Ld": "8+",
+    "OC": "0"
+  },
+  {
+    "name": "Broadside Battlesuits",
+    "M": "5\"",
+    "T": "6",
+    "Sv": "2+",
+    "W": "8",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Crisis Fireknife Battlesuits",
+    "M": "10\"",
+    "T": "5",
+    "Sv": "3+",
+    "W": "4",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Crisis Starscythe Battlesuits",
+    "M": "10\"",
+    "T": "5",
+    "Sv": "3+",
+    "W": "4",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Crisis Sunforge Battlesuits",
+    "M": "10\"",
+    "T": "5",
+    "Sv": "3+",
+    "W": "4",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Ghostkeel Battlesuit",
+    "M": "10\"",
+    "T": "8",
+    "Sv": "2+",
+    "W": "12",
+    "Ld": "7+",
+    "OC": "3"
+  },
+  {
+    "name": "Hammerhead Gunship",
+    "M": "10\"",
+    "T": "10",
+    "Sv": "3+",
+    "W": "14",
+    "Ld": "7+",
+    "OC": "3"
+  },
+  {
+    "name": "Kroot Carnivores",
+    "M": "7\"",
+    "T": "3",
+    "Sv": "6+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Kroot Farstalkers",
+    "M": "7\"",
+    "T": "3",
+    "Sv": "6+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Kroot Hounds",
+    "M": "12\"",
+    "T": "3",
+    "Sv": "6+",
+    "W": "1",
+    "Ld": "8+",
+    "OC": "0"
+  },
+  {
+    "name": "Krootox Rampagers",
+    "M": "7\"",
+    "T": "6",
+    "Sv": "5+",
+    "W": "5",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Krootox Riders",
+    "M": "7\"",
+    "T": "6",
+    "Sv": "5+",
+    "W": "5",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Pathfinder Team",
+    "M": "7\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Piranhas",
+    "M": "14\"",
+    "T": "7",
+    "Sv": "4+",
+    "W": "7",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Razorshark Strike Fighter",
+    "M": "20+\"",
+    "T": "10",
+    "Sv": "3+",
+    "W": "12",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Riptide Battlesuit",
+    "M": "10\"",
+    "T": "9",
+    "Sv": "2+",
+    "W": "14",
+    "Ld": "7+",
+    "OC": "4"
+  },
+  {
+    "name": "Sky Ray Gunship",
+    "M": "10\"",
+    "T": "10",
+    "Sv": "3+",
+    "W": "14",
+    "Ld": "7+",
+    "OC": "3"
+  },
+  {
+    "name": "Stealth Battlesuits",
+    "M": "8\"",
+    "T": "4",
+    "Sv": "3+",
+    "W": "2",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Stormsurge",
+    "M": "8\"",
+    "T": "11",
+    "Sv": "2+",
+    "W": "20",
+    "Ld": "7+",
+    "OC": "6"
+  },
+  {
+    "name": "Sun Shark Bomber",
+    "M": "20+\"",
+    "T": "9",
+    "Sv": "3+",
+    "W": "12",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Vespid Stingwings",
+    "M": "12\"",
+    "T": "4",
+    "Sv": "4+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "AX-1-0 Tiger Shark",
+    "M": "20+\"",
+    "T": "11",
+    "Sv": "3+",
+    "W": "18",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Manta",
+    "M": "20+\"",
+    "T": "14",
+    "Sv": "2+",
+    "W": "60",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Ta’unar Supremacy Armour",
+    "M": "8\"",
+    "T": "13",
+    "Sv": "2+",
+    "W": "30",
+    "Ld": "7+",
+    "OC": "10"
+  },
+  {
+    "name": "Tiger Shark",
+    "M": "20+\"",
+    "T": "11",
+    "Sv": "3+",
+    "W": "18",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Barracuda",
+    "M": "20+\"",
+    "T": "10",
+    "Sv": "3+",
+    "W": "14",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Crisis Battlesuits",
+    "M": "10\"",
+    "T": "5",
+    "Sv": "3+",
+    "W": "4",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Great Knarloc",
+    "M": "9\"",
+    "T": "8",
+    "Sv": "4+",
+    "W": "10",
+    "Ld": "7+",
+    "OC": "3"
+  },
+  {
+    "name": "Heavy Gun Drones",
+    "M": "8\"",
+    "T": "5",
+    "Sv": "4+",
+    "W": "2",
+    "Ld": "8+",
+    "OC": "0"
+  },
+  {
+    "name": "Knarloc Riders",
+    "M": "7\"",
+    "T": "5",
+    "Sv": "5+",
+    "W": "4",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Orca Dropship",
+    "M": "20+\"",
+    "T": "12",
+    "Sv": "3+",
+    "W": "28",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "R’varna Battlesuit",
+    "M": "8\"",
+    "T": "10",
+    "Sv": "2+",
+    "W": "15",
+    "Ld": "7+",
+    "OC": "4"
+  },
+  {
+    "name": "Remora Stealth Drones",
+    "M": "16\"",
+    "T": "6",
+    "Sv": "3+",
+    "W": "5",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Tactical Drones",
+    "M": "8\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Tetras",
+    "M": "14\"",
+    "T": "7",
+    "Sv": "4+",
+    "W": "7",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Tx42 Piranha",
+    "M": "14\"",
+    "T": "7",
+    "Sv": "4+",
+    "W": "7",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Xv9 Hazard Battlesuits",
+    "M": "8\"",
+    "T": "6",
+    "Sv": "3+",
+    "W": "4",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Y’vahra Battlesuit",
+    "M": "10\"",
+    "T": "9",
+    "Sv": "2+",
+    "W": "15",
+    "Ld": "7+",
+    "OC": "4"
+  }
+]

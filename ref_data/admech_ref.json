@@ -1,0 +1,353 @@
+[
+  {
+    "name": "Thulia Ghuld",
+    "M": "8\"",
+    "T": "8",
+    "Sv": "2+",
+    "W": "10",
+    "Ld": "6+",
+    "OC": "3"
+  },
+  {
+    "name": "Belisarius Cawl",
+    "M": "8\"",
+    "T": "8",
+    "Sv": "2+",
+    "W": "10",
+    "Ld": "6+",
+    "OC": "3"
+  },
+  {
+    "name": "Cybernetica Datasmith",
+    "M": "6\"",
+    "T": "4",
+    "Sv": "2+",
+    "W": "3",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Skitarii Marshal",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "3",
+    "Ld": "6+",
+    "OC": "1"
+  },
+  {
+    "name": "Sydonian Skatros",
+    "M": "8\"",
+    "T": "4",
+    "Sv": "4+",
+    "W": "4",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Tech-priest Dominus",
+    "M": "6\"",
+    "T": "4",
+    "Sv": "2+",
+    "W": "4",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Tech-priest Enginseer",
+    "M": "6\"",
+    "T": "4",
+    "Sv": "3+",
+    "W": "3",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Tech-priest Manipulus",
+    "M": "6\"",
+    "T": "4",
+    "Sv": "2+",
+    "W": "4",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Technoarcheologist",
+    "M": "6\"",
+    "T": "4",
+    "Sv": "3+",
+    "W": "3",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "X-101",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "3",
+    "Ld": "8+",
+    "OC": "0"
+  },
+  {
+    "name": "Skitarii Rangers",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Skitarii Vanguard",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Skorpius Dunerider",
+    "M": "12\"",
+    "T": "9",
+    "Sv": "3+",
+    "W": "11",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Terrax-pattern Termite",
+    "M": "8\"",
+    "T": "10",
+    "Sv": "3+",
+    "W": "14",
+    "Ld": "6+",
+    "OC": "2"
+  },
+  {
+    "name": "Hastarii Exterminators",
+    "M": "5\"",
+    "T": "4",
+    "Sv": "3+",
+    "W": "2",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Hastarii Fusiliers",
+    "M": "5\"",
+    "T": "4",
+    "Sv": "3+",
+    "W": "2",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Archaeopter Fusilave",
+    "M": "20+\"",
+    "T": "9",
+    "Sv": "3+",
+    "W": "10",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Archaeopter Stratoraptor",
+    "M": "20+\"",
+    "T": "9",
+    "Sv": "3+",
+    "W": "10",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Archaeopter Transvector",
+    "M": "20+\"",
+    "T": "9",
+    "Sv": "3+",
+    "W": "10",
+    "Ld": "7+",
+    "OC": "0"
+  },
+  {
+    "name": "Corpuscarii Electro-priests",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "7+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Fulgurite Electro-priests",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "7+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Ironstrider Ballistarii",
+    "M": "10\"",
+    "T": "7",
+    "Sv": "3+",
+    "W": "7",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Kastelan Robots",
+    "M": "6\"",
+    "T": "9",
+    "Sv": "2+",
+    "W": "7",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Kataphron Breachers",
+    "M": "5\"",
+    "T": "7",
+    "Sv": "3+",
+    "W": "3",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Kataphron Destroyers",
+    "M": "5\"",
+    "T": "6",
+    "Sv": "3+",
+    "W": "3",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Onager Dunecrawler",
+    "M": "8\"",
+    "T": "10",
+    "Sv": "2+",
+    "W": "11",
+    "Ld": "7+",
+    "OC": "3"
+  },
+  {
+    "name": "Pteraxii Skystalkers",
+    "M": "12\"",
+    "T": "4",
+    "Sv": "4+",
+    "W": "2",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Pteraxii Sterylizors",
+    "M": "12\"",
+    "T": "4",
+    "Sv": "4+",
+    "W": "2",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Serberys Raiders",
+    "M": "12\"",
+    "T": "4",
+    "Sv": "4+",
+    "W": "2",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Serberys Sulphurhounds",
+    "M": "12\"",
+    "T": "4",
+    "Sv": "4+",
+    "W": "2",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Servitor Battleclade",
+    "M": "6\"",
+    "T": "4",
+    "Sv": "4+",
+    "W": "2",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Sicarian Infiltrators",
+    "M": "8\"",
+    "T": "4",
+    "Sv": "4+",
+    "W": "2",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Sicarian Ruststalkers",
+    "M": "8\"",
+    "T": "4",
+    "Sv": "4+",
+    "W": "2",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Skorpius Disintegrator",
+    "M": "10\"",
+    "T": "10",
+    "Sv": "2+",
+    "W": "12",
+    "Ld": "7+",
+    "OC": "3"
+  },
+  {
+    "name": "Sydonian Dragoons With Radium Jezzails",
+    "M": "10\"",
+    "T": "7",
+    "Sv": "3+",
+    "W": "7",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Sydonian Dragoons With Taser Lances",
+    "M": "10\"",
+    "T": "7",
+    "Sv": "3+",
+    "W": "7",
+    "Ld": "7+",
+    "OC": "2"
+  },
+  {
+    "name": "Secutarii Hoplites",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "5+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Secutarii Peltasts",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "5+",
+    "W": "1",
+    "Ld": "7+",
+    "OC": "1"
+  },
+  {
+    "name": "Servitors",
+    "M": "6\"",
+    "T": "3",
+    "Sv": "4+",
+    "W": "1",
+    "Ld": "8+",
+    "OC": "0"
+  }
+]
