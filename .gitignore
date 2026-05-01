@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+*.so
+.env
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.vscode/
+.idea/
+
+# Virtual env
+.venv/
+venv/
+
+# SQLite database
+*.db
+
+# Wiki vault (симлинк или отдельный репозиторий)
+wiki/
+
+# OS files
+.DS_Store
+Thumbs.db

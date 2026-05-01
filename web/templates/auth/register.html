@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto mt-16">
+    <h1 class="text-3xl font-bold mb-8 text-center">📝 Register</h1>
+
+    <form method="POST" action="/auth/register"
+          class="bg-gray-800 rounded-lg p-6 border border-gray-700 space-y-4">
+
+        <div>
+            <label class="block text-sm text-gray-400 mb-1">Email</label>
+            <input type="email" name="email" required
+                   class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2">
+        </div>
+
+        <div>
+            <label class="block text-sm text-gray-400 mb-1">Display Name</label>
+            <input type="text" name="display_name"
+                   class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2">
+        </div>
+
+        <div>
+            <label class="block text-sm text-gray-400 mb-1">Password</label>
+            <input type="password" name="password" required minlength="6"
+                   class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2">
+        </div>
+
+        <button type="submit"
+                class="w-full bg-yellow-600 hover:bg-yellow-500 font-bold py-2 rounded">
+            Register
+        </button>
+
+        <p class="text-center text-sm text-gray-400">
+            Already have an account?
+            <a href="/auth/login" class="text-yellow-500 hover:underline">Login</a>
+        </p>
+    </form>
+</div>
+{% endblock %}

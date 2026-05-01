@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Страница Pricing — заглушка для Stripe Checkout -->
+<div class="max-w-4xl mx-auto mt-8" x-data="pricing()">
+    <h1 class="text-4xl font-bold text-center mb-4">Choose Your Plan</h1>
+    <p class="text-center text-gray-400 mb-12">Unlock the full power of WH40k Battle Simulator</p>
+
+    <div class="grid md:grid-cols-2 gap-8">
+
+        <!-- Free -->
+        <div class="card border-gray-600">
+            <h2 class="text-2xl font-bold mb-2">Free</h2>
+            <p class="text-4xl font-bold mb-6">$0 <span class="text-lg text-gray-400">/month</span></p>
+            <ul class="space-y-3 mb-8 text-gray-300">
+                <li>✅ 1 saved roster</li>
+                <li>✅ Basic AI simulation</li>
+                <li>✅ Browse public rosters</li>
+                <li>✅ All factions</li>
+                <li>❌ <span class="text-gray-500">Export (CSV/JSON)</span></li>
+                <li>❌ <span class="text-gray-500">Create public rosters</span></li>
+                <li>❌ <span class="text-gray-500">Priority simulation</span></li>
+                <li>📢 Ads included</li>
+            </ul>
+            <div x-show="!user">
+                <a href="/auth/register" class="btn w-full text-center block">Get Started Free</a>
+            </div>
+            <div x-show="user && user.tier === 'free'" x-cloak>
+                <span class="block text-center text-green-400 font-bold py-2">✨ You're on Free</span>
+            </div>
+            <div x-show="user && user.tier !== 'free'" x-cloak>
+                <span class="block text-center text-gray-500 py-2">Current plan</span>
+            </div>
+        </div>
+
+        <!-- Premium -->
+        <div class="card border-yellow-500 relative">
+            <div class="absolute -top-3 right-4 bg-yellow-500 text-black px-3 py-1 rounded-full text-sm font-bold">
+                POPULAR
+            </div>
+            <h2 class="text-2xl font-bold mb-2">Premium</h2>
+            <p class="text-4xl font-bold mb-6">
+                $7 <span class="text-lg text-gray-400">/month</span>
+            </p>
+            <ul class="space-y-3 mb-8 text-gray-300">
+                <li>✅ Unlimited rosters</li>
+                <li>✅ Full AI simulation</li>
+                <li>✅ Export (CSV/JSON)</li>
+                <li>✅ Create & share public rosters</li>
+                <li>✅ Priority simulation</li>
+                <li>✅ No ads</li>
+                <li>✅ Early access to new features</li>
+                <li>✅ All factions</li>
+            </ul>
+            <div x-show="!user || user.tier === 'free'">
+                <a href="/api/subscribe" class="btn w-full text-center block bg-yellow-500 hover:bg-yellow-400 text-black">
+                    🔥 Upgrade to Premium
+                </a>
+            </div>
+            <div x-show="user && user.tier === 'premium'" x-cloak>
+                <span class="block text-center text-yellow-400 font-bold py-2">⭐ You're Premium!</span>
+                <a href="/api/billing/portal" class="block text-center text-sm text-gray-400 hover:text-white mt-2">
+                    Manage subscription →
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function pricing() {
+    return {
+        user: null,
+        init() {
+            fetch('/api/me')
+                .then(r => r.ok ? r.json() : null)
+                .then(d => this.user = d)
+                .catch(() => {});
+        }
+    };
+}
+</script>
+
+<style>
+[x-cloak] { display: none !important; }
+</style>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8">🗺 Scenario Setup</h1>
+
+    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 mb-6">
+        <h2 class="text-xl font-bold mb-4">Mission</h2>
+        <select class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 mb-4">
+            <option value="only-war">Only War</option>
+            <option value="supply-drop">Supply Drop</option>
+            <option value="area-denial">Area Denial</option>
+        </select>
+
+        <h2 class="text-xl font-bold mb-4">Map</h2>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <button class="bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded p-4 text-left">
+                <div class="font-bold">Patrol</div>
+                <div class="text-sm text-gray-400">44" × 30"</div>
+            </button>
+            <button class="bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded p-4 text-left">
+                <div class="font-bold">Strike Force</div>
+                <div class="text-sm text-gray-400">44" × 60"</div>
+            </button>
+        </div>
+
+        <h2 class="text-xl font-bold mb-4">Deployment</h2>
+        <select class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 mb-4">
+            <option value="roll-off">Roll-off</option>
+            <option value="player1">Player 1 goes first</option>
+            <option value="player2">Player 2 goes first</option>
+        </select>
+    </div>
+
+    <button class="bg-yellow-600 hover:bg-yellow-500 px-8 py-3 rounded font-bold text-lg">
+        🎲 Run Simulation
+    </button>
+</div>
+{% endblock %}

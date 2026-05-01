@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .card { @apply bg-gray-800 border border-gray-700 rounded-lg p-6; }
+        .btn { @apply bg-yellow-600 hover:bg-yellow-500 font-bold py-2 px-4 rounded transition; }
+        .input { @apply w-full bg-gray-700 border border-gray-600 rounded px-3 py-2; }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen"
+      x-data="{ user: null }"
+      x-init="fetch('/api/me').then(r => r.ok ? r.json().then(d => { user = d; user.features = d.features || {}; }) : null).catch(() => null)">
+
+    <!-- Upgrade Banner — для Free -->
+    <template x-if="user && !user.features?.ads_enabled === false">
+        <div class="bg-gradient-to-r from-yellow-900 to-yellow-700 px-6 py-3 text-center text-sm flex items-center justify-center gap-4">
+            <span>⚡ Upgrade to Premium — no ads, unlimited rosters, priority AI</span>
+            <a href="/pricing" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-4 py-1 rounded text-sm">
+                🔥 Upgrade Now
+            </a>
+        </div>
+    </template>
+
+    <!-- Guest Banner — незарегистрированным -->
+    <template x-if="!user">
+        <div class="bg-gray-800 border-b border-gray-700 px-6 py-2 text-center text-sm text-gray-400">
+            👋 You're browsing as a guest.
+            <a href="/auth/register" class="text-yellow-500 hover:underline">Register</a>
+            or
+            <a href="/auth/login" class="text-yellow-500 hover:underline">Login</a>
+            to save rosters and run simulations.
+        </div>
+    </template>
+
+    <nav class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex items-center gap-6">
+        <a href="/" class="text-xl font-bold text-yellow-500">⚔️ WH40k Sim</a>
+        <a href="/team-builder" class="hover:text-yellow-400">Team Builder</a>
+        <a href="/scenario-setup" class="hover:text-yellow-400">Scenario</a>
+        <a href="/pricing" class="hover:text-yellow-400">Pricing</a>
+
+        <div class="ml-auto flex items-center gap-4">
+            <template x-if="user">
+                <div class="flex items-center gap-3">
+                    <span class="text-sm text-yellow-400 border border-yellow-600 rounded px-2 py-0.5"
+                          x-text="user.tier === 'premium' ? '⭐ PREMIUM' : 'FREE'"></span>
+                    <span class="text-sm text-gray-300" x-text="user.display_name"></span>
+                    <a href="/auth/logout" class="text-sm text-gray-400 hover:text-white">Logout</a>
+                </div>
+            </template>
+            <template x-if="!user">
+                <div class="flex items-center gap-2">
+                    <a href="/auth/login" class="text-sm text-gray-400 hover:text-white">Login</a>
+                    <a href="/auth/register" class="btn text-sm py-1 px-3">Register</a>
+                </div>
+            </template>
+        </div>
+    </nav>
+
+    <!-- Ad Block — только для Free -->
+    <template x-if="user && !user.features?.ads_enabled === false">
+        <div class="bg-gray-850 border-b border-gray-700 px-6 py-3 text-center text-xs text-gray-600">
+            [ Ad Space — supports free users. Upgrade to Premium to remove. ]
+        </div>
+    </template>
+
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

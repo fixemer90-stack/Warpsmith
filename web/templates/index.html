@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto text-center py-16">
+    <h1 class="text-5xl font-bold mb-6">
+        <span class="text-yellow-500">⚔️</span> WH40k Battle Simulator
+    </h1>
+    <p class="text-xl text-gray-400 mb-12">
+        Собирай армии, выбирай сценарии, симулируй бои по правилам
+        Warhammer 40,000
+    </p>
+
+    <div class="grid grid-cols-3 gap-6">
+        <a href="/team-builder"
+           class="bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg p-8 transition">
+            <div class="text-4xl mb-4">🛠</div>
+            <h2 class="text-xl font-bold mb-2">Team Builder</h2>
+            <p class="text-gray-400 text-sm">Собери армию с лимитами PTS, выбери снаряжение</p>
+        </a>
+
+        <a href="/scenario-setup"
+           class="bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg p-8 transition">
+            <div class="text-4xl mb-4">🗺</div>
+            <h2 class="text-xl font-bold mb-2">Scenario Setup</h2>
+            <p class="text-gray-400 text-sm">Выбери миссию, карту и порядок хода</p>
+        </a>
+
+        <div class="bg-gray-800 border border-gray-700 rounded-lg p-8 opacity-50">
+            <div class="text-4xl mb-4">🎬</div>
+            <h2 class="text-xl font-bold mb-2">Replays</h2>
+            <p class="text-gray-400 text-sm">История симуляций (скоро)</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

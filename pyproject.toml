@@ -1,0 +1,130 @@
+[project]
+name = "wh40k-simulator"
+version = "0.2.0"
+description = "Warhammer 40,000 Battle Simulator"
+requires-python = ">=3.12"
+
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "jinja2",
+    "numpy",
+    "python-multipart",
+    "python-jose[cryptography]",
+    "python-dotenv",
+    "bcrypt",
+    "pyyaml",
+    "python-frontmatter",
+    "htmy",
+    "pytest",
+    "httpx",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy",
+    "pre-commit",
+]
+
+[project.scripts]
+simulator = "main:create_app"
+
+# ─── Ruff: linter + formatter ────────────────────────────────
+[tool.ruff]
+target-version = "py312"
+src = ["."]
+line-length = 100
+exclude = ["venv", ".venv", "__pycache__", ".git", "*.egg-info"]
+
+[tool.ruff.lint]
+select = [
+    # Standard
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "S",    # bandit (security)
+    "B",    # bugbear
+    "SIM",  # simplify
+    "T20",  # print
+    "RUF",  # ruff-specific
+    "PIE",  # pie (unnecessary pass, etc)
+    "YTT",  # sys.version flake8
+    "INT",  # gettext
+    "EM",   # exception messages
+    "PLC",  # pylint convention
+    "PLE",  # pylint error
+    "RSE",  # raise
+]
+ignore = [
+    "E501",  # line-too-long — форматтер сам разрулит
+    "E402",  # module-import-not-at-top-of-file — __init__ файлы
+    "F401",  # unused-import — __init__ реэкспорты
+    "S101",  # assert — используется в тестах
+    "S311",  # standard pseudo-random generators
+    "PLC0415",  # import-outside-top-level — lazy imports
+    "EM102", # f-string-in-exception
+    "SIM108",  # use ternary — читаемость важнее краткости
+    "UP007",  # X | Y vs Optional[X]
+    # Russian-language project — Cyrillic в докстрингах и строках
+    "RUF001",  # ambiguous-unicode-character-string
+    "RUF002",  # ambiguous-unicode-character-docstring
+    "RUF003",  # ambiguous-unicode-character-comment
+    # FastAPI Depends() в аргументах — правильный паттерн
+    "B008",
+    # URL-строки в константах не пароли
+    "S105",
+    # 0.0.0.0 в production — intentional
+    "S104",
+]
+unfixable = ["F841"]  # unused-variable — ручная проверка
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = [
+    "S311", "T201", "ANN001", "ANN201", "ANN204",
+    "PLR2004", "T20", "D100", "D101", "D102", "D103",
+]
+"__init__.py" = ["F401", "E402"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["backend", "web", "tests"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+# ─── mypy: type checking ──────────────────────────────────────
+[tool.mypy]
+python_version = "3.12"
+explicit_package_bases = true
+warn_return_any = true
+warn_unused_configs = true
+warn_unused_ignores = true
+show_error_codes = true
+strict_optional = true
+ignore_missing_imports = true
+disallow_any_unimported = false
+disallow_any_expr = false
+disallow_any_decorated = false
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = ["web.routes.*", "main"]
+ignore_errors = true
+
+# ─── pytest ──────────────────────────────────────────────────
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
