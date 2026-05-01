@@ -3,8 +3,12 @@
 from dataclasses import dataclass, field
 from typing import Dict, List, Tuple, Optional
 from enum import Enum
+from typing import TYPE_CHECKING
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from .mission import Mission
 
 
 class TerrainType(Enum):
@@ -102,12 +106,18 @@ class GameState:
     max_rounds: int = 5
     victory_conditions: Dict[str, any] = field(default_factory=dict)
     game_log: List[str] = field(default_factory=list)
+    mission: Optional['Mission'] = None  # Current mission being played
 
     def __post_init__(self):
-        """Initialize terrain map if not provided."""
+        """Initialize terrain map and mission if not provided."""
         if self.terrain_map is None:
             self.terrain_map = np.full((self.map_height, self.map_width),
-                                     TerrainType.OPEN_GROUND, dtype=object)
+                                      TerrainType.OPEN_GROUND, dtype=object)
+        
+        # Initialize mission if mission_name is provided
+        if self.mission_name and self.mission is None:
+            from .mission import create_mission
+            self.mission = create_mission(self.mission_name, self)
 
     @property
     def is_game_over(self) -> bool:
