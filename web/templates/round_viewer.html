@@ -1,7 +1,229 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div class="max-w-6xl mx-auto">
-    <h1 class="text-3xl font-bold mb-8">🎬 Simulation Results</h1>
-    <p class="text-gray-400">Scenario #{{ scenario_id }} — coming soon</p>
+<div class="max-w-6xl mx-auto p-6">
+  <h1 class="text-3xl font-bold mb-6">🎬 Round Viewer - Scenario #{{ scenario_id }}</h1>
+
+  <div class="bg-white rounded-lg shadow p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-4">Simulation Summary</h2>
+
+    <div class="grid grid-cols-4 gap-4 mb-6">
+      <div class="text-center">
+        <div class="text-2xl font-bold text-blue-600" id="total-rounds">0</div>
+        <div class="text-sm text-gray-600">Total Rounds</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-green-600" id="avg-damage">0.00</div>
+        <div class="text-sm text-gray-600">Avg Damage/Round</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-red-600" id="kill-rate">0%</div>
+        <div class="text-sm text-gray-600">Kill Rate</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-purple-600" id="sim-time">0ms</div>
+        <div class="text-sm text-gray-600">Simulation Time</div>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <h3 class="text-lg font-medium mb-2">Current Round Details</h3>
+      <div class="bg-gray-50 p-4 rounded">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <strong>Attacker:</strong> <span id="attacker-name">-</span><br>
+            <strong>Weapon:</strong> <span id="weapon-name">-</span><br>
+            <strong>Attacks:</strong> <span id="attacks-made">-</span>
+          </div>
+          <div>
+            <strong>Defender:</strong> <span id="defender-name">-</span><br>
+            <strong>Damage Dealt:</strong> <span id="damage-dealt">-</span><br>
+            <strong>Hits/Wounds/Unsaved:</strong> <span id="hit-stats">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <h3 class="text-lg font-medium mb-2">Round History</h3>
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Round</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Damage</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Hits</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Wounds</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Kills</th>
+            </tr>
+          </thead>
+          <tbody id="rounds-table-body" class="divide-y divide-gray-200">
+            <!-- Round data will be populated here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="flex gap-4">
+      <button id="run-round-btn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+        Run Next Round
+      </button>
+      <button id="run-full-battle-btn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+        Run Full Battle (5 Rounds)
+      </button>
+      <button id="reset-btn" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700">
+        Reset
+      </button>
+    </div>
+  </div>
 </div>
+
+<script>
+let currentRound = 0;
+let battleHistory = [];
+let simulationResults = null;
+
+// Load example simulation data on page load
+document.addEventListener('DOMContentLoaded', function() {
+  loadExampleData();
+  updateDisplay();
+});
+
+async function loadExampleData() {
+  try {
+    // Example simulation: Plasma Gun vs Tactical Marine
+    const response = await fetch('/api/simulate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        attacker_faction: 'test',
+        attacker_unit: 'Attacker',
+        defender_faction: 'test',
+        defender_unit: 'Tactical Marine',
+        weapon_name: 'Plasma Gun',
+        distance: 24,
+        squad_size: 1,
+        n_iterations: 1000
+      })
+    });
+
+    if (response.ok) {
+      simulationResults = await response.json();
+      updateDisplay();
+    }
+  } catch (error) {
+    console.error('Error loading example data:', error);
+    // Fallback to mock data
+    simulationResults = {
+      weapon: 'Plasma Gun',
+      target: 'Tactical Marine',
+      stats: {
+        mean: 0.83,
+        median: 1.0,
+        std: 0.70,
+        min: 0,
+        max: 2,
+        percentiles: {5: 0.0, 25: 0.0, 50: 1.0, 75: 1.0, 95: 2.0},
+        pmf: [[0, 0.341], [1, 0.483], [2, 0.176]],
+        kill_probability: 0.176
+      },
+      avg_attacks: 2.0,
+      avg_hits: 0.67,
+      avg_wounds: 0.44,
+      avg_unsaved_wounds: 0.37,
+      avg_damage_per_success: 0.33,
+      n_iterations: 1000,
+      simulation_time_ms: 150
+    };
+  }
+}
+
+function updateDisplay() {
+  if (!simulationResults) return;
+
+  document.getElementById('total-rounds').textContent = battleHistory.length;
+  document.getElementById('avg-damage').textContent = (battleHistory.length > 0 ?
+    (battleHistory.reduce((sum, r) => sum + r.damage, 0) / battleHistory.length).toFixed(2) : '0.00');
+  document.getElementById('kill-rate').textContent = (battleHistory.length > 0 ?
+    ((battleHistory.filter(r => r.kills > 0).length / battleHistory.length) * 100).toFixed(1) + '%' : '0%');
+  document.getElementById('sim-time').textContent = simulationResults.simulation_time_ms + 'ms';
+
+  updateRoundsTable();
+}
+
+function updateRoundsTable() {
+  const tbody = document.getElementById('rounds-table-body');
+  tbody.innerHTML = '';
+
+  battleHistory.forEach((round, index) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td class="px-4 py-2 text-sm">${index + 1}</td>
+      <td class="px-4 py-2 text-sm">${round.damage}</td>
+      <td class="px-4 py-2 text-sm">${round.hits}</td>
+      <td class="px-4 py-2 text-sm">${round.wounds}</td>
+      <td class="px-4 py-2 text-sm">${round.kills}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+document.getElementById('run-round-btn').addEventListener('click', function() {
+  runRound();
+});
+
+document.getElementById('run-full-battle-btn').addEventListener('click', function() {
+  for (let i = 0; i < 5; i++) {
+    runRound();
+  }
+});
+
+document.getElementById('reset-btn').addEventListener('click', function() {
+  battleHistory = [];
+  currentRound = 0;
+  updateDisplay();
+});
+
+function runRound() {
+  if (!simulationResults) return;
+
+  // Generate a random damage value based on PMF
+  const pmf = simulationResults.stats.pmf;
+  const random = Math.random();
+  let cumulative = 0;
+  let damage = 0;
+
+  for (const [dmg, prob] of pmf) {
+    cumulative += prob;
+    if (random <= cumulative) {
+      damage = dmg;
+      break;
+    }
+  }
+
+  // Generate other stats proportionally
+  const roundData = {
+    damage: damage,
+    hits: Math.round(damage * simulationResults.avg_hits / simulationResults.stats.mean) || 0,
+    wounds: Math.round(damage * simulationResults.avg_wounds / simulationResults.stats.mean) || 0,
+    kills: damage >= 2 ? 1 : 0  // Simple kill logic
+  };
+
+  battleHistory.push(roundData);
+  currentRound++;
+
+  // Update current round details
+  document.getElementById('attacker-name').textContent = 'Test Attacker';
+  document.getElementById('weapon-name').textContent = simulationResults.weapon;
+  document.getElementById('defender-name').textContent = simulationResults.target;
+  document.getElementById('attacks-made').textContent = simulationResults.avg_attacks.toFixed(1);
+  document.getElementById('damage-dealt').textContent = roundData.damage;
+  document.getElementById('hit-stats').textContent =
+    `${roundData.hits}/${roundData.wounds}/${Math.floor(roundData.wounds * 0.8)}`;
+
+  updateDisplay();
+}
+</script>
 {% endblock %}

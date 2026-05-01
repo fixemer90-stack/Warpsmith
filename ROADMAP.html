@@ -128,12 +128,12 @@ details.features > summary { list-style: none; display: none; }
 
   <div class="header">
     <h1><span class="g1">🔧</span> Warpsmith <span class="g2">⟡</span> Roadmap</h1>
-    <div class="sub"><span class="pulse-dot"></span>v0.2.0 · 7 phases · ~75 features · ~240h</div>
+    <div class="sub"><span class="pulse-dot"></span>v0.3.0 · 7 phases · ~75 features · ~270h</div>
   </div>
 
   <!-- Stats -->
   <div class="stats">
-    <div class="stat"><div class="val g1">2</div><div class="lbl">Phases Started</div></div>
+    <div class="stat"><div class="val g1">3</div><div class="lbl">Phases Started</div></div>
     <div class="stat"><div class="val g2">68</div><div class="lbl">Files Complete</div></div>
     <div class="stat"><div class="val g3">360</div><div class="lbl">Wiki Pages</div></div>
     <div class="stat"><div class="val g4">0.2.0</div><div class="lbl">Current Version</div></div>
@@ -185,24 +185,24 @@ details.features > summary { list-style: none; display: none; }
           <div class="name">⚙️ Combat Engine</div>
           <div class="desc">Monte Carlo dice · Hit→Wound→Save→Damage→FNP · /api/simulate</div>
         </div>
-        <div class="phase-pct"><span class="pct-active">25%</span></div>
+        <div class="phase-pct"><span class="pct-done">100%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
-      <div class="phase-progress"><div class="fill active" style="width:25%"></div></div>
+      <div class="phase-progress"><div class="fill done"></div></div>
       <div class="features">
         <div class="feature-list">
-          <div class="feature"><span class="f-status wip"></span><span class="f-icon">📦</span><span class="f-name">Unit dataclass (M/T/SV/W/LD/OC) + invul/FNP/wargear</span><span class="f-deps"></span><span class="f-hours">2h</span></div>
-          <div class="feature"><span class="f-status wip"></span><span class="f-icon">🔫</span><span class="f-name">Weapon dataclass (S/AP/D/keywords) + DiceExpr</span><span class="f-deps"></span><span class="f-hours">1h</span></div>
-          <div class="feature"><span class="f-status wip"></span><span class="f-icon">🔧</span><span class="f-name">Modifier system (±1, rerolls, caps, sustained/lethal)</span><span class="f-deps"></span><span class="f-hours">3h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📥</span><span class="f-name">Wiki Loader — .md → Unit objects</span><span class="f-deps">SCHEMA.md</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🎲</span><span class="f-name">Dice pool (NumPy D6 Monte Carlo)</span><span class="f-deps"></span><span class="f-hours">2h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">💥</span><span class="f-name">Combat sequence: Hit→Wound→Save→Damage→FNP</span><span class="f-deps">dice, model</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🔥</span><span class="f-name">Modifiers: Sustained, Lethal, Devastating, Ignores Cover</span><span class="f-deps">combat</span><span class="f-hours">3h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🧪</span><span class="f-name">Tests: Shoota/Marine, HB/Marine, Plasma overcharge</span><span class="f-deps">combat</span><span class="f-hours">2h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🌐</span><span class="f-name">POST /api/simulate (Weapon×Target → JSON)</span><span class="f-deps">combat</span><span class="f-hours">2h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📊</span><span class="f-name">PMF chart — damage distribution graph</span><span class="f-deps">api</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📋</span><span class="f-name">Round Viewer stub — JSON result display</span><span class="f-deps">api</span><span class="f-hours">2h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📐</span><span class="f-name">MultiAttack: multiple weapons + squads</span><span class="f-deps">combat</span><span class="f-hours">3h</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📦</span><span class="f-name">Unit dataclass (M/T/SV/W/LD/OC) + invul/FNP/wargear</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔫</span><span class="f-name">Weapon dataclass (S/AP/D/keywords) + DiceExpr</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔧</span><span class="f-name">Modifier system (±1, rerolls, caps, sustained/lethal)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📥</span><span class="f-name">Wiki Loader — .md → Unit objects</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🎲</span><span class="f-name">Dice pool (NumPy D6 Monte Carlo)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">💥</span><span class="f-name">Combat sequence: Hit→Wound→Save→Damage→FNP</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔥</span><span class="f-name">Modifiers: Sustained, Lethal, Devastating, Ignores Cover</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🧪</span><span class="f-name">Tests: Shoota/Marine, HB/Marine, Plasma overcharge</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🌐</span><span class="f-name">POST /api/simulate (Weapon×Target → JSON)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📊</span><span class="f-name">PMF chart — damage distribution graph</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📋</span><span class="f-name">Round Viewer stub — JSON result display</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📐</span><span class="f-name">MultiAttack: multiple weapons + squads</span><span class="f-hours">✅</span></div>
         </div>
       </div>
     </div>
@@ -210,16 +210,16 @@ details.features > summary { list-style: none; display: none; }
     <!-- Phase 2 -->
     <div class="phase">
       <div class="phase-header">
-        <div class="phase-bar future"></div>
+        <div class="phase-bar active"></div>
         <div class="phase-info">
           <div class="num">Phase 2 · 12 features</div>
           <div class="name">🎲 Game System</div>
           <div class="desc">Game Loop · State · Map · Roster validation · Missions</div>
         </div>
-        <div class="phase-pct"><span class="pct-future">0%</span></div>
+        <div class="phase-pct"><span class="pct-active">0%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
-      <div class="phase-progress"><div class="fill future"></div></div>
+      <div class="phase-progress"><div class="fill active"></div></div>
       <div class="features">
         <div class="feature-list">
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">📊</span><span class="f-name">Game State: positions, wounds, CP, VP, round</span><span class="f-hours">4h</span></div>
@@ -229,7 +229,7 @@ details.features > summary { list-style: none; display: none; }
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">🔄</span><span class="f-name">Game Loop: Command→Move→Shoot→Charge→Fight</span><span class="f-hours">6h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">⚡</span><span class="f-name">Phase transitions + alternating activations</span><span class="f-hours">4h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">💀</span><span class="f-name">Battle-shock + CP generation + stratagems</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🏆</span><span class="f-name">Victory Points + end-game conditions</span><span class="f-hours">2h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🏆</span><span class="f-name">Victory Points + end-game conditions</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">✅</span><span class="f-name">Roster validation (PTS, 1 Warlord, 3× cap)</span><span class="f-hours">3h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">💾</span><span class="f-name">Roster CRUD: SQLite save/load/delete</span><span class="f-hours">2h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">🛠️</span><span class="f-name">Team Builder: faction picker, unit modal, PTS bar</span><span class="f-hours">8h</span></div>
@@ -297,7 +297,7 @@ details.features > summary { list-style: none; display: none; }
       <div class="phase-header">
         <div class="phase-bar future"></div>
         <div class="phase-info">
-          <div class="num">Phase 5 · 8 features</div>
+          <div class="num">Phase 5 · 7 features</div>
           <div class="name">☁️ Production</div>
           <div class="desc">Docker · CI/CD · HTTPS · Logging · Monitoring</div>
         </div>
@@ -309,7 +309,7 @@ details.features > summary { list-style: none; display: none; }
         <div class="feature-list">
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">🐳</span><span class="f-name">Dockerfile + docker-compose</span><span class="f-hours">3h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">🚀</span><span class="f-name">Deployment scripts (Dokku/Railway/self-host)</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🚦</span><span class="f-name">Rate limiting (slowapi)</span><span class="f-hours">1h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🚦</span><span class="f-name">Rate limiting (slowapi)</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">🛡️</span><span class="f-name">CORS hardening + CSP headers</span><span class="f-hours">1h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">📝</span><span class="f-name">Logging (structlog) + Sentry</span><span class="f-hours">2h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">🔄</span><span class="f-name">CI/CD: GitHub Actions (lint+test+deploy)</span><span class="f-hours">4h</span></div>
@@ -426,11 +426,11 @@ details.features > summary { list-style: none; display: none; }
     <span><span class="sw empty"></span>Not Started</span>
     <span style="color:#334155;">|</span>
     <span>Phase 0: <span class="sw done"></span> 100%</span>
-    <span>Phase 1: <span class="sw wip"></span> 25%</span>
-    <span>Phases 2-7: <span class="sw empty"></span> 0%</span>
+    <span>Phase 1: <span class="sw done"></span> 100%</span>
+    <span>Phase 2: <span class="sw wip"></span> 0%</span>
   </div>
 
-  <div class="footer">Warpsmith · v0.2.0 · 2026-05-01</div>
+  <div class="footer">Warpsmith · v0.3.0 · 2026-05-01</div>
 
 </div>
 

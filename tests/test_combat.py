@@ -1,6 +1,6 @@
 import numpy as np
 
-from backend.engine.combat import simulate_weapon_attack
+from backend.engine.combat import simulate_weapon_attack, simulate_unit_attack, simulate_squad_attack
 from backend.engine.dice import DicePool
 from backend.model.unit import Unit, Weapon
 
@@ -375,3 +375,93 @@ def test_plasma_overcharge() -> None:
     # When rolling 1 to hit, should hit on 3+ (skill 3) so hit roll fails
     # Therefore no damage should be dealt
     assert np.all(result_got_hot.damage_per_iter == 0)
+
+
+def test_multi_weapon_unit_attack() -> None:
+    """Test simulating a unit with multiple weapons."""
+    # Create a unit with multiple weapons
+    multi_weapon_attacker = make_unit("Multi-Weapon Unit", toughness=4, save=3, wounds=2)
+    multi_weapon_attacker.ranged_weapons = [
+        Weapon(
+            name="Bolter",
+            type="ranged",
+            range_max=24,
+            attacks_dice=(0, 0, 2),
+            skill=3,
+            strength=4,
+            ap=0,
+            damage_dice=(0, 0, 1),
+            tags=[],
+        ),
+        Weapon(
+            name="Plasma Gun",
+            type="ranged",
+            range_max=24,
+            attacks_dice=(0, 0, 1),
+            skill=3,
+            strength=7,
+            ap=-3,
+            damage_dice=(0, 0, 1),
+            tags=[],
+        )
+    ]
+
+    marine = make_unit("Tactical Marine", toughness=4, save=3, wounds=2)
+
+    result = simulate_unit_attack(
+        attacker=multi_weapon_attacker,
+        defender=marine,
+        pool=DicePool(seed=42),
+        n_iterations=10000,
+    )
+
+    # Should have results for both weapons
+    assert len(result.weapon_results) == 2
+    assert result.weapon_results[0].weapon_name == "Bolter"
+    assert result.weapon_results[1].weapon_name == "Plasma Gun"
+
+    # Total damage should be sum of both weapons
+    expected_total = result.weapon_results[0].stats.mean + result.weapon_results[1].stats.mean
+    assert abs(result.total_stats.mean - expected_total) < 0.1
+
+    # Should be reasonable total damage (~0.28 from bolter + ~0.42 from plasma)
+    assert 0.6 < result.total_stats.mean < 0.8
+
+
+def test_squad_attack() -> None:
+    """Test simulating multiple units attacking together."""
+    # Create a squad of 3 identical attackers
+    attackers = [make_unit(f"Attacker {i+1}", toughness=4, save=3, wounds=2) for i in range(3)]
+
+    for attacker in attackers:
+        attacker.ranged_weapons = [
+            Weapon(
+                name="Bolter",
+                type="ranged",
+                range_max=24,
+                attacks_dice=(0, 0, 1),
+                skill=3,
+                strength=4,
+                ap=0,
+                damage_dice=(0, 0, 1),
+                tags=[],
+            )
+        ]
+
+    marine = make_unit("Tactical Marine", toughness=4, save=3, wounds=2)
+
+    result = simulate_squad_attack(
+        attackers=attackers,
+        defender=marine,
+        pool=DicePool(seed=42),
+        n_iterations=10000,
+    )
+
+    # Should have 3 weapon results (one per attacker)
+    assert len(result.weapon_results) == 3
+    assert result.squad_size == 3
+
+    # Total damage should be approximately 3x single attacker damage
+    single_damage = result.weapon_results[0].stats.mean
+    expected_total = single_damage * 3
+    assert abs(result.total_stats.mean - expected_total) < 0.1

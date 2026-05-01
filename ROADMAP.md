@@ -1,7 +1,7 @@
 # Roadmap — Warpsmith
 
-> Дорожная карта разработки. Версия 0.2.0
-> **Статус:** Phase 0 ✅ | Phase 1 🚧 20% | Phase 2-7 ⏳
+> Дорожная карта разработки. Версия 0.3.0
+> **Статус:** Phase 0 ✅ | Phase 1 ✅ | Phase 2 🚧
 
 ---
 
@@ -33,7 +33,7 @@
 ## 🚧 Phase 1: Combat Engine (ТЕКУЩАЯ)
 
 ```
-[████░░░░░░░░░░░░░░] 20% · 12 features
+[██████████████] 100% · 12 features
 ```
 
 **Цель:** `curl /api/simulate` → JSON с распределением урона.
@@ -41,19 +41,19 @@
 ### Features
 
 | # | Статус | Фича | Зависимости | Часы |
-|---|--------|------|-------------|------|
-| 1.1 | 🟡 | Unit dataclass (M/T/SV/W/LD/OC, weapons, abilities) | Wiki schema | 2h |
-| 1.2 | ⚪ | Weapon dataclass (S/AP/D, keywords: Sustained, Lethal...) | — | 1h |
-| 1.3 | ⚪ | Modifier system (±1, rerolls, caps, +1 to hit/wound) | — | 3h |
-| 1.4 | ⚪ | Wiki Loader — парсинг .md frontmatter → Unit objects | SCHEMA.md | 4h |
-| 1.5 | ⚪ | Dice pool — NumPy D6 Monte Carlo engine | numpy | 2h |
-| 1.6 | ⚪ | Combat sequence: Hit → Wound → Save → Damage → FNP | dice, model | 4h |
-| 1.7 | ⚪ | Modifiers: Sustained Hits, Lethal, Devastating, Ignores Cover | combat | 3h |
-| 1.8 | ⚪ | Tests: Shoota vs Marine, HB vs Marine, Plasma overcharge | combat | 2h |
-| 1.9 | ⚪ | POST /api/simulate — Weapon × Target → JSON result | combat | 2h |
-| 1.10 | ⚪ | PMF chart — damage distribution graph (Chart.js) | api | 4h |
-| 1.11 | ⚪ | Round Viewer stub — отображение JSON результата | api | 2h |
-| 1.12 | ⚪ | MultiAttack — несколько оружий + отряды | combat | 3h |
+|---|---|--------|------|-------------|------|
+| 1.1 | ✅ | Unit dataclass (M/T/SV/W/LD/OC, weapons, abilities) | Wiki schema | 2h |
+| 1.2 | ✅ | Weapon dataclass (S/AP/D, keywords: Sustained, Lethal...) | — | 1h |
+| 1.3 | ✅ | Modifier system (±1, rerolls, caps, +1 to hit/wound) | — | 3h |
+| 1.4 | ✅ | Wiki Loader — парсинг .md frontmatter → Unit objects | SCHEMA.md | 4h |
+| 1.5 | ✅ | Dice pool — NumPy D6 Monte Carlo engine | numpy | 2h |
+| 1.6 | ✅ | Combat sequence: Hit → Wound → Save → Damage → FNP | dice, model | 4h |
+| 1.7 | ✅ | Modifiers: Sustained Hits, Lethal, Devastating, Ignores Cover | combat | 3h |
+| 1.8 | ✅ | Tests: Shoota vs Marine, HB vs Marine, Plasma overcharge | combat | 2h |
+| 1.9 | ✅ | POST /api/simulate — Weapon × Target → JSON result | combat | 2h |
+| 1.10 | ✅ | PMF chart — damage distribution graph (Chart.js) | api | 4h |
+| 1.11 | ✅ | Round Viewer stub — отображение JSON результата | api | 2h |
+| 1.12 | ✅ | MultiAttack — несколько оружий + отряды | combat | 3h |
 
 ---
 
@@ -203,11 +203,11 @@
 | Фаза | Features | Часы | Статус | Milestone |
 |------|----------|------|--------|-----------|
 | **0. Foundation** | 12 | ~40ч | ✅ 100% | Скелет проекта + wiki |
-| **1. Combat Engine** | 12 | ~30ч | 🚧 20% | `curl /api/simulate` → JSON |
-| **2. Game System** | 12 | ~40ч | ⏳ 0% | Полный Game Loop |
+| **1. Combat Engine** | 12 | ~60ч | ✅ 100% | `curl /api/simulate` → JSON + PMF |
+| **2. Game System** | 12 | ~40ч | 🚧 0% | Полный Game Loop |
 | **3. AI & Automation** | 8 | ~25ч | ⏳ 0% | AI-vs-AI бой |
 | **4. Web UI Polish** | 8 | ~35ч | ⏳ 0% | Готовый UX |
 | **5. Production** | 7 | ~15ч | ⏳ 0% | Развёрнуто на сервере |
 | **6. Monetization** | 6 | ~15ч | ⏳ 0% | Первый платящий |
 | **7. Expansion** | 10 | ~40ч | ⏳ 0% | Новые фичи |
-| **Итого** | **~75** | **~240ч** | | |
+| **Итого** | **~75** | **~270ч** | | |
