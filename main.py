@@ -28,9 +28,9 @@ ALLOWED_ORIGINS = os.getenv(
 ).split(",")
 
 app = FastAPI(
-    title="WH40k Battle Simulator",
+    title="Warpsmith — WH40k Battle Simulator",
     version="0.2.0",
-    description="Симулятор сценариев боёв Warhammer 40,000 — сбор армии, AI-vs-AI бой, пораундовый реплей.",
+    description="Warpsmith — симулятор сценариев боёв Warhammer 40,000: сбор армии, AI-vs-AI бой, пораундовый реплей.",
 )
 
 # ── CORS ─────────────────────────────────────────────────────────

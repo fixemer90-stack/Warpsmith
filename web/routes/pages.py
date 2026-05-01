@@ -16,7 +16,7 @@ async def index(request: Request):
     """Главная страница."""
     return templates.TemplateResponse(
         "index.html",
-        {"request": request, "title": "WH40k Battle Simulator"},
+        {"request": request, "title": "Warpsmith"},
     )
 
 
@@ -52,7 +52,7 @@ async def pricing(request: Request):
     """Страница с планами подписки."""
     return templates.TemplateResponse(
         "pricing.html",
-        {"request": request, "title": "Pricing — WH40k Simulator"},
+        {"request": request, "title": "Pricing — Warpsmith"},
     )
 
 
@@ -61,5 +61,5 @@ async def billing_page(request: Request):
     """Управление подпиской (Stripe Customer Portal stub)."""
     return templates.TemplateResponse(
         "pricing.html",
-        {"request": request, "title": "Billing — WH40k Simulator"},
+        {"request": request, "title": "Billing — Warpsmith"},
     )

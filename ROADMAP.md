@@ -1,4 +1,4 @@
-# Roadmap — WH40k Battle Simulator
+# Roadmap — Warpsmith
 
 > Дорожная карта разработки. Версия 0.2.0
 > **Статус:** Phase 0 ✅ | Phase 1 🚧 20% | Phase 2-7 ⏳

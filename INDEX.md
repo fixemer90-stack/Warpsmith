@@ -1,4 +1,6 @@
-# Project Index — WH40k Battle Simulator
+# Project Index — Warpsmith
+
+**Продукт:** Warpsmith — симулятор сценариев Warhammer 40k.
 
 Полный индекс всех файлов проекта. От корня до каждого модуля.
 Обновлён: 2026-05-01 | v0.2.0
