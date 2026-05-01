@@ -38,6 +38,19 @@ class CombatResult:
 
 
 @dataclass
+class MultiAttackResult:
+    """Result of simulating multiple weapons or squad attacks."""
+    total_damage_per_iter: np.ndarray
+    total_stats: SimulationStats
+    weapon_results: list[CombatResult]
+    squad_size: int
+    n_iterations: int
+    attacker_name: str
+    defender_name: str
+    simulation_time_ms: float
+
+
+@dataclass
 class RollResult:
     success: bool
     roll: int
@@ -351,5 +364,134 @@ def simulate_weapon_attack(
         n_iterations=n_iterations,
         weapon_name=weapon.name,
         target_name=defender.name,
+        simulation_time_ms=(end - start) * 1000,
+    )
+
+
+def simulate_unit_attack(
+    attacker: Unit,
+    defender: Unit,
+    pool: DicePool | None = None,
+    modifiers: list[Modifier] | None = None,
+    squad_size: int = 1,
+    n_iterations: int = 10000,
+    distance: int | None = None,
+    is_stationary: bool = False,
+) -> MultiAttackResult:
+    """Simulate attack from a unit with multiple weapons against a defender."""
+    if pool is None:
+        pool = DicePool(seed=42)
+
+    start = time.monotonic()
+
+    # Get all weapons from the attacker
+    all_weapons = []
+    if hasattr(attacker, 'ranged_weapons') and attacker.ranged_weapons:
+        all_weapons.extend(attacker.ranged_weapons)
+    if hasattr(attacker, 'melee_weapons') and attacker.melee_weapons:
+        all_weapons.extend(attacker.melee_weapons)
+
+    # If no weapons found, use a default placeholder
+    if not all_weapons:
+        from backend.model.unit import Weapon
+        all_weapons = [Weapon(
+            name="Default Weapon",
+            type="ranged",
+            range_max=24,
+            attacks_dice=(0, 0, 1),
+            skill=3,
+            strength=4,
+            ap=0,
+            damage_dice=(0, 0, 1),
+            tags=[],
+        )]
+
+    # Simulate each weapon
+    weapon_results = []
+    total_damage_per_iter = np.zeros(n_iterations, dtype=int)
+
+    for weapon in all_weapons:
+        weapon_result = simulate_weapon_attack(
+            weapon=weapon,
+            attacker=attacker,
+            defender=defender,
+            pool=pool,
+            modifiers=modifiers,
+            n_iterations=n_iterations,
+            distance=distance,
+            is_stationary=is_stationary,
+            squad_size=squad_size,
+        )
+        weapon_results.append(weapon_result)
+        total_damage_per_iter += weapon_result.damage_per_iter
+
+    # Calculate total stats
+    total_stats = compute_stats(total_damage_per_iter, target_wounds=defender.wounds * squad_size)
+
+    end = time.monotonic()
+
+    return MultiAttackResult(
+        total_damage_per_iter=total_damage_per_iter,
+        total_stats=total_stats,
+        weapon_results=weapon_results,
+        squad_size=squad_size,
+        n_iterations=n_iterations,
+        attacker_name=attacker.name,
+        defender_name=defender.name,
+        simulation_time_ms=(end - start) * 1000,
+    )
+
+
+def simulate_squad_attack(
+    attackers: list[Unit],
+    defender: Unit,
+    pool: DicePool | None = None,
+    modifiers: list[Modifier] | None = None,
+    n_iterations: int = 10000,
+    distance: int | None = None,
+    is_stationary: bool = False,
+) -> MultiAttackResult:
+    """Simulate attack from multiple units (squad) against a defender."""
+    if pool is None:
+        pool = DicePool(seed=42)
+
+    start = time.monotonic()
+
+    # Simulate each attacker
+    attacker_results = []
+    total_damage_per_iter = np.zeros(n_iterations, dtype=int)
+
+    for attacker in attackers:
+        attacker_result = simulate_unit_attack(
+            attacker=attacker,
+            defender=defender,
+            pool=pool,
+            modifiers=modifiers,
+            squad_size=1,  # Each attacker is treated as a single model
+            n_iterations=n_iterations,
+            distance=distance,
+            is_stationary=is_stationary,
+        )
+        attacker_results.append(attacker_result)
+        total_damage_per_iter += attacker_result.total_damage_per_iter
+
+    # Combine weapon results from all attackers
+    all_weapon_results = []
+    for attacker_result in attacker_results:
+        all_weapon_results.extend(attacker_result.weapon_results)
+
+    # Calculate total stats
+    total_stats = compute_stats(total_damage_per_iter, target_wounds=defender.wounds)
+
+    end = time.monotonic()
+
+    return MultiAttackResult(
+        total_damage_per_iter=total_damage_per_iter,
+        total_stats=total_stats,
+        weapon_results=all_weapon_results,
+        squad_size=len(attackers),
+        n_iterations=n_iterations,
+        attacker_name=f"Squad ({len(attackers)} models)",
+        defender_name=defender.name,
         simulation_time_ms=(end - start) * 1000,
     )

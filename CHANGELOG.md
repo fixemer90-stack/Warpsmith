@@ -7,6 +7,18 @@
 
 ---
 
+## [0.3.0] — 2026-05-02
+
+### Added
+- F1.12 MultiAttack: `simulate_unit_attack()` для юнитов с несколькими оружиями
+- F1.12 `simulate_squad_attack()` для симуляции атак отрядов
+- F1.12 POST `/api/simulate-unit`: эндпоинт для симуляции атаки юнита
+- Тесты `tests/test_combat.py` для multi-weapon и squad attacks
+- **Phase 1: Combat Engine полностью завершён!**
+
+### Changed
+- Версия: 0.2.1 → 0.3.0 (Phase 1 завершена, начинается Phase 2)
+
 ## [Unreleased]
 
 ## [0.2.1] — 2026-05-01
@@ -36,6 +48,8 @@
 - F1.9 POST `/api/simulate`: эндпоинт для симуляции с PMF-ответом JSON
 - F1.9 `/pmf-chart` страница с Chart.js визуализацией распределения урона
 - Тесты `tests/test_pmf_chart.py` для страницы PMF chart
+- F1.10 PMF chart — damage distribution graph (Chart.js) | интегрирован в /pmf-chart
+- F1.11 Round Viewer stub — отображение JSON результата симуляции с историей раундов
 - RELEASE.md: политика версионирования (ZeroVer), ветвления (GitHub Flow), релизов
 - CHANGELOG.md: история изменений в формате Keep a Changelog
 
