@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from typing import Optional
 
-from backend.loader.registry import WikiRegistry
+from backend.loader.registry import registry as wiki
 from backend.engine.combat import simulate_weapon_attack, simulate_unit_attack, MultiAttackResult
 from backend.engine.dice import DicePool
 
@@ -23,27 +23,66 @@ class SimulationRequest(BaseModel):
     n_iterations: int = Field(10000, description="Number of Monte Carlo iterations")
 
 
-@router.get("/units/{faction}")
-async def list_units(faction: str):
-    """Список юнитов фракции."""
-    # TODO: интеграция с WikiRegistry
-    return {"faction": faction, "units": []}
+@router.get("/units")
+async def list_units(faction: str = ""):
+    """Список юнитов (всех или по фракции)."""
+    try:
+        wiki.load()
+    except Exception:
+        return {"faction": faction, "units": []}
+
+    if faction:
+        unit_names = wiki.list_units(faction)
+    else:
+        unit_names = wiki.list_units()
+
+    result = []
+    for name in unit_names:
+        unit = wiki.get_unit(name)
+        if unit:
+            result.append({
+                "name": unit.name,
+                "faction": unit.faction,
+                "category": unit.category,
+                "points": unit.points,
+                "movement": unit.movement,
+                "toughness": unit.toughness,
+                "save": unit.save,
+                "wounds": unit.wounds,
+                "weapons": [
+                    {"name": w.name, "type": w.type}
+                    for w in (unit.ranged_weapons + unit.melee_weapons)
+                ],
+            })
+
+    return {"faction": faction, "units": result}
 
 
 @router.post("/simulate")
 async def run_simulation(request: SimulationRequest):
     """Запуск симуляции сценария."""
     # Fetch units and weapon from the wiki registry
-    attacker_unit = WikiRegistry.get_unit(request.attacker_faction, request.attacker_unit)
-    defender_unit = WikiRegistry.get_unit(request.defender_faction, request.defender_unit)
-    weapon = WikiRegistry.get_weapon(request.attacker_faction, request.weapon_name)
+    try:
+        wiki.load()
+    except Exception:
+        pass
+
+    attacker_unit = wiki.get_unit(request.attacker_unit)
+    defender_unit = wiki.get_unit(request.defender_unit)
 
     if not attacker_unit:
         raise HTTPException(status_code=404, detail=f"Attacker unit not found: {request.attacker_faction}/{request.attacker_unit}")
     if not defender_unit:
         raise HTTPException(status_code=404, detail=f"Defender unit not found: {request.defender_faction}/{request.defender_unit}")
+
+    # Find weapon in attacker's weapon lists
+    weapon = None
+    for w in attacker_unit.ranged_weapons + attacker_unit.melee_weapons:
+        if w.name.lower() == request.weapon_name.lower():
+            weapon = w
+            break
     if not weapon:
-        raise HTTPException(status_code=404, detail=f"Weapon not found: {request.attacker_faction}/{request.weapon_name}")
+        raise HTTPException(status_code=404, detail=f"Weapon not found: {request.weapon_name} (check name or weapon list)")
 
     # Create a dice pool (we can use a random seed or None for true randomness)
     pool = DicePool()
@@ -89,8 +128,13 @@ async def run_simulation(request: SimulationRequest):
 async def simulate_unit(request: SimulationRequest):
     """Simulate attack from a unit with multiple weapons against a defender."""
     # Fetch units from the wiki registry
-    attacker_unit = WikiRegistry.get_unit(request.attacker_faction, request.attacker_unit)
-    defender_unit = WikiRegistry.get_unit(request.defender_faction, request.defender_unit)
+    try:
+        wiki.load()
+    except Exception:
+        pass
+
+    attacker_unit = wiki.get_unit(request.attacker_unit)
+    defender_unit = wiki.get_unit(request.defender_unit)
 
     if not attacker_unit:
         raise HTTPException(status_code=404, detail=f"Attacker unit not found: {request.attacker_faction}/{request.attacker_unit}")
@@ -151,3 +195,25 @@ async def simulate_unit(request: SimulationRequest):
 @router.get("/health")
 async def health():
     return {"status": "ok", "version": "0.2.1"}
+
+
+@router.get("/factions")
+async def list_factions():
+    """Список доступных фракций."""
+    try:
+        wiki.load()
+    except Exception:
+        return {"factions": []}
+
+    faction_names = wiki.list_factions()
+    labels = {
+        "orks": "Orks",
+        "tau": "T'au Empire",
+        "adeptus-mechanicus": "Adeptus Mechanicus",
+    }
+    return {
+        "factions": [
+            {"id": f, "label": labels.get(f, f)}
+            for f in faction_names
+        ]
+    }

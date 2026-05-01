@@ -45,9 +45,10 @@ def test_max_wounds_in_squad() -> None:
     assert marine.max_wounds_in_squad(10) == 20
 
 
-@pytest.mark.parametrize("save", [1, 7])
+@pytest.mark.parametrize("save", [1, 8])
 def test_invalid_save_rejected(save: int) -> None:
-    with pytest.raises(ValueError, match="save must be between 2 and 6"):
+    """Test that invalid save values are rejected."""
+    with pytest.raises(ValueError, match="save must be between 2 and 7"):
         make_unit(save=save)
 
 

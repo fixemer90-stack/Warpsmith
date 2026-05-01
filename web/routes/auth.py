@@ -39,13 +39,13 @@ _IS_SECURE = os.getenv("HOSTING", "").lower() in ("true", "1", "yes")
 @router.get("/auth/login", response_class=HTMLResponse)
 async def login_page(request: Request):
     """Форма входа."""
-    return templates.TemplateResponse("auth/login.html", {"request": request})
+    return templates.TemplateResponse(request, "auth/login.html", {"request": request})
 
 
 @router.get("/auth/register", response_class=HTMLResponse)
 async def register_page(request: Request):
     """Форма регистрации."""
-    return templates.TemplateResponse("auth/register.html", {"request": request})
+    return templates.TemplateResponse(request, "auth/register.html", {"request": request})
 
 
 # ── Регистрация ──────────────────────────────────────────────────

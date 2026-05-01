@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div x-data="teamBuilder()" class="max-w-6xl mx-auto">
+    <div x-data="teamBuilder()" class="max-w-6xl mx-auto">
     <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-bold">🛠 Team Builder</h1>
         <button @click="saveRoster" class="bg-yellow-600 hover:bg-yellow-500 px-4 py-2 rounded font-semibold">
@@ -12,10 +12,11 @@
         <!-- Левая панель: фильтры и библиотека -->
         <div class="col-span-1 bg-gray-800 rounded-lg p-6 border border-gray-700">
             <label class="block text-sm text-gray-400 mb-1">Faction</label>
-            <select x-model="faction" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 mb-4">
+            <select x-model="faction" @change="loadUnits()" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 mb-4">
                 <option value="">-- Select --</option>
                 <option value="orks">Orks</option>
                 <option value="tau">T'au Empire</option>
+                <option value="adeptus-mechanicus">Adeptus Mechanicus</option>
             </select>
 
             <label class="block text-sm text-gray-400 mb-1">PTS Limit</label>
@@ -28,15 +29,49 @@
                 <template x-if="faction === 'orks'">
                     <option>War Horde</option>
                     <option>Da Big Hunt</option>
+                    <option>Speedwaaagh!</option>
+                    <option>Goff</option>
+                    <option>Bad Moons</option>
+                    <option>Snakebites</option>
+                    <option>Freebootaz</option>
+                    <option>Dread Waaagh!</option>
+                    <option>Green Tide</option>
+                    <option>Da Blitz Brigade</option>
+                    <option>Bully Boyz</option>
                 </template>
                 <template x-if="faction === 'tau'">
                     <option>Kauyon</option>
                     <option>Mont'ka</option>
+                    <option>Retaliation Cadre</option>
+                    <option>Coordinated Exploitation</option>
+                </template>
+                <template x-if="faction === 'adeptus-mechanicus'">
+                    <option>Data Psalm Conclave</option>
+                    <option>Skitarii Hunter Cohort</option>
+                    <option>Explorator Maniple</option>
+                    <option>Skitarii Horde</option>
+                    <option>Cybernetica Cohort</option>
+                    <option>Breaching Drill Maniple</option>
+                    <option>Pteraxii Wing</option>
                 </template>
             </select>
 
             <h2 class="text-lg font-bold mb-3 mt-6">Available Units</h2>
-            <div class="text-gray-500 text-sm">Loading from wiki...</div>
+            <template x-if="!faction">
+                <div class="text-gray-500 text-sm py-4">Select a faction to see available units.</div>
+            </template>
+            <template x-if="faction && units.length === 0">
+                <div class="text-gray-500 text-sm py-4">Loading units...</div>
+            </template>
+            <div class="space-y-1 max-h-96 overflow-y-auto">
+                <template x-for="unit in units" :key="unit.name">
+                    <div class="flex items-center justify-between bg-gray-700 rounded px-3 py-2 text-sm hover:bg-gray-600 cursor-pointer"
+                         @click="addUnit(unit.name, unit.points)">
+                        <span x-text="unit.name"></span>
+                        <span class="text-yellow-400 text-xs" x-text="unit.points + 'pts'"></span>
+                    </div>
+                </template>
+            </div>
         </div>
 
         <!-- Правая панель: ростер и PTS -->

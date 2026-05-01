@@ -5,6 +5,20 @@ function teamBuilder() {
         ptsLimit: 2000,
         detachment: "",
         roster: [],
+        units: [],
+
+        async loadUnits() {
+            if (!this.faction) {
+                this.units = [];
+                return;
+            }
+            this.units = [];
+            const resp = await fetch("/api/units?faction=" + encodeURIComponent(this.faction));
+            if (resp.ok) {
+                const data = await resp.json();
+                this.units = data.units || [];
+            }
+        },
 
         get ptsUsed() {
             return this.roster.reduce((sum, u) => sum + u.points * u.count, 0);

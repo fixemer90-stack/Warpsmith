@@ -19,6 +19,7 @@ from fastapi.templating import Jinja2Templates
 
 from backend.db.database import db
 
+
 # ── Конфигурация ─────────────────────────────────────────────────
 
 IS_PRODUCTION = os.getenv("HOSTING", "").lower() in ("true", "1", "yes")
@@ -27,42 +28,36 @@ ALLOWED_ORIGINS = os.getenv(
     "http://localhost:8000,http://127.0.0.1:8000",
 ).split(",")
 
-app = FastAPI(
-    title="Warpsmith — WH40k Battle Simulator",
-    version="0.2.0",
-    description="Warpsmith — симулятор сценариев боёв Warhammer 40,000: сбор армии, AI-vs-AI бой, пораундовый реплей.",
-)
-
-# ── CORS ─────────────────────────────────────────────────────────
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# ── Templates ────────────────────────────────────────────────────
-
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "web" / "templates"))
 
 
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-
-# ── Factory ──────────────────────────────────────────────────────
-
-
 def create_app() -> FastAPI:
-    """Инициализация: БД, роуты, статика."""
+    """Создать и настроить FastAPI приложение."""
+    app = FastAPI(
+        title="Warpsmith — WH40k Battle Simulator",
+        version="0.3.0",
+        description="Warpsmith — симулятор сценариев боёв Warhammer 40,000: сбор армии, AI-vs-AI бой, пораундовый реплей.",
+    )
+
+    # CORS
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=ALLOWED_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    # Templates — inject into app state for routes
+    app.state.templates = templates
+
+    # Index route
+    @app.get("/", response_class=HTMLResponse)
+    async def index(request: Request):
+        return templates.TemplateResponse(request, "index.html", {"request": request})
+
+    # DB init
     db.migrate()
-    if IS_PRODUCTION:
-        pass
-    else:
-        pass
 
     # Импортируем роуты (lazy, чтобы избежать циклических импортов)
     from backend.auth.providers.routes import router as oauth_router
@@ -84,13 +79,15 @@ def create_app() -> FastAPI:
     return app
 
 
+app = create_app()
+
+
 if __name__ == "__main__":
     import uvicorn
 
-    create_app()
     uvicorn.run(
         "main:app",
-        host=os.getenv("HOST", "0.0.0.0" if IS_PRODUCTION else "127.0.0.1"),
+        host=os.getenv("HOST", "127.0.0.1"),
         port=int(os.getenv("PORT", "8000")),
         reload=not IS_PRODUCTION,
     )
