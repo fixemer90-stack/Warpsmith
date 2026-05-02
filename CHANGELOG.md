@@ -35,12 +35,14 @@
 - F2.4 Missions: система миссий с правилами высадки, условиями захвата точек и подсчётом VP
 - F2.4 Три готовые миссии: Only War, Purge the Foe, Take and Hold
 - F2.4 Тесты `tests/test_mission.py` для системы миссий
-- F2.9 Roster validation: PTS limit, 1 Warlord, 3× cap (6× Battleline), уникальные Epic Heroes, проверка размера отряда
-- F2.9 `GameSize` enum: Combat Patrol (500), Incursion (1000), Strike Force (2000), Onslaught (3000)
-- F2.9 Тесты `tests/test_roster.py` (22 теста для валидации ростера и squad size)
 - F2.5 Game Loop: реализован игровой цикл с фазами Command → Movement → Shooting → Charge → Fight
 - F2.5 Класс `Scenario` в `backend/engine/scenario.py` для управления игровым процессом
 - F2.5 Тесты `tests/test_scenario.py` для игрового цикла
+- F2.6 Phase Transitions: реализованы механизмы чередования активаций в фазе Fight и определение Command Priority
+- F2.6 Добавлены поля `command_priority` в `PlayerState`, `is_engaged` и `is_fighting` в `UnitState`
+- F2.6 Добавлен метод `_determine_command_priority` в `GameState` для swap-правил приоритета
+- F2.6 Расширен `Scenario._fight_phase` с логикой чередующихся активаций
+- F2.6 Тесты `tests/test_phase_transitions.py` для проверки приоритета и чередующихся активаций
 
 ## [0.2.1] — 2026-05-01
 

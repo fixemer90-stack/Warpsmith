@@ -102,9 +102,91 @@ class Scenario:
         # Similar to shooting, but for charges
     
     def _fight_phase(self) -> None:
-        """Fight phase logic: resolve fights."""
+        """Fight phase logic: resolve fights with alternating activations."""
         self.state.game_log.append("Fight phase: units may fight")
-        # Resolve melee combat
+        
+        # Determine player order for Fight phase: non-priority player goes first
+        player_ids = list(self.state.players.keys())
+        if len(player_ids) < 2:
+            # If only one player, just let them fight
+            order = player_ids
+        else:
+            # Find which player has priority
+            priority_player_id = None
+            for pid, player in self.state.players.items():
+                if player.command_priority:
+                    priority_player_id = pid
+                    break
+            
+            if priority_player_id is None:
+                # Fallback: if no priority set, use arbitrary order
+                order = player_ids
+            else:
+                # The non-priority player goes first in Fight phase
+                non_priority_player_id = [pid for pid in player_ids if pid != priority_player_id][0]
+                order = [non_priority_player_id, priority_player_id]
+        
+        # Continue alternating activations until no more units can fight
+        progress = True
+        while progress:
+            progress = False
+            for player_id in order:
+                player = self.state.players[player_id]
+                # Find an eligible unit for this player: engaged and not yet fought
+                eligible_unit = None
+                for unit in player.units.values():
+                    if unit.is_engaged and not unit.is_fighting and unit.is_alive:
+                        eligible_unit = unit
+                        break
+                
+                if eligible_unit is not None:
+                    # Resolve melee combat for this unit
+                    self._resolve_melee_combat(eligible_unit)
+                    # Mark the unit as having fought
+                    eligible_unit.is_fighting = True
+                    progress = True
+                    self.state.game_log.append(f"{eligible_unit.name} fought in melee")
+        
+        # After Fight phase, reset is_fighting flags (though they will be reset again at start of next round)
+        for player in self.state.players.values():
+            for unit in player.units.values():
+                unit.is_fighting = False
+    
+    def _resolve_melee_combat(self, attacking_unit) -> None:
+        """Resolve melee combat for a unit.
+        This is a simplified implementation - in reality this would use the combat engine.
+        """
+        # Find an enemy unit engaged with this unit
+        enemy_unit = None
+        for player in self.state.players.values():
+            for unit in player.units.values():
+                if unit.is_alive and unit != attacking_unit:
+                    # Simplified engagement check - same position or adjacent
+                    # In a real implementation, we'd use proper engagement rules
+                    if unit.position == attacking_unit.position:
+                        enemy_unit = unit
+                        break
+            if enemy_unit:
+                break
+        
+        if enemy_unit is None:
+            # No enemy found to fight with
+            return
+            
+        # Simple melee resolution: each unit does damage to the other
+        # In reality, we would use Weapon skill, attacks, etc. from the combat engine
+        # For now, we'll do a simple exchange of damage
+        
+        # Attacking unit damages enemy
+        damage_to_enemy = 1  # Simplified: 1 damage per attack
+        self.state.deal_damage(enemy_unit.unit_id, damage_to_enemy)
+        self.state.game_log.append(f"{attacking_unit.name} hit {enemy_unit.name} for {damage_to_enemy} damage")
+        
+        # Enemy unit damages attacking unit (if still alive)
+        if enemy_unit.is_alive:
+            damage_to_attacker = 1  # Simplified: 1 damage per attack
+            self.state.deal_damage(attacking_unit.unit_id, damage_to_attacker)
+            self.state.game_log.append(f"{enemy_unit.name} hit {attacking_unit.name} for {damage_to_attacker} damage")
     
     def _morale_phase(self) -> None:
         """Morale phase logic: check for morale failures."""
