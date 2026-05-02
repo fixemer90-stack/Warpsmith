@@ -3,8 +3,12 @@
 from dataclasses import dataclass, field
 from typing import Dict, List, Tuple, Optional
 from enum import Enum
+from typing import TYPE_CHECKING
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from .mission import Mission
 
 
 class TerrainType(Enum):
@@ -45,6 +49,26 @@ class UnitState:
     has_fought: bool = False
     is_pinned: bool = False
     command_points: int = 0
+    is_engaged: bool = False  # Whether the unit is engaged with an enemy unit
+    is_fighting: bool = False  # Whether the unit has activated to fight in the current Fight phase
+    is_battle_shocked: bool = False  # Whether the unit is currently battle-shocked
+
+    @property
+    def is_above_half_strength(self) -> bool:
+        """Check if the unit is at or above half strength."""
+        return self.models_remaining > (self.models_total / 2)
+
+    @property
+    def is_alive(self) -> bool:
+        """Check if the unit is still alive."""
+        return self.models_remaining > 0 and self.current_wounds > 0
+
+    @property
+    def wounds_per_model(self) -> float:
+        """Calculate average wounds per remaining model."""
+        if self.models_remaining == 0:
+            return 0
+        return self.current_wounds / self.models_remaining
 
     @property
     def is_alive(self) -> bool:
@@ -70,6 +94,7 @@ class PlayerState:
     units: Dict[str, UnitState] = field(default_factory=dict)
     stratagems_used: List[str] = field(default_factory=list)
     is_active: bool = True
+    command_priority: bool = False  # Whether this player has priority this round
 
     @property
     def total_objective_control(self) -> int:
@@ -100,14 +125,21 @@ class GameState:
     deployment_zones: Dict[str, List[Tuple[int, int]]] = field(default_factory=dict)
     objectives: Dict[str, Tuple[int, int]] = field(default_factory=dict)
     max_rounds: int = 5
+    previous_round_priority_player_id: Optional[str] = None
     victory_conditions: Dict[str, any] = field(default_factory=dict)
     game_log: List[str] = field(default_factory=list)
+    mission: Optional['Mission'] = None  # Current mission being played
 
     def __post_init__(self):
-        """Initialize terrain map if not provided."""
+        """Initialize terrain map and mission if not provided."""
         if self.terrain_map is None:
             self.terrain_map = np.full((self.map_height, self.map_width),
-                                     TerrainType.OPEN_GROUND, dtype=object)
+                                      TerrainType.OPEN_GROUND, dtype=object)
+        
+        # Initialize mission if mission_name is provided
+        if self.mission_name and self.mission is None:
+            from .mission import create_mission
+            self.mission = create_mission(self.mission_name, self)
 
     @property
     def is_game_over(self) -> bool:
@@ -194,13 +226,43 @@ class GameState:
             self.players[player_id].victory_points += points
             self.game_log.append(f"{self.players[player_id].name} gained {points} VP")
 
+    def _determine_command_priority(self) -> None:
+        """Determine which player has command priority for the current round.
+        Round 1: roll-off (random), Round 2+: swap priority from previous round.
+        """
+        player_ids = list(self.players.keys())
+        if len(player_ids) < 2:
+            if player_ids:
+                self.players[player_ids[0]].command_priority = True
+            return
+
+        if self.current_round == 1:
+            import random
+            winner_id = random.choice(player_ids)
+            for pid in player_ids:
+                self.players[pid].command_priority = (pid == winner_id)
+            self.previous_round_priority_player_id = winner_id
+        else:
+            if self.previous_round_priority_player_id is not None:
+                for pid in player_ids:
+                    self.players[pid].command_priority = (pid != self.previous_round_priority_player_id)
+                nxt = [pid for pid in player_ids if pid != self.previous_round_priority_player_id]
+                if nxt:
+                    self.previous_round_priority_player_id = nxt[0]
+            else:
+                import random
+                winner_id = random.choice(player_ids)
+                for pid in player_ids:
+                    self.players[pid].command_priority = (pid == winner_id)
+                self.previous_round_priority_player_id = winner_id
+
     def next_phase(self):
         """Advance to the next phase."""
         phases = list(GamePhase)
         current_index = phases.index(self.current_phase)
         next_index = (current_index + 1) % len(phases)
 
-        if next_index == 0:  # New turn
+        if next_index == 0:  # New turn starting with Command phase
             self.current_round += 1
             # Reset unit states for new turn
             for player in self.players.values():
@@ -209,7 +271,14 @@ class GameState:
                     unit.has_shot = False
                     unit.has_charged = False
                     unit.has_fought = False
-
+                    # Reset fight-related flags for new round
+                    unit.is_engaged = False
+                    unit.is_fighting = False
+                    unit.is_battle_shocked = False
+            
+            # Determine command priority for the new round
+            self._determine_command_priority()
+            
         self.current_phase = phases[next_index]
         self.game_log.append(f"Phase changed to {self.current_phase.value}")
 

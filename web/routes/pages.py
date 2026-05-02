@@ -7,24 +7,14 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 router = APIRouter()
-
 templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
-
-
-@router.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    """Главная страница."""
-    return templates.TemplateResponse(
-        "index.html",
-        {"request": request, "title": "Warpsmith"},
-    )
 
 
 @router.get("/team-builder", response_class=HTMLResponse)
 async def team_builder(request: Request):
     """Сбор армии."""
     return templates.TemplateResponse(
-        "team_builder.html",
+        request, "team_builder.html",
         {"request": request, "title": "Team Builder"},
     )
 
@@ -33,8 +23,17 @@ async def team_builder(request: Request):
 async def scenario_setup(request: Request):
     """Выбор миссии и карты."""
     return templates.TemplateResponse(
-        "scenario_setup.html",
+        request, "scenario_setup.html",
         {"request": request, "title": "Scenario Setup"},
+    )
+
+
+@router.get("/pmf-chart", response_class=HTMLResponse)
+async def pmf_chart(request: Request):
+    """PMF chart page for visualizing damage distributions."""
+    return templates.TemplateResponse(
+        request, "pmf_chart.html",
+        {"request": request, "title": "PMF Chart — Warpsmith"},
     )
 
 
@@ -42,7 +41,7 @@ async def scenario_setup(request: Request):
 async def round_viewer(request: Request, scenario_id: int):
     """Просмотр результатов симуляции."""
     return templates.TemplateResponse(
-        "round_viewer.html",
+        request, "round_viewer.html",
         {"request": request, "scenario_id": scenario_id},
     )
 
@@ -51,7 +50,7 @@ async def round_viewer(request: Request, scenario_id: int):
 async def pricing(request: Request):
     """Страница с планами подписки."""
     return templates.TemplateResponse(
-        "pricing.html",
+        request, "pricing.html",
         {"request": request, "title": "Pricing — Warpsmith"},
     )
 
@@ -60,6 +59,6 @@ async def pricing(request: Request):
 async def billing_page(request: Request):
     """Управление подпиской (Stripe Customer Portal stub)."""
     return templates.TemplateResponse(
-        "pricing.html",
+        request, "pricing.html",
         {"request": request, "title": "Billing — Warpsmith"},
     )

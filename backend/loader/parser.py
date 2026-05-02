@@ -48,6 +48,11 @@ def parse_unit(filepath: Path) -> Unit | None:
         logger.warning("No title in %s", filepath)
         return None
 
+    # Skip non-unit concept pages (weapon descriptions, wargear, etc.)
+    if metadata.get("type") != "entity" and not re.search(r"\|\s*M\s*\|\s*T\s*\|\s*SV\s*\|", post.content):
+        logger.debug("Skipping non-unit page: %s", filepath)
+        return None
+
     kwargs: dict[str, Any] = {
         "name": str(title),
         "faction": str(metadata.get("faction") or filepath.parent.name),
@@ -152,42 +157,45 @@ def _build_weapon(raw_weapon: dict[str, Any]) -> Weapon | None:
 
 def _parse_weapons_from_markdown(body: str) -> tuple[list[Weapon], list[Weapon]]:
     table_pattern = r"\|(.+)\|\n\|[-:| ]+\|\n((?:\|.+\|\n?)*)"
-    match = re.search(table_pattern, body)
-    if not match:
-        return [], []
-
-    rows_text = match.group(2)
     ranged: list[Weapon] = []
     melee: list[Weapon] = []
 
-    for row in rows_text.strip().splitlines():
-        cells = [cell.strip() for cell in row.split("|")[1:-1]]
-        if len(cells) < 7:
+    for match in re.finditer(table_pattern, body):
+        # Skip profile tables (those with M and T columns)
+        header = match.group(1).strip()
+        header_cells = [c.strip() for c in header.split("|")]
+        if any(c.upper().startswith("M") for c in header_cells) and any(c.upper().startswith("T") for c in header_cells):
             continue
 
-        abilities = []
-        if len(cells) > 7 and cells[7] != "-":
-            abilities = [item.strip() for item in cells[7].split(",") if item.strip()]
+        rows_text = match.group(2)
+        for row in rows_text.strip().splitlines():
+            cells = [cell.strip() for cell in row.split("|")[1:-1]]
+            if len(cells) < 7:
+                continue
 
-        weapon = _build_weapon(
-            {
-                "name": cells[0],
-                "range": cells[1],
-                "attacks": cells[2],
-                "skill": cells[3],
-                "strength": cells[4],
-                "ap": cells[5],
-                "damage": cells[6],
-                "abilities": abilities,
-                "tags": [],
-            }
-        )
-        if weapon is None:
-            continue
-        if weapon.type == "ranged":
-            ranged.append(weapon)
-        else:
-            melee.append(weapon)
+            abilities = []
+            if len(cells) > 7 and cells[7] != "-":
+                abilities = [item.strip() for item in cells[7].split(",") if item.strip()]
+
+            weapon = _build_weapon(
+                {
+                    "name": cells[0],
+                    "range": cells[1],
+                    "attacks": cells[2],
+                    "skill": cells[3],
+                    "strength": cells[4],
+                    "ap": cells[5],
+                    "damage": cells[6],
+                    "abilities": abilities,
+                    "tags": [],
+                }
+            )
+            if weapon is None:
+                continue
+            if weapon.type == "ranged":
+                ranged.append(weapon)
+            else:
+                melee.append(weapon)
 
     return ranged, melee
 
@@ -246,11 +254,6 @@ def _fill_missing_unit_fields(kwargs: dict[str, Any], metadata: dict[str, Any], 
         if model_count is not None:
             kwargs["model_count"] = model_count
 
-    if kwargs.get("points", 0) == 0:
-        points = _parse_points_from_markdown(body)
-        if points is not None:
-            kwargs["points"] = points
-
     if not kwargs.get("keywords"):
         kwargs["keywords"] = _parse_keywords_from_markdown(body)
 
@@ -259,26 +262,104 @@ def _fill_missing_unit_fields(kwargs: dict[str, Any], metadata: dict[str, Any], 
         kwargs["category"] = category
 
 
-def _parse_profile_from_markdown(body: str) -> dict[str, int]:
-    match = re.search(
-        r"\|\s*M\s*\|\s*T\s*\|\s*SV\s*\|\s*W\s*\|\s*LD\s*\|\s*OC\s*\|\s*\n"
-        r"\|[-| :]+\|\s*\n"
-        r"\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|",
-        body,
-        re.IGNORECASE,
-    )
-    if not match:
-        return {}
+def _find_m_column_index(header_line: str) -> int:
+    """Find the 0-based column index of the M (Movement) column in a profile table header.
 
-    values = [cell.strip().replace('"', "").replace("+", "") for cell in match.groups()]
-    return {
-        "movement": int(values[0]),
-        "toughness": int(values[1]),
-        "save": int(values[2]),
-        "wounds": int(values[3]),
-        "leadership": int(values[4]),
-        "objective_control": int(values[5]),
-    }
+    Handles tables like | M | T | SV | ... | or | Type | M | T | ... |
+    """
+    cells = [c.strip() for c in header_line.split("|")]
+    for i, cell in enumerate(cells):
+        if cell.upper() == "M":
+            return i
+    return -1
+
+
+def _parse_profile_from_markdown(body: str) -> dict[str, int]:
+    """Parse the unit profile table (M/T/SV/W/LD/OC) from markdown body.
+
+    Handles:
+    - Standard 6-column tables: | M | T | SV | W | LD | OC |
+    - 7-column tables with INV: | M | T | SV | W | LD | OC | INV |
+    - Tables with a leading Type column: | Type | M | T | SV | W | LD | OC | INV |
+    - Fortifications with '-' for movement
+    - Non-standard 7th column names (e.g. 'Размер')
+    """
+    lines = body.split("\n")
+    for i, line in enumerate(lines):
+        # Find a line containing | M | (could be at any position in the row)
+        if not re.search(r"\|\s*M\s*\|", line, re.IGNORECASE):
+            continue
+        # Check this isn't a weapon table by verifying M isn't followed by WEAPON-like headers
+        m_col = _find_m_column_index(line)
+        if m_col < 0:
+            continue
+
+        # Found the header line. Skip separator line.
+        if i + 1 >= len(lines):
+            break
+        separator = lines[i + 1]
+        if not re.match(r"^\|[-| :]+\|", separator):
+            continue
+
+        # Next non-empty line that starts with | is data
+        data_line = ""
+        for j in range(i + 2, len(lines)):
+            candidate = lines[j].strip()
+            if candidate.startswith("|"):
+                data_line = candidate
+                break
+            elif candidate == "":
+                continue
+            else:
+                break
+
+        if not data_line:
+            continue
+
+        # Find M column position
+        m_col = _find_m_column_index(line)
+
+        # Parse data row cells
+        data_cells = [c.strip() for c in data_line.split("|")]
+
+        if m_col < 0 or m_col + 5 >= len(data_cells) - 1:
+            continue
+
+        # Extract and clean values
+        raw_values = []
+        for k in range(6):
+            cell = data_cells[m_col + k].replace('"', "").replace("+", "").strip()
+            if cell == "-":
+                raw_values.append(0)  # Fortifications with no movement
+            else:
+                try:
+                    raw_values.append(int(cell))
+                except ValueError:
+                    raw_values.append(0)
+
+        result = {
+            "movement": raw_values[0],
+            "toughness": raw_values[1],
+            "save": raw_values[2],
+            "wounds": raw_values[3],
+            "leadership": raw_values[4],
+            "objective_control": raw_values[5],
+        }
+
+        # Check for INV column (M+6 should be in range)
+        if m_col + 6 < len(data_cells) - 1:
+            inv_raw = data_cells[m_col + 6].strip()
+            # Only treat as INV if it's a number (with optional +)
+            if inv_raw and not any(c.isalpha() for c in inv_raw):
+                inv_str = inv_raw.replace("+", "").strip()
+                try:
+                    result["invulnerable_save"] = int(inv_str)
+                except ValueError:
+                    pass
+
+        return result
+
+    return {}
 
 
 def _parse_model_count_from_markdown(body: str) -> tuple[int, int] | None:
@@ -289,10 +370,74 @@ def _parse_model_count_from_markdown(body: str) -> tuple[int, int] | None:
 
 
 def _parse_points_from_markdown(body: str) -> int | None:
+    """Parse unit points from markdown body.
+
+    Supports multiple formats found in wiki files:
+    1. **Очки:** 80  or  **Очки:** 80 (10 моделей) / 160 (20 моделей)
+    2. **Points:** 125  or  **Points:** 155 | **Role:** ...
+    3. **85 pts**  or  **280 points**  or  **30 очков**  (standalone bold)
+    4. Tables with a Points/Очки column:
+       | Состав | Points |    | Model | Points |
+       |:---|---:|        |-------|:------:|
+       | 5 Flash Gitz | 135 |    | Painboy | 55 |
+    """
+    # Pattern 1: Russian **Очки:** (existing)
     match = re.search(r"\*\*Очки:\*\*\s*(\d+)", body)
-    if not match:
-        return None
-    return int(match.group(1))
+    if match:
+        return int(match.group(1))
+
+    # Pattern 2: English **Points:**
+    match = re.search(r"\*\*Points:\*\*\s*(\d+)", body)
+    if match:
+        return int(match.group(1))
+
+    # Pattern 3: Bold number with pts/points/очков suffix (standalone)
+    # e.g. **85 pts**, **280 points**, **30 очков**
+    match = re.search(r"\*\*(\d+)\s*(?:pts|points|очков)\*\*", body)
+    if match:
+        return int(match.group(1))
+
+    # Pattern 4: Table with Points/Очки column
+    # Find the column index of the Points/Очки header, then extract
+    # the value from that column in the first data row.
+    lines = body.split("\n")
+    for i, line in enumerate(lines):
+        if not re.match(r"^\|[-:| ]+\|$", line):
+            continue
+        if i < 1 or i + 1 >= len(lines):
+            continue
+        header = lines[i - 1].strip()
+        header_cells = [c.strip() for c in header.split("|")]
+        # Find which column contains "Points" or "Очки" or "очк"
+        points_col = -1
+        for ci, cell in enumerate(header_cells):
+            if re.search(r"(Points|Очки|очк)", cell, re.IGNORECASE):
+                points_col = ci
+                break
+        if points_col < 0:
+            continue
+
+        # Find the first data row after the separator
+        for j in range(i + 1, len(lines)):
+            candidate = lines[j].strip()
+            if not candidate:
+                continue
+            if re.match(r"^\|[-:| ]+\|$", candidate):
+                continue
+            if not candidate.startswith("|"):
+                continue
+            # Extract data cells and get the points column value
+            data_cells = [c.strip() for c in candidate.split("|")]
+            if points_col < len(data_cells):
+                cell_value = data_cells[points_col]
+                # Remove bold markers and extract first number
+                cell_clean = cell_value.replace("*", "").replace("~", "").strip()
+                nums = re.findall(r"\b(\d+)\b", cell_clean)
+                if nums:
+                    return int(nums[0])
+            break
+
+    return None
 
 
 def _parse_keywords_from_markdown(body: str) -> list[str]:

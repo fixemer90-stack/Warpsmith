@@ -7,6 +7,7 @@ from backend.loader.registry import WikiRegistry
 
 SAMPLE_BOY = """---
 title: Boyz
+type: entity
 faction: orks
 category: Battleline
 movement: 5

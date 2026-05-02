@@ -3,7 +3,7 @@
 Все заметные изменения проекта фиксируются в этом файле.
 
 Формат: [Keep a Changelog](https://keepachangelog.com/)
-Версионирование: ZeroVer `v0.<PHASE>.<PATCH>`
+Версионирование: ZeroVer `v0.<PHASE>.<PATCH>` — см. [RELEASE.md](RELEASE.md)
 
 ---
 
@@ -20,6 +20,39 @@
 - Версия: 0.2.1 → 0.3.0 (Phase 1 завершена, начинается Phase 2)
 
 ## [Unreleased]
+
+### Added
+- **Phase 2: Game System начат!**
+- F2.1 Game State dataclass: `UnitState`, `PlayerState`, `GameState` с позициями, ранами, CP, VP, раундами
+- F2.1 Методы для движения юнитов, повреждений, переходов фаз, определения победителя
+- Тесты `tests/test_game_state.py` для управления состоянием игры
+- F2.2 2D Map: `BattlefieldMap` с NumPy terrain array, deployment zones, objectives
+- F2.2 Mission maps: Dawn of War, Spearhead с правильными зонами развертывания
+- Тесты `tests/test_map.py` для карт, зон развертывания и pathfinding
+- F2.3 Line of Sight: `LineOfSightCalculator` с ray casting алгоритмом
+- F2.3 Методы: `has_line_of_sight()`, `can_shoot_at()`, `can_charge_at()`, cover detection
+- Тесты `tests/test_line_of_sight.py` для видимости и стрельбы
+- F2.4 Missions: система миссий с правилами высадки, условиями захвата точек и подсчётом VP
+- F2.4 Три готовые миссии: Only War, Purge the Foe, Take and Hold
+- F2.4 Тесты `tests/test_mission.py` для системы миссий
+- F2.5 Game Loop: реализован игровой цикл с фазами Command → Movement → Shooting → Charge → Fight
+- F2.5 Класс `Scenario` в `backend/engine/scenario.py` для управления игровым процессом
+- F2.5 Тесты `tests/test_scenario.py` для игрового цикла
+- F2.6 Phase Transitions: реализованы механизмы чередования активаций в фазе Fight и определение Command Priority
+- F2.6 Добавлены поля `command_priority` в `PlayerState`, `is_engaged` и `is_fighting` в `UnitState`
+- F2.6 Добавлен метод `_determine_command_priority` в `GameState` для swap-правил приоритета
+- F2.6 Расширен `Scenario._fight_phase` с логикой чередующихся активаций
+- F2.6 Тесты `tests/test_phase_transitions.py` для проверки приоритета и чередующихся активаций
+- F2.7 Battle-shock, CP Generation, Stratagems: реализованы механизмы моральных тестов, генерации командных очков и фреймворк стратагем
+- F2.7 Добавлено поле `is_battle_shocked` в `UnitState` и метод `is_above_half_strength`
+- F2.7 Расширена генерация CP в `_command_phase`: +1 базовый +1 за warlord с лимитом Leviathan (10 CP)
+- F2.7 Реализована логика battle-shock тестов в `_morale_phase` с правилами snake eyes/boxcars
+- F2.7 Создан `backend/engine/stratagems.py` со фреймворком стратагем и базовыми стратагемами (Command Re-roll, Insane Bravery, Counter-Offensive, Tank Shock)
+- F2.7 Тесты `tests/test_f2_7_battle_shock_cp_stratagems.py` для battle-shock, CP генерации и стратагем
+- F2.8 Victory Points tracking and end-game conditions: VPTracker, GameResult, check_end_game with VP cap (100), army wipe, max rounds conditions; scoring functions (standard, progressive, kill_points)
+- F2.11 Team Builder UI: faction picker, unit modal with squad size selection, real-time PTS bar, validation, save/load via /api/rosters
+- F2.12 Leader Compatibility Checker: leader compatibility validation with rules for is_leader, leader_for list, max 2 leaders per unit, captain/lieutenant restrictions
+
 
 ## [0.2.1] — 2026-05-01
 

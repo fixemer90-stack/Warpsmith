@@ -1,7 +1,9 @@
-# Developer Index — WH40k Battle Simulator
+# Developer Index — Warpsmith
 
 Центральный хаб проекта. Отсюда ведут все тропы.
-Обновлён: 2026-05-01 | v0.2.0
+Обновлён: 2026-05-02 | v0.3.0
+
+**Навигация:** [INDEX.md](/mnt/d/Python/Balthier/INDEX.md) ← · → [WIKI_INDEX.md](/mnt/d/Python/Balthier/wiki/WIKI_INDEX.md)
 
 ## 📋 Граф документации
 
@@ -51,16 +53,18 @@ graph TD
 | # | Документ | Назначение |
 |---|----------|------------|
 | 1 | **DEV_INDEX.md** | 📌 Хаб всех документов (этот файл) |
-| 2 | **INDEX.md** | 📋 Полный индекс всех файлов (75 код + 360 wiki) |
+| 2 | **wiki/WIKI_INDEX.md** | 📋 Индекс всех вики-данных (478 файлов) |
 | 3 | **AGENTS.md** | 🤖 Правила разработки для AI-агентов |
-| 4 | **ROADMAP.md** | 🛣️ Дорожная карта: 7 фаз, ~75 фич |
+| 4 | **ROADMAP.md** | 🛣️ Дорожная карта: 7 фаз, ~75 фич, Phase 2 58% |
 | 5 | **ROADMAP.html** | 📊 Визуализация roadmap в браузере |
 | 6 | **docs/architecture/C4.md** | 🏗 C4-диаграммы (4 уровня) |
 | 7 | **docs/architecture/ADR.md** | ⚖️ 11 архитектурных решений |
 | 8 | **docs/requirements/SRS.md** | 📖 7 разделов требований |
 | 9 | **docs/requirements/UX.md** | 🎨 UX-дизайн (tooltips, synergy engine) |
 | 10 | **main.py** | 💻 Точка входа FastAPI |
-| 11 | **pyproject.toml** | 📦 Зависимости проекта |
+| 11 | **pyproject.toml** | 📦 Зависимости + ruff + mypy |
+| 12 | **RELEASE.md** | 📦 Политика релизов (ZeroVer, GitHub Flow) |
+| 13 | **CHANGELOG.md** | 📜 История изменений |
 
 ## 🏗 Проект
 
@@ -70,30 +74,36 @@ simulator/
 ├── DEV_INDEX.md       ← вы здесь
 ├── INDEX.md           индекс файлов
 ├── ROADMAP.md         дорожная карта
-├── main.py            FastAPI
+├── ROADMAP.html       визуализация roadmap
+├── RELEASE.md         политика релизов
+├── CHANGELOG.md       история изменений
+├── main.py            FastAPI (create_app)
 ├── pyproject.toml     зависимости
 │
 ├── backend/
 │   ├── auth/          JWT + bcrypt + OAuth (Google, VK)
 │   ├── billing/       Stripe, Feature Gate, Free/Premium
-│   ├── loader/        Wiki парсер, ICON_MAP
-│   ├── model/         Unit, Weapon dataclasses
-│   ├── engine/        Combat, Dice, Modifiers (Phase 1)
-│   ├── ai/            AI-поведение
-│   ├── state/         Game State, Map
-│   ├── db/            SQLite
-│   └── reporter/      Rich-таблицы
+│   ├── loader/        Wiki парсер + registry (160 units)
+│   ├── model/         Unit, Weapon, WargearSlot dataclasses
+│   ├── engine/        Combat, Dice, Modifiers, Scenario (Phase 1)
+│   ├── ai/            AI-поведение (стабы)
+│   ├── state/         Game State, Map, LoS, Missions, Roster (Phase 2)
+│   ├── db/            SQLite (users, rosters, scenarios)
+│   └── reporter/      Rich-таблицы (стабы)
 │
 ├── web/
-│   ├── routes/        pages, api, auth
-│   ├── templates/     Jinja2 (auth/, partials/)
+│   ├── routes/        pages, api (units/factions/simulate/rosters), auth
+│   ├── templates/     Jinja2 (base, team_builder, auth, pricing)
 │   └── static/        JS, SVG icons (16)
+│
+├── tests/             15 файлов, 133 теста (100% pass)
 │
 ├── docs/
 │   ├── architecture/  C4.md, ADR.md
-│   └── requirements/  SRS.md, UX.md
+│   ├── requirements/  SRS.md, UX.md
+│   └── features/      F1.1–F2.12 (24 specs)
 │
-└── wiki/ → /mnt/d/Python/Balthier/wiki   360+ страниц данных
+└── wiki/ → /mnt/d/Python/Balthier/wiki   ~478 страниц данных
 ```
 
 ## 🧩 Типовые сценарии
@@ -108,6 +118,7 @@ simulator/
 | Добавить страницу | ADR-002 (HTMX) | `web/templates/` + `web/routes/pages.py` |
 | Поправить БД | ADR-003, SRS.md | `backend/db/database.py` + `main.py: db.migrate()` |
 | Написать тест | AGENTS.md → п.2 | `tests/test_*.py` |
+| Создать эндпоинт API | — | `web/routes/api.py` + Pydantic модель |
 
 ## 🚀 Запуск
 
@@ -116,19 +127,39 @@ cd /mnt/d/Python/Balthier/simulator
 python main.py
 # → http://127.0.0.1:8000
 
-# Тесты
-python -m pytest tests/ -v
+# Тесты (133 шт.)
+WIKI_PATH=/mnt/d/Python/Balthier/wiki python -m pytest tests/ -v
 ```
 
 ## ⚙️ API (curl)
 
 ```bash
 curl http://127.0.0.1:8000/api/health
-# → {"status": "ok", "version": "0.2.0"}
+# → {"status": "ok", "version": "0.3.0"}
 
-curl http://127.0.0.1:8000/api/me
-# → {"id": 1, "email": "...", "display_name": "..."}
+curl http://127.0.0.1:8000/api/factions
+# → {"factions": [{"id": "orks", "label": "Orks"}, ...]}
 
-curl http://127.0.0.1:8000/api/units/orks
-# → список юнитов орков (заглушка)
+curl 'http://127.0.0.1:8000/api/units?faction=orks'
+# → {"faction": "orks", "units": [81 юнит]}
+
+curl http://127.0.0.1:8000/api/simulate -X POST \
+  -H 'Content-Type: application/json' \
+  -d '{"attacker_faction":"orks","attacker_unit":"Boyz",\
+       "defender_faction":"tau","defender_unit":"Strike Team",\
+       "weapon_name":"Shoota","n_iterations":1000}'
+# → {"weapon":"Shoota","stats":{"mean":0.264,"kill_probability":0.264},...}
 ```
+
+## 📊 Текущий прогресс
+
+| Фаза | Статус | Ключевое |
+|------|--------|----------|
+| Phase 0: Foundation | ✅ 100% | FastAPI, Auth, Wiki, Billing |
+| Phase 1: Combat Engine | ✅ 100% | Monte Carlo, Hit→Wound→Save→FNP, /api/simulate |
+| Phase 2: Game System | 🚧 58% | Game State, Map, LoS, Missions, Roster, CRUD |
+| Phase 3: AI | ⏳ 0% | Greedy AI, faction behaviors |
+| Phase 4: Web UI | ⏳ 0% | Team Builder UX, Canvas Map |
+| Phase 5: Production | ⏳ 0% | Docker, CI/CD |
+| Phase 6: Monetization | ⏳ 0% | Stripe, Ads |
+| Phase 7: Expansion | ⏳ 0% | i18n, Campaigns |

@@ -115,17 +115,17 @@ class Unit:
     edition: str = "10e"
 
     def __post_init__(self) -> None:
-        if not 2 <= self.save <= 6:
-            msg = "save must be between 2 and 6"
+        if not 2 <= self.save <= 7:
+            msg = "save must be between 2 and 7"
             raise ValueError(msg)
-        if self.invulnerable_save is not None and not 3 <= self.invulnerable_save <= 6:
-            msg = "invulnerable_save must be between 3 and 6"
+        if self.invulnerable_save is not None and not 3 <= self.invulnerable_save <= 7:
+            msg = "invulnerable_save must be between 3 and 7"
             raise ValueError(msg)
         if self.feel_no_pain is not None and not 4 <= self.feel_no_pain <= 6:
             msg = "feel_no_pain must be between 4 and 6"
             raise ValueError(msg)
-        if self.movement < 1:
-            msg = "movement must be at least 1"
+        if self.movement < 0:
+            msg = "movement cannot be negative"
             raise ValueError(msg)
         if self.toughness < 1:
             msg = "toughness must be at least 1"

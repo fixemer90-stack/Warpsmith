@@ -1,6 +1,7 @@
 # Release Policy — Warpsmith
 
 Политика версионирования, ветвления и релизов.
+см. [CHANGELOG.md](CHANGELOG.md) — история изменений по версиям.
 
 ---
 
