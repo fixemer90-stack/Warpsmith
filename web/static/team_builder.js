@@ -5,19 +5,26 @@ function teamBuilder() {
         faction: '',
         detachment: '',
         name: 'My Army',
+        gameSize: 2000,
         ptsLimit: 2000,
         roster: [],
-        categories: ['HQ', 'Battleline', 'Infantry', 'Vehicle', 'Monster', 'Dedicated Transport'],
-        selectedCategory: 'Battleline',
+        selectedCategory: '',
         showModal: false,
         selectedUnit: null,
         squadSize: 1,
         validationErrors: [],
+        _units: [],
+        detachments: [],
 
         // Computed
         get unitsByCategory() {
-            // From window._unitData grouped by category
-            return window._unitData || {};
+            const grouped = {};
+            this._units.forEach(unit => {
+                const cat = unit.category || 'Other';
+                if (!grouped[cat]) grouped[cat] = [];
+                grouped[cat].push(unit);
+            });
+            return grouped;
         },
         get filteredUnits() {
             const cat = this.selectedCategory;
@@ -38,6 +45,9 @@ function teamBuilder() {
         },
 
         // Methods
+        updatePtsLimit() {
+            this.ptsLimit = parseInt(this.gameSize, 10);
+        },
         async loadUnits() {
             if (!this.faction) {
                 this.units = [];
@@ -52,15 +62,9 @@ function teamBuilder() {
                 
         if (unitsResp.ok) {
             const unitsData = await unitsResp.json();
-            // Group units by category for the sidebar
-            const grouped = {};
-            (unitsData.units || []).forEach(unit => {
-                if (!grouped[unit.category]) {
-                    grouped[unit.category] = [];
-                }
-                grouped[unit.category].push(unit);
-            });
-            window._unitData = grouped;
+            this._units = unitsData.units || [];
+            const keys = Object.keys(this.unitsByCategory);
+            this.selectedCategory = keys.length > 0 ? keys[0] : '';
         }
                 
                 if (detResp.ok) {
