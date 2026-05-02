@@ -1,12 +1,18 @@
 """JSON API для симуляции."""
 
-from fastapi import APIRouter, HTTPException
+import json
+
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from typing import Optional
 
 from backend.loader.registry import registry as wiki
 from backend.engine.combat import simulate_weapon_attack, simulate_unit_attack, MultiAttackResult
 from backend.engine.dice import DicePool
+from backend.auth import get_current_user, User
+from backend.billing.plans import UserFeatures
+from backend.db.database import db
+from backend.state.roster import validate_roster
 
 
 router = APIRouter()
@@ -217,3 +223,106 @@ async def list_factions():
             for f in faction_names
         ]
     }
+
+
+# ── Roster CRUD ─────────────────────────────────────────
+
+
+class RosterUnit(BaseModel):
+    unit_name: str
+    squad_size: int = 1
+
+
+class RosterCreate(BaseModel):
+    name: str
+    faction: str
+    pts_limit: int = 2000
+    detachment: Optional[str] = None
+    units: list[RosterUnit]
+    is_public: bool = False
+
+
+class RosterUpdate(BaseModel):
+    name: Optional[str] = None
+    units: Optional[list[RosterUnit]] = None
+    is_public: Optional[bool] = None
+
+
+@router.post("/rosters")
+async def create_roster(data: RosterCreate, user: User = Depends(get_current_user)):
+    """Создать новый ростер."""
+
+    # Check Free tier limit
+    features = UserFeatures.for_user(user)
+    current = db.fetchone(
+        "SELECT COUNT(*) as cnt FROM rosters WHERE user_id = ?", (user.id,)
+    )["cnt"]
+    if current >= features["max_rosters"]:
+        raise HTTPException(403, detail="Max rosters limit reached. Upgrade to Premium.")
+
+    # Load wiki and validate
+    try:
+        wiki.load()
+    except Exception:
+        pass
+    units_list = [(u.unit_name, u.squad_size) for u in data.units]
+    validation = validate_roster(units_list, wiki.units, pts_limit=data.pts_limit)
+    if not validation.is_valid:
+        raise HTTPException(400, detail={
+            "error": "roster_invalid",
+            "validation_errors": [e.__dict__ for e in validation.errors],
+        })
+
+    cur = db.execute(
+        """INSERT INTO rosters (user_id, name, faction, pts_limit, detachment, units, is_public)
+           VALUES (?, ?, ?, ?, ?, ?, ?)""",
+        (user.id, data.name, data.faction, data.pts_limit,
+         data.detachment, json.dumps([u.model_dump() for u in data.units]),
+         int(data.is_public)),
+    )
+    db.commit()
+    return {"id": cur.lastrowid, **data.model_dump()}
+
+
+@router.get("/rosters")
+async def list_rosters(user: User = Depends(get_current_user), public_only: bool = False):
+    """Список ростереров текущего пользователя."""
+
+    if public_only:
+        rows = db.fetchall(
+            "SELECT * FROM rosters WHERE is_public = 1 ORDER BY updated_at DESC"
+        )
+    else:
+        rows = db.fetchall(
+            "SELECT * FROM rosters WHERE user_id = ? ORDER BY updated_at DESC",
+            (user.id,),
+        )
+    return {"rosters": [dict(r) for r in rows]}
+
+
+@router.get("/rosters/{roster_id}")
+async def get_roster(roster_id: int, user: User = Depends(get_current_user)):
+    """Получить ростер по id."""
+
+    row = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_id,))
+    if not row:
+        raise HTTPException(404, detail="Roster not found")
+    if row["user_id"] != user.id and not row["is_public"]:
+        raise HTTPException(403, detail="Not authorized")
+
+    return dict(row)
+
+
+@router.delete("/rosters/{roster_id}")
+async def delete_roster(roster_id: int, user: User = Depends(get_current_user)):
+    """Удалить ростер."""
+
+    row = db.fetchone("SELECT user_id FROM rosters WHERE id = ?", (roster_id,))
+    if not row:
+        raise HTTPException(404, detail="Roster not found")
+    if row["user_id"] != user.id:
+        raise HTTPException(403, detail="Not authorized")
+
+    db.execute("DELETE FROM rosters WHERE id = ?", (roster_id,))
+    db.commit()
+    return {"status": "deleted", "id": roster_id}
