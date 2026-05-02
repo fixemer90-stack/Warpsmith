@@ -42,24 +42,25 @@ async def list_units(faction: str = ""):
     else:
         unit_names = wiki.list_units()
 
-    result = []
-    for name in unit_names:
-        unit = wiki.get_unit(name)
-        if unit:
-            result.append({
-                "name": unit.name,
-                "faction": unit.faction,
-                "category": unit.category,
-                "points": unit.points,
-                "movement": unit.movement,
-                "toughness": unit.toughness,
-                "save": unit.save,
-                "wounds": unit.wounds,
-                "weapons": [
-                    {"name": w.name, "type": w.type}
-                    for w in (unit.ranged_weapons + unit.melee_weapons)
-                ],
-            })
+        result = []
+        for name in unit_names:
+            unit = wiki.get_unit(name)
+            if unit:
+                result.append({
+                    "name": unit.name,
+                    "faction": unit.faction,
+                    "category": unit.category,
+                    "points": unit.points,
+                    "movement": unit.movement,
+                    "toughness": unit.toughness,
+                    "save": unit.save,
+                    "wounds": unit.wounds,
+                    "abilities": unit.abilities,  # Add abilities for team builder modal
+                    "weapons": [
+                        {"name": w.name, "type": w.type}
+                        for w in (unit.ranged_weapons + unit.melee_weapons)
+                    ],
+                })
 
     return {"faction": faction, "units": result}
 

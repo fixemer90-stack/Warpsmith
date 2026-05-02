@@ -1,89 +1,155 @@
 {% extends "base.html" %}
+
 {% block content %}
-    <div x-data="teamBuilder()" x-init="init()" class="max-w-6xl mx-auto">
-    <div class="flex items-center justify-between mb-8">
-        <h1 class="text-3xl font-bold">🛠 Team Builder</h1>
-        <button @click="saveRoster" class="bg-yellow-600 hover:bg-yellow-500 px-4 py-2 rounded font-semibold">
-            Save Roster
-        </button>
+<div x-data="teamBuilder()" class="max-w-6xl mx-auto py-8 px-4">
+    <h1 class="text-2xl font-bold text-white mb-6">Team Builder</h1>
+
+    <!-- Step 1: Faction + Detachment -->
+    <div class="bg-gray-800 rounded-lg p-4 mb-4">
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm text-gray-300 mb-1">Faction</label>
+                <select x-model="faction" @change="loadUnits()"
+                        class="w-full bg-gray-700 text-white rounded px-3 py-2">
+                    <option value="">-- Select Faction --</option>
+                    {% for faction in factions %}
+                    <option value="{{ faction }}">{{ faction|title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm text-gray-300 mb-1">Detachment</label>
+                <select x-model="detachment"
+                        class="w-full bg-gray-700 text-white rounded px-3 py-2">
+                    <option value="">-- Select Detachment --</option>
+                    <template x-for="d in detachments" :key="d">
+                        <option x-text="d" :value="d"></option>
+                    </template>
+                </select>
+            </div>
+        </div>
+        <div class="mt-2">
+            <label class="block text-sm text-gray-300 mb-1">Roster Name</label>
+            <input x-model="name" type="text" placeholder="My Army"
+                   class="w-full bg-gray-700 text-white rounded px-3 py-2">
+        </div>
     </div>
 
-    <div class="grid grid-cols-3 gap-6">
-        <!-- Left panel -->
-        <div class="col-span-1 bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <label class="block text-sm text-gray-400 mb-1">Faction</label>
-            <select x-model="faction" @change="loadUnits()" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 mb-4">
-                <option value="">-- Select --</option>
-                <template x-for="f in factions" :key="f.id">
-                    <option x-text="f.label" x-bind:value="f.id"></option>
+    <!-- Step 2: Unit Browser -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Categories -->
+        <div class="bg-gray-800 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-gray-300 mb-3">Categories</h3>
+            <div class="space-y-1">
+                <template x-for="cat in categories" :key="cat">
+                    <button @click="selectedCategory = cat"
+                            class="w-full text-left px-3 py-2 rounded text-sm"
+                            :class="selectedCategory == cat
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'">
+                        <span x-text="cat"></span>
+                        <span class="text-gray-500 text-xs ml-1"
+                              x-text="`(${unitsByCategory[cat]?.length || 0})`"></span>
+                    </button>
                 </template>
-            </select>
+            </div>
+        </div>
 
-            <label class="block text-sm text-gray-400 mb-1">PTS Limit</label>
-            <input type="number" x-model="ptsLimit" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 mb-4"
-                   value="2000" min="500" max="3000" step="500">
-
-            <label class="block text-sm text-gray-400 mb-1">Detachment</label>
-            <select x-model="detachment" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 mb-4">
-                <option value="">-- Select --</option>
-                <template x-for="d in detachments" :key="d">
-                    <option x-text="d" x-bind:value="d"></option>
-                </template>
-            </select>
-
-            <h2 class="text-lg font-bold mb-3 mt-6">Available Units</h2>
-            <template x-if="!faction">
-                <div class="text-gray-500 text-sm py-4">Select a faction to see available units.</div>
-            </template>
-            <template x-if="faction && units.length === 0">
-                <div class="text-gray-500 text-sm py-4">Loading units...</div>
-            </template>
-            <div class="space-y-1 max-h-96 overflow-y-auto">
-                <template x-for="unit in units" :key="unit.name">
-                    <div class="flex items-center justify-between bg-gray-700 rounded px-3 py-2 text-sm hover:bg-gray-600 cursor-pointer"
-                         @click="addUnit(unit.name, unit.points)">
-                        <span x-text="unit.name"></span>
-                        <span class="text-yellow-400 text-xs" x-text="unit.points + 'pts'"></span>
+        <!-- Units List -->
+        <div class="bg-gray-800 rounded-lg p-4 lg:col-span-1">
+            <h3 class="text-sm font-semibold text-gray-300 mb-3">Units</h3>
+            <div class="space-y-2 max-h-96 overflow-y-auto">
+                <template x-for="unit in filteredUnits" :key="unit.name">
+                    <div @click="openUnitModal(unit)"
+                         class="bg-gray-700 rounded p-3 cursor-pointer hover:bg-gray-600">
+                        <div class="flex justify-between">
+                            <span class="text-white text-sm" x-text="unit.name"></span>
+                            <span class="text-yellow-400 text-xs" x-text="unit.points + 'pts'"></span>
+                        </div>
+                        <div class="text-gray-400 text-xs mt-1">
+                            <span x-text="unit.category"></span>
+                            <span class="mx-1">|</span>
+                            <span x-text="`M${unit.movement} T${unit.toughness} SV${unit.save}+ W${unit.wounds}`"></span>
+                        </div>
                     </div>
                 </template>
             </div>
         </div>
 
-        <!-- Right panel -->
-        <div class="col-span-2 bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold">Roster</h2>
-                <span class="text-sm" :class="ptsUsed > ptsLimit ? 'text-red-500' : 'text-gray-400'">
-                    <span x-text="ptsUsed"></span>/<span x-text="ptsLimit"></span> PTS
-                </span>
-            </div>
+        <!-- Current Roster -->
+        <div class="bg-gray-800 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-gray-300 mb-3">Roster</h3>
 
-            <div class="w-full bg-gray-700 rounded-full h-3 mb-6">
-                <div class="bg-yellow-500 h-3 rounded-full transition-all"
-                     :style="'width: ' + Math.min(100, (ptsUsed/ptsLimit)*100) + '%'"
-                     :class="ptsUsed > ptsLimit ? 'bg-red-500' : 'bg-yellow-500'">
+            <!-- PTS Bar -->
+            <div class="mb-4">
+                <div class="flex justify-between text-xs text-gray-400 mb-1">
+                    <span x-text="`${totalPts} / ${ptsLimit} pts`"></span>
+                    <span x-text="`${unitCount} units`"></span>
                 </div>
-            </div>
-
-            <template x-if="roster.length === 0">
-                <p class="text-gray-500 text-center py-8">No units added yet. Select from the library.</p>
-            </template>
-
-            <template x-for="(unit, idx) in roster" :key="idx">
-                <div class="flex items-center justify-between bg-gray-700 rounded px-4 py-3 mb-2">
-                    <div>
-                        <span class="font-semibold" x-text="unit.name"></span>
-                        <span class="text-gray-400 text-sm"> ×<span x-text="unit.count"></span></span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-yellow-400" x-text="unit.points * unit.count"></span>
-                        <button @click="removeUnit(idx)" class="text-red-400 hover:text-red-300">✕</button>
+                <div class="w-full bg-gray-700 rounded-full h-3">
+                    <div class="h-3 rounded-full transition-all duration-300"
+                         :style="`width: ${(totalPts / ptsLimit * 100)}%`"
+                         :class="totalPts > ptsLimit ? 'bg-red-500' : 'bg-green-500'">
                     </div>
                 </div>
-            </template>
+            </div>
+
+            <!-- Unit List -->
+            <div class="space-y-2 max-h-80 overflow-y-auto">
+                <template x-for="(entry, idx) in roster" :key="idx">
+                    <div class="bg-gray-700 rounded p-2 flex justify-between items-center">
+                        <div>
+                            <span class="text-white text-sm" x-text="entry.name"></span>
+                            <span class="text-gray-400 text-xs ml-1"
+                                  x-text="`x${entry.squad_size}`"></span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-yellow-400 text-xs" x-text="entry.pts + 'pts'"></span>
+                            <button @click="removeUnit(idx)" class="text-red-400 text-xs hover:text-red-300">x</button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-4 space-y-2">
+                <button @click="saveRoster()"
+                        :disabled="!isValid"
+                        class="w-full bg-blue-600 text-white rounded py-2 font-medium
+                                disabled:opacity-50 disabled:cursor-not-allowed">
+                    Save Roster
+                </button>
+                <template x-if="validationErrors.length > 0">
+                    <div class="bg-red-900/30 border border-red-700 rounded p-2 text-red-400 text-xs">
+                        <template x-for="err in validationErrors" :key="err.code">
+                            <div x-text="err.message"></div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unit Modal -->
+    <div x-show="showModal" @click.away="showModal = false"
+         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <h2 class="text-lg font-bold text-white mb-2" x-text="selectedUnit?.name"></h2>
+            <div class="text-gray-400 text-sm mb-4" x-text="selectedUnit?.ability_text"></div>
+
+            <div class="mb-4">
+                <label class="block text-sm text-gray-300 mb-1">Squad Size</label>
+                <input x-model="squadSize" type="number" min="1" max="20"
+                       class="w-full bg-gray-700 text-white rounded px-3 py-2">
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <button @click="showModal = false"
+                        class="bg-gray-600 text-white px-4 py-2 rounded">Cancel</button>
+                <button @click="addUnit()"
+                        class="bg-blue-600 text-white px-4 py-2 rounded">Add to Roster</button>
+            </div>
         </div>
     </div>
 </div>
-
-<script src="/static/team_builder.js"></script>
 {% endblock %}

@@ -1,83 +1,154 @@
 // Team Builder — Alpine.js component
 function teamBuilder() {
     return {
-        faction: "",
+        // State
+        faction: '',
+        detachment: '',
+        name: 'My Army',
         ptsLimit: 2000,
-        detachment: "",
         roster: [],
-        units: [],
-        factions: [],
-        detachments: [],
+        categories: ['HQ', 'Battleline', 'Infantry', 'Vehicle', 'Monster', 'Dedicated Transport'],
+        selectedCategory: 'Battleline',
+        showModal: false,
+        selectedUnit: null,
+        squadSize: 1,
+        validationErrors: [],
 
-        async init() {
-            const resp = await fetch("/api/factions");
-            if (resp.ok) {
-                this.factions = (await resp.json()).factions || [];
-            }
+        // Computed
+        get unitsByCategory() {
+            // From window._unitData grouped by category
+            return window._unitData || {};
+        },
+        get filteredUnits() {
+            const cat = this.selectedCategory;
+            return (this.unitsByCategory[cat] || [])
+                .filter(u => u.faction === this.faction || !this.faction);
+        },
+        get totalPts() {
+            return this.roster.reduce((sum, u) => sum + u.pts * u.squad_size, 0);
+        },
+        get unitCount() {
+            return this.roster.length;
+        },
+        get isValid() {
+            return this.totalPts <= this.ptsLimit
+                && this.totalPts > 0
+                && this.faction
+                && this.roster.length > 0;
         },
 
+        // Methods
         async loadUnits() {
             if (!this.faction) {
                 this.units = [];
                 this.detachments = [];
                 return;
             }
-            this.units = [];
-            this.detachment = "";
-            const [unitsResp, detResp] = await Promise.all([
-                fetch("/api/units?faction=" + encodeURIComponent(this.faction)),
-                fetch("/api/detachments?faction=" + encodeURIComponent(this.faction)),
-            ]);
-            if (unitsResp.ok) {
-                this.units = (await unitsResp.json()).units || [];
-            }
-            if (detResp.ok) {
-                this.detachments = (await detResp.json()).detachments || [];
-            }
-        },
-
-        get ptsUsed() {
-            return this.roster.reduce((sum, u) => sum + u.points * u.count, 0);
-        },
-
-        addUnit(name, points) {
-            const existing = this.roster.find(u => u.name === name);
-            if (existing) {
-                existing.count++;
-            } else {
-                this.roster.push({ name, points, count: 1 });
-            }
-        },
-
-        removeUnit(idx) {
-            if (this.roster[idx].count > 1) {
-                this.roster[idx].count--;
-            } else {
-                this.roster.splice(idx, 1);
-            }
-        },
-
-        async saveRoster() {
-            const name = prompt("Roster name:", `My ${this.faction} Army`);
-            if (!name) return;
-
-            const resp = await fetch("/api/rosters", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name,
-                    faction: this.faction,
-                    pts_limit: this.ptsLimit,
-                    detachment: this.detachment,
-                    units: this.roster.map(u => ({ unit_name: u.name, squad_size: u.count })),
-                }),
+            try {
+                const [unitsResp, detResp] = await Promise.all([
+                    fetch(`/api/units?faction=${encodeURIComponent(this.faction)}`),
+                    fetch(`/api/detachments?faction=${encodeURIComponent(this.faction)}`),
+                ]);
+                
+        if (unitsResp.ok) {
+            const unitsData = await unitsResp.json();
+            // Group units by category for the sidebar
+            const grouped = {};
+            (unitsData.units || []).forEach(unit => {
+                if (!grouped[unit.category]) {
+                    grouped[unit.category] = [];
+                }
+                grouped[unit.category].push(unit);
             });
-
-            if (resp.ok) {
-                alert("Roster saved!");
+            window._unitData = grouped;
+        }
+                
+                if (detResp.ok) {
+                    const detData = await detResp.json();
+                    this.detachments = detData.detachments || [];
+                }
+            } catch (error) {
+                console.error('Failed to load units/detachments:', error);
+            }
+        },
+        
+        openUnitModal(unit) {
+            this.selectedUnit = unit;
+            this.squadSize = unit.squad_size || 1; // Default to 1 if not specified
+            this.showModal = true;
+        },
+        
+        addUnit() {
+            if (!this.selectedUnit) return;
+            
+            // Check if unit already in roster
+            const existingIndex = this.roster.findIndex(u => u.name === this.selectedUnit.name);
+            if (existingIndex >= 0) {
+                // Increase squad size
+                this.roster[existingIndex].squad_size += this.squadSize;
             } else {
-                const err = await resp.json().catch(() => ({}));
-                alert("Failed to save: " + (err.detail || resp.statusText));
+                // Add new unit to roster
+                this.roster.push({
+                    name: this.selectedUnit.name,
+                    pts: this.selectedUnit.points,
+                    squad_size: this.squadSize
+                });
+            }
+            
+            // Reset form
+            this.showModal = false;
+            this.validationErrors = [];
+        },
+        
+        removeUnit(idx) {
+            this.roster.splice(idx, 1);
+        },
+        
+        async saveRoster() {
+            if (!this.isValid) {
+                alert('Please fix validation errors before saving');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/rosters', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: this.name,
+                        faction: this.faction,
+                        pts_limit: this.ptsLimit,
+                        detachment: this.detachment,
+                        units: this.roster.map(u => ({
+                            unit_name: u.name,
+                            squad_size: u.squad_size
+                        }))
+                    })
+                });
+                
+                if (response.ok) {
+                    alert('Roster saved successfully!');
+                    // Reset form after successful save
+                    this.name = 'My Army';
+                    this.faction = '';
+                    this.detachment = '';
+                    this.roster = [];
+                    this.validationErrors = [];
+                } else {
+                    const errorData = await response.json();
+                    if (errorData.validation_errors) {
+                        // Format validation errors for display
+                        this.validationErrors = errorData.validation_errors.map(err => ({
+                            code: err.error || 'validation_error',
+                            message: err.message || 'Validation failed'
+                        }));
+                    } else {
+                        alert('Failed to save roster: ' + (errorData.detail || response.statusText));
+                    }
+                }
+            } catch (error) {
+                console.error('Error saving roster:', error);
+                alert('Failed to save roster due to network error');
             }
         }
     };
