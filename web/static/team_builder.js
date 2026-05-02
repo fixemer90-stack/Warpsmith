@@ -24,7 +24,13 @@ function teamBuilder() {
                 if (!grouped[cat]) grouped[cat] = [];
                 grouped[cat].push(unit);
             });
-            return grouped;
+            // Sort: Character → Battleline → Transport → Vehicle → Monster → Infantry → Legends
+            const order = ['Character', 'Battleline', 'Transport', 'Vehicle', 'Monster', 'Infantry', 'Legends'];
+            const sorted = {};
+            order.forEach(c => { if (grouped[c]) sorted[c] = grouped[c]; });
+            // Any uncategorized go at the end but before Legends (if not already in order)
+            Object.keys(grouped).filter(c => !order.includes(c)).forEach(c => sorted[c] = grouped[c]);
+            return sorted;
         },
         get filteredUnits() {
             const cat = this.selectedCategory;
