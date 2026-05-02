@@ -3,7 +3,7 @@
 Все заметные изменения проекта фиксируются в этом файле.
 
 Формат: [Keep a Changelog](https://keepachangelog.com/)
-Версионирование: ZeroVer `v0.<PHASE>.<PATCH>`
+Версионирование: ZeroVer `v0.<PHASE>.<PATCH>` — см. [RELEASE.md](RELEASE.md)
 
 ---
 

@@ -60,7 +60,7 @@
 ## 🚧 Phase 2: Game System
 
 ```
-[████████░░░░░░░░] 58% · 12 features
+[██████████████░░] 75% · 12 features
 ```
 
 **Цель:** Полный Game Loop с картой, миссиями, ростерами.
@@ -74,8 +74,8 @@
 | 2.3 | ✅ | Line of Sight (LoS) — ray casting | 4h |
 | 2.4 | ✅ | Missions: objectives, scoring, deployment rules | 3h |
 | 2.5 | ✅ | Game Loop: Command → Movement → Shooting → Charge → Fight | 6h |
-| 2.6 | ⚪ | Phase transitions, priority, alternating activations | 4h |
-| 2.7 | ⚪ | Battle-shock, CP generation, stratagem resolution | 4h |
+| 2.6 | 🟢 | Phase transitions, priority, alternating activations | 4h |
+| 2.7 | 🟢 | Battle-shock, CP generation, stratagem resolution | 4h |
 | 2.8 | ⚪ | Victory Points tracking and end-game conditions | 2h |
 | 2.9 | 🟢 | Roster validation (PTS, Warlord, 3× cap) + GameSize enum | 3h |
 | 2.10 | 🟢 | Roster CRUD: SQLite save/load/delete via /api/rosters | 2h |
@@ -204,7 +204,7 @@
 |------|----------|------|--------|-----------|
 | **0. Foundation** | 12 | ~40ч | ✅ 100% | Скелет проекта + wiki |
 | **1. Combat Engine** | 12 | ~60ч | ✅ 100% | `curl /api/simulate` → JSON + PMF |
-| **2. Game System** | 12 | ~40ч | 🚧 58% (F2.1–F2.5, F2.9, F2.10 done) | Полный Game Loop |
+| **2. Game System** | 12 | ~40ч | 🚧 75% (F2.1–F2.7, F2.9, F2.10 done) | Полный Game Loop |
 | **3. AI & Automation** | 8 | ~25ч | ⏳ 0% | AI-vs-AI бой |
 | **4. Web UI Polish** | 8 | ~35ч | ⏳ 0% | Готовый UX |
 | **5. Production** | 7 | ~15ч | ⏳ 0% | Развёрнуто на сервере |

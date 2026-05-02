@@ -254,11 +254,6 @@ def _fill_missing_unit_fields(kwargs: dict[str, Any], metadata: dict[str, Any], 
         if model_count is not None:
             kwargs["model_count"] = model_count
 
-    if kwargs.get("points", 0) == 0:
-        points = _parse_points_from_markdown(body)
-        if points is not None:
-            kwargs["points"] = points
-
     if not kwargs.get("keywords"):
         kwargs["keywords"] = _parse_keywords_from_markdown(body)
 
@@ -375,10 +370,74 @@ def _parse_model_count_from_markdown(body: str) -> tuple[int, int] | None:
 
 
 def _parse_points_from_markdown(body: str) -> int | None:
+    """Parse unit points from markdown body.
+
+    Supports multiple formats found in wiki files:
+    1. **Очки:** 80  or  **Очки:** 80 (10 моделей) / 160 (20 моделей)
+    2. **Points:** 125  or  **Points:** 155 | **Role:** ...
+    3. **85 pts**  or  **280 points**  or  **30 очков**  (standalone bold)
+    4. Tables with a Points/Очки column:
+       | Состав | Points |    | Model | Points |
+       |:---|---:|        |-------|:------:|
+       | 5 Flash Gitz | 135 |    | Painboy | 55 |
+    """
+    # Pattern 1: Russian **Очки:** (existing)
     match = re.search(r"\*\*Очки:\*\*\s*(\d+)", body)
-    if not match:
-        return None
-    return int(match.group(1))
+    if match:
+        return int(match.group(1))
+
+    # Pattern 2: English **Points:**
+    match = re.search(r"\*\*Points:\*\*\s*(\d+)", body)
+    if match:
+        return int(match.group(1))
+
+    # Pattern 3: Bold number with pts/points/очков suffix (standalone)
+    # e.g. **85 pts**, **280 points**, **30 очков**
+    match = re.search(r"\*\*(\d+)\s*(?:pts|points|очков)\*\*", body)
+    if match:
+        return int(match.group(1))
+
+    # Pattern 4: Table with Points/Очки column
+    # Find the column index of the Points/Очки header, then extract
+    # the value from that column in the first data row.
+    lines = body.split("\n")
+    for i, line in enumerate(lines):
+        if not re.match(r"^\|[-:| ]+\|$", line):
+            continue
+        if i < 1 or i + 1 >= len(lines):
+            continue
+        header = lines[i - 1].strip()
+        header_cells = [c.strip() for c in header.split("|")]
+        # Find which column contains "Points" or "Очки" or "очк"
+        points_col = -1
+        for ci, cell in enumerate(header_cells):
+            if re.search(r"(Points|Очки|очк)", cell, re.IGNORECASE):
+                points_col = ci
+                break
+        if points_col < 0:
+            continue
+
+        # Find the first data row after the separator
+        for j in range(i + 1, len(lines)):
+            candidate = lines[j].strip()
+            if not candidate:
+                continue
+            if re.match(r"^\|[-:| ]+\|$", candidate):
+                continue
+            if not candidate.startswith("|"):
+                continue
+            # Extract data cells and get the points column value
+            data_cells = [c.strip() for c in candidate.split("|")]
+            if points_col < len(data_cells):
+                cell_value = data_cells[points_col]
+                # Remove bold markers and extract first number
+                cell_clean = cell_value.replace("*", "").replace("~", "").strip()
+                nums = re.findall(r"\b(\d+)\b", cell_clean)
+                if nums:
+                    return int(nums[0])
+            break
+
+    return None
 
 
 def _parse_keywords_from_markdown(body: str) -> list[str]:

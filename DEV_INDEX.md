@@ -3,6 +3,8 @@
 Центральный хаб проекта. Отсюда ведут все тропы.
 Обновлён: 2026-05-02 | v0.3.0
 
+**Навигация:** [INDEX.md](/mnt/d/Python/Balthier/INDEX.md) ← · → [WIKI_INDEX.md](/mnt/d/Python/Balthier/wiki/WIKI_INDEX.md)
+
 ## 📋 Граф документации
 
 ```mermaid
@@ -61,6 +63,8 @@ graph TD
 | 9 | **docs/requirements/UX.md** | 🎨 UX-дизайн (tooltips, synergy engine) |
 | 10 | **main.py** | 💻 Точка входа FastAPI |
 | 11 | **pyproject.toml** | 📦 Зависимости + ruff + mypy |
+| 12 | **RELEASE.md** | 📦 Политика релизов (ZeroVer, GitHub Flow) |
+| 13 | **CHANGELOG.md** | 📜 История изменений |
 
 ## 🏗 Проект
 
