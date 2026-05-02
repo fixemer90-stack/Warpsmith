@@ -7,22 +7,13 @@
 
 ---
 
-## [0.3.0] — 2026-05-02
+## [0.4.0] — 2026-05-02
 
 ### Added
-- F1.12 MultiAttack: `simulate_unit_attack()` для юнитов с несколькими оружиями
-- F1.12 `simulate_squad_attack()` для симуляции атак отрядов
-- F1.12 POST `/api/simulate-unit`: эндпоинт для симуляции атаки юнита
-- Тесты `tests/test_combat.py` для multi-weapon и squad attacks
-- **Phase 1: Combat Engine полностью завершён!**
-
-### Changed
-- Версия: 0.2.1 → 0.3.0 (Phase 1 завершена, начинается Phase 2)
-
-## [Unreleased]
-
-### Added
-- **Phase 2: Game System начат!**
+- **Phase 2: Game System завершена!**
+- F2.8 Victory Points tracking and end-game conditions: VPTracker, GameResult, check_end_game with VP cap (100), army wipe, max rounds conditions; scoring functions (standard, progressive, kill_points)
+- F2.11 Team Builder UI: faction picker, unit modal with squad size selection, real-time PTS bar, validation, save/load via /api/rosters
+- F2.12 Leader Compatibility Checker: leader compatibility validation with rules for is_leader, leader_for list, max 2 leaders per unit, captain/lieutenant restrictions
 - F2.1 Game State dataclass: `UnitState`, `PlayerState`, `GameState` с позициями, ранами, CP, VP, раундами
 - F2.1 Методы для движения юнитов, повреждений, переходов фаз, определения победителя
 - Тесты `tests/test_game_state.py` для управления состоянием игры
@@ -49,6 +40,14 @@
 - F2.7 Реализована логика battle-shock тестов в `_morale_phase` с правилами snake eyes/boxcars
 - F2.7 Создан `backend/engine/stratagems.py` со фреймворком стратагем и базовыми стратагемами (Command Re-roll, Insane Bravery, Counter-Offensive, Tank Shock)
 - F2.7 Тесты `tests/test_f2_7_battle_shock_cp_stratagems.py` для battle-shock, CP генерации и стратагем
+
+### Changed
+- Версия: 0.3.0 → 0.4.0 (Phase 2 завершена, начинается Phase 3)
+
+---
+
+## [Unreleased]
+
 - F2.8 Victory Points tracking and end-game conditions: VPTracker, GameResult, check_end_game with VP cap (100), army wipe, max rounds conditions; scoring functions (standard, progressive, kill_points)
 - F2.11 Team Builder UI: faction picker, unit modal with squad size selection, real-time PTS bar, validation, save/load via /api/rosters
 - F2.12 Leader Compatibility Checker: leader compatibility validation with rules for is_leader, leader_for list, max 2 leaders per unit, captain/lieutenant restrictions
