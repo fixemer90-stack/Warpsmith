@@ -212,17 +212,52 @@ async def list_factions():
         return {"factions": []}
 
     faction_names = wiki.list_factions()
-    labels = {
-        "orks": "Orks",
-        "tau": "T'au Empire",
-        "adeptus-mechanicus": "Adeptus Mechanicus",
-    }
+
+    # Try to get proper labels from wiki faction pages
+    from pathlib import Path
+    import frontmatter
+    labels = {}
+    for f_id in faction_names:
+        fp = wiki.wiki_path / "factions" / f"{f_id}.md"
+        if not fp.exists():
+            # Try case-insensitive match
+            for f in (wiki.wiki_path / "factions").iterdir():
+                if f.is_file() and f.stem.lower() == f_id.lower():
+                    fp = f
+                    break
+        if fp.exists():
+            try:
+                post = frontmatter.load(str(fp))
+                labels[f_id] = str(post.metadata.get("title", f_id.replace("-", " ").title()))
+            except Exception:
+                labels[f_id] = f_id.replace("-", " ").title()
+        else:
+            labels[f_id] = f_id.replace("-", " ").title()
+
     return {
         "factions": [
-            {"id": f, "label": labels.get(f, f)}
+            {"id": f, "label": labels.get(f, f.replace("-", " ").title())}
             for f in faction_names
         ]
     }
+
+
+@router.get("/detachments")
+async def list_detachments(faction: str = ""):
+    """Список детачментов (всех или по фракции)."""
+    try:
+        wiki.load()
+    except Exception:
+        return {"detachments": []}
+
+    from pathlib import Path
+    wiki_path = wiki.wiki_path
+    det_dir = wiki_path / "detachments" / faction
+    if not det_dir.exists():
+        return {"detachments": []}
+
+    detachments = sorted(f.stem for f in det_dir.glob("*.md"))
+    return {"detachments": detachments}
 
 
 # ── Roster CRUD ─────────────────────────────────────────

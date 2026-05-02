@@ -6,17 +6,33 @@ function teamBuilder() {
         detachment: "",
         roster: [],
         units: [],
+        factions: [],
+        detachments: [],
+
+        async init() {
+            const resp = await fetch("/api/factions");
+            if (resp.ok) {
+                this.factions = (await resp.json()).factions || [];
+            }
+        },
 
         async loadUnits() {
             if (!this.faction) {
                 this.units = [];
+                this.detachments = [];
                 return;
             }
             this.units = [];
-            const resp = await fetch("/api/units?faction=" + encodeURIComponent(this.faction));
-            if (resp.ok) {
-                const data = await resp.json();
-                this.units = data.units || [];
+            this.detachment = "";
+            const [unitsResp, detResp] = await Promise.all([
+                fetch("/api/units?faction=" + encodeURIComponent(this.faction)),
+                fetch("/api/detachments?faction=" + encodeURIComponent(this.faction)),
+            ]);
+            if (unitsResp.ok) {
+                this.units = (await unitsResp.json()).units || [];
+            }
+            if (detResp.ok) {
+                this.detachments = (await detResp.json()).detachments || [];
             }
         },
 
@@ -42,26 +58,26 @@ function teamBuilder() {
         },
 
         async saveRoster() {
-            const payload = {
-                name: prompt("Roster name:", `My ${this.faction} Army`),
-                faction: this.faction,
-                pts_limit: this.ptsLimit,
-                detachment: this.detachment,
-                units: this.roster.map(u => ({ name: u.name, count: u.count }))
-            };
-
-            if (!payload.name) return;
+            const name = prompt("Roster name:", `My ${this.faction} Army`);
+            if (!name) return;
 
             const resp = await fetch("/api/rosters", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    name,
+                    faction: this.faction,
+                    pts_limit: this.ptsLimit,
+                    detachment: this.detachment,
+                    units: this.roster.map(u => ({ unit_name: u.name, squad_size: u.count })),
+                }),
             });
 
             if (resp.ok) {
                 alert("Roster saved!");
             } else {
-                alert("Failed to save roster");
+                const err = await resp.json().catch(() => ({}));
+                alert("Failed to save: " + (err.detail || resp.statusText));
             }
         }
     };
