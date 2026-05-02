@@ -51,6 +51,42 @@ class UnitState:
     command_points: int = 0
     is_engaged: bool = False  # Whether the unit is engaged with an enemy unit
     is_fighting: bool = False  # Whether the unit has activated to fight in the current Fight phase
+    is_battle_shocked: bool = False  # Whether the unit is currently battle-shocked
+
+    @property
+    def is_above_half_strength(self) -> bool:
+        """Check if the unit is at or above half strength."""
+        return self.models_remaining > (self.models_total / 2)
+
+    @property
+    def is_alive(self) -> bool:
+        """Check if the unit is still alive."""
+        return self.models_remaining > 0 and self.current_wounds > 0
+
+    @property
+    def wounds_per_model(self) -> float:
+        """Calculate average wounds per remaining model."""
+        if self.models_remaining == 0:
+            return 0
+        return self.current_wounds / self.models_remaining
+    is_battle_shocked: bool = False  # Whether the unit is currently battle-shocked
+
+    @property
+    def is_above_half_strength(self) -> bool:
+        """Check if the unit is at or above half strength."""
+        return self.models_remaining > (self.models_total / 2)
+
+    @property
+    def is_alive(self) -> bool:
+        """Check if the unit is still alive."""
+        return self.models_remaining > 0 and self.current_wounds > 0
+
+    @property
+    def wounds_per_model(self) -> float:
+        """Calculate average wounds per remaining model."""
+        if self.models_remaining == 0:
+            return 0
+        return self.current_wounds / self.models_remaining
 
     @property
     def is_alive(self) -> bool:
