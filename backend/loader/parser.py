@@ -453,6 +453,8 @@ def _infer_category(keywords: list[str], metadata: dict[str, Any]) -> str:
     combined = normalized_keywords | metadata_tags
     if "battleline" in combined:
         return "Battleline"
+    if "character" in combined:
+        return "Character"
     if "vehicle" in combined:
         return "Vehicle"
     if "monster" in combined:
