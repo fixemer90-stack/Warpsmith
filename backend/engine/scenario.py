@@ -60,9 +60,16 @@ class Scenario:
         """Command phase logic: generate CP, check mission objectives, etc."""
         # Generate command points for each player
         for player in self.state.players.values():
-            # Simplified: each player gets 1 CP per turn (can be modified by abilities, etc.)
-            player.command_points += 1
-            self.state.game_log.append(f"{player.name} gained 1 CP (total: {player.command_points})")
+            # Base CP generation: 1 CP per turn
+            cp_gain = 1
+            # Additional CP if player has a warlord
+            if player.warlord_unit is not None:
+                cp_gain += 1
+            # Apply Leviathan cap: max 10 CP per player
+            if player.command_points + cp_gain > 10:
+                cp_gain = 10 - player.command_points
+            player.command_points += cp_gain
+            self.state.game_log.append(f"{player.name} gained {cp_gain} CP (total: {player.command_points})")
         
         # Update mission scoring at end of Command phase
         if self.state.mission:
@@ -189,9 +196,38 @@ class Scenario:
             self.state.game_log.append(f"{enemy_unit.name} hit {attacking_unit.name} for {damage_to_attacker} damage")
     
     def _morale_phase(self) -> None:
-        """Morale phase logic: check for morale failures."""
+        """Morale phase logic: check for morale failures (Battle-shock)."""
         self.state.game_log.append("Morale phase: check for battle-shock")
-        # Check for units that need to take morale tests
+        import random
+        for player in self.state.players.values():
+            for unit in player.units.values():
+                if unit.is_alive and not unit.is_above_half_strength:
+                    # Take battle-shock test
+                    die1 = random.randint(1, 6)
+                    die2 = random.randint(1, 6)
+                    roll = die1 + die2
+
+                    # Natural 1 on either die? Actually, spec says:
+                    #   Natural 1 on either die = auto-fail
+                    #   Natural 6 on both = auto-pass
+                    # But the code in the spec uses:
+                    #   if roll <= 2:  # snake eyes -> auto-fail
+                    #   if roll >= 12:  # boxcars -> auto-pass
+                    # We'll follow the code in the spec.
+                    if roll == 2:  # snake eyes
+                        unit.is_battle_shocked = True
+                        self.state.game_log.append(f"{unit.name} rolls {roll} (snake eyes) and fails Battle-shock")
+                    elif roll == 12:  # boxcars
+                        unit.is_battle_shocked = False
+                        self.state.game_log.append(f"{unit.name} rolls {roll} (boxcars) and passes Battle-shock")
+                    else:
+                        # Compare to leadership
+                        if roll < unit.leadership:
+                            unit.is_battle_shocked = True
+                            self.state.game_log.append(f"{unit.name} rolls {roll} < LD {unit.leadership} and fails Battle-shock")
+                        else:
+                            unit.is_battle_shocked = False
+                            self.state.game_log.append(f"{unit.name} rolls {roll} >= LD {unit.leadership} and passes Battle-shock")
     
     def get_state_summary(self) -> dict:
         """Get a summary of the current game state."""

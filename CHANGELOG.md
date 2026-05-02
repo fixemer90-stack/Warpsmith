@@ -43,6 +43,12 @@
 - F2.6 Добавлен метод `_determine_command_priority` в `GameState` для swap-правил приоритета
 - F2.6 Расширен `Scenario._fight_phase` с логикой чередующихся активаций
 - F2.6 Тесты `tests/test_phase_transitions.py` для проверки приоритета и чередующихся активаций
+- F2.7 Battle-shock, CP Generation, Stratagems: реализованы механизмы моральных тестов, генерации командных очков и фреймворк стратагем
+- F2.7 Добавлено поле `is_battle_shocked` в `UnitState` и метод `is_above_half_strength`
+- F2.7 Расширена генерация CP в `_command_phase`: +1 базовый +1 за warlord с лимитом Leviathan (10 CP)
+- F2.7 Реализована логика battle-shock тестов в `_morale_phase` с правилами snake eyes/boxcars
+- F2.7 Создан `backend/engine/stratagems.py` со фреймворком стратагем и базовыми стратагемами (Command Re-roll, Insane Bravery, Counter-Offensive, Tank Shock)
+- F2.7 Тесты `tests/test_f2_7_battle_shock_cp_stratagems.py` для battle-shock, CP генерации и стратагем
 
 ## [0.2.1] — 2026-05-01
 
