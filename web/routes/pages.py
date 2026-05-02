@@ -13,9 +13,35 @@ templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templa
 @router.get("/team-builder", response_class=HTMLResponse)
 async def team_builder(request: Request):
     """Сбор армии."""
+    # Load factions for the selector
+    from backend.loader.registry import registry as wiki
+    try:
+        wiki.load()
+        raw_factions = wiki.list_factions()
+    except Exception:
+        raw_factions = []
+    # Build faction list with labels
+    from pathlib import Path
+    import frontmatter
+    factions = []
+    for f_id in raw_factions:
+        fp = wiki.wiki_path / "factions" / f"{f_id}.md"
+        if not fp.exists():
+            for f in (wiki.wiki_path / "factions").iterdir():
+                if f.is_file() and f.stem.lower() == f_id.lower():
+                    fp = f
+                    break
+        label = f_id.replace("-", " ").title()
+        if fp.exists():
+            try:
+                post = frontmatter.load(str(fp))
+                label = str(post.metadata.get("title", label))
+            except Exception:
+                pass
+        factions.append({"id": f_id, "label": label})
     return templates.TemplateResponse(
         request, "team_builder.html",
-        {"request": request, "title": "Team Builder"},
+        {"request": request, "title": "Team Builder", "factions": factions},
     )
 
 
