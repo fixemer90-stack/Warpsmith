@@ -42,25 +42,25 @@ async def list_units(faction: str = ""):
     else:
         unit_names = wiki.list_units()
 
-        result = []
-        for name in unit_names:
-            unit = wiki.get_unit(name)
-            if unit:
-                result.append({
-                    "name": unit.name,
-                    "faction": unit.faction,
-                    "category": unit.category,
-                    "points": unit.points,
-                    "movement": unit.movement,
-                    "toughness": unit.toughness,
-                    "save": unit.save,
-                    "wounds": unit.wounds,
-                    "abilities": unit.abilities,  # Add abilities for team builder modal
-                    "weapons": [
-                        {"name": w.name, "type": w.type}
-                        for w in (unit.ranged_weapons + unit.melee_weapons)
-                    ],
-                })
+    result = []
+    for name in unit_names:
+        unit = wiki.get_unit(name)
+        if unit:
+            result.append({
+                "name": unit.name,
+                "faction": unit.faction,
+                "category": unit.category,
+                "points": unit.points,
+                "movement": unit.movement,
+                "toughness": unit.toughness,
+                "save": unit.save,
+                "wounds": unit.wounds,
+                "abilities": unit.abilities,  # Add abilities for team builder modal
+                "weapons": [
+                    {"name": w.name, "type": w.type}
+                    for w in (unit.ranged_weapons + unit.melee_weapons)
+                ],
+            })
 
     return {"faction": faction, "units": result}
 
@@ -243,6 +243,37 @@ async def list_factions():
     }
 
 
+def _faction_detachment_dir(wiki_path, faction_id: str):
+    """Map faction ID (e.g. 'adeptus-mechanicus') to its detachments directory name ('mechanicus')."""
+    from pathlib import Path
+    import frontmatter
+
+    units_dir = wiki_path / "units"
+    if not units_dir.exists():
+        return None
+
+    # Scan units subdirectories to find which one has the matching faction YAML
+    for subdir in sorted(units_dir.iterdir()):
+        if not subdir.is_dir():
+            continue
+        # Check if the directory name itself matches (common case: orks→orks)
+        if subdir.name == faction_id:
+            det_dir = wiki_path / "detachments" / subdir.name
+            if det_dir.exists():
+                return det_dir
+        # Check first .md file for faction: field
+        for f in subdir.glob("*.md"):
+            try:
+                post = frontmatter.load(str(f))
+                if post.metadata.get("faction") == faction_id:
+                    det_dir = wiki_path / "detachments" / subdir.name
+                    return det_dir if det_dir.exists() else None
+            except Exception:
+                continue
+            break  # only need first file
+    return None
+
+
 @router.get("/detachments")
 async def list_detachments(faction: str = ""):
     """Список детачментов (всех или по фракции)."""
@@ -255,6 +286,9 @@ async def list_detachments(faction: str = ""):
     wiki_path = wiki.wiki_path
     det_dir = wiki_path / "detachments" / faction
     if not det_dir.exists():
+        # Try resolving faction ID → directory name (e.g. adeptus-mechanicus → mechanicus)
+        det_dir = _faction_detachment_dir(wiki_path, faction)
+    if not det_dir or not det_dir.exists():
         return {"detachments": []}
 
     detachments = sorted(f.stem for f in det_dir.glob("*.md"))
