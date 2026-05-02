@@ -23,9 +23,41 @@ async def index(request: Request):
 @router.get("/team-builder", response_class=HTMLResponse)
 async def team_builder(request: Request):
     """Сбор армии."""
+    try:
+        from backend.loader.registry import registry as wiki
+        wiki.load()
+        faction_names = wiki.list_factions()
+
+        # Get labels from faction pages
+        from pathlib import Path
+        import frontmatter
+        factions = []
+        for f_id in faction_names:
+            fp = wiki.wiki_path / "factions" / f"{f_id}.md"
+            label = f_id.replace("-", " ").title()
+            if fp.exists():
+                try:
+                    post = frontmatter.load(str(fp))
+                    label = str(post.metadata.get("title", label))
+                except Exception:
+                    pass
+            else:
+                # Try case-insensitive match
+                for f in (wiki.wiki_path / "factions").iterdir():
+                    if f.is_file() and f.stem.lower() == f_id.lower():
+                        try:
+                            post = frontmatter.load(str(f))
+                            label = str(post.metadata.get("title", label))
+                        except Exception:
+                            pass
+                        break
+            factions.append({"id": f_id, "label": label})
+    except Exception:
+        factions = []
+
     return templates.TemplateResponse(
         "team_builder.html",
-        {"request": request, "title": "Team Builder"},
+        {"request": request, "title": "Team Builder", "factions": factions},
     )
 
 
