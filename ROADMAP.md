@@ -1,7 +1,7 @@
 # Roadmap — Warpsmith
 
 > Дорожная карта разработки. Версия 0.3.0
-> **Статус:** Phase 0 ✅ | Phase 1 ✅ | Phase 2 🚧
+> **Статус:** Phase 0 ✅ | Phase 1 ✅ | Phase 2 ✅
 
 ---
 
@@ -60,10 +60,12 @@
 ## 🚧 Phase 2: Game System
 
 ```
-[██████████████░░] 75% · 12 features
+[████████████████████] 100% · 12 features
 ```
 
 **Цель:** Полный Game Loop с картой, миссиями, ростерами.
+
+**Все 12 фич реализованы!**
 
 ### Features
 
@@ -76,11 +78,11 @@
 | 2.5 | ✅ | Game Loop: Command → Movement → Shooting → Charge → Fight | 6h |
 | 2.6 | 🟢 | Phase transitions, priority, alternating activations | 4h |
 | 2.7 | 🟢 | Battle-shock, CP generation, stratagem resolution | 4h |
-| 2.8 | ⚪ | Victory Points tracking and end-game conditions | 2h |
+| 2.8 | 🟢 | Victory Points tracking and end-game conditions | 2h |
 | 2.9 | 🟢 | Roster validation (PTS, Warlord, 3× cap) + GameSize enum | 3h |
 | 2.10 | 🟢 | Roster CRUD: SQLite save/load/delete via /api/rosters | 2h |
-| 2.11 | ⚪ | Team Builder UI: faction picker, unit modal, PTS bar | 8h |
-| 2.12 | ⚪ | Leader compatibility checker | 3h |
+| 2.11 | 🟢 | Team Builder UI: faction picker, unit modal, PTS bar | 8h |
+| 2.12 | 🟢 | Leader compatibility checker | 3h |
 
 ---
 
@@ -204,7 +206,7 @@
 |------|----------|------|--------|-----------|
 | **0. Foundation** | 12 | ~40ч | ✅ 100% | Скелет проекта + wiki |
 | **1. Combat Engine** | 12 | ~60ч | ✅ 100% | `curl /api/simulate` → JSON + PMF |
-| **2. Game System** | 12 | ~40ч | 🚧 75% (F2.1–F2.7, F2.9, F2.10 done) | Полный Game Loop |
+| **2. Game System** | 12 | ~40ч | ✅ 100% | Полный Game Loop |
 | **3. AI & Automation** | 8 | ~25ч | ⏳ 0% | AI-vs-AI бой |
 | **4. Web UI Polish** | 8 | ~35ч | ⏳ 0% | Готовый UX |
 | **5. Production** | 7 | ~15ч | ⏳ 0% | Развёрнуто на сервере |
