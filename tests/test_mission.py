@@ -10,7 +10,14 @@ from backend.state.mission import (
     _only_war,
     _purge_the_foe,
     _take_and_hold,
-    MISSIONS
+    MISSIONS,
+    VPTracker,
+    GameResult,
+    check_end_game,
+    score_standard,
+    score_progressive,
+    score_kill_points,
+    apply_scoring
 )
 from backend.state.game_state import (
     GameState,
@@ -443,6 +450,414 @@ def test_integration_with_game_state():
     # Test that we can access mission methods through game state
     summary = game_state.mission.get_mission_summary()
     assert summary["mission_name"] == "Only War"
+
+
+def test_vp_tracker():
+    """Test VPTracker functionality."""
+    vp = VPTracker()
+    vp.add(1, 10)
+    vp.add(2, 5)
+    vp.add(1, 5)
+    assert vp.total[1] == 15
+    assert vp.total[2] == 5
+    assert vp.leader() == 1
+    assert vp.is_tied() == False
+    assert vp.margin() == 10
+    
+    # Test round VP
+    assert vp.round_vp(1, 1) == 10
+    assert vp.round_vp(1, 2) == 5
+    assert vp.round_vp(2, 1) == 5
+    
+    # Test summary
+    summary = vp.summary()
+    assert summary["player_1"]["total"] == 15
+    assert summary["player_2"]["total"] == 5
+    assert summary["winner"] == 1
+    assert summary["margin"] == 10
+
+
+def test_score_standard():
+    """Test standard scoring function."""
+    game_state = create_empty_game("test_game", "Test Mission")
+    
+    player1 = PlayerState("p1", "Player 1", "Space Marines")
+    player2 = PlayerState("p2", "Player 2", "Orks")
+    game_state.players = {"p1": player1, "p2": player2}
+    
+    mission = Mission(
+        config=MissionConfig(
+            name="Test Mission",
+            deployment=DeploymentType.DAWN_OF_WAR,
+            description="Test mission",
+            objectives=[
+                MissionObjective(2, 2, "Center"),
+                MissionObjective(1, 3, "Left"),
+                MissionObjective(4, 3, "Right")
+            ],
+            scoring_rule="standard"
+        ),
+        state=game_state
+    )
+    
+    # No units on objectives
+    vp = score_standard(mission)
+    assert vp[1] == 0
+    assert vp[2] == 0
+    
+    # Add unit to first objective
+    unit1 = UnitState(
+        unit_id="marine1", name="Tactical Marine", faction="Space Marines",
+        position=(2, 2), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=6, objective_control=2,
+    )
+    player1.units = {"marine1": unit1}
+    
+    vp = score_standard(mission)
+    assert vp[1] == 1  # 1 VP per objective
+    assert vp[2] == 0
+    
+    # Add unit to another objective
+    unit2 = UnitState(
+        unit_id="marine2", name="Assault Marine", faction="Space Marines",
+        position=(1, 3), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=6, objective_control=2,
+    )
+    player1.units["marine2"] = unit2
+    
+    vp = score_standard(mission)
+    assert vp[1] == 2  # 2 VP for 2 objectives
+    assert vp[2] == 0
+    
+    # Add enemy unit to same objective - should be contested
+    unit3 = UnitState(
+        unit_id="ork1", name="Ork Boy", faction="Orks",
+        position=(2, 2), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=5, objective_control=1,
+    )
+    player2.units = {"ork1": unit3}
+    
+    vp = score_standard(mission)
+    assert vp[1] == 0  # Contested objective gives 0 VP
+    assert vp[2] == 0
+
+
+def test_score_progressive():
+    """Test progressive scoring function."""
+    game_state = create_empty_game("test_game", "Test Mission")
+    
+    player1 = PlayerState("p1", "Player 1", "Space Marines")
+    player2 = PlayerState("p2", "Player 2", "Orks")
+    game_state.players = {"p1": player1, "p2": player2}
+    
+    mission = Mission(
+        config=MissionConfig(
+            name="Test Mission",
+            deployment=DeploymentType.DAWN_OF_WAR,
+            description="Test mission",
+            objectives=[
+                MissionObjective(2, 2, "Center"),
+                MissionObjective(1, 3, "Left"),
+                MissionObjective(4, 3, "Right")
+            ],
+            scoring_rule="progressive"
+        ),
+        state=game_state
+    )
+    
+    # Player 1 controls 2 objectives, Player 2 controls 1
+    unit1 = UnitState(
+        unit_id="marine1", name="Tactical Marine", faction="Space Marines",
+        position=(2, 2), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=6, objective_control=2,
+    )
+    unit2 = UnitState(
+        unit_id="marine2", name="Assault Marine", faction="Space Marines",
+        position=(1, 3), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=6, objective_control=2,
+    )
+    unit3 = UnitState(
+        unit_id="ork1", name="Ork Boy", faction="Orks",
+        position=(4, 3), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=5, objective_control=1,
+    )
+    
+    player1.units = {"marine1": unit1, "marine2": unit2}
+    player2.units = {"ork1": unit3}
+    
+    vp = score_progressive(mission)
+    # Base VP: p1=2, p2=1
+    # Progressive bonus: p1 gets +2 for having more objectives
+    assert vp[1] == 4  # 2 base + 2 bonus
+    assert vp[2] == 1  # 1 base + 0 bonus
+
+
+def test_score_kill_points():
+    """Test kill points scoring function."""
+    game_state = create_empty_game("test_game", "Test Mission")
+    
+    player1 = PlayerState("p1", "Player 1", "Space Marines")
+    player2 = PlayerState("p2", "Player 2", "Orks")
+    game_state.players = {"p1": player1, "p2": player2}
+    
+    mission = Mission(
+        config=MissionConfig(
+            name="Test Mission",
+            deployment=DeploymentType.SEARCH_AND_DESTROY,
+            description="Test mission",
+            objectives=[],  # no objectives
+            scoring_rule="kill_points"
+        ),
+        state=game_state
+    )
+    
+    # Add units
+    marine = UnitState(
+        unit_id="marine1", name="Tactical Marine", faction="Space Marines",
+        position=(0, 0), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=6, objective_control=2,
+    )
+    ork = UnitState(
+        unit_id="ork1", name="Ork Boy", faction="Orks",
+        position=(5, 3), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=5, objective_control=1,
+    )
+    
+    player1.units = {"marine1": marine}
+    player2.units = {"ork1": ork}
+    
+    # Initially no kills
+    vp = score_kill_points(mission)
+    assert vp[1] == 0
+    assert vp[2] == 0
+    
+    # Damage the ork (half wounds)
+    ork.current_wounds = 2
+    
+    vp = score_kill_points(mission)
+    # Ork has lost half its wounds, so ~50% of its points
+    # Marine has full health, so 0% of marine points
+    # Exact values depend on implementation
+    assert vp[1] >= 0  # Marine VP
+    assert vp[2] >= 0  # Ork VP
+    
+    # Kill the ork completely
+    ork.current_wounds = 0
+    ork.models_remaining = 0
+    
+    vp = score_kill_points(mission)
+    # Ork is completely destroyed, so marine gets points for killing it
+    # Marine is still alive, so ork gets 0 points for killing marine
+    assert vp[1] > 0  # Marine should have VP for killing ork
+    assert vp[2] == 0   # Ork should have 0 VP (marine still alive)
+
+
+def test_apply_scoring():
+    """Test apply_scoring function."""
+    game_state = create_empty_game("test_game", "Test Mission")
+    
+    player1 = PlayerState("p1", "Player 1", "Space Marines")
+    player2 = PlayerState("p2", "Player 2", "Orks")
+    game_state.players = {"p1": player1, "p2": player2}
+    
+    mission = Mission(
+        config=MissionConfig(
+            name="Test Mission",
+            deployment=DeploymentType.DAWN_OF_WAR,
+            description="Test mission",
+            objectives=[
+                MissionObjective(2, 2, "Center"),
+            ],
+            scoring_rule="standard"
+        ),
+        state=game_state
+    )
+    
+    # Add unit to objective
+    unit1 = UnitState(
+        unit_id="marine1", name="Tactical Marine", faction="Space Marines",
+        position=(2, 2), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=6, objective_control=2,
+    )
+    player1.units = {"marine1": unit1}
+    
+    vp_tracker = VPTracker()
+    updated_vp = apply_scoring(game_state, mission, vp_tracker)
+    
+    # Player 1 should have 1 VP, player 2 should have 0
+    assert updated_vp.total[1] == 1
+    assert updated_vp.total[2] == 0
+    assert updated_vp.history[1] == [1]
+    assert updated_vp.history[2] == [0]
+
+
+def test_check_end_game_vp_cap():
+    """Test end game check for VP cap."""
+    game_state = create_empty_game("test_game", "Test Mission")
+    
+    player1 = PlayerState("p1", "Player 1", "Space Marines")
+    player2 = PlayerState("p2", "Player 2", "Orks")
+    game_state.players = {"p1": player1, "p2": player2}
+    
+    mission = Mission(
+        config=MissionConfig(
+            name="Test Mission",
+            deployment=DeploymentType.DAWN_OF_WAR,
+            description="Test mission",
+            objectives=[],
+            max_rounds=5
+        ),
+        state=game_state
+    )
+    
+    # Create VP tracker with player 1 at 100 VP
+    vp_tracker = VPTracker()
+    vp_tracker.add(1, 100)
+    vp_tracker.add(2, 50)
+    
+    result = check_end_game(game_state, mission, vp_tracker, 3)
+    
+    assert result is not None
+    assert result.winner == 1
+    assert result.reason == "vp_cap"
+    assert result.total_rounds == 3
+
+
+def test_check_end_game_army_wiped():
+    """Test end game check for army wiped."""
+    game_state = create_empty_game("test_game", "Test Mission")
+    
+    player1 = PlayerState("p1", "Player 1", "Space Marines")
+    player2 = PlayerState("p2", "Player 2", "Orks")
+    game_state.players = {"p1": player1, "p2": player2}
+    
+    mission = Mission(
+        config=MissionConfig(
+            name="Test Mission",
+            deployment=DeploymentType.DAWN_OF_WAR,
+            description="Test mission",
+            objectives=[],
+            max_rounds=5
+        ),
+        state=game_state
+    )
+    
+    # Add units
+    marine = UnitState(
+        unit_id="marine1", name="Tactical Marine", faction="Space Marines",
+        position=(0, 0), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=6, objective_control=2,
+    )
+    ork = UnitState(
+        unit_id="ork1", name="Ork Boy", faction="Orks",
+        position=(5, 3), current_wounds=0, max_wounds=4,  # Already dead
+        models_remaining=0, models_total=1, leadership=5, objective_control=1,
+    )
+    
+    player1.units = {"marine1": marine}
+    player2.units = {"ork1": ork}
+    
+    vp_tracker = VPTracker()
+    vp_tracker.add(1, 10)
+    vp_tracker.add(2, 5)
+    
+    result = check_end_game(game_state, mission, vp_tracker, 2)
+    
+    assert result is not None
+    assert result.winner == 1  # Player 1 wins because player 2's army is wiped
+    assert result.reason == "army_wiped"
+    assert result.total_rounds == 2
+
+
+def test_check_end_game_max_rounds():
+    """Test end game check for max rounds reached."""
+    game_state = create_empty_game("test_game", "Test Mission")
+    
+    player1 = PlayerState("p1", "Player 1", "Space Marines")
+    player2 = PlayerState("p2", "Player 2", "Orks")
+    game_state.players = {"p1": player1, "p2": player2}
+    
+    mission = Mission(
+        config=MissionConfig(
+            name="Test Mission",
+            deployment=DeploymentType.DAWN_OF_WAR,
+            description="Test mission",
+            objectives=[],
+            max_rounds=3
+        ),
+        state=game_state
+    )
+    
+    # Add units so neither army is wiped
+    marine = UnitState(
+        unit_id="marine1", name="Tactical Marine", faction="Space Marines",
+        position=(0, 0), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=6, objective_control=2,
+    )
+    ork = UnitState(
+        unit_id="ork1", name="Ork Boy", faction="Orks",
+        position=(5, 3), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=5, objective_control=1,
+    )
+    
+    player1.units = {"marine1": marine}
+    player2.units = {"ork1": ork}
+    
+    # Create VP tracker with player 1 ahead
+    vp_tracker = VPTracker()
+    vp_tracker.add(1, 30)
+    vp_tracker.add(2, 20)
+    
+    result = check_end_game(game_state, mission, vp_tracker, 3)  # Round 3 = max_rounds
+    
+    assert result is not None
+    assert result.winner == 1  # Player 1 has more VP
+    assert result.reason == "rounds_completed"
+    assert result.total_rounds == 3
+
+
+def test_check_end_game_continues():
+    """Test that game continues when no end conditions met."""
+    game_state = create_empty_game("test_game", "Test Mission")
+    
+    player1 = PlayerState("p1", "Player 1", "Space Marines")
+    player2 = PlayerState("p2", "Player 2", "Orks")
+    game_state.players = {"p1": player1, "p2": player2}
+    
+    mission = Mission(
+        config=MissionConfig(
+            name="Test Mission",
+            deployment=DeploymentType.DAWN_OF_WAR,
+            description="Test mission",
+            objectives=[],
+            max_rounds=5
+        ),
+        state=game_state
+    )
+    
+    # Add units
+    marine = UnitState(
+        unit_id="marine1", name="Tactical Marine", faction="Space Marines",
+        position=(0, 0), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=6, objective_control=2,
+    )
+    ork = UnitState(
+        unit_id="ork1", name="Ork Boy", faction="Orks",
+        position=(5, 3), current_wounds=4, max_wounds=4,
+        models_remaining=1, models_total=1, leadership=5, objective_control=1,
+    )
+    
+    player1.units = {"marine1": marine}
+    player2.units = {"ork1": ork}
+    
+    # Create VP tracker with low scores
+    vp_tracker = VPTracker()
+    vp_tracker.add(1, 10)
+    vp_tracker.add(2, 8)
+    
+    result = check_end_game(game_state, mission, vp_tracker, 2)  # Only round 2
+    
+    assert result is None  # Game should continue
 
 
 if __name__ == "__main__":

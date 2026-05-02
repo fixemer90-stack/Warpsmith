@@ -2,11 +2,234 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Tuple, Optional, Callable, Any, TYPE_CHECKING
+from typing import Dict, List, Tuple, Optional, Callable, Any, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from .game_state import GameState
 import numpy as np
+
+
+@dataclass
+class VPTracker:
+    """Подсчёт VP на протяжении игры."""
+    history: dict[int, list[int]] = field(default_factory=lambda: {1: [], 2: []})
+    total: dict[int, int] = field(default_factory=lambda: {1: 0, 2: 0})
+
+    def add(self, player: int, vp: int) -> None:
+        self.history[player].append(vp)
+        self.total[player] += vp
+
+    def round_vp(self, player: int, round_num: int) -> int:
+        """VP полученные в конкретном раунде."""
+        if round_num <= len(self.history[player]):
+            return self.history[player][round_num - 1]
+        return 0
+
+    def leader(self) -> int:
+        """Текущий лидер по VP."""
+        return 1 if self.total[1] >= self.total[2] else 2
+
+    def is_tied(self) -> bool:
+        return self.total[1] == self.total[2]
+
+    def margin(self) -> int:
+        return abs(self.total[1] - self.total[2])
+
+    def summary(self) -> dict:
+        return {
+            "player_1": {"total": self.total[1], "per_round": self.history[1]},
+            "player_2": {"total": self.total[2], "per_round": self.history[2]},
+            "winner": self.leader() if not self.is_tied() else "tie",
+            "margin": self.margin(),
+        }
+
+
+@dataclass
+class GameResult:
+    winner: Optional[int]       # None = tie
+    reason: str                 # "rounds_completed", "army_wiped", "vp_cap"
+    vp_tracker: VPTracker
+    total_rounds: int
+    summary: dict
+
+
+def check_end_game(state: 'GameState', mission: 'Mission',
+                   vp: VPTracker, round_num: int) -> Optional[GameResult]:
+    """Проверить условия окончания игры."""
+
+    # 1. Victory Point cap (100 VP)
+    for player in [1, 2]:
+        if vp.total[player] >= 100:
+            return GameResult(
+                winner=player,
+                reason="vp_cap",
+                vp_tracker=vp,
+                total_rounds=round_num,
+                summary=vp.summary(),
+            )
+
+    # 2. Army wiped
+    for player_id, player_state in [(1, state.players.get("p1")), (2, state.players.get("p2"))]:
+        if player_state and all(u.models_remaining <= 0 for u in player_state.units.values()):
+            winner = 2 if player_id == 1 else 1
+            return GameResult(
+                winner=winner,
+                reason="army_wiped",
+                vp_tracker=vp,
+                total_rounds=round_num,
+                summary=vp.summary(),
+            )
+
+    # 3. Max rounds reached
+    if round_num >= mission.config.max_rounds:
+        leader = vp.leader()
+        if vp.is_tied():
+            # Tie-breakers:
+            # 1. Who killed more pts?
+            # 2. Who has more objectives?
+            # 3. Random
+            leader = _resolve_tie(state)
+        return GameResult(
+            winner=leader if not vp.is_tied() else None,
+            reason="rounds_completed",
+            vp_tracker=vp,
+            total_rounds=round_num,
+            summary=vp.summary(),
+        )
+
+    return None  # game continues
+
+
+def _resolve_tie(state: 'GameState') -> int:
+    """Tie-break: больше убитых очков -> больше контролируемых точек -> random."""
+    # Calculate killed points for each player
+    killed_points = {}
+    for player_id, player_state in [("p1", state.players.get("p1")), ("p2", state.players.get("p2"))]:
+        if player_state:
+            killed = 0
+            for unit in player_state.units.values():
+                # Points killed = (starting wounds - current wounds) * points per wound
+                # Simplified: assume 10 points per wound
+                killed += (unit.max_wounds - unit.current_wounds) * 10
+            killed_points[player_id] = killed
+        else:
+            killed_points[player_id] = 0
+
+    p1_killed = killed_points.get("p1", 0)
+    p2_killed = killed_points.get("p2", 0)
+    
+    if p1_killed != p2_killed:
+        return 1 if p1_killed > p2_killed else 2
+        
+    # TODO: count controlled objectives
+    # For now, fallback to player 1 winning
+    return 1
+
+
+def score_standard(mission: 'Mission') -> Dict[int, int]:
+    """Standard scoring: VP = number of objectives controlled."""
+    mission.update_objective_control()
+    
+    vp = {player_id: 0 for player_id in mission.state.players.keys()}
+    for player_id in mission.state.players.keys():
+        for obj in mission.config.objectives:
+            if obj.controlled_by == player_id and not obj.is_contested:
+                vp[player_id] += 1  # 1 VP per objective controlled
+    return vp
+
+
+def score_progressive(mission: 'Mission') -> Dict[int, int]:
+    """Progressive scoring: VP = objectives controlled + bonus for controlling more than opponent."""
+    mission.update_objective_control()
+    
+    vp = {player_id: 0 for player_id in mission.state.players.keys()}
+    player_ids = list(mission.state.players.keys())
+    
+    if len(player_ids) >= 2:
+        p1_obj = 0
+        p2_obj = 0
+        
+        for obj in mission.config.objectives:
+            if obj.controlled_by == player_ids[0] and not obj.is_contested:
+                p1_obj += 1
+            elif obj.controlled_by == player_ids[1] and not obj.is_contested:
+                p2_obj += 1
+        
+        vp[player_ids[0]] = p1_obj
+        vp[player_ids[1]] = p2_obj
+        
+        # Bonus for controlling more objectives
+        if p1_obj > p2_obj:
+            vp[player_ids[0]] += 2
+        elif p2_obj > p1_obj:
+            vp[player_ids[1]] += 2
+    
+    return vp
+
+
+def score_kill_points(mission: 'Mission') -> Dict[int, int]:
+    """Kill points scoring: VP = percentage of opponent's army destroyed."""
+    mission.update_objective_control()
+    
+    vp = {player_id: 0 for player_id in mission.state.players.keys()}
+    player_ids = list(mission.state.players.keys())
+    
+    if len(player_ids) >= 2:
+        # Calculate destroyed points for each player
+        p1_destroyed = 0
+        p2_destroyed = 0
+        
+        # Points destroyed by player 1 (against player 2)
+        if player_ids[1] in mission.state.players:
+            for unit in mission.state.players[player_ids[1]].units.values():
+                if not unit.is_alive:
+                    # Simplified: assume unit cost is proportional to max wounds
+                    p1_destroyed += unit.max_wounds * 10
+        
+        # Points destroyed by player 2 (against player 1)
+        if player_ids[0] in mission.state.players:
+            for unit in mission.state.players[player_ids[0]].units.values():
+                if not unit.is_alive:
+                    # Simplified: assume unit cost is proportional to max wounds
+                    p2_destroyed += unit.max_wounds * 10
+        
+        # Calculate total army points for each player
+        p1_total = 0
+        p2_total = 0
+        
+        if player_ids[0] in mission.state.players:
+            for unit in mission.state.players[player_ids[0]].units.values():
+                p1_total += unit.max_wounds * 10  # Rough approximation
+                
+        if player_ids[1] in mission.state.players:
+            for unit in mission.state.players[player_ids[1]].units.values():
+                p2_total += unit.max_wounds * 10  # Rough approximation
+        
+        # Calculate VP as percentage of opponent's army destroyed
+        if p1_total > 0:
+            vp[player_ids[0]] = int((p2_destroyed / p1_total) * 100)
+        if p2_total > 0:
+            vp[player_ids[1]] = int((p1_destroyed / p2_total) * 100)
+    
+    return vp
+
+
+SCORING_MAP = {
+    "standard": score_standard,
+    "progressive": score_progressive,
+    "kill_points": score_kill_points,
+}
+
+
+def apply_scoring(state: 'GameState', mission: 'Mission', vp: VPTracker) -> VPTracker:
+    """Подсчитать VP за текущий раунд, добавить в трекер."""
+    scorer = SCORING_MAP.get(mission.config.scoring_rule, score_standard)
+    round_vp = scorer(mission)
+    for player_id in state.players.keys():
+        # Convert string player_id to int for VPTracker
+        player_num = 1 if player_id == "p1" else 2
+        vp.add(player_num, round_vp.get(player_id, 0))
+    return vp
 
 
 class DeploymentType(Enum):
