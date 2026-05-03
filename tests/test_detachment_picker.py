@@ -84,12 +84,12 @@ class TestDetachmentPickerIntegration:
         assert resp.status_code == 200
         assert "Select Detachment" in resp.text
 
-    def test_detachment_picker_select_input_readonly(self):
-        """Detachment input should be readonly, filled by picker"""
+    def test_detachment_picker_renders(self):
+        """Detachment picker component should be present on team-builder page"""
         resp = client.get("/team-builder")
-        assert 'readonly' in resp.text
-        # Should contain placeholder text
-        assert "Select below" in resp.text
+        assert "detachmentPicker()" in resp.text
+        assert "Select Detachment" in resp.text
+        assert "detachment_picker.js" in resp.text
 
 
 class TestRegistryDetachmentSupport:

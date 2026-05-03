@@ -13,6 +13,13 @@ def test_leader_can_attach():
     warboss = Unit(
         name="Warboss",
         faction="Orks",
+        category="Character",
+        movement=4,
+        toughness=4,
+        save=4,
+        wounds=3,
+        leadership=7,
+        objective_control=1,
         is_leader=True,
         leader_for=["Boyz"],
         keywords=["Character"],
@@ -21,6 +28,13 @@ def test_leader_can_attach():
     boyz = Unit(
         name="Boyz",
         faction="Orks",
+        category="Battleline",
+        movement=4,
+        toughness=3,
+        save=6,
+        wounds=1,
+        leadership=5,
+        objective_control=1,
         keywords=["Infantry", "Battleline"],
     )
     result = check_leader_compatibility(warboss, boyz)
@@ -31,6 +45,13 @@ def test_leader_wrong_unit():
     warboss = Unit(
         name="Warboss",
         faction="Orks",
+        category="Character",
+        movement=4,
+        toughness=4,
+        save=4,
+        wounds=3,
+        leadership=7,
+        objective_control=1,
         is_leader=True,
         leader_for=["Boyz"],
         keywords=["Character"],
@@ -39,6 +60,13 @@ def test_leader_wrong_unit():
     marine = Unit(
         name="Tactical Marine",
         faction="Space Marines",
+        category="Battleline",
+        movement=4,
+        toughness=4,
+        save=3,
+        wounds=2,
+        leadership=6,
+        objective_control=1,
         keywords=["Infantry"],
     )
     result = check_leader_compatibility(warboss, marine)
@@ -50,12 +78,27 @@ def test_not_a_leader():
     boyz = Unit(
         name="Boyz",
         faction="Orks",
+        category="Battleline",
+        movement=4,
+        toughness=3,
+        save=6,
+        wounds=1,
+        leadership=5,
+        objective_control=1,
         is_leader=False,
         keywords=["Infantry"],
     )
     boyz2 = Unit(
         name="Boyz",
         faction="Orks",
+        category="Battleline",
+        movement=4,
+        toughness=3,
+        save=6,
+        wounds=1,
+        leadership=5,
+        objective_control=1,
+        keywords=["Infantry"],
     )
     result = check_leader_compatibility(boyz, boyz2)
     assert not result.is_compatible
@@ -66,30 +109,58 @@ def test_max_two_leaders():
     warboss = Unit(
         name="Warboss",
         faction="Orks",
+        category="Character",
+        movement=4,
+        toughness=4,
+        save=4,
+        wounds=3,
+        leadership=7,
+        objective_control=1,
         is_leader=True,
         leader_for=["Boyz"],
-        keywords=["Infantry", "Orks", "Character"],
+        keywords=["Character", "Orks", "Infantry"],
         faction_keywords=["Orks"],
     )
     weirdboy = Unit(
         name="Weirdboy",
         faction="Orks",
+        category="Character",
+        movement=4,
+        toughness=3,
+        save=5,
+        wounds=2,
+        leadership=6,
+        objective_control=1,
         is_leader=True,
         leader_for=["Boyz"],
-        keywords=["Infantry", "Orks", "Psyker", "Character"],
+        keywords=["Character", "Orks", "Infantry", "Psyker"],
         faction_keywords=["Orks"],
     )
     nob = Unit(
         name="Nob",
         faction="Orks",
+        category="Character",
+        movement=4,
+        toughness=4,
+        save=4,
+        wounds=2,
+        leadership=6,
+        objective_control=1,
         is_leader=True,
         leader_for=["Boyz"],
-        keywords=["Infantry", "Orks", "Character"],
+        keywords=["Character", "Orks", "Infantry"],
         faction_keywords=["Orks"],
     )
     boyz = Unit(
         name="Boyz",
         faction="Orks",
+        category="Battleline",
+        movement=4,
+        toughness=3,
+        save=6,
+        wounds=1,
+        leadership=5,
+        objective_control=1,
         keywords=["Infantry", "Battleline"],
     )
     result = check_leader_compatibility(nob, boyz, existing_leaders=[warboss, weirdboy])
@@ -102,6 +173,13 @@ def test_wildcard_battleline():
     leader = Unit(
         name="Generic Leader",
         faction="Imperium",
+        category="Character",
+        movement=4,
+        toughness=3,
+        save=4,
+        wounds=2,
+        leadership=5,
+        objective_control=1,
         is_leader=True,
         leader_for=["BATTLELINE"],
         keywords=["Character"],
@@ -110,6 +188,13 @@ def test_wildcard_battleline():
     boyz = Unit(
         name="Boyz",
         faction="Orks",
+        category="Battleline",
+        movement=4,
+        toughness=3,
+        save=6,
+        wounds=1,
+        leadership=5,
+        objective_control=1,
         keywords=["Battleline"],
     )
     result = check_leader_compatibility(leader, boyz)
@@ -121,6 +206,13 @@ def test_validate_leader_assignments():
     warboss = Unit(
         name="Warboss",
         faction="Orks",
+        category="Character",
+        movement=4,
+        toughness=4,
+        save=4,
+        wounds=3,
+        leadership=7,
+        objective_control=1,
         is_leader=True,
         leader_for=["Boyz"],
         keywords=["Character"],
@@ -129,6 +221,13 @@ def test_validate_leader_assignments():
     boyz = Unit(
         name="Boyz",
         faction="Orks",
+        category="Battleline",
+        movement=4,
+        toughness=3,
+        save=6,
+        wounds=1,
+        leadership=5,
+        objective_control=1,
         keywords=["Infantry", "Battleline"],
     )
     roster = [(warboss, 1), (boyz, 10)]
@@ -141,6 +240,13 @@ def test_validate_leader_assignments():
     captain = Unit(
         name="Captain Squad",
         faction="Imperium",
+        category="Character",
+        movement=4,
+        toughness=3,
+        save=3,
+        wounds=2,
+        leadership=7,
+        objective_control=1,
         is_leader=True,
         leader_for=["Tactical Marine"],
         keywords=["Character"],
@@ -149,6 +255,13 @@ def test_validate_leader_assignments():
     lieutenant = Unit(
         name="Lieutenant Squad",
         faction="Imperium",
+        category="Character",
+        movement=4,
+        toughness=3,
+        save=3,
+        wounds=2,
+        leadership=6,
+        objective_control=1,
         is_leader=True,
         leader_for=["Tactical Marine"],
         keywords=["Character"],
@@ -157,6 +270,13 @@ def test_validate_leader_assignments():
     marine = Unit(
         name="Tactical Marine",
         faction="Imperium",
+        category="Battleline",
+        movement=4,
+        toughness=3,
+        save=3,
+        wounds=2,
+        leadership=6,
+        objective_control=1,
         keywords=["Infantry"],
     )
     # Now test: two leaders (captain and lieutenant) on the same unit should be ok (different types)
@@ -169,6 +289,13 @@ def test_validate_leader_assignments():
     captain2 = Unit(
         name="Captain Squad 2",
         faction="Imperium",
+        category="Character",
+        movement=4,
+        toughness=3,
+        save=3,
+        wounds=2,
+        leadership=7,
+        objective_control=1,
         is_leader=True,
         leader_for=["Tactical Marine"],
         keywords=["Character"],
@@ -184,6 +311,13 @@ def test_get_leader_hints():
     warboss = Unit(
         name="Warboss",
         faction="Orks",
+        category="Character",
+        movement=4,
+        toughness=4,
+        save=4,
+        wounds=3,
+        leadership=7,
+        objective_control=1,
         is_leader=True,
         leader_for=["Boyz"],
         keywords=["Character"],
@@ -192,11 +326,25 @@ def test_get_leader_hints():
     boyz = Unit(
         name="Boyz",
         faction="Orks",
+        category="Battleline",
+        movement=4,
+        toughness=3,
+        save=6,
+        wounds=1,
+        leadership=5,
+        objective_control=1,
         keywords=["Infantry", "Battleline"],
     )
     marine = Unit(
         name="Tactical Marine",
         faction="Space Marines",
+        category="Battleline",
+        movement=4,
+        toughness=4,
+        save=3,
+        wounds=2,
+        leadership=6,
+        objective_control=1,
         keywords=["Infantry"],
     )
     all_units = {

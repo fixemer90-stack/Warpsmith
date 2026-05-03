@@ -7,6 +7,21 @@
 
 ---
 
+## 2026-05-04
+
+### Added
+- **F5.2 Deployment** — `Procfile`, `app.json`, `deploy/dokku-setup.sh`, `deploy/railway.json`, `deploy/systemd.service`, `docs/deployment.md` — поддерживает 3 сценария: Dokku (git push + letsencrypt + volume), Railway (serverless + Dockerfile), self-host (systemd + nginx + certbot)
+- F4.8 SVG icons — `web/static/icons/legends.svg` (tombstone), `_unit_icons()` включает `legends` в priority, `icon_map.py` загружает все SVG динамически
+- API `/api/detachments` — эндпоинт возвращает `rule_name`, `rule_description`, `stratagem_count`, `enhancement_count` для inline preview
+- Wiki YAML детачментов — `detachment_rule`, `stratagems`, `enhancements` добавлены в frontmatter 21 файла
+
+### Fixed
+- Team Builder: дублирование заголовка 🛠 Team Builder, два селекта Detachment, `@change="loadUnits()"` → `@change="onFactionChange()"` (диспатчит событие в detachmentPicker)
+- Detachment Picker: добавлен `collapsed`/`expand` — после выбора список сворачивается, кнопка Change разворачивает
+- `detachment_picker.js` не подгружался в team_builder.html — добавлен `<script src=...>`
+- YAML parsing: апострофы в `'Ere We Go` и `'Ard as Nails` ломали frontmatter — обёрнуты в двойные кавычки
+- WatchFiles reload отключён — файлы больше не откатываются к git-версиям
+
 ## 2026-05-03
 
 ### Added
