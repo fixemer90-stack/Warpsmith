@@ -110,7 +110,7 @@
 ## 🎨 Phase 4: Web UI Polish
 
 ```
-[███░░░░░░░░░░░░░░░] 37.5% · 3/8 features
+[████░░░░░░░░░░░░░░] 50% · 4/8 features
 ```
 
 **Цель:** Полноценное веб-приложение, готовое к пользователям.
@@ -122,7 +122,7 @@
 | 4.1 | ✅ | Faction browser + category/PTS filter | 4h |
 | 4.2 | ✅ | Unit modal: squad size, loadout, wargear selection | 6h |
 | 4.3 | ✅ | Detachment picker with rule preview | 3h |
-| 4.4 | ⚪ | Synergy hints: leader compatibility, transport capacity | 4h |
+| 4.4 | ✅ | Synergy hints: leader compatibility, transport capacity | 4h |
 | 4.5 | ⚪ | Canvas map: terrain tiles + deploy zones interactivity | 8h |
 | 4.6 | ⚪ | Progressive Disclosure: Beginner / Intermediate / Expert | 4h |
 | 4.7 | ⚪ | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h |

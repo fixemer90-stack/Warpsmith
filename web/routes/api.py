@@ -4,7 +4,7 @@ import json
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List
 
 from backend.loader.registry import registry as wiki
 from backend.engine.combat import simulate_weapon_attack, simulate_unit_attack, MultiAttackResult
@@ -560,6 +560,16 @@ class RosterUpdate(BaseModel):
     is_public: Optional[bool] = None
 
 
+class SynergyCheck(BaseModel):
+    type: str  # "leader" | "transport" | "synergy"
+    severity: str  # "info" | "warning" | "error"
+    source_unit: str
+    target_unit: Optional[str] = None
+    message: str
+    icon: str = "💡"
+    action_url: Optional[str] = None
+
+
 @router.post("/rosters")
 async def create_roster(data: RosterCreate, user: User = Depends(get_current_user)):
     """Создать новый ростер."""
@@ -719,3 +729,138 @@ async def delete_roster(roster_id: int, user: User = Depends(get_current_user)):
     db.execute("DELETE FROM rosters WHERE id = ?", (roster_id,))
     db.commit()
     return {"status": "deleted", "id": roster_id}
+
+
+@router.post("/rosters/synergies")
+async def check_roster_synergies(data: dict):
+    """
+    Проверить ростер на синергии.
+    request: { "faction": str, "units": list[{"name": str, "squad_size": int, ...}] }
+    response: { "checks": list[SynergyCheck], "score": int }
+    """
+    try:
+        wiki.load()
+    except Exception:
+        return {"checks": [], "score": 0}
+
+    checks: List[dict] = []
+    faction = data.get("faction", "")
+    units_data = data.get("units", [])
+
+    # Get unit objects
+    unit_objs = []
+    for u_data in units_data:
+        unit = wiki.get_unit(u_data["name"])
+        if unit:
+            unit_objs.append((unit, u_data))
+
+    # 1. Leader → Bodyguard compatibility
+    leaders = [(u, ud) for u, ud in unit_objs if getattr(u, "is_leader", False) or getattr(u, "can_be_warlord", False)]
+    non_leaders = [(u, ud) for u, ud in unit_objs if not (getattr(u, "is_leader", False) or getattr(u, "can_be_warlord", False))]
+
+    for leader, leader_data in leaders:
+        compatible = []
+        incompatible = []
+
+        # Check leader_for compatibility
+        leader_for = getattr(leader, "leader_for", [])
+        if leader_for:
+            for unit, unit_data in non_leaders:
+                if any(lf.lower() in [kw.lower() for kw in getattr(unit, "keywords", [])] or
+                       lf.lower() in unit.category.lower() for lf in leader_for):
+                    compatible.append(unit.name)
+                else:
+                    incompatible.append(unit.name)
+        else:
+            # Default: assume leaders can lead infantry/battleline
+            for unit, unit_data in non_leaders:
+                if unit.category.lower() in ["infantry", "battleline"]:
+                    compatible.append(unit.name)
+                else:
+                    incompatible.append(unit.name)
+
+        if compatible:
+            checks.append({
+                "type": "leader",
+                "severity": "info",
+                "source_unit": leader.name,
+                "message": f"{leader.name} can lead: {', '.join(compatible)}",
+                "icon": "✅",
+            })
+        elif incompatible:
+            checks.append({
+                "type": "leader",
+                "severity": "warning",
+                "source_unit": leader.name,
+                "message": f"{leader.name} has no compatible units to lead",
+                "icon": "⚠️",
+            })
+
+    # 2. Transport capacity
+    transports = [(u, ud) for u, ud in unit_objs if getattr(u, "transport_capacity", None)]
+    for transport, transport_data in transports:
+        capacity = transport.transport_capacity
+        # Find units that can embark (infantry, battleline, etc.)
+        embarked_count = 0
+        embarked_units = []
+        for unit, unit_data in non_leaders:
+            # Skip if it's another transport or epic hero
+            if getattr(unit, "transport_capacity", None) or getattr(unit, "is_epic_hero", False):
+                continue
+            # Check if unit can be transported (infantry/battleline typically)
+            if unit.category.lower() in ["infantry", "battleline"]:
+                embarked_count += unit_data.get("squad_size", 1)
+                embarked_units.append(unit.name)
+
+        if embarked_count > capacity:
+            checks.append({
+                "type": "transport",
+                "severity": "error",
+                "source_unit": transport.name,
+                "message": f"{transport.name} can carry {capacity} models, but roster has {embarked_count} eligible models",
+                "icon": "🚫",
+            })
+        elif embarked_count == 0 and capacity > 0:
+            checks.append({
+                "type": "transport",
+                "severity": "info",
+                "source_unit": transport.name,
+                "message": f"{transport.name} is empty — add infantry to transport",
+                "icon": "🚌",
+            })
+        elif embarked_count > 0:
+            checks.append({
+                "type": "transport",
+                "severity": "info",
+                "source_unit": transport.name,
+                "message": f"{transport.name} carrying {embarked_count}/{capacity} models: {', '.join(embarked_units)}",
+                "icon": "🚌",
+            })
+
+    # 3. Wiki synergy hints (from YAML frontmatter synergies field)
+    for unit, unit_data in unit_objs:
+        synergies = getattr(unit, "synergies", [])
+        for syn in synergies:
+            if isinstance(syn, dict):
+                with_unit = syn.get("with", "")
+                if with_unit:
+                    # Check if target unit is in roster
+                    matched = [ud for u, ud in unit_objs if ud["name"].lower() == with_unit.lower()]
+                    if matched:
+                        checks.append({
+                            "type": "synergy",
+                            "severity": syn.get("type", "info"),
+                            "source_unit": unit.name,
+                            "target_unit": with_unit,
+                            "message": syn.get("text", f"Synergy with {with_unit}"),
+                            "icon": "💡",
+                        })
+
+    # Calculate score: errors = 3 points, warnings = 1 point, info = 0
+    score = sum(
+        (3 if c["severity"] == "error" else
+         1 if c["severity"] == "warning" else 0)
+        for c in checks
+    )
+
+    return {"checks": checks, "score": score}
