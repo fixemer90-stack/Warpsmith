@@ -1,82 +1,57 @@
 """
-Маппинг категорий юнитов → SVG-иконки.
+Маппинг категорий юнитов → SVG-иконки, цвета, подписи.
 Используется на фронте для отображения карточек юнитов.
 """
 
+import os
+from pathlib import Path
+
+ICONS_DIR = Path(__file__).parent.parent.parent / "web" / "static" / "icons"
+
 ICON_MAP = {
-    "character": "character.svg",  # 🪖 Командиры
-    "battleline": "battleline.svg",  # ⚔️ Линейная пехота
-    "elite": "elite.svg",  # ⭐ Элита
-    "infantry": "infantry.svg",  # 👤 Простая пехота
-    "vehicle": "vehicle.svg",  # 🚛 Техника
-    "transport": "transport.svg",  # 🚌 Транспорт
-    "walker": "walker.svg",  # 🦿 Ходячая техника
-    "monster": "monster.svg",  # 🦣 Монстры
-    "dreadnought": "dreadnought.svg",  # 💀 Дредноуты
-    "titanic": "titanic.svg",  # 🏗 Титаны
-    "speed-freek": "speed-freek.svg",  # 🏍 Скоростная техника
-    "flyer": "flyer.svg",  # ✈️ Летающие
-    "artillery": "artillery.svg",  # 💥 Артиллерия
-    "psyker": "psyker.svg",  # 🔮 Псайкеры
-    "medic": "medic.svg",  # 🏥 Медики
-    "epic-hero": "epic-hero.svg",  # 👑 Эпические герои
+    "epic-hero": "epic-hero.svg",
+    "character": "character.svg",
+    "psyker": "psyker.svg",
+    "medic": "medic.svg",
+    "battleline": "battleline.svg",
+    "elite": "elite.svg",
+    "infantry": "infantry.svg",
+    "transport": "transport.svg",
+    "vehicle": "vehicle.svg",
+    "walker": "walker.svg",
+    "dreadnought": "dreadnought.svg",
+    "speed-freek": "speed-freek.svg",
+    "battlesuit": "battlesuit.svg",
+    "monster": "monster.svg",
+    "titanic": "titanic.svg",
+    "fly": "fly.svg",
+    "artillery": "artillery.svg",
+    "legends": "legends.svg",
 }
 
 CATEGORY_ORDER = [
-    "epic-hero",
-    "character",
-    "psyker",
-    "medic",
-    "battleline",
-    "elite",
-    "infantry",
-    "transport",
-    "vehicle",
-    "walker",
-    "dreadnought",
-    "speed-freek",
-    "monster",
-    "titanic",
-    "flyer",
-    "artillery",
+    "epic-hero", "character", "psyker", "medic", "battleline", "elite",
+    "infantry", "transport", "vehicle", "walker", "dreadnought",
+    "battlesuit", "speed-freek", "monster", "titanic", "fly", "artillery", "legends",
 ]
 
 CATEGORY_LABELS = {
-    "character": "Characters",
-    "battleline": "Battleline",
-    "elite": "Elites",
-    "infantry": "Infantry",
-    "vehicle": "Vehicles",
-    "transport": "Dedicated Transports",
-    "walker": "Walkers",
-    "monster": "Monsters",
-    "dreadnought": "Dreadnoughts",
-    "titanic": "Titanic",
-    "speed-freek": "Speed Freeks",
-    "flyer": "Flyers",
-    "artillery": "Artillery",
-    "psyker": "Psykers",
-    "medic": "Medics",
-    "epic-hero": "Epic Heroes",
+    "epic-hero": "Epic Heroes", "character": "Characters", "psyker": "Psykers",
+    "medic": "Medics", "battleline": "Battleline", "elite": "Elites",
+    "infantry": "Infantry", "transport": "Dedicated Transports",
+    "vehicle": "Vehicles", "walker": "Walkers", "dreadnought": "Dreadnoughts",
+    "battlesuit": "Battlesuits", "speed-freek": "Speed Freeks",
+    "monster": "Monsters", "titanic": "Titanic", "fly": "Flyers",
+    "artillery": "Artillery", "legends": "Legends",
 }
 
 CATEGORY_COLORS = {
-    "epic-hero": "#a855f7",  # purple
-    "character": "#a855f7",  # purple
-    "psyker": "#ec4899",  # pink
-    "medic": "#22c55e",  # green
-    "battleline": "#22c55e",  # green
-    "elite": "#eab308",  # yellow
-    "infantry": "#6b7280",  # gray
-    "transport": "#3b82f6",  # blue
-    "vehicle": "#3b82f6",  # blue
-    "walker": "#f97316",  # orange
-    "dreadnought": "#f97316",  # orange
-    "speed-freek": "#ef4444",  # red
-    "monster": "#ef4444",  # red
-    "titanic": "#dc2626",  # red-dark
-    "flyer": "#8b5cf6",  # violet
-    "artillery": "#78716c",  # stone
+    "epic-hero": "#a855f7", "character": "#a855f7", "psyker": "#ec4899",
+    "medic": "#22c55e", "battleline": "#22c55e", "elite": "#eab308",
+    "infantry": "#6b7280", "transport": "#3b82f6", "vehicle": "#3b82f6",
+    "walker": "#f97316", "dreadnought": "#f97316", "battlesuit": "#06b6d4",
+    "speed-freek": "#ef4444", "monster": "#ef4444", "titanic": "#dc2626",
+    "fly": "#8b5cf6", "artillery": "#78716c", "legends": "#555555",
 }
 
 
@@ -84,3 +59,37 @@ def get_icon_url(category: str) -> str:
     """Вернуть URL иконки для категории юнита."""
     icon = ICON_MAP.get(category, "infantry.svg")
     return f"/static/icons/{icon}"
+
+
+def get_icon_html(category: str, size: int = 24, class_name: str = "") -> str:
+    """Вернуть inline SVG как HTML-строку."""
+    filename = ICON_MAP.get(category, "infantry.svg")
+    svg_path = ICONS_DIR / filename
+    if not svg_path.exists():
+        return f'<!-- icon {filename} not found -->'
+    try:
+        svg = svg_path.read_text()
+    except Exception:
+        return ''
+    svg = svg.replace(
+        '<svg ',
+        f'<svg width="{size}" height="{size}" class="{class_name}" ',
+        1,
+    )
+    return svg
+
+
+def get_card_style(category: str) -> str:
+    """Вернуть CSS-стиль для карточки юнита по категории."""
+    color = CATEGORY_COLORS.get(category, "#6b7280")
+    return f"border-left: 3px solid {color};"
+
+
+def get_icon_svg_map() -> dict[str, str]:
+    """Загрузить все SVG в словарь (для inline-вставки на фронте)."""
+    svg_map = {}
+    for cat, filename in ICON_MAP.items():
+        path = ICONS_DIR / filename
+        if path.exists():
+            svg_map[cat] = path.read_text()
+    return svg_map

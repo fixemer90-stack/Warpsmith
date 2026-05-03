@@ -12,6 +12,59 @@ function scenarioSetup() {
         rosters: [],
         factions: [],
         generating: false,
+        player1Units: [],
+        player2Units: [],
+
+        // Lifecycle
+        init() {
+            this.$watch('player1Roster', (newVal) => {
+                if (newVal) this.loadRoster(1, newVal);
+                else this.player1Units = [];
+                this.updateMapUnits();
+            });
+
+            this.$watch('player2Roster', (newVal) => {
+                if (newVal) {
+                    this.player2Generated = null;
+                    this.loadRoster(2, newVal);
+                } else {
+                    this.player2Units = [];
+                }
+                this.updateMapUnits();
+            });
+
+            // Watch for generated opponent
+            this.$watch('player2Generated', (newVal) => {
+                if (newVal && newVal.units) {
+                    this.loadGeneratedUnits(newVal.units);
+                }
+            });
+        },
+
+        async loadGeneratedUnits(units) {
+            const unitDetails = await Promise.all(
+                units.map(u => this.loadUnitDetails(u.unit_name))
+            );
+
+            const mapUnits = [];
+            for (let i = 0; i < units.length; i++) {
+                const unit = units[i];
+                const details = unitDetails[i];
+                if (details) {
+                    const pos = this.getDeployPosition(2, i, units.length);
+                    mapUnits.push({
+                        name: unit.unit_name,
+                        x: pos.x,
+                        y: pos.y,
+                        faction: 'generated',
+                        icon: details.icon_url,
+                        color: details.color,
+                    });
+                }
+            }
+            this.player2Units = mapUnits;
+            this.updateMapUnits();
+        },
 
         // Computed
         get canStart() {
@@ -55,6 +108,87 @@ function scenarioSetup() {
 
         clearOpponent() {
             this.player2Generated = null;
+            this.player2Units = [];
+            this.updateMapUnits();
+        },
+
+        async loadRoster(player, rosterId) {
+            try {
+                const resp = await fetch(`/api/rosters/${rosterId}`);
+                if (resp.ok) {
+                    const roster = await resp.json();
+                    const units = roster.units || [];
+                    const unitDetails = await Promise.all(
+                        units.map(u => this.loadUnitDetails(u.unit_name))
+                    );
+
+                    const mapUnits = [];
+                    for (let i = 0; i < units.length; i++) {
+                        const unit = units[i];
+                        const details = unitDetails[i];
+                        if (details) {
+                            // Place units in deploy zones
+                            const pos = this.getDeployPosition(player, i, units.length);
+                            mapUnits.push({
+                                name: unit.unit_name,
+                                x: pos.x,
+                                y: pos.y,
+                                faction: roster.faction,
+                                icon: details.icon_url,
+                                color: details.color,
+                            });
+                        }
+                    }
+
+                    if (player === 1) {
+                        this.player1Units = mapUnits;
+                    } else {
+                        this.player2Units = mapUnits;
+                    }
+                    this.updateMapUnits();
+                }
+            } catch (e) {
+                console.error('Failed to load roster:', e);
+            }
+        },
+
+        async loadUnitDetails(unitName) {
+            try {
+                const resp = await fetch(`/api/units/${encodeURIComponent(unitName)}/detail`);
+                if (resp.ok) {
+                    return await resp.json();
+                }
+            } catch (e) {
+                console.error('Failed to load unit details:', e);
+            }
+            return null;
+        },
+
+        getDeployPosition(player, index, totalUnits) {
+            // Simple deploy positioning
+            const isPlayer1 = player === 1;
+            const deployZone = isPlayer1 ? { startX: 0, endX: 3 } : { startX: 13, endX: 15 };
+
+            // Spread units across deploy zone
+            const unitsPerRow = Math.ceil(totalUnits / 16); // 16 rows available
+            const row = Math.floor(index / unitsPerRow);
+            const colOffset = (index % unitsPerRow) * Math.floor((deployZone.endX - deployZone.startX + 1) / Math.max(unitsPerRow, 1));
+
+            return {
+                x: Math.min(deployZone.endX, deployZone.startX + colOffset),
+                y: Math.min(15, row),
+            };
+        },
+
+        updateMapUnits() {
+            // Combine units from both players
+            const allUnits = [...this.player1Units, ...this.player2Units];
+
+            // Update canvas map data
+            if (window.canvasMapInstance) {
+                window.canvasMapInstance.mapData.units = allUnits;
+                window.canvasMapInstance.render();
+            }
         },
 
         async startSimulation() {

@@ -4,7 +4,7 @@ import json
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List
 
 from backend.loader.registry import registry as wiki
 from backend.engine.combat import simulate_weapon_attack, simulate_unit_attack, MultiAttackResult
@@ -33,7 +33,7 @@ def _unit_icons(unit) -> list[str]:
     """All SVG icons for a unit based on its YAML tags, in priority order."""
     tags = {t.lower().replace(" ", "-") for t in unit.tags}
     priority = ["epic-hero", "psyker", "titanic", "monster", "dreadnought",
-                "walker", "transport", "vehicle", "fly", "artillery",
+                "walker", "battlesuit", "transport", "vehicle", "fly", "artillery",
                 "battleline", "character", "elite", "infantry", "medic", "speed-freek"]
     seen = set()
     result = []
@@ -380,6 +380,154 @@ async def unit_detail(unit_name: str):
     }
 
 
+@router.get("/detachments")
+async def list_detachments(faction: Optional[str] = None):
+    """Вернуть список детачментов. С фильтрацией по faction."""
+    try:
+        wiki.load()
+    except Exception:
+        return []
+
+    detachment_names = wiki.list_detachments(faction=faction)
+    result = []
+    for name in detachment_names:
+        det = wiki.get_detachment(name)
+        if det:
+            result.append({
+                "name": det.name,
+                "faction": det.faction,
+                "description": det.description[:100] + "..." if len(det.description) > 100 else det.description,
+            })
+    return result
+
+
+@router.get("/detachments/{detachment_name}")
+async def detachment_detail(detachment_name: str):
+    """Вернуть полные данные детачмента: правила, стратагемы, энхансменты."""
+    try:
+        wiki.load()
+    except Exception:
+        pass
+
+    det = wiki.get_detachment(detachment_name)
+    if not det:
+        raise HTTPException(404, detail="Detachment not found")
+
+    return {
+        "name": det.name,
+        "faction": det.faction,
+        "description": det.description,
+        "detachment_rule": {
+            "name": det.detachment_rule.name if det.detachment_rule else "No Rule",
+            "description": det.detachment_rule.description if det.detachment_rule else "",
+        } if det.detachment_rule else None,
+        "stratagems": [
+            {
+                "name": s.name,
+                "cost": s.cost,
+                "when": s.when,
+                "effect": s.effect,
+            }
+            for s in det.stratagems
+        ],
+        "enhancements": [
+            {
+                "name": e.name,
+                "points": e.points,
+                "effect": e.effect,
+            }
+            for e in det.enhancements
+        ],
+    }
+
+
+@router.get("/map/tiles")
+async def get_map_tiles(
+    map_id: Optional[int] = None,
+    scenario: Optional[str] = None,
+):
+    """
+    Вернуть сетку тайлов для отображения на Canvas.
+    Response: {
+        "width": 16, "height": 16,
+        "tiles": [[tile_type, ...], ...],  # 16×16 matrix of TileType values
+        "deploy_zones": {
+            "player1": [(x1,y1), (x2,y2), ...],
+            "player2": [(x3,y3), (x4,y4), ...],
+        },
+        "units": [
+            {"name": "Warboss", "x": 2, "y": 3, "faction": "orks",
+             "icon": "/static/icons/character.svg", "color": "#a855f7"},
+        ],
+    }
+    """
+    from backend.loader.icon_map import ICON_MAP, CATEGORY_COLORS
+    from enum import Enum
+
+    class TileType(Enum):
+        OPEN = 0
+        LIGHT_COVER = 1
+        HEAVY_COVER = 2
+        OBSTACLE = 3
+        DIFFICULT = 4
+        DEPLOY_ZONE = 5
+
+    GRID_SIZE = 16
+
+    # Generate a balanced map with central obstacles
+    tiles = []
+    for y in range(GRID_SIZE):
+        row = []
+        for x in range(GRID_SIZE):
+            # Default to open ground
+            tile_type = TileType.OPEN.value
+
+            # Central obstacle cluster
+            if 6 <= x <= 9 and 6 <= y <= 9:
+                tile_type = TileType.OBSTACLE.value
+            # Light cover on flanks
+            elif (x == 3 or x == 12) and 4 <= y <= 11:
+                tile_type = TileType.LIGHT_COVER.value
+            # Heavy cover in corners
+            elif (x <= 2 or x >= 13) and (y <= 2 or y >= 13):
+                tile_type = TileType.HEAVY_COVER.value
+            # Difficult terrain near obstacles
+            elif 5 <= x <= 10 and 5 <= y <= 10 and tile_type == TileType.OPEN.value:
+                if (x + y) % 3 == 0:
+                    tile_type = TileType.DIFFICULT.value
+
+            row.append(tile_type)
+        tiles.append(row)
+
+    # Deploy zones
+    deploy_zones = {
+        "player1": [],  # left side (x: 0-3)
+        "player2": [],  # right side (x: 12-15)
+    }
+
+    for x in range(4):  # player1: x 0-3
+        for y in range(GRID_SIZE):
+            deploy_zones["player1"].append([x, y])
+
+    for x in range(12, GRID_SIZE):  # player2: x 12-15
+        for y in range(GRID_SIZE):
+            deploy_zones["player2"].append([x, y])
+
+    # Mark deploy zone tiles
+    for coord in deploy_zones["player1"] + deploy_zones["player2"]:
+        x, y = coord
+        if tiles[y][x] == TileType.OPEN.value:
+            tiles[y][x] = TileType.DEPLOY_ZONE.value
+
+    return {
+        "width": GRID_SIZE,
+        "height": GRID_SIZE,
+        "tiles": tiles,
+        "deploy_zones": deploy_zones,
+        "units": [],  # Empty for now, can be populated from scenario
+    }
+
+
 @router.get("/health")
 async def health():
     return {"status": "ok", "version": "0.3.0"}
@@ -424,58 +572,6 @@ async def list_factions():
     }
 
 
-def _faction_detachment_dir(wiki_path, faction_id: str):
-    """Map faction ID (e.g. 'adeptus-mechanicus') to its detachments directory name ('mechanicus')."""
-    from pathlib import Path
-    import frontmatter
-
-    units_dir = wiki_path / "units"
-    if not units_dir.exists():
-        return None
-
-    # Scan units subdirectories to find which one has the matching faction YAML
-    for subdir in sorted(units_dir.iterdir()):
-        if not subdir.is_dir():
-            continue
-        # Check if the directory name itself matches (common case: orks→orks)
-        if subdir.name == faction_id:
-            det_dir = wiki_path / "detachments" / subdir.name
-            if det_dir.exists():
-                return det_dir
-        # Check first .md file for faction: field
-        for f in subdir.glob("*.md"):
-            try:
-                post = frontmatter.load(str(f))
-                if post.metadata.get("faction") == faction_id:
-                    det_dir = wiki_path / "detachments" / subdir.name
-                    return det_dir if det_dir.exists() else None
-            except Exception:
-                continue
-            break  # only need first file
-    return None
-
-
-@router.get("/detachments")
-async def list_detachments(faction: str = ""):
-    """Список детачментов (всех или по фракции)."""
-    try:
-        wiki.load()
-    except Exception:
-        return {"detachments": []}
-
-    from pathlib import Path
-    wiki_path = wiki.wiki_path
-    det_dir = wiki_path / "detachments" / faction
-    if not det_dir.exists():
-        # Try resolving faction ID → directory name (e.g. adeptus-mechanicus → mechanicus)
-        det_dir = _faction_detachment_dir(wiki_path, faction)
-    if not det_dir or not det_dir.exists():
-        return {"detachments": []}
-
-    detachments = sorted(f.stem for f in det_dir.glob("*.md"))
-    return {"detachments": detachments}
-
-
 # ── Roster CRUD ─────────────────────────────────────────
 
 
@@ -497,6 +593,16 @@ class RosterUpdate(BaseModel):
     name: Optional[str] = None
     units: Optional[list[RosterUnit]] = None
     is_public: Optional[bool] = None
+
+
+class SynergyCheck(BaseModel):
+    type: str  # "leader" | "transport" | "synergy"
+    severity: str  # "info" | "warning" | "error"
+    source_unit: str
+    target_unit: Optional[str] = None
+    message: str
+    icon: str = "💡"
+    action_url: Optional[str] = None
 
 
 @router.post("/rosters")
@@ -658,3 +764,138 @@ async def delete_roster(roster_id: int, user: User = Depends(get_current_user)):
     db.execute("DELETE FROM rosters WHERE id = ?", (roster_id,))
     db.commit()
     return {"status": "deleted", "id": roster_id}
+
+
+@router.post("/rosters/synergies")
+async def check_roster_synergies(data: dict):
+    """
+    Проверить ростер на синергии.
+    request: { "faction": str, "units": list[{"name": str, "squad_size": int, ...}] }
+    response: { "checks": list[SynergyCheck], "score": int }
+    """
+    try:
+        wiki.load()
+    except Exception:
+        return {"checks": [], "score": 0}
+
+    checks: List[dict] = []
+    faction = data.get("faction", "")
+    units_data = data.get("units", [])
+
+    # Get unit objects
+    unit_objs = []
+    for u_data in units_data:
+        unit = wiki.get_unit(u_data["name"])
+        if unit:
+            unit_objs.append((unit, u_data))
+
+    # 1. Leader → Bodyguard compatibility
+    leaders = [(u, ud) for u, ud in unit_objs if getattr(u, "is_leader", False) or getattr(u, "can_be_warlord", False)]
+    non_leaders = [(u, ud) for u, ud in unit_objs if not (getattr(u, "is_leader", False) or getattr(u, "can_be_warlord", False))]
+
+    for leader, leader_data in leaders:
+        compatible = []
+        incompatible = []
+
+        # Check leader_for compatibility
+        leader_for = getattr(leader, "leader_for", [])
+        if leader_for:
+            for unit, unit_data in non_leaders:
+                if any(lf.lower() in [kw.lower() for kw in getattr(unit, "keywords", [])] or
+                       lf.lower() in unit.category.lower() for lf in leader_for):
+                    compatible.append(unit.name)
+                else:
+                    incompatible.append(unit.name)
+        else:
+            # Default: assume leaders can lead infantry/battleline
+            for unit, unit_data in non_leaders:
+                if unit.category.lower() in ["infantry", "battleline"]:
+                    compatible.append(unit.name)
+                else:
+                    incompatible.append(unit.name)
+
+        if compatible:
+            checks.append({
+                "type": "leader",
+                "severity": "info",
+                "source_unit": leader.name,
+                "message": f"{leader.name} can lead: {', '.join(compatible)}",
+                "icon": "✅",
+            })
+        elif incompatible:
+            checks.append({
+                "type": "leader",
+                "severity": "warning",
+                "source_unit": leader.name,
+                "message": f"{leader.name} has no compatible units to lead",
+                "icon": "⚠️",
+            })
+
+    # 2. Transport capacity
+    transports = [(u, ud) for u, ud in unit_objs if getattr(u, "transport_capacity", None)]
+    for transport, transport_data in transports:
+        capacity = transport.transport_capacity
+        # Find units that can embark (infantry, battleline, etc.)
+        embarked_count = 0
+        embarked_units = []
+        for unit, unit_data in non_leaders:
+            # Skip if it's another transport or epic hero
+            if getattr(unit, "transport_capacity", None) or getattr(unit, "is_epic_hero", False):
+                continue
+            # Check if unit can be transported (infantry/battleline typically)
+            if unit.category.lower() in ["infantry", "battleline"]:
+                embarked_count += unit_data.get("squad_size", 1)
+                embarked_units.append(unit.name)
+
+        if embarked_count > capacity:
+            checks.append({
+                "type": "transport",
+                "severity": "error",
+                "source_unit": transport.name,
+                "message": f"{transport.name} can carry {capacity} models, but roster has {embarked_count} eligible models",
+                "icon": "🚫",
+            })
+        elif embarked_count == 0 and capacity > 0:
+            checks.append({
+                "type": "transport",
+                "severity": "info",
+                "source_unit": transport.name,
+                "message": f"{transport.name} is empty — add infantry to transport",
+                "icon": "🚌",
+            })
+        elif embarked_count > 0:
+            checks.append({
+                "type": "transport",
+                "severity": "info",
+                "source_unit": transport.name,
+                "message": f"{transport.name} carrying {embarked_count}/{capacity} models: {', '.join(embarked_units)}",
+                "icon": "🚌",
+            })
+
+    # 3. Wiki synergy hints (from YAML frontmatter synergies field)
+    for unit, unit_data in unit_objs:
+        synergies = getattr(unit, "synergies", [])
+        for syn in synergies:
+            if isinstance(syn, dict):
+                with_unit = syn.get("with", "")
+                if with_unit:
+                    # Check if target unit is in roster
+                    matched = [ud for u, ud in unit_objs if ud["name"].lower() == with_unit.lower()]
+                    if matched:
+                        checks.append({
+                            "type": "synergy",
+                            "severity": syn.get("type", "info"),
+                            "source_unit": unit.name,
+                            "target_unit": with_unit,
+                            "message": syn.get("text", f"Synergy with {with_unit}"),
+                            "icon": "💡",
+                        })
+
+    # Calculate score: errors = 3 points, warnings = 1 point, info = 0
+    score = sum(
+        (3 if c["severity"] == "error" else
+         1 if c["severity"] == "warning" else 0)
+        for c in checks
+    )
+
+    return {"checks": checks, "score": score}

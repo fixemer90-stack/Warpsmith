@@ -1,0 +1,50 @@
+<!-- web/templates/partials/synergy_panel.html -->
+<div x-data="synergyHints()"
+     x-init="$watch('roster', () => checkSynergies())"
+     class="mt-4">
+
+    <!-- Summary Badge -->
+    <div class="flex items-center gap-2 mb-3">
+        <span class="text-sm text-gray-300">Synergy Check</span>
+        <template x-if="synergyChecks.length > 0">
+            <div class="flex gap-1">
+                <span class="text-xs px-2 py-0.5 rounded bg-red-900 text-red-300"
+                      x-show="errorCount > 0" x-text="errorCount + ' errors'"></span>
+                <span class="text-xs px-2 py-0.5 rounded bg-yellow-900 text-yellow-300"
+                      x-show="warningCount > 0" x-text="warningCount + ' warnings'"></span>
+                <span class="text-xs px-2 py-0.5 rounded bg-green-900 text-green-300"
+                      x-show="infoCount > 0 && errorCount === 0 && warningCount === 0"
+                      x-text="infoCount + ' synergies'"></span>
+            </div>
+        </template>
+        <template x-if="synergyChecks.length === 0 && roster.length > 0">
+            <span class="text-xs text-gray-500">No synergy data available</span>
+        </template>
+        <template x-if="roster.length === 0">
+            <span class="text-xs text-gray-500">Add units to check synergies</span>
+        </template>
+    </div>
+
+    <!-- Checks List -->
+    <div class="space-y-2 max-h-64 overflow-y-auto" x-show="synergyChecks.length > 0">
+        <template x-for="check in synergyChecks" :key="check.source_unit + check.message">
+            <div class="flex items-start gap-2 p-2 rounded text-xs"
+                 :class="{
+                     'bg-green-900/20 border border-green-800/30': check.severity === 'info',
+                     'bg-yellow-900/20 border border-yellow-800/30': check.severity === 'warning',
+                     'bg-red-900/20 border border-red-800/30': check.severity === 'error',
+                 }">
+                <span x-text="check.icon" class="mt-0.5"></span>
+                <div class="flex-1">
+                    <p class="text-gray-200" x-text="check.message"></p>
+                    <template x-if="check.action_url">
+                        <a :href="check.action_url"
+                           class="text-blue-400 hover:text-blue-300 mt-1 inline-block">
+                            Add compatible unit →
+                        </a>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>

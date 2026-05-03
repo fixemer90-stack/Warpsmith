@@ -1,4 +1,13 @@
 // Team Builder — Alpine.js component
+
+// Global helper: inline SVG icon
+function getIconHtml(category, size = 16) {
+    const svgMap = window._iconSvgMap || {};
+    const svg = svgMap[category] || svgMap['infantry'] || '';
+    if (!svg) return '';
+    return svg.replace('<svg ', `<svg width="${size}" height="${size}" style="fill: currentColor" `);
+}
+
 function teamBuilder() {
     return {
         // State
@@ -21,6 +30,9 @@ function teamBuilder() {
         selectedLoadout: '',
         selectedNobOption: '',
         currentUnitName: '',
+
+        // Detachment State
+        detachment: '',
 
         // Computed
         get unitsByCategory() {
@@ -104,6 +116,15 @@ function teamBuilder() {
             this.ptsLimit = parseInt(this.gameSize, 10);
         },
 
+        onFactionChange() {
+            this.loadUnits();
+            // Emit faction change event for detachment picker
+            const event = new CustomEvent('faction-changed', {
+                detail: { faction: this.faction }
+            });
+            document.dispatchEvent(event);
+        },
+
         // Unit Modal Methods
         openUnitModal(unitName) {
             this.currentUnitName = unitName;
@@ -142,6 +163,13 @@ function teamBuilder() {
             this.showUnitModal = false;
             this.validationErrors = [];
         },
+
+        init() {
+            // Listen for detachment selection
+            document.addEventListener('detachment-selected', (e) => {
+                this.detachment = e.detail.detachment;
+            });
+        },
         async loadUnits() {
             if (!this.faction) {
                 this.units = [];
@@ -163,7 +191,9 @@ function teamBuilder() {
                 
                 if (detResp.ok) {
                     const detData = await detResp.json();
-                    this.detachments = detData.detachments || [];
+                    this.detachments = Array.isArray(detData)
+                        ? detData.map(d => d.name)
+                        : (detData.detachments || []);
                 }
             } catch (error) {
                 console.error('Failed to load units/detachments:', error);

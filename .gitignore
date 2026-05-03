@@ -19,6 +19,8 @@ venv/
 
 # SQLite database
 *.db
+*.db-shm
+*.db-wal
 
 # Wiki vault (симлинк или отдельный репозиторий)
 wiki/

@@ -1,10 +1,13 @@
 {% extends "base.html" %}
-
 {% block content %}
 <div x-data="teamBuilder()" class="max-w-6xl mx-auto py-8 px-4">
     <script src="/static/team_builder.js"></script>
-    {% include "partials/unit_modal.html" %}
-    <h1 class="text-2xl font-bold text-white mb-6">Team Builder</h1>
+    <script>
+        window._iconSvgMap = {{ _icon_svg_map_json | safe }};
+    </script>
+    <link rel="stylesheet" href="/static/unit_card.css">
+    <h1 class="text-2xl font-bold text-white mb-6">🛠 Team Builder</h1>
+    <script src="/static/synergy_hints.js"></script>
 
     <!-- Step 1: Faction + Detachment + Game Size + Roster Name -->
     <div class="bg-gray-800 rounded-lg p-4 mb-4">
@@ -49,6 +52,9 @@
         </div>
     </div>
 
+    <!-- Step 1.5: Detachment Picker -->
+    {% include "partials/detachment_picker.html" %}
+
     <!-- Step 2: Unit Browser -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <!-- Categories -->
@@ -73,16 +79,18 @@
         <div class="bg-gray-800 rounded-lg p-4 lg:col-span-1">
             <h3 class="text-sm font-semibold text-gray-300 mb-3">Units</h3>
             <div class="space-y-2 max-h-96 overflow-y-auto">
+                <template x-if="filteredUnits.length === 0">
+                    <p class="text-gray-500 text-sm text-center py-8">Select a faction to see units.</p>
+                </template>
                 <template x-for="unit in filteredUnits" :key="unit.name">
-                    <div @click="openUnitModal(unit.name)"
+                    <div @click="openUnitModal(unit)"
                          class="bg-gray-700 rounded p-2 cursor-pointer hover:bg-gray-600 transition">
                         <div class="flex justify-between items-center">
                             <span class="flex items-center gap-1.5 text-white text-xs font-medium truncate">
                                 <span x-text="unit.name"></span>
                                 <template x-for="ic in unit.icon" :key="ic">
-                                    <img :src="`/static/icons/${ic}.svg`"
-                                         class="w-3.5 h-3.5 shrink-0 opacity-60"
-                                         :title="ic">
+                                    <span class="w-3.5 h-3.5 shrink-0 opacity-60 icon-category"
+                                          x-html="getIconHtml(ic, 14)"></span>
                                 </template>
                             </span>
                             <span class="text-yellow-400 text-xs shrink-0 ml-2" x-text="unit.points + 'pts'"></span>
@@ -109,7 +117,7 @@
                 </div>
                 <div class="w-full bg-gray-700 rounded-full h-3">
                     <div class="h-3 rounded-full transition-all duration-300"
-                         :style="`width: ${(totalPts / ptsLimit * 100)}%`"
+                         :style="`width: ${Math.min(100, (totalPts / ptsLimit * 100))}%`"
                          :class="totalPts > ptsLimit ? 'bg-red-500' : 'bg-green-500'">
                     </div>
                 </div>
@@ -118,15 +126,19 @@
             <!-- Unit List -->
             <div class="space-y-2 max-h-80 overflow-y-auto">
                 <template x-for="(entry, idx) in roster" :key="idx">
-                    <div class="bg-gray-700 rounded p-2 flex justify-between items-center">
-                        <div>
+                    <div class="rounded p-2 flex justify-between items-center"
+                         :class="getSynergyClass(entry.name)">
+                        <!-- Status dot -->
+                        <span class="w-2 h-2 rounded-full flex-shrink-0 mr-2"
+                              :class="getSynergyDot(entry.name)"></span>
+                        <div class="flex-1">
                             <span class="text-white text-sm" x-text="entry.name"></span>
                             <span class="text-gray-400 text-xs ml-1"
                                   x-text="`x${entry.squad_size}`"></span>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-yellow-400 text-xs" x-text="entry.pts + 'pts'"></span>
-                            <button @click="removeUnit(idx)" class="text-red-400 text-xs hover:text-red-300">x</button>
+                            <button @click="removeUnit(idx)" class="text-red-400 text-xs hover:text-red-300">✕</button>
                         </div>
                     </div>
                 </template>
@@ -138,7 +150,7 @@
                         :disabled="!isValid"
                         class="w-full bg-blue-600 text-white rounded py-2 font-medium
                                 disabled:opacity-50 disabled:cursor-not-allowed">
-                    Save Roster
+                    💾 Save Roster
                 </button>
                 <template x-if="validationErrors.length > 0">
                     <div class="bg-red-900/30 border border-red-700 rounded p-2 text-red-400 text-xs">
@@ -151,6 +163,29 @@
         </div>
     </div>
 
+    <!-- Step 2.5: Synergy Panel -->
+    {% include "partials/synergy_panel.html" %}
 
+    <!-- Unit Modal -->
+    <div x-show="showModal" @click.away="showModal = false"
+         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <h2 class="text-lg font-bold text-white mb-2" x-text="selectedUnit?.name"></h2>
+            <div class="text-gray-400 text-sm mb-4" x-text="selectedUnit?.ability_text"></div>
+
+            <div class="mb-4">
+                <label class="block text-sm text-gray-300 mb-1">Squad Size</label>
+                <input x-model="squadSize" type="number" min="1" max="20"
+                       class="w-full bg-gray-700 text-white rounded px-3 py-2">
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <button @click="showModal = false"
+                        class="bg-gray-600 text-white px-4 py-2 rounded">Cancel</button>
+                <button @click="addUnit()"
+                        class="bg-blue-600 text-white px-4 py-2 rounded">Add to Roster</button>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -1,0 +1,146 @@
+<!-- web/templates/partials/detachment_picker.html -->
+<div x-data="detachmentPicker()" class="mb-6">
+    <h3 class="text-sm font-semibold text-gray-300 mb-3">Select Detachment</h3>
+
+    <!-- Detachment List (HTMX loaded when faction selected) -->
+    <div id="detachment-list" class="space-y-2">
+        <template x-if="!faction">
+            <p class="text-gray-500 text-sm">Select a faction first</p>
+        </template>
+
+        <template x-if="faction && !loading && !error && detachments.length === 0">
+            <p class="text-gray-500 text-sm">No detachments found for this faction</p>
+        </template>
+
+        <template x-if="loading">
+            <div class="space-y-2">
+                <template x-for="i in 3" :key="i">
+                    <div class="bg-gray-700 rounded p-3 animate-pulse">
+                        <div class="h-4 bg-gray-600 rounded w-3/4 mb-2"></div>
+                        <div class="h-3 bg-gray-600 rounded w-full"></div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <template x-if="error">
+            <div class="bg-red-900/20 border border-red-700 rounded p-3">
+                <p class="text-red-400 text-sm">Failed to load detachments</p>
+                <button @click="loadDetachments(faction)"
+                        class="mt-2 bg-red-700 hover:bg-red-600 text-white px-3 py-1 rounded text-xs">
+                    Retry
+                </button>
+            </div>
+        </template>
+
+        <template x-if="!loading && !error && detachments.length > 0">
+            <template x-for="detachment in detachments" :key="detachment.name">
+                <div @click="selectDetachment(detachment.name)"
+                     class="bg-gray-700 rounded p-3 cursor-pointer hover:bg-gray-600 transition
+                            border border-transparent hover:border-gray-500"
+                     :class="selectedDetachment?.name === detachment.name ? 'ring-2 ring-blue-500' : ''">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h4 class="text-white font-medium text-sm" x-text="detachment.name"></h4>
+                            <p class="text-gray-400 text-xs mt-1" x-text="detachment.description"></p>
+                        </div>
+                        <span class="text-blue-400 text-xs ml-2" x-text="detachment.faction"></span>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+
+    <!-- Detachment Detail Card (shown when selected) -->
+    <template x-if="selectedDetachment">
+        <div class="mt-4 bg-gray-750 border border-gray-600 rounded-lg overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gray-700 px-4 py-3 flex justify-between items-center">
+                <div>
+                    <h4 class="text-white font-bold" x-text="selectedDetachment.name"></h4>
+                    <span class="text-gray-400 text-xs"
+                          x-text="selectedDetachment.faction"></span>
+                </div>
+                <button @click="selectedDetachment = null"
+                        class="text-gray-400 hover:text-white text-lg">&times;</button>
+            </div>
+
+            <div class="p-4 space-y-4">
+                <!-- Description -->
+                <p class="text-gray-300 text-sm" x-text="selectedDetachment.description"></p>
+
+                <!-- Detachment Rule -->
+                <template x-if="selectedDetachment.detachment_rule">
+                    <div class="bg-blue-900/20 border border-blue-800/40 rounded p-3">
+                        <h5 class="text-blue-300 text-xs font-semibold uppercase tracking-wider mb-1">
+                            Detachment Rule
+                        </h5>
+                        <p class="text-white text-sm font-medium"
+                           x-text="selectedDetachment.detachment_rule.name"></p>
+                        <p class="text-gray-400 text-xs mt-1"
+                           x-text="selectedDetachment.detachment_rule.description"></p>
+                    </div>
+                </template>
+
+                <!-- Stratagems -->
+                <template x-if="selectedDetachment.stratagems && selectedDetachment.stratagems.length > 0">
+                    <div>
+                        <h5 class="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-2">
+                            Stratagems (<span x-text="selectedDetachment.stratagems.length"></span>)
+                        </h5>
+                        <div class="space-y-2">
+                            <template x-for="strat in selectedDetachment.stratagems"
+                                      :key="strat.name">
+                                <div class="bg-gray-700 rounded p-2">
+                                    <div class="flex justify-between items-start">
+                                        <span class="text-white text-sm font-medium"
+                                              x-text="strat.name"></span>
+                                        <span class="bg-yellow-900 text-yellow-300 text-xs px-1.5 py-0.5 rounded"
+                                              x-text="strat.cost + 'CP'"></span>
+                                    </div>
+                                    <p class="text-gray-500 text-xs mt-0.5"
+                                       x-text="strat.when"></p>
+                                    <p class="text-gray-400 text-xs mt-1"
+                                       x-text="strat.effect"></p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Enhancements -->
+                <template x-if="selectedDetachment.enhancements && selectedDetachment.enhancements.length > 0">
+                    <div>
+                        <h5 class="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-2">
+                            Enhancements
+                        </h5>
+                        <div class="space-y-2">
+                            <template x-for="enh in selectedDetachment.enhancements"
+                                      :key="enh.name">
+                                <div class="bg-gray-700 rounded p-2 flex justify-between">
+                                    <div class="flex-1">
+                                        <span class="text-white text-sm font-medium"
+                                              x-text="enh.name"></span>
+                                        <p class="text-gray-400 text-xs mt-0.5"
+                                           x-text="enh.effect"></p>
+                                    </div>
+                                    <span class="text-yellow-400 text-xs whitespace-nowrap ml-2"
+                                          x-text="enh.points + 'pts'"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Select Button -->
+            <div class="px-4 py-3 bg-gray-750 border-t border-gray-700">
+                <button @click="confirmDetachment()"
+                        class="w-full bg-blue-600 text-white rounded py-2 font-medium
+                               hover:bg-blue-500">
+                    Select "<span x-text="selectedDetachment.name"></span>"
+                </button>
+            </div>
+        </div>
+    </template>
+</div>

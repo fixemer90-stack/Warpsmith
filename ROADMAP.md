@@ -110,7 +110,7 @@
 ## 🎨 Phase 4: Web UI Polish
 
 ```
-[███░░░░░░░░░░░░░░░] 25% · 2/8 features
+[█████░░░░░░░░░░░░░] 62.5% · 5/8 features
 ```
 
 **Цель:** Полноценное веб-приложение, готовое к пользователям.
@@ -121,9 +121,9 @@
 |---|--------|------|------|
 | 4.1 | ✅ | Faction browser + category/PTS filter | 4h |
 | 4.2 | ✅ | Unit modal: squad size, loadout, wargear selection | 6h |
-| 4.3 | ⚪ | Detachment picker with rule preview | 3h |
-| 4.4 | ⚪ | Synergy hints: leader compatibility, transport capacity | 4h |
-| 4.5 | ⚪ | Canvas map: terrain tiles + deploy zones interactivity | 8h |
+| 4.3 | ✅ | Detachment picker with rule preview | 3h |
+| 4.4 | ✅ | Synergy hints: leader compatibility, transport capacity | 4h |
+| 4.5 | ✅ | Canvas map: terrain tiles + deploy zones interactivity | 8h |
 | 4.6 | ⚪ | Progressive Disclosure: Beginner / Intermediate / Expert | 4h |
 | 4.7 | ⚪ | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h |
 | 4.8 | ⚪ | SVG icons integration in unit cards | 2h |
@@ -133,7 +133,7 @@
 ## ☁️ Phase 5: Production
 
 ```
-[░░░░░░░░░░░░░░░░░░] 0% · 7 features
+[█░░░░░░░░░░░░░░░░░] 14.3% · 1/7 features
 ```
 
 **Цель:** Приложение на сервере, HTTPS, мониторинг.
@@ -142,7 +142,7 @@
 
 | # | Статус | Фича | Часы |
 |---|--------|------|------|
-| 5.1 | ⚪ | Dockerfile + docker-compose | 3h |
+| 5.1 | ✅ | Dockerfile + docker-compose | 3h |
 | 5.2 | ⚪ | Deployment (Dokku / Railway / self-host) | 4h |
 | 5.3 | ⚪ | Rate limiting (slowapi) | 1h |
 | 5.4 | ⚪ | CORS hardening + CSP security headers | 1h |
