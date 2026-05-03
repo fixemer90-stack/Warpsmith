@@ -89,30 +89,28 @@
 ## 🧠 Phase 3: AI & Automation
 
 ```
-[░░░░░░░░░░░░░░░░░░] 0% · 8 features
+[█░░░░░░░░░░░░░░░░░░] 6% · 1/8 features
 ```
 
 **Цель:** Нажать "Simulate" → AI разыгрывает 5 раундов → replay.
 
 ### Features
 
-| # | Статус | Фича | Часы |
-|---|--------|------|------|
-| 3.1 | ⚪ | Greedy decision engine — target/action evaluation | 6h |
-| 3.2 | ⚪ | Ork AI: charge priority, Waaagh! timing, melee focus | 4h |
-| 3.3 | ⚪ | T'au AI: distance control, Guided Fire, Kauyon/Mont'ka | 4h |
-| 3.4 | ⚪ | Deployment AI: zone placement logic | 3h |
-| 3.5 | ⚪ | Auto-play: AI vs AI full scenario | 6h |
-| 3.6 | ⚪ | Replay recording: JSON event log per round/phase | 3h |
-| 3.7 | ⚪ | Round viewer: step-by-step replay UI | 6h |
-| 3.8 | ⚪ | Result screen: kills, damage, VP timeline chart | 3h |
-
----
+|| # | Статус | Фича | Часы |
+||----|--------|------|------|
+|| 3.1 | ✅ | Greedy decision engine — target/action evaluation | 6h |
+|| 3.2 | 🆕 | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h |
+|| 3.3 | ⚪ | Deployment AI: zone placement logic | 3h |
+|| 3.4 | ⚪ | Auto-play: AI vs AI full scenario | 6h |
+|| 3.5 | ⚪ | Replay recording: JSON event log per round/phase | 3h |
+|| 3.6 | ⚪ | Round viewer: step-by-step replay UI | 6h |
+|| 3.7 | ⚪ | Result screen: kills, damage, VP timeline chart | 3h |
+|---
 
 ## 🎨 Phase 4: Web UI Polish
 
 ```
-[░░░░░░░░░░░░░░░░░░] 0% · 8 features
+[███░░░░░░░░░░░░░░░] 25% · 2/8 features
 ```
 
 **Цель:** Полноценное веб-приложение, готовое к пользователям.
@@ -121,8 +119,8 @@
 
 | # | Статус | Фича | Часы |
 |---|--------|------|------|
-| 4.1 | ⚪ | Faction browser + category/PTS filter | 4h |
-| 4.2 | ⚪ | Unit modal: squad size, loadout, wargear selection | 6h |
+| 4.1 | ✅ | Faction browser + category/PTS filter | 4h |
+| 4.2 | ✅ | Unit modal: squad size, loadout, wargear selection | 6h |
 | 4.3 | ⚪ | Detachment picker with rule preview | 3h |
 | 4.4 | ⚪ | Synergy hints: leader compatibility, transport capacity | 4h |
 | 4.5 | ⚪ | Canvas map: terrain tiles + deploy zones interactivity | 8h |
@@ -207,7 +205,7 @@
 | **0. Foundation** | 12 | ~40ч | ✅ 100% | Скелет проекта + wiki |
 | **1. Combat Engine** | 12 | ~60ч | ✅ 100% | `curl /api/simulate` → JSON + PMF |
 | **2. Game System** | 12 | ~40ч | ✅ 100% | Полный Game Loop |
-| **3. AI & Automation** | 8 | ~25ч | ⏳ 0% | AI-vs-AI бой |
+|| **3. AI & Automation** | 7 | ~35ч | 🟢 14% |
 | **4. Web UI Polish** | 8 | ~35ч | ⏳ 0% | Готовый UX |
 | **5. Production** | 7 | ~15ч | ⏳ 0% | Развёрнуто на сервере |
 | **6. Monetization** | 6 | ~15ч | ⏳ 0% | Первый платящий |

@@ -9,12 +9,18 @@ function teamBuilder() {
         ptsLimit: 2000,
         roster: [],
         selectedCategory: '',
-        showModal: false,
-        selectedUnit: null,
         squadSize: 1,
         validationErrors: [],
         _units: [],
         detachments: [],
+
+        // Unit Modal State
+        showUnitModal: false,
+        unitDetail: null,
+        unitLoading: false,
+        selectedLoadout: '',
+        selectedNobOption: '',
+        currentUnitName: '',
 
         // Computed
         get unitsByCategory() {
@@ -24,7 +30,13 @@ function teamBuilder() {
                 if (!grouped[cat]) grouped[cat] = [];
                 grouped[cat].push(unit);
             });
-            return grouped;
+            // Sort: Epic Hero → Character → Battleline → Transport → Vehicle → Monster → Infantry → Legends
+            const order = ['Epic Hero', 'Character', 'Battleline', 'Transport', 'Vehicle', 'Monster', 'Infantry', 'Legends'];
+            const sorted = {};
+            order.forEach(c => { if (grouped[c]) sorted[c] = grouped[c]; });
+            // Any uncategorized go at the end but before Legends (if not already in order)
+            Object.keys(grouped).filter(c => !order.includes(c)).forEach(c => sorted[c] = grouped[c]);
+            return sorted;
         },
         get filteredUnits() {
             const cat = this.selectedCategory;
@@ -44,9 +56,91 @@ function teamBuilder() {
                 && this.roster.length > 0;
         },
 
+        // Unit Modal Computed
+        get currentWeapons() {
+            if (!this.unitDetail) return [];
+            // Resolve weapons from selected loadout + nob option
+            const loadout = this.unitDetail.wargear_options
+                ?.find(o => o.name === this.selectedLoadout);
+            const nobOpt = this.unitDetail.nob_options
+                ?.find(o => o.name === this.selectedNobOption);
+
+            let weaponNames = loadout?.weapons || [];
+            // If nob option has weapons, they replace the default
+            if (nobOpt?.replaces && nobOpt?.weapons) {
+                weaponNames = weaponNames.filter(w => w !== nobOpt.replaces);
+                weaponNames.push(...nobOpt.weapons);
+            }
+
+            return this.unitDetail.weapons
+                ?.filter(w => weaponNames.includes(w.name)) || [];
+        },
+
+        get totalCost() {
+            if (!this.unitDetail) return 0;
+            const basePts = this.unitDetail.points;
+            // Wargear option cost (per model)
+            const loadout = this.unitDetail.wargear_options
+                ?.find(o => o.name === this.selectedLoadout);
+            const loadoutPts = loadout?.points || 0;
+            // Nob option cost (one-time)
+            const nobOpt = this.unitDetail.nob_options
+                ?.find(o => o.name === this.selectedNobOption);
+            const nobPts = nobOpt?.points || 0;
+
+            return (basePts + loadoutPts) * this.squadSize + nobPts;
+        },
+
+        getQuickSizes() {
+            if (!this.unitDetail?.squad_size) return [];
+            const { min, max, step } = this.unitDetail.squad_size;
+            const sizes = [];
+            for (let s = min; s <= max; s += step) sizes.push(s);
+            return sizes;
+        },
+
         // Methods
         updatePtsLimit() {
             this.ptsLimit = parseInt(this.gameSize, 10);
+        },
+
+        // Unit Modal Methods
+        openUnitModal(unitName) {
+            this.currentUnitName = unitName;
+            this.showUnitModal = true;
+            this.unitLoading = true;
+            this.unitDetail = null;
+            this.selectedLoadout = '';
+            this.selectedNobOption = '';
+
+            fetch(`/api/units/${encodeURIComponent(unitName)}/detail`)
+                .then(r => r.json())
+                .then(data => {
+                    this.unitDetail = data;
+                    this.squadSize = data.squad_size.min || 5;
+                    this.selectedLoadout = data.wargear_options?.[0]?.name || '';
+                    this.selectedNobOption = '';
+                    this.unitLoading = false;
+                })
+                .catch(err => {
+                    console.error('Failed to load unit detail:', err);
+                    this.unitLoading = false;
+                });
+        },
+
+        addUnitToRoster() {
+            if (!this.unitDetail) return;
+            this.roster.push({
+                name: this.unitDetail.name,
+                squad_size: this.squadSize,
+                pts: this.totalCost,
+                loadout: this.selectedLoadout,
+                nob_option: this.selectedNobOption,
+                weapons: this.currentWeapons.map(w => w.name),
+                category: this.unitDetail.category,
+            });
+            this.showUnitModal = false;
+            this.validationErrors = [];
         },
         async loadUnits() {
             if (!this.faction) {
@@ -76,33 +170,7 @@ function teamBuilder() {
             }
         },
         
-        openUnitModal(unit) {
-            this.selectedUnit = unit;
-            this.squadSize = unit.squad_size || 1; // Default to 1 if not specified
-            this.showModal = true;
-        },
-        
-        addUnit() {
-            if (!this.selectedUnit) return;
-            
-            // Check if unit already in roster
-            const existingIndex = this.roster.findIndex(u => u.name === this.selectedUnit.name);
-            if (existingIndex >= 0) {
-                // Increase squad size
-                this.roster[existingIndex].squad_size += this.squadSize;
-            } else {
-                // Add new unit to roster
-                this.roster.push({
-                    name: this.selectedUnit.name,
-                    pts: this.selectedUnit.points,
-                    squad_size: this.squadSize
-                });
-            }
-            
-            // Reset form
-            this.showModal = false;
-            this.validationErrors = [];
-        },
+
         
         removeUnit(idx) {
             this.roster.splice(idx, 1);

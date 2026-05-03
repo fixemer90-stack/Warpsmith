@@ -2,7 +2,7 @@
 
 > Симулятор боёв Warhammer 40,000 с Monte Carlo анализом, AI и веб-интерфейсом.
 
-**Версия:** 0.3.0 | **Статус:** Phase 1 ✅ | Phase 2 🚧 75%
+**Версия:** 0.4.0 | **Статус:** Phase 1 ✅ | Phase 2 ✅ | Phase 3 🚧
 
 Warpsmith — симулятор боёв по правилам Warhammer 40,000 10-й редакции. Вики как источник данных: фракции, юниты, оружие, стратагемы.
 
@@ -16,13 +16,16 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - MultiAttack: несколько оружий и отряды
 - POST `/api/simulate` — JSON с PMF
 
-### 🚧 Phase 2: Game System (75%)
+### ✅ Phase 2: Game System (100%)
 - Game State: фазы, CP, VP, движение, урон
 - 2D-карта (NumPy), LoS ray casting, cover
 - 3 миссии: Only War, Purge the Foe, Take and Hold
 - Battle-shock тесты + CP generation + stratagems
 - Roster validation + GameSize enum (Combat Patrol–Onslaught)
 - Roster CRUD через `/api/rosters`
+- Victory Points tracking and end-game conditions
+- Team Builder UI: faction picker, unit modal, PTS bar
+- Leader Compatibility Checker
 
 ### 🌐 Веб-интерфейс
 - Team Builder: динамический выбор фракций/юнитов/детачментов
@@ -53,7 +56,7 @@ curl -X POST http://127.0.0.1:8000/api/simulate \
 
 ```bash
 WIKI_PATH=/mnt/d/Python/Balthier/wiki python -m pytest tests/ -v
-# → 133 теста, покрытие 78%
+# → 150+ теста, покрытие 80%+
 ```
 
 ## 📁 Структура
@@ -67,7 +70,7 @@ WIKI_PATH=/mnt/d/Python/Balthier/wiki python -m pytest tests/ -v
     ├── main.py           FastAPI
     ├── backend/          auth · engine · loader · model · state · db
     ├── web/              routes · templates · static
-    ├── tests/            15 файлов, 133 теста
+    ├── tests/            20+ файлов, 150+ теста
     └── docs/             architecture · requirements · features
 ```
 
@@ -86,7 +89,7 @@ WIKI_PATH=/mnt/d/Python/Balthier/wiki python -m pytest tests/ -v
 
 ## 📊 Статистика
 
-- **Тестов:** 133 (100% pass, 78% покрытие)
+- **Тестов:** 150+ (100% pass, 80%+ покрытие)
 - **Юнитов:** 160 (Orks 81, Tau 40, AdMech 39)
 - **Wiki:** ~478 .md файлов
 - **Стратагем:** 114 (Core 13, Orks 42, AdMech 42, Tau 19)

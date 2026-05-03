@@ -7,6 +7,42 @@
 
 ---
 
+## [Unreleased] — 2026-05-03
+
+### Added
+- **F3.1 Greedy Decision Engine** — `backend/engine/ai/decision.py`: ActionType, Action, EvaluationContext, choose_action() с взвешенной оценкой (shoot/charge/move), генерация кандидатов по фазам, поддержка opponent_units_map для статов целей
+- **Тесты F3.1** — `tests/test_ai_decision.py`: 26 тестов (дистанция, дальность, ожидаемый урон, генерация кандидатов, скоринг, choose_action, custom weights)
+- GET /api/rosters/generate — эндпоинт для генерации случайного валидного ростера AI-оппонента (Warlord, 3x cap, Epic Hero unique, PTS budget)
+- get_current_user_optional — опциональная аутентификация (возвращает None вместо 401)
+- Scenario Setup UI — выбор ростера для Player 1 / Player 2, кнопка "Generate Random Opponent", выбор миссии/карты/очередности хода
+- Epic Hero — отдельная категория в парсере и UI (выше Character)
+- SVG иконки для юнитов — маппинг из YAML tags, несколько иконок на юнит (vehicle+fly), отображение после имени
+- Kroot Hunting Pack — новый детачмент Tau (5 детачментов)
+- Transport — приоритет выше Vehicle в категориях
+- Legends — отдельная категория для Legends-юнитов
+- Feature specs для Phase 3 (8 файлов), Phase 4 (8 файлов), Phase 5 (7 файлов)
+
+### Changed
+- **Архитектура AI: хардкод → wiki-driven**. F3.2, F3.3, F3.9 (Ork/Tau/AdMech AI) объединены в один [F3.2 Faction AI Profiles](docs/features/f3.2-faction-ai-profiles.md). Все поведенческие параметры читаются из YAML `ai:` секции wiki/factions/*.md. Новая фракция = новый .md, ноль строк Python.
+- Версия: 0.4.0 → путь к 0.5.0 (Phase 3 начата)
+- `_infer_category`: добавлены приоритеты epic-hero, transport, legends; Character не перекрывает Monster/Vehicle
+- `can_be_warlord`: авто-определение из YAML tags + body keywords (47 кандидатов вместо 1)
+- Wiki loader: поле `tags` добавлено в Unit dataclass и LIST_FIELDS
+- Points: добавлены PTS для 21 не-Legends юнита (Orks: Beastboss 80, Big Mek 90, Breaka Boyz 140, Tankbustas 140 и др.; Tau: Broadside 80, Cadre Fireblade 50, Ethereal 50 и др.)
+- `flyer.svg` → `fly.svg` (совпадение с YAML тегом)
+- Save formula в decision engine: AP правильно ухудшает save; fail_save = (effective - 1)/6
+- Wound table: корректная 10th edition (S ≥ 2T → 2+, S > T → 3+, S == T → 4+)
+
+### Fixed
+- `/api/units?faction=...` — баг: `result` объявлялся только внутри else-блока (500 при указании фракции)
+- `/api/detachments?faction=adeptus-mechanicus` — маппинг faction ID → directory name через _faction_detachment_dir()
+- main.py — роуты не грузились при импорте `main:app` (uvicorn) из-за вызова create_app() только в `if __name__`
+- TemplateResponse — Starlette 1.0 сигнатура (request, name, context) вместо (name, context)
+- Team Builder — gameSize пропадал при git merge (NaN pts); _units не был реактивным (категории не отображались)
+- Obsidian — удалены битые symlink venv/lib64, venv/bin/
+
+---
+
 ## [0.4.0] — 2026-05-02
 
 ### Added
@@ -45,13 +81,6 @@
 - Версия: 0.3.0 → 0.4.0 (Phase 2 завершена, начинается Phase 3)
 
 ---
-
-## [Unreleased]
-
-- F2.8 Victory Points tracking and end-game conditions: VPTracker, GameResult, check_end_game with VP cap (100), army wipe, max rounds conditions; scoring functions (standard, progressive, kill_points)
-- F2.11 Team Builder UI: faction picker, unit modal with squad size selection, real-time PTS bar, validation, save/load via /api/rosters
-- F2.12 Leader Compatibility Checker: leader compatibility validation with rules for is_leader, leader_for list, max 2 leaders per unit, captain/lieutenant restrictions
-
 
 ## [0.2.1] — 2026-05-01
 

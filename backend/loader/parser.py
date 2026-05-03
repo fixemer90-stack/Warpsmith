@@ -31,6 +31,7 @@ LIST_FIELDS = {
     "abilities": "abilities",
     "leader_for": "leader_for",
     "transports": "transports",
+    "tags": "tags",
 }
 
 
@@ -71,9 +72,21 @@ def parse_unit(filepath: Path) -> Unit | None:
     kwargs["feel_no_pain"] = parse_optional_int(metadata.get("feel_no_pain"))
     kwargs["model_count"] = parse_model_count(metadata.get("model_count", (1, 1)))
     kwargs["is_epic_hero"] = parse_bool(metadata.get("is_epic_hero", False))
-    kwargs["can_be_warlord"] = parse_bool(metadata.get("can_be_warlord", False))
+    # Auto-detect Warlord: любой Character может быть Warlord
+    explicit_warlord = metadata.get("can_be_warlord")
+    if explicit_warlord is not None:
+        kwargs["can_be_warlord"] = parse_bool(explicit_warlord)
+    else:
+        keywords = kwargs.get("keywords", [])
+        tags = [str(t) for t in ensure_list(metadata.get("tags", []))]
+        all_tags = {t.lower() for t in keywords + tags}
+        kwargs["can_be_warlord"] = "character" in all_tags
     kwargs["is_leader"] = parse_bool(metadata.get("is_leader", False))
     kwargs["wargear_options"] = _parse_wargear_options(metadata.get("wargear_options", []))
+    # F4.2: Extended wargear system
+    kwargs["squad_size"] = metadata.get("squad_size", {"min": 1, "max": 1, "step": 1})
+    kwargs["extended_wargear_options"] = ensure_list(metadata.get("extended_wargear_options", []))
+    kwargs["nob_options"] = ensure_list(metadata.get("nob_options", []))
 
     weapons_data = metadata.get("weapons", [])
     ranged_weapons, melee_weapons = _parse_weapons_from_frontmatter(ensure_list(weapons_data))
@@ -260,6 +273,12 @@ def _fill_missing_unit_fields(kwargs: dict[str, Any], metadata: dict[str, Any], 
     if "category" not in metadata:
         category = _infer_category(kwargs.get("keywords", []), metadata)
         kwargs["category"] = category
+
+    # Second pass: auto-detect Warlord from body keywords
+    if not kwargs.get("can_be_warlord"):
+        body_keywords = _parse_keywords_from_markdown(body)
+        if "character" in {kw.lower() for kw in body_keywords}:
+            kwargs["can_be_warlord"] = True
 
 
 def _find_m_column_index(header_line: str) -> int:
@@ -451,10 +470,17 @@ def _infer_category(keywords: list[str], metadata: dict[str, Any]) -> str:
     normalized_keywords = {keyword.lower() for keyword in keywords}
     metadata_tags = {str(tag).lower() for tag in ensure_list(metadata.get("tags", []))}
     combined = normalized_keywords | metadata_tags
+    # Legends — отдельная категория (можно исключить из ростера)
+    if str(metadata.get("status", "")).lower() == "legends" or "legends" in combined:
+        return "Legends"
+    if "epic-hero" in combined or "epic hero" in combined:
+        return "Epic Hero"
     if "battleline" in combined:
         return "Battleline"
     if "character" in combined:
         return "Character"
+    if "transport" in combined:
+        return "Transport"
     if "vehicle" in combined:
         return "Vehicle"
     if "monster" in combined:

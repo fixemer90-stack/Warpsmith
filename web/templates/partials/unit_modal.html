@@ -1,0 +1,250 @@
+<!-- web/templates/partials/unit_modal.html -->
+<div x-show="showUnitModal" x-cloak
+     class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+     @click.away="showUnitModal = false"
+     @keydown.escape.window="showUnitModal = false">
+
+    <div class="bg-gray-800 rounded-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <!-- Loading State -->
+        <template x-if="unitLoading">
+            <div class="p-8 text-center text-gray-400">
+                <div class="animate-spin h-8 w-8 border-2 border-blue-500
+                            border-t-transparent rounded-full mx-auto mb-4"></div>
+                Loading unit data...
+            </div>
+        </template>
+
+        <!-- Unit Detail -->
+        <template x-if="!unitLoading && unitDetail">
+            <div>
+                <!-- Header -->
+                <div class="sticky top-0 bg-gray-800 p-4 border-b border-gray-700
+                            flex items-center gap-3">
+                    <img :src="unitDetail.icon_url" alt="" class="w-8 h-8"
+                         :style="`filter: brightness(0) saturate(100%) invert(1)
+                         sepia(1) hue-rotate(${unitDetail.color === '#a855f7' ? 260 :
+                         unitDetail.color === '#ec4899' ? 320 : unitDetail.color === '#22c55e' ? 120 :
+                         unitDetail.color === '#eab308' ? 45 : unitDetail.color === '#6b7280' ? 0 :
+                         unitDetail.color === '#3b82f6' ? 210 : unitDetail.color === '#f97316' ? 25 :
+                         unitDetail.color === '#ef4444' ? 0 : unitDetail.color === '#dc2626' ? 0 :
+                         unitDetail.color === '#8b5cf6' ? 270 : 0})`">
+                    <div class="flex-1">
+                        <h2 class="text-lg font-bold text-white"
+                            x-text="unitDetail.name"></h2>
+                        <span class="text-xs text-gray-400"
+                              x-text="`${unitDetail.faction.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} · ${unitDetail.category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`">
+                        </span>
+                    </div>
+                    <span class="text-yellow-400 font-bold text-lg"
+                          x-text="unitDetail.points + 'pts'"></span>
+                </div>
+
+                <div class="p-4 space-y-4">
+                    <!-- Stats Strip -->
+                    <div class="grid grid-cols-6 gap-2 text-center text-xs">
+                        <div class="bg-gray-700 rounded p-2"
+                             title="Movement — how many inches this model moves per phase">
+                            <div class="text-gray-400">M</div>
+                            <div class="text-white font-bold text-sm"
+                                 x-text="unitDetail.movement + '&#34;'"></div>
+                        </div>
+                        <div class="bg-gray-700 rounded p-2"
+                             title="Toughness — compared to weapon Strength for wound rolls">
+                            <div class="text-gray-400">T</div>
+                            <div class="text-white font-bold text-sm"
+                                 x-text="unitDetail.toughness"></div>
+                        </div>
+                        <div class="bg-gray-700 rounded p-2"
+                             title="Save — armour saving throw target">
+                            <div class="text-gray-400">SV</div>
+                            <div class="text-white font-bold text-sm"
+                                 x-text="unitDetail.save + '+'"></div>
+                        </div>
+                        <div class="bg-gray-700 rounded p-2"
+                             title="Wounds — how much damage this model can take">
+                            <div class="text-gray-400">W</div>
+                            <div class="text-white font-bold text-sm"
+                                 x-text="unitDetail.wounds"></div>
+                        </div>
+                        <div class="bg-gray-700 rounded p-2"
+                             title="Leadership — morale/bravery stat">
+                            <div class="text-gray-400">LD</div>
+                            <div class="text-white font-bold text-sm"
+                                 x-text="unitDetail.leadership + '+'"></div>
+                        </div>
+                        <div class="bg-gray-700 rounded p-2"
+                             title="Objective Control — controlling objectives">
+                            <div class="text-gray-400">OC</div>
+                            <div class="text-white font-bold text-sm"
+                                 x-text="unitDetail.oc"></div>
+                        </div>
+                    </div>
+
+                    <!-- Squad Size -->
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-1">
+                            Squad Size
+                            <span class="text-gray-500 text-xs"
+                                  x-text="`(${unitDetail.squad_size.min}-${unitDetail.squad_size.max})`">
+                            </span>
+                        </label>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <button @click="squadSize = Math.max(unitDetail.squad_size.min, squadSize - unitDetail.squad_size.step)"
+                                    class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600"
+                                    :disabled="squadSize <= unitDetail.squad_size.min">
+                                −
+                            </button>
+                            <input type="number" x-model.number="squadSize"
+                                   :min="unitDetail.squad_size.min"
+                                   :max="unitDetail.squad_size.max"
+                                   class="w-20 bg-gray-700 text-white text-center rounded px-2 py-1">
+                            <button @click="squadSize = Math.min(unitDetail.squad_size.max, squadSize + unitDetail.squad_size.step)"
+                                    class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600"
+                                    :disabled="squadSize >= unitDetail.squad_size.max">
+                                +
+                            </button>
+                            <!-- Quick presets -->
+                            <template x-for="size in getQuickSizes()" :key="size">
+                                <button @click="squadSize = size"
+                                        class="text-xs px-2 py-1 rounded"
+                                        :class="squadSize === size
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-gray-700 text-gray-400 hover:bg-gray-600'"
+                                        x-text="size">
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Loadout / Wargear Selection -->
+                    <div x-show="unitDetail.wargear_options && unitDetail.wargear_options.length > 0">
+                        <label class="block text-sm text-gray-300 mb-2">Loadout</label>
+                        <div class="space-y-2">
+                            <template x-for="option in unitDetail.wargear_options" :key="option.name">
+                                <label class="flex items-start gap-3 bg-gray-700 rounded p-3
+                                              cursor-pointer hover:bg-gray-600 transition"
+                                       :class="selectedLoadout === option.name
+                                           ? 'ring-2 ring-blue-500' : ''">
+                                    <input type="radio" name="loadout"
+                                           :value="option.name"
+                                           x-model="selectedLoadout"
+                                           class="mt-1 text-blue-500">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between">
+                                            <span class="text-white text-sm font-medium"
+                                                  x-text="option.name"></span>
+                                            <span class="text-yellow-400 text-xs"
+                                                  x-text="(option.points > 0 ? '+' : '') + option.points + 'pts'">
+                                            </span>
+                                        </div>
+                                        <div class="text-gray-400 text-xs mt-1"
+                                             x-text="option.description || 'No description'"></div>
+                                        <template x-if="option.recommended">
+                                            <span class="inline-block bg-blue-900 text-blue-300
+                                                         text-xs px-2 py-0.5 rounded mt-1">
+                                                ★ Recommended
+                                            </span>
+                                        </template>
+                                    </div>
+                                </label>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Nob / Sergeant Options -->
+                    <div x-show="unitDetail.nob_options && unitDetail.nob_options.length > 0">
+                        <label class="block text-sm text-gray-300 mb-2">
+                            Nob / Sergeant Upgrade
+                        </label>
+                        <select x-model="selectedNobOption"
+                                class="w-full bg-gray-700 text-white rounded px-3 py-2">
+                            <option value="">None (default loadout)</option>
+                            <template x-for="opt in unitDetail.nob_options" :key="opt.name">
+                                <option :value="opt.name"
+                                        x-text="opt.name + ' (+' + opt.points + ' pts)'">
+                                </option>
+                            </template>
+                        </select>
+                    </div>
+
+                    <!-- Abilities -->
+                    <div x-show="unitDetail.abilities && unitDetail.abilities.length > 0">
+                        <label class="block text-sm text-gray-300 mb-2">Abilities</label>
+                        <div class="space-y-2">
+                            <template x-for="ability in unitDetail.abilities" :key="ability.name || ability">
+                                <div class="bg-gray-700/50 rounded p-2">
+                                    <span class="text-blue-300 text-xs font-medium"
+                                          x-text="(ability.name || ability) + ':'"></span>
+                                    <span class="text-gray-400 text-xs ml-1"
+                                          x-text="ability.description || 'No description'"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Weapons Table -->
+                    <div x-show="currentWeapons && currentWeapons.length > 0">
+                        <label class="block text-sm text-gray-300 mb-2">Weapons</label>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-xs">
+                                <thead>
+                                    <tr class="text-gray-400 border-b border-gray-700">
+                                        <th class="text-left py-1 pr-2">Weapon</th>
+                                        <th class="py-1 px-2">RNG</th>
+                                        <th class="py-1 px-2">A</th>
+                                        <th class="py-1 px-2">BS</th>
+                                        <th class="py-1 px-2">S</th>
+                                        <th class="py-1 px-2">AP</th>
+                                        <th class="py-1 px-2">D</th>
+                                        <th class="py-1 px-2">Keywords</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="wpn in currentWeapons" :key="wpn.name">
+                                        <tr class="border-b border-gray-700/50 text-gray-300">
+                                            <td class="py-1 pr-2 font-medium" x-text="wpn.name"></td>
+                                            <td class="py-1 px-2 text-center" x-text="wpn.range ? wpn.range + '&#34;' : '-'"></td>
+                                            <td class="py-1 px-2 text-center" x-text="wpn.attacks"></td>
+                                            <td class="py-1 px-2 text-center" x-text="wpn.skill + '+'"></td>
+                                            <td class="py-1 px-2 text-center" x-text="wpn.strength"></td>
+                                            <td class="py-1 px-2 text-center" x-text="wpn.ap"></td>
+                                            <td class="py-1 px-2 text-center" x-text="wpn.damage"></td>
+                                            <td class="py-1 px-2 text-gray-500"
+                                                x-text="(wpn.keywords || []).join(', ')"></td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Total Cost Bar -->
+                    <div class="bg-gray-900 rounded p-3 flex justify-between items-center">
+                        <span class="text-sm text-gray-300">
+                            Total for <span x-text="squadSize"></span> models
+                            <template x-if="selectedNobOption !== ''">
+                                <span class="text-gray-500"> + Nob upgrade</span>
+                            </template>
+                        </span>
+                        <span class="text-yellow-400 font-bold text-lg"
+                              x-text="totalCost + ' pts'"></span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="sticky bottom-0 bg-gray-800 p-4 border-t border-gray-700
+                            flex justify-end gap-3">
+                    <button @click="showUnitModal = false"
+                            class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
+                        Cancel
+                    </button>
+                    <button @click="addUnitToRoster()"
+                            class="px-6 py-2 bg-blue-600 text-white rounded font-medium
+                                   hover:bg-blue-500">
+                        Add to Roster
+                    </button>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>
