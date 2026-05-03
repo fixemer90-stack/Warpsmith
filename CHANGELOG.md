@@ -46,45 +46,40 @@
 
 ---
 
-## [Unreleased]
+## [Unreleased] — 2026-05-03
 
-- F2.1 Game State dataclass: `UnitState`, `PlayerState`, `GameState` с позициями, ранами, CP, VP, раундами
-- F2.1 Методы для движения юнитов, повреждений, переходов фаз, определения победителя
-- Тесты `tests/test_game_state.py` для управления состоянием игры
-- F2.2 2D Map: `BattlefieldMap` с NumPy terrain array, deployment zones, objectives
-- F2.2 Mission maps: Dawn of War, Spearhead с правильными зонами развертывания
-- Тесты `tests/test_map.py` для карт, зон развертывания и pathfinding
-- F2.3 Line of Sight: `LineOfSightCalculator` с ray casting алгоритмом
-- F2.3 Методы: `has_line_of_sight()`, `can_shoot_at()`, `can_charge_at()`, cover detection
-- Тесты `tests/test_line_of_sight.py` для видимости и стрельбы
-- F2.4 Missions: система миссий с правилами высадки, условиями захвата точек и подсчётом VP
-- F2.4 Три готовые миссии: Only War, Purge the Foe, Take and Hold
-- F2.4 Тесты `tests/test_mission.py` для системы миссий
-- F2.5 Game Loop: реализован игровой цикл с фазами Command → Movement → Shooting → Charge → Fight
-- F2.5 Класс `Scenario` в `backend/engine/scenario.py` для управления игровым процессом
-- F2.5 Тесты `tests/test_scenario.py` для игрового цикла
-- F2.6 Phase Transitions: реализованы механизмы чередования активаций в фазе Fight и определение Command Priority
-- F2.6 Добавлены поля `command_priority` в `PlayerState`, `is_engaged` и `is_fighting` в `UnitState`
-- F2.6 Добавлен метод `_determine_command_priority` в `GameState` для swap-правил приоритета
-- F2.6 Расширен `Scenario._fight_phase` с логикой чередующихся активаций
-- F2.6 Тесты `tests/test_phase_transitions.py` для проверки приоритета и чередующихся активаций
-- F2.7 Battle-shock, CP Generation, Stratagems: реализованы механизмы моральных тестов, генерации командных очков и фреймворк стратагем
-- F2.7 Добавлено поле `is_battle_shocked` в `UnitState` и метод `is_above_half_strength`
-- F2.7 Расширена генерация CP в `_command_phase`: +1 базовый +1 за warlord с лимитом Leviathan (10 CP)
-- F2.7 Реализована логика battle-shock тестов в `_morale_phase` с правилами snake eyes/boxcars
-- F2.7 Создан `backend/engine/stratagems.py` со фреймворком стратагем и базовыми стратагемами (Command Re-roll, Insane Bravery, Counter-Offensive, Tank Shock)
-- F2.7 Тесты `tests/test_f2_7_battle_shock_cp_stratagems.py` для battle-shock, CP генерации и стратагем
+### Added
+- **F3.1 Greedy Decision Engine** — `backend/engine/ai/decision.py`: ActionType, Action, EvaluationContext, choose_action() с взвешенной оценкой (shoot/charge/move), генерация кандидатов по фазам, поддержка opponent_units_map для статов целей
+- **Тесты F3.1** — `tests/test_ai_decision.py`: 26 тестов (дистанция, дальность, ожидаемый урон, генерация кандидатов, скоринг, choose_action, custom weights)
+- GET /api/rosters/generate — эндпоинт для генерации случайного валидного ростера AI-оппонента (Warlord, 3x cap, Epic Hero unique, PTS budget)
+- get_current_user_optional — опциональная аутентификация (возвращает None вместо 401)
+- Scenario Setup UI — выбор ростера для Player 1 / Player 2, кнопка "Generate Random Opponent", выбор миссии/карты/очередности хода
+- Epic Hero — отдельная категория в парсере и UI (выше Character)
+- SVG иконки для юнитов — маппинг из YAML tags, несколько иконок на юнит (vehicle+fly), отображение после имени
+- Kroot Hunting Pack — новый детачмент Tau (5 детачментов)
+- Transport — приоритет выше Vehicle в категориях
+- Legends — отдельная категория для Legends-юнитов
+- Feature specs для Phase 3 (8 файлов), Phase 4 (8 файлов), Phase 5 (7 файлов)
 
 ### Changed
-- Версия: 0.3.0 → 0.4.0 (Phase 2 завершена, начинается Phase 3)
+- Версия: 0.4.0 → путь к 0.5.0 (Phase 3 начата)
+- `_infer_category`: добавлены приоритеты epic-hero, transport, legends; Character не перекрывает Monster/Vehicle
+- `can_be_warlord`: авто-определение из YAML tags + body keywords (47 кандидатов вместо 1)
+- Wiki loader: поле `tags` добавлено в Unit dataclass и LIST_FIELDS
+- Points: добавлены PTS для 21 не-Legends юнита (Orks: Beastboss 80, Big Mek 90, Breaka Boyz 140, Tankbustas 140 и др.; Tau: Broadside 80, Cadre Fireblade 50, Ethereal 50 и др.)
+- `flyer.svg` → `fly.svg` (совпадение с YAML тегом)
+- Save formula в decision engine: AP правильно ухудшает save; fail_save = (effective - 1)/6
+- Wound table: корректная 10th edition (S ≥ 2T → 2+, S > T → 3+, S == T → 4+)
+
+### Fixed
+- `/api/units?faction=...` — баг: `result` объявлялся только внутри else-блока (500 при указании фракции)
+- `/api/detachments?faction=adeptus-mechanicus` — маппинг faction ID → directory name через _faction_detachment_dir()
+- main.py — роуты не грузились при импорте `main:app` (uvicorn) из-за вызова create_app() только в `if __name__`
+- TemplateResponse — Starlette 1.0 сигнатура (request, name, context) вместо (name, context)
+- Team Builder — gameSize пропадал при git merge (NaN pts); _units не был реактивным (категории не отображались)
+- Obsidian — удалены битые symlink venv/lib64, venv/bin/
 
 ---
-
-## [Unreleased]
-
-- F2.8 Victory Points tracking and end-game conditions: VPTracker, GameResult, check_end_game with VP cap (100), army wipe, max rounds conditions; scoring functions (standard, progressive, kill_points)
-- F2.11 Team Builder UI: faction picker, unit modal with squad size selection, real-time PTS bar, validation, save/load via /api/rosters
-- F2.12 Leader Compatibility Checker: leader compatibility validation with rules for is_leader, leader_for list, max 2 leaders per unit, captain/lieutenant restrictions
 
 
 ## [0.2.1] — 2026-05-01

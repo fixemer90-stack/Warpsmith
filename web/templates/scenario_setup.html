@@ -1,38 +1,131 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl font-bold mb-8">🗺 Scenario Setup</h1>
+<div x-data="scenarioSetup()" class="max-w-4xl mx-auto">
+    <script src="/static/scenario_setup.js"></script>
 
-    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 mb-6">
-        <h2 class="text-xl font-bold mb-4">Mission</h2>
-        <select class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 mb-4">
-            <option value="only-war">Only War</option>
-            <option value="supply-drop">Supply Drop</option>
-            <option value="area-denial">Area Denial</option>
-        </select>
+    <h1 class="text-2xl font-bold text-white mb-6">🗺 Scenario Setup</h1>
 
-        <h2 class="text-xl font-bold mb-4">Map</h2>
-        <div class="grid grid-cols-2 gap-4 mb-4">
-            <button class="bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded p-4 text-left">
-                <div class="font-bold">Patrol</div>
-                <div class="text-sm text-gray-400">44" × 30"</div>
-            </button>
-            <button class="bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded p-4 text-left">
-                <div class="font-bold">Strike Force</div>
-                <div class="text-sm text-gray-400">44" × 60"</div>
-            </button>
+    <!-- Step 1: Roster Selection -->
+    <div class="bg-gray-800 rounded-lg p-5 border border-gray-700 mb-4">
+        <h2 class="text-lg font-bold text-white mb-4">👥 Choose Sides</h2>
+
+        <div class="grid grid-cols-2 gap-6">
+            <!-- Player 1 -->
+            <div class="bg-gray-750 rounded p-4 border border-gray-600">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold">1</span>
+                    <span class="font-semibold text-blue-400">Player</span>
+                </div>
+
+                <select x-model="player1Roster"
+                        class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm mb-2">
+                    <option value="">-- Select your roster --</option>
+                    {% for r in rosters %}
+                    <option value="{{ r.id }}">{{ r.name }} ({{ r.faction }}, {{ r.pts_limit }}pts)</option>
+                    {% endfor %}
+                </select>
+
+                <div class="text-xs text-gray-500">
+                    <span x-text="player1Label"></span>
+                </div>
+            </div>
+
+            <!-- Player 2 -->
+            <div class="bg-gray-750 rounded p-4 border border-gray-600">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-sm font-bold">2</span>
+                    <span class="font-semibold text-red-400">Opponent</span>
+                </div>
+
+                <!-- Saved roster dropdown -->
+                <select x-model="player2Roster" @change="clearOpponent()"
+                        class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm mb-2">
+                    <option value="">-- Select saved roster --</option>
+                    {% for r in rosters %}
+                    <option value="{{ r.id }}">{{ r.name }} ({{ r.faction }}, {{ r.pts_limit }}pts)</option>
+                    {% endfor %}
+                </select>
+
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-gray-500 text-xs">— or —</span>
+                </div>
+
+                <!-- Generate random -->
+                <div class="space-y-2">
+                    <select x-model="player2Faction"
+                            class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
+                        <option value="">Any faction</option>
+                        {% for f in factions %}
+                        <option value="{{ f.id }}">{{ f.label }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button @click="generateOpponent()" :disabled="generating"
+                            class="w-full bg-purple-700 hover:bg-purple-600 disabled:opacity-50 disabled:cursor-wait
+                                   text-white text-sm rounded px-3 py-2 font-medium flex items-center justify-center gap-2">
+                        <span x-show="!generating">🎲 Generate Random Opponent</span>
+                        <span x-show="generating">⏳ Generating...</span>
+                    </button>
+                </div>
+
+                <template x-if="player2Generated">
+                    <div class="mt-2 text-xs text-green-400">
+                        ✅ <span x-text="player2Label"></span>
+                        <button @click="player2Generated = null; player2Roster = ''" class="text-red-400 ml-2">✕</button>
+                    </div>
+                </template>
+
+                <div class="text-xs text-gray-500 mt-1" x-show="!player2Generated">
+                    <span x-text="player2Label"></span>
+                </div>
+            </div>
         </div>
-
-        <h2 class="text-xl font-bold mb-4">Deployment</h2>
-        <select class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 mb-4">
-            <option value="roll-off">Roll-off</option>
-            <option value="player1">Player 1 goes first</option>
-            <option value="player2">Player 2 goes first</option>
-        </select>
     </div>
 
-    <button class="bg-yellow-600 hover:bg-yellow-500 px-8 py-3 rounded font-bold text-lg">
-        🎲 Run Simulation
+    <!-- Step 2: Mission + Map -->
+    <div class="bg-gray-800 rounded-lg p-5 border border-gray-700 mb-4">
+        <h2 class="text-lg font-bold text-white mb-4">🎯 Mission & Map</h2>
+
+        <div class="grid grid-cols-3 gap-4">
+            <div>
+                <label class="block text-xs text-gray-400 uppercase tracking-wide mb-1">Mission</label>
+                <select x-model="mission" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
+                    <option value="only-war">Only War</option>
+                    <option value="supply-drop">Supply Drop</option>
+                    <option value="area-denial">Area Denial</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs text-gray-400 uppercase tracking-wide mb-1">Map Size</label>
+                <select x-model="mapSize" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
+                    <option value="combat-patrol">Combat Patrol (44×30")</option>
+                    <option value="strike-force" selected>Strike Force (44×60")</option>
+                    <option value="onslaught">Onslaught (44×90")</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs text-gray-400 uppercase tracking-wide mb-1">First Turn</label>
+                <select x-model="firstTurn" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
+                    <option value="roll-off">Roll-off</option>
+                    <option value="player1">Player 1</option>
+                    <option value="player2">Player 2</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Start button -->
+    <button @click="startSimulation()"
+            :disabled="!canStart"
+            class="w-full bg-yellow-600 hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed
+                   px-8 py-3 rounded font-bold text-lg flex items-center justify-center gap-2">
+        🎲 Start Simulation
     </button>
+
+    <template x-if="!canStart">
+        <p class="text-gray-500 text-xs text-center mt-2">Select Player 1 roster and choose an opponent to start.</p>
+    </template>
 </div>
 {% endblock %}

@@ -74,10 +74,17 @@
             <div class="space-y-2 max-h-96 overflow-y-auto">
                 <template x-for="unit in filteredUnits" :key="unit.name">
                     <div @click="openUnitModal(unit)"
-                         class="bg-gray-700 rounded p-3 cursor-pointer hover:bg-gray-600">
-                        <div class="flex justify-between">
-                            <span class="text-white text-sm" x-text="unit.name"></span>
-                            <span class="text-yellow-400 text-xs" x-text="unit.points + 'pts'"></span>
+                         class="bg-gray-700 rounded p-2 cursor-pointer hover:bg-gray-600 transition">
+                        <div class="flex justify-between items-center">
+                            <span class="flex items-center gap-1.5 text-white text-xs font-medium truncate">
+                                <span x-text="unit.name"></span>
+                                <template x-for="ic in unit.icon" :key="ic">
+                                    <img :src="`/static/icons/${ic}.svg`"
+                                         class="w-3.5 h-3.5 shrink-0 opacity-60"
+                                         :title="ic">
+                                </template>
+                            </span>
+                            <span class="text-yellow-400 text-xs shrink-0 ml-2" x-text="unit.points + 'pts'"></span>
                         </div>
                         <div class="text-gray-400 text-xs mt-1">
                             <span x-text="unit.category"></span>

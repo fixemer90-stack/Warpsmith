@@ -84,15 +84,133 @@ flowchart LR
 
 ---
 
+## Phase 3: AI & Automation
+
+**Цель:** Нажать "Simulate" → AI разыгрывает 5 раундов → replay.
+
+| # | Фича | Часы | Приоритет |
+|---|------|------|-----------|
+| [F3.1](f3.1-greedy-decision-engine.md) | Greedy decision engine — target/action evaluation | 6h | 1 |
+| [F3.2](f3.2-ork-ai.md) | Ork AI: charge priority, Waaagh! timing, melee focus | 4h | 2 |
+| [F3.3](f3.3-tau-ai.md) | T'au AI: distance control, Guided Fire, Kauyon/Mont'ka | 4h | 2 |
+| [F3.4](f3.4-deployment-ai.md) | Deployment AI: zone placement logic | 3h | 3 |
+| [F3.5](f3.5-autoplay.md) | Auto-play: AI vs AI full scenario | 6h | 3 |
+| [F3.6](f3.6-replay-recording.md) | Replay recording: JSON event log per round/phase | 3h | 4 |
+| [F3.7](f3.7-round-viewer.md) | Round viewer: step-by-step replay UI | 6h | 5 |
+| [F3.8](f3.8-result-screen.md) | Result screen: kills, damage, VP timeline chart | 3h | 5 |
+
+**Всего:** 8 features, ~35 часов. ⏳ 0%
+
+### Рекомендуемый порядок имплементации
+
+| Шаг | Фичи | Почему |
+|-----|------|--------|
+| 1 | **F3.1** — Greedy decision engine | Ядро AI, всё строится на нём |
+| 2 | **F3.2 + F3.3** — Ork + T'au AI | Фракционные профили используют F3.1 |
+| 3 | **F3.4** — Deployment AI | Нужен для полного цикла |
+| 4 | **F3.5** — Auto-play | Интеграция всех компонентов |
+| 5 | **F3.6** — Replay recording | Логирование результатов |
+| 6 | **F3.7 + F3.8** — Round viewer + Result screen | UI для просмотра реплеев |
+
+---
+
+## Phase 5: Production
+
+**Цель:** Приложение на сервере, HTTPS, мониторинг.
+
+| # | Фича | Часы | Приоритет |
+|---|------|------|-----------|
+| [F5.1](f5.1-dockerfile-compose.md) | Dockerfile + docker-compose | 3h | 1 |
+| [F5.2](f5.2-deployment.md) | Deployment (Dokku / Railway / self-host) | 4h | 1 |
+| [F5.3](f5.3-rate-limiting.md) | Rate limiting (slowapi) | 1h | 2 |
+| [F5.4](f5.4-cors-csp-security.md) | CORS hardening + CSP security headers | 1h | 2 |
+| [F5.5](f5.5-logging-sentry.md) | Logging (structlog) + Sentry error tracking | 2h | 3 |
+| [F5.6](f5.6-cicd-github-actions.md) | CI/CD: GitHub Actions (lint + test + deploy) | 4h | 3 |
+| [F5.7](f5.7-sqlite-backup.md) | SQLite backup strategy + restore script | 1h | 4 |
+
+**Всего:** 7 features, ~16 часов. ⏳ 0%
+
+### Рекомендуемый порядок имплементации
+
+| Шаг | Фичи | Почему |
+|-----|------|--------|
+| 1 | **F5.1** — Dockerfile + compose | Основа для деплоя |
+| 2 | **F5.2** — Deployment | Развернуть приложение |
+| 3 | **F5.3** — Rate limiting | Защита от ботов |
+| 4 | **F5.4** — CORS + CSP | Безопасность |
+| 5 | **F5.5** — Logging + Sentry | Мониторинг |
+| 6 | **F5.6** — CI/CD | Автоматизация |
+| 7 | **F5.7** — SQLite backup | Надёжность данных |
+
+---
+
+---
+
+## Phase 4: Web UI Polish
+
+**Цель:** Полноценное веб-приложение, готовое к пользователям.
+
+| # | Фича | Часы | Приоритет |
+|---|------|------|-----------|
+| [F4.1](f4.1-faction-browser.md) | Faction browser with category/PTS filter | 4h | 1 |
+| [F4.2](f4.2-unit-modal.md) | Unit modal: squad size, loadout, wargear selection | 6h | 1 |
+| [F4.3](f4.3-detachment-picker.md) | Detachment picker with rule preview | 3h | 2 |
+| [F4.4](f4.4-synergy-hints.md) | Synergy hints: leader compatibility, transport capacity | 4h | 2 |
+| [F4.5](f4.5-canvas-map.md) | Canvas map: terrain tiles + deploy zones interactivity | 8h | 3 |
+| [F4.6](f4.6-progressive-disclosure.md) | Progressive Disclosure: Beginner/Intermediate/Expert modes | 4h | 4 |
+| [F4.7](f4.7-stat-tooltips.md) | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h | 4 |
+| [F4.8](f4.8-svg-icons.md) | SVG icons integration in unit cards | 2h | 5 |
+
+**Всего:** 8 features, ~35 часов. ⏳ 0%
+
+### Сводка зависимостей (Phase 4)
+
+```mermaid
+flowchart LR
+    F41[F4.1] --> F42[F4.2]
+    F42 --> F44[F4.4]
+    F41 --> F43[F4.3]
+    F44 --> F46[F4.6]
+    F42 --> F47[F4.7]
+    F46 --> F47
+    F41 --> F48[F4.8]
+    F42 --> F48
+    subgraph P0["Phase 0.8"]
+        ICONS["SVG Icons + ICON_MAP"]
+    end
+    subgraph P2["Phase 2"]
+        F211["F2.11 Team Builder UI"]
+        F212["F2.12 Leader Compatibility"]
+    end
+    ICONS --> F48
+    F211 --> F41
+    F212 --> F44
+```
+
+### Рекомендуемый порядок имплементации
+
+| Шаг | Фичи | Почему |
+|-----|------|--------|
+| 1 | **F4.1** — Faction browser | База для всего UI, нужно сначала |
+| 2 | **F4.2** — Unit modal | Зависит от F4.1, ядро взаимодействия |
+| 3 | **F4.3** — Detachment picker | Независим после F4.1 |
+| 4 | **F4.8** — SVG icons | Быстрая победа, разносится по всем карточкам |
+| 5 | **F4.4** — Synergy hints | Нужны F4.2, F2.12 |
+| 6 | **F4.7** — Stat tooltips | Распределяется по всем страницам |
+| 7 | **F4.6** — Progressive Disclosure | Меняет поведение всех остальных UI |
+| 8 | **F4.5** — Canvas map | Самый большой, можно делать параллельно |
+
+---
+
 ## Сводка
 
 | Фаза | Features | Часы | Статус |
 |------|----------|------|--------|
 | **Phase 1** — Combat Engine | 12 | ~30h | 🚧 20% |
 | **Phase 2** — Game System | 12 | ~45h | ⏳ 0% |
-| **Phase 3** — AI & Automation | 8 | ~25h | ⏳ |
-| **Phase 4** — Web UI Polish | 8 | ~35h | ⏳ |
-| **Phase 5** — Production | 7 | ~15h | ⏳ |
-| **Phase 6** — Monetization | 6 | ~15h | ⏳ |
-| **Phase 7** — Expansion | 10 | ~40h | ⏳ |
-| **Итого** | **~75** | **~240h** | |
+|| **Phase 3** — AI & Automation | 8 | ~35h | ⏳ 0% |
+|| **Phase 4** — Web UI Polish | 8 | ~35h | ⏳ 0% |
+|| **Phase 5** — Production | 7 | ~16h | ⏳ 0% |
+|| **Phase 6** — Monetization | 6 | ~15h | ⏳ 0% |
+|| **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |
+|| **Итого** | **~73** | **~251h** | |

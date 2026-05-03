@@ -5,10 +5,10 @@ function teamBuilder() {
         faction: '',
         detachment: '',
         name: 'My Army',
+        gameSize: 2000,
         ptsLimit: 2000,
         roster: [],
-        categories: ['epic-hero', 'HQ', 'Battleline', 'Infantry', 'Vehicle', 'Monster', 'Dedicated Transport'],
-        selectedCategory: 'Battleline',
+        selectedCategory: '',
         showModal: false,
         selectedUnit: null,
         squadSize: 1,
@@ -24,8 +24,8 @@ function teamBuilder() {
                 if (!grouped[cat]) grouped[cat] = [];
                 grouped[cat].push(unit);
             });
-            // Sort: Character → Battleline → Transport → Vehicle → Monster → Infantry → Legends
-            const order = ['Character', 'Battleline', 'Transport', 'Vehicle', 'Monster', 'Infantry', 'Legends'];
+            // Sort: Epic Hero → Character → Battleline → Transport → Vehicle → Monster → Infantry → Legends
+            const order = ['Epic Hero', 'Character', 'Battleline', 'Transport', 'Vehicle', 'Monster', 'Infantry', 'Legends'];
             const sorted = {};
             order.forEach(c => { if (grouped[c]) sorted[c] = grouped[c]; });
             // Any uncategorized go at the end but before Legends (if not already in order)

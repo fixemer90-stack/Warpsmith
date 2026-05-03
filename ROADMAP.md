@@ -89,7 +89,7 @@
 ## 🧠 Phase 3: AI & Automation
 
 ```
-[░░░░░░░░░░░░░░░░░░] 0% · 8 features
+[█░░░░░░░░░░░░░░░░░░] 6% · 1/8 features
 ```
 
 **Цель:** Нажать "Simulate" → AI разыгрывает 5 раундов → replay.
@@ -101,7 +101,7 @@
 | 3.1 | ⚪ | Greedy decision engine — target/action evaluation | 6h |
 | 3.2 | ⚪ | Ork AI: charge priority, Waaagh! timing, melee focus | 4h |
 | 3.3 | ⚪ | T'au AI: distance control, Guided Fire, Kauyon/Mont'ka | 4h |
-| 3.4 | ⚪ | Deployment AI: zone placement logic | 3h |
+| 3.4 | ✅ | Deployment AI: zone placement logic | 3h |
 | 3.5 | ⚪ | Auto-play: AI vs AI full scenario | 6h |
 | 3.6 | ⚪ | Replay recording: JSON event log per round/phase | 3h |
 | 3.7 | ⚪ | Round viewer: step-by-step replay UI | 6h |

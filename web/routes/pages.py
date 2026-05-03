@@ -47,10 +47,55 @@ async def team_builder(request: Request):
 
 @router.get("/scenario-setup", response_class=HTMLResponse)
 async def scenario_setup(request: Request):
-    """Выбор миссии и карты."""
+    """Выбор миссии, карты и ростера."""
+    factions = []
+    rosters = []
+
+    try:
+        from backend.loader.registry import registry as wiki
+        wiki.load()
+        for f_id in wiki.list_factions():
+            fp = wiki.wiki_path / "factions" / f"{f_id}.md"
+            label = f_id.replace("-", " ").title()
+            if fp.exists():
+                try:
+                    import frontmatter
+                    post = frontmatter.load(str(fp))
+                    label = str(post.metadata.get("title", label))
+                except Exception:
+                    pass
+            factions.append({"id": f_id, "label": label})
+    except Exception:
+        pass
+
+    # Get user's rosters if authenticated
+    from backend.auth import get_current_user_optional
+    from backend.db.database import db
+    try:
+        user = await get_current_user_optional(request)
+        if user:
+            rows = db.fetchall(
+                "SELECT id, name, faction, pts_limit, detachment, units FROM rosters WHERE user_id = ? ORDER BY id DESC",
+                (user.id,),
+            )
+            for row in rows:
+                rosters.append({
+                    "id": row["id"],
+                    "name": row["name"],
+                    "faction": row["faction"],
+                    "pts_limit": row["pts_limit"],
+                })
+    except Exception:
+        pass
+
     return templates.TemplateResponse(
         request, "scenario_setup.html",
-        {"request": request, "title": "Scenario Setup"},
+        {
+            "request": request,
+            "title": "Scenario Setup",
+            "factions": factions,
+            "rosters": rosters,
+        },
     )
 
 

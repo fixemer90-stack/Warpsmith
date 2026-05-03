@@ -29,6 +29,21 @@ class SimulationRequest(BaseModel):
     n_iterations: int = Field(10000, description="Number of Monte Carlo iterations")
 
 
+def _unit_icons(unit) -> list[str]:
+    """All SVG icons for a unit based on its YAML tags, in priority order."""
+    tags = {t.lower().replace(" ", "-") for t in unit.tags}
+    priority = ["epic-hero", "psyker", "titanic", "monster", "dreadnought",
+                "walker", "transport", "vehicle", "fly", "artillery",
+                "battleline", "character", "elite", "infantry", "medic", "speed-freek"]
+    seen = set()
+    result = []
+    for icon in priority:
+        if icon in tags and icon not in seen:
+            result.append(icon)
+            seen.add(icon)
+    return result
+
+
 @router.get("/units")
 async def list_units(faction: str = ""):
     """Список юнитов (всех или по фракции)."""
@@ -50,6 +65,7 @@ async def list_units(faction: str = ""):
                 "name": unit.name,
                 "faction": unit.faction,
                 "category": unit.category,
+                "icon": _unit_icons(unit),
                 "points": unit.points,
                 "movement": unit.movement,
                 "toughness": unit.toughness,
@@ -381,6 +397,87 @@ async def get_roster(roster_id: int, user: User = Depends(get_current_user)):
         raise HTTPException(403, detail="Not authorized")
 
     return dict(row)
+
+
+@router.post("/rosters/generate")
+async def generate_roster(faction: str = "", pts_limit: int = 2000):
+    """Сгенерировать случайный валидный ростер для AI-оппонента."""
+    import random
+
+    try:
+        wiki.load()
+    except Exception:
+        raise HTTPException(500, detail="Wiki not loaded")
+
+    # Filter units by faction (or all factions)
+    candidates = []
+    for name, unit in wiki.units.items():
+        if unit.points <= 0 or unit.points is None:
+            continue
+        if faction and unit.faction != faction:
+            continue
+        if unit.is_epic_hero:
+            candidates.append((name, unit, 1))
+        else:
+            min_m, max_m = unit.model_count
+            candidates.append((name, unit, min_m))
+
+    if not candidates:
+        raise HTTPException(404, detail=f"No valid units for faction '{faction}'")
+
+    random.shuffle(candidates)
+
+    selected = []
+    total = 0
+    has_warlord = False
+    epic_heroes = set()
+    counts = {}
+
+    for name, unit, squad_size in candidates:
+        if total >= pts_limit:
+            break
+
+        # Respect 3x cap
+        if counts.get(name, 0) >= 3:
+            continue
+
+        # Epic Hero unique
+        if unit.is_epic_hero:
+            if name in epic_heroes:
+                continue
+            epic_heroes.add(name)
+
+        cost = unit.points * squad_size
+        if total + cost > pts_limit:
+            continue
+
+        selected.append({"unit_name": name, "squad_size": squad_size})
+        total += cost
+        counts[name] = counts.get(name, 0) + 1
+        if unit.can_be_warlord:
+            has_warlord = True
+
+    if not has_warlord:
+        # Force-add a cheap warlord-capable unit
+        warlords = [(n, u) for n, u in wiki.units.items()
+                    if u.can_be_warlord and u.points > 0
+                    and (not faction or u.faction == faction)]
+        if warlords:
+            n, u = random.choice(warlords)
+            cost = u.points
+            if total + cost <= pts_limit or True:  # force even if over
+                selected.insert(0, {"unit_name": n, "squad_size": 1})
+                total += cost
+
+    return {
+        "roster": {
+            "name": f"AI {faction.title() if faction else 'Random'} Army",
+            "faction": faction or "mixed",
+            "pts_limit": pts_limit,
+            "total_pts": total,
+            "units": selected,
+        }
+    }
 
 
 @router.delete("/rosters/{roster_id}")

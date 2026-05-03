@@ -102,6 +102,7 @@ class Unit:
     abilities: list[str] = field(default_factory=list)
     keywords: list[str] = field(default_factory=list)
     faction_keywords: list[str] = field(default_factory=list)
+    tags: list[str] = field(default_factory=list)
     points: int = 0
     model_count: tuple[int, int] = (1, 1)  # (min, max) models per unit
     invulnerable_save: int | None = None  # 4 means 4++

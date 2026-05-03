@@ -31,6 +31,7 @@ LIST_FIELDS = {
     "abilities": "abilities",
     "leader_for": "leader_for",
     "transports": "transports",
+    "tags": "tags",
 }
 
 
@@ -468,6 +469,8 @@ def _infer_category(keywords: list[str], metadata: dict[str, Any]) -> str:
     # Legends — отдельная категория (можно исключить из ростера)
     if str(metadata.get("status", "")).lower() == "legends" or "legends" in combined:
         return "Legends"
+    if "epic-hero" in combined or "epic hero" in combined:
+        return "Epic Hero"
     if "battleline" in combined:
         return "Battleline"
     if "character" in combined:

@@ -183,6 +183,15 @@ async def get_current_user(request: Request) -> User:
     return user
 
 
+
+async def get_current_user_optional(request: Request) -> User | None:
+    """Get current user or None if not authenticated."""
+    try:
+        return await get_current_user(request)
+    except HTTPException:
+        return None
+
+
 async def get_optional_user(request: Request) -> User | None:
     """Depends — опциональный пользователь (публичные страницы)."""
     token = _extract_token(request)
