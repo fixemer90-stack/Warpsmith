@@ -502,8 +502,8 @@ def test_score_standard():
     
     # No units on objectives
     vp = score_standard(mission)
-    assert vp[1] == 0
-    assert vp[2] == 0
+    assert vp["p1"] == 0
+    assert vp["p2"] == 0
     
     # Add unit to first objective
     unit1 = UnitState(
@@ -514,8 +514,8 @@ def test_score_standard():
     player1.units = {"marine1": unit1}
     
     vp = score_standard(mission)
-    assert vp[1] == 1  # 1 VP per objective
-    assert vp[2] == 0
+    assert vp["p1"] == 1  # 1 VP per objective
+    assert vp["p2"] == 0
     
     # Add unit to another objective
     unit2 = UnitState(
@@ -526,8 +526,8 @@ def test_score_standard():
     player1.units["marine2"] = unit2
     
     vp = score_standard(mission)
-    assert vp[1] == 2  # 2 VP for 2 objectives
-    assert vp[2] == 0
+    assert vp["p1"] == 2  # 2 VP for 2 objectives
+    assert vp["p2"] == 0
     
     # Add enemy unit to same objective - should be contested
     unit3 = UnitState(
@@ -538,8 +538,8 @@ def test_score_standard():
     player2.units = {"ork1": unit3}
     
     vp = score_standard(mission)
-    assert vp[1] == 0  # Contested objective gives 0 VP
-    assert vp[2] == 0
+    assert vp["p1"] == 0  # Contested objective gives 0 VP
+    assert vp["p2"] == 0
 
 
 def test_score_progressive():
@@ -588,8 +588,8 @@ def test_score_progressive():
     vp = score_progressive(mission)
     # Base VP: p1=2, p2=1
     # Progressive bonus: p1 gets +2 for having more objectives
-    assert vp[1] == 4  # 2 base + 2 bonus
-    assert vp[2] == 1  # 1 base + 0 bonus
+    assert vp["p1"] == 4  # 2 base + 2 bonus
+    assert vp["p2"] == 1  # 1 base + 0 bonus
 
 
 def test_score_kill_points():
@@ -628,8 +628,8 @@ def test_score_kill_points():
     
     # Initially no kills
     vp = score_kill_points(mission)
-    assert vp[1] == 0
-    assert vp[2] == 0
+    assert vp["p1"] == 0
+    assert vp["p2"] == 0
     
     # Damage the ork (half wounds)
     ork.current_wounds = 2
@@ -638,8 +638,8 @@ def test_score_kill_points():
     # Ork has lost half its wounds, so ~50% of its points
     # Marine has full health, so 0% of marine points
     # Exact values depend on implementation
-    assert vp[1] >= 0  # Marine VP
-    assert vp[2] >= 0  # Ork VP
+    assert vp["p1"] >= 0  # Marine VP
+    assert vp["p2"] >= 0  # Ork VP
     
     # Kill the ork completely
     ork.current_wounds = 0
@@ -648,8 +648,8 @@ def test_score_kill_points():
     vp = score_kill_points(mission)
     # Ork is completely destroyed, so marine gets points for killing it
     # Marine is still alive, so ork gets 0 points for killing marine
-    assert vp[1] > 0  # Marine should have VP for killing ork
-    assert vp[2] == 0   # Ork should have 0 VP (marine still alive)
+    assert vp["p1"] > 0  # Marine should have VP for killing ork
+    assert vp["p2"] == 0   # Ork should have 0 VP (marine still alive)
 
 
 def test_apply_scoring():

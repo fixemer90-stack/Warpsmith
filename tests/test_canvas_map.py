@@ -108,7 +108,7 @@ class TestTileTypes:
         from pathlib import Path
         js_file = Path(__file__).parent.parent / "web" / "static" / "canvas_map.js"
         if js_file.exists():
-            content = js_file.read_text()
+            content = js_file.read_text(encoding='utf-8')
             assert "TILE_COLORS" in content
             assert "TILE_LABELS" in content
             assert "TILE_SYMBOLS" in content

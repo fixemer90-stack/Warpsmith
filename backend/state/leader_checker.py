@@ -139,7 +139,9 @@ def validate_leader_assignments(
         if not bodyguard:
             continue
         for leader in attached_leaders:
-            result = check_leader_compatibility(leader, bodyguard, attached_leaders)
+            # Exclude the current leader from existing_leaders when checking compatibility
+            existing_leaders = [l for l in attached_leaders if l != leader]
+            result = check_leader_compatibility(leader, bodyguard, existing_leaders)
             if not result.is_compatible:
                 results.append(result)
 
