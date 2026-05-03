@@ -22,6 +22,9 @@ function teamBuilder() {
         selectedNobOption: '',
         currentUnitName: '',
 
+        // Detachment State
+        detachment: '',
+
         // Computed
         get unitsByCategory() {
             const grouped = {};
@@ -104,6 +107,15 @@ function teamBuilder() {
             this.ptsLimit = parseInt(this.gameSize, 10);
         },
 
+        onFactionChange() {
+            this.loadUnits();
+            // Emit faction change event for detachment picker
+            const event = new CustomEvent('faction-changed', {
+                detail: { faction: this.faction }
+            });
+            document.dispatchEvent(event);
+        },
+
         // Unit Modal Methods
         openUnitModal(unitName) {
             this.currentUnitName = unitName;
@@ -141,6 +153,13 @@ function teamBuilder() {
             });
             this.showUnitModal = false;
             this.validationErrors = [];
+        },
+
+        init() {
+            // Listen for detachment selection
+            document.addEventListener('detachment-selected', (e) => {
+                this.detachment = e.detail.detachment;
+            });
         },
         async loadUnits() {
             if (!this.faction) {
