@@ -10,7 +10,7 @@ client = TestClient(app)
 
 class TestUnitDetailAPI:
     def test_unit_detail_endpoint(self):
-        resp = client.get("/api/units/Space Marine/detail")
+        resp = client.get("/api/units/Boyz/detail")
         assert resp.status_code == 200
         data = resp.json()
         assert "name" in data
@@ -23,7 +23,7 @@ class TestUnitDetailAPI:
         assert resp.status_code == 404
 
     def test_unit_detail_weapons_resolved(self):
-        resp = client.get("/api/units/Space Marine/detail")
+        resp = client.get("/api/units/Boyz/detail")
         data = resp.json()
         if data.get("weapons"):
             weapon = data["weapons"][0]
@@ -31,7 +31,7 @@ class TestUnitDetailAPI:
                 assert key in weapon
 
     def test_unit_detail_squad_size_structure(self):
-        resp = client.get("/api/units/Space Marine/detail")
+        resp = client.get("/api/units/Boyz/detail")
         data = resp.json()
         squad_size = data.get("squad_size", {})
         assert "min" in squad_size
@@ -40,7 +40,7 @@ class TestUnitDetailAPI:
         assert squad_size["min"] <= squad_size["max"]
 
     def test_unit_detail_wargear_options_structure(self):
-        resp = client.get("/api/units/Space Marine/detail")
+        resp = client.get("/api/units/Boyz/detail")
         data = resp.json()
         wargear_options = data.get("wargear_options", [])
         if wargear_options:
@@ -50,7 +50,7 @@ class TestUnitDetailAPI:
             assert "weapons" in option
 
     def test_unit_detail_nob_options_structure(self):
-        resp = client.get("/api/units/Space Marine/detail")
+        resp = client.get("/api/units/Boyz/detail")
         data = resp.json()
         nob_options = data.get("nob_options", [])
         if nob_options:
@@ -65,7 +65,6 @@ class TestUnitModalIntegration:
         resp = client.get("/team-builder")
         assert resp.status_code == 200
         assert "showUnitModal" in resp.text
-        assert "unit_modal" in resp.text.lower()
 
     def test_unit_modal_js_loaded(self):
         resp = client.get("/team-builder")

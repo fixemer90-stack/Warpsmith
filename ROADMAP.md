@@ -89,7 +89,7 @@
 ## 🧠 Phase 3: AI & Automation
 
 ```
-[█░░░░░░░░░░░░░░░░░░] 6% · 1/8 features
+[██████░░░░░░░░░░░░] 28.6% · 2/7 features
 ```
 
 **Цель:** Нажать "Simulate" → AI разыгрывает 5 раундов → replay.
@@ -100,7 +100,7 @@
 ||----|--------|------|------|
 || 3.1 | ✅ | Greedy decision engine — target/action evaluation | 6h |
 || 3.2 | 🆕 | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h |
-|| 3.3 | ⚪ | Deployment AI: zone placement logic | 3h |
+|| 3.3 | ✅ | Deployment AI: zone placement logic | 3h |
 || 3.4 | ⚪ | Auto-play: AI vs AI full scenario | 6h |
 || 3.5 | ⚪ | Replay recording: JSON event log per round/phase | 3h |
 || 3.6 | ⚪ | Round viewer: step-by-step replay UI | 6h |
