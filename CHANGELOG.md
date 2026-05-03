@@ -11,7 +11,11 @@
 
 ### Added
 - **F3.1 Greedy Decision Engine** — `backend/engine/ai/decision.py`: ActionType, Action, EvaluationContext, choose_action() с взвешенной оценкой (shoot/charge/move), генерация кандидатов по фазам, поддержка opponent_units_map для статов целей
+- **F4.3 Detachment Picker with Rule Preview** — `backend/loader/registry.py` расширение с Detachment/Stratagem/Enhancement классами, `/api/detachments` endpoints, `web/templates/partials/detachment_picker.html`, `web/static/detachment_picker.js` с HTMX reactive loading и detail modal
+- **F4.4 Synergy Hints: Leader Compatibility, Transport Capacity** — `/api/rosters/synergies` endpoint с SynergyCheck моделью, `web/templates/partials/synergy_panel.html`, `web/static/synergy_hints.js` с 500ms debouncing, визуальные индикаторы (dots/borders) в roster списке, wiki synergies из YAML
 - **Тесты F3.1** — `tests/test_ai_decision.py`: 26 тестов (дистанция, дальность, ожидаемый урон, генерация кандидатов, скоринг, choose_action, custom weights)
+- **Тесты F4.3** — `tests/test_detachment_picker.py`: 12 тестов (API endpoints, data structures, integration)
+- **Тесты F4.4** — `tests/test_synergy_hints.py`: 12 тестов (synergy checks, transport capacity, visual indicators)
 - GET /api/rosters/generate — эндпоинт для генерации случайного валидного ростера AI-оппонента (Warlord, 3x cap, Epic Hero unique, PTS budget)
 - get_current_user_optional — опциональная аутентификация (возвращает None вместо 401)
 - Scenario Setup UI — выбор ростера для Player 1 / Player 2, кнопка "Generate Random Opponent", выбор миссии/карты/очередности хода
@@ -23,6 +27,7 @@
 - Feature specs для Phase 3 (8 файлов), Phase 4 (8 файлов), Phase 5 (7 файлов)
 
 ### Changed
+- **Phase 4: Web UI Polish** — 4/8 features реализованы (50%): F4.1 (Faction Browser), F4.2 (Unit Modal), F4.3 (Detachment Picker), F4.4 (Synergy Hints)
 - **Архитектура AI: хардкод → wiki-driven**. F3.2, F3.3, F3.9 (Ork/Tau/AdMech AI) объединены в один [F3.2 Faction AI Profiles](docs/features/f3.2-faction-ai-profiles.md). Все поведенческие параметры читаются из YAML `ai:` секции wiki/factions/*.md. Новая фракция = новый .md, ноль строк Python.
 - Версия: 0.4.0 → путь к 0.5.0 (Phase 3 начата)
 - `_infer_category`: добавлены приоритеты epic-hero, transport, legends; Character не перекрывает Monster/Vehicle
