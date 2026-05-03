@@ -182,7 +182,9 @@ function teamBuilder() {
                 
                 if (detResp.ok) {
                     const detData = await detResp.json();
-                    this.detachments = detData.detachments || [];
+                    this.detachments = Array.isArray(detData)
+                        ? detData.map(d => d.name)
+                        : (detData.detachments || []);
                 }
             } catch (error) {
                 console.error('Failed to load units/detachments:', error);

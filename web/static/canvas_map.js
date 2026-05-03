@@ -1,189 +1,3 @@
----
-title: "F4.5 — Canvas Map: Terrain Tiles + Deploy Zones Interactivity"
-parent: phase4-web-ui-polish
-status: done
-priority: 3
----
-
-# F4.5: Canvas Map — Terrain Tiles + Deploy Zones Interactivity
-
-**Файлы:** `web/static/canvas_map.js` (создать),
-`web/templates/partials/canvas_map.html` (создать),
-`web/routes/api.py` (расширение — /api/map/tiles)
-**Зависимости:** F2.2 (2D Map — NumPy grid, terrain, deploy zones),
-F2.3 (Line of Sight)
-**Часы:** 8h
-
-**Цель (SMART):** Создать интерактивную Canvas-карту для Scenario Setup: отрисовка
-террейна (tiles), зон развёртывания, возможность кликать/перетаскивать юниты.
-Критерий: Canvas 800×800px, 6 типов террейна (open, light_cover, heavy_cover, obstacle,
-difficult_ground, deploy_zone), зоны развёртывания цветом, клик по клетке — подсветка
-и показ координат, drag'n'drop юнитов на карту. 8 часов.
-
----
-
-## Canvas Specs
-
-```
-Canvas size: 800 × 800 px (fixed, responsive via CSS max-width: 100%)
-Grid: 16×16 cells (50px × 50px per cell)
-Zoom: Pinch/scroll zoom (0.5x — 2x), center on cursor
-Pan: Click+drag on empty space
-```
-
-## Data Model — Tile Types
-
-```python
-from enum import Enum
-
-class TileType(Enum):
-    OPEN = 0            #  — без эффекта
-    LIGHT_COVER = 1     # 🌿 — +1 save vs shooting
-    HEAVY_COVER = 2     # 🏛 — +1 save, -1 to hit through
-    OBSTACLE = 3        # 🧱 — блокирует LoS полностью
-    DIFFICULT = 4       # 💧 — double movement cost
-    DEPLOY_ZONE = 5     # 📍 — зона развёртывания (player 1 или 2)
-
-TILE_COLORS = {
-    TileType.OPEN:           "#3a3a3a",   # dark gray
-    TileType.LIGHT_COVER:    "#2d5a27",   # forest green
-    TileType.HEAVY_COVER:    "#4a3728",   # brown
-    TileType.OBSTACLE:       "#555555",   # gray
-    TileType.DIFFICULT:      "#3a5c6e",   # blue-gray
-    TileType.DEPLOY_ZONE:    "#3a3a3a",   # base color, overlay is separate
-}
-
-TILE_SYMBOLS = {
-    TileType.OPEN:           "",
-    TileType.LIGHT_COVER:    "🌿",
-    TileType.HEAVY_COVER:    "🏛",
-    TileType.OBSTACLE:       "🧱",
-    TileType.DIFFICULT:      "💧",
-}
-```
-
-## API Endpoint
-
-```python
-@router.get("/api/map/tiles")
-async def get_map_tiles(
-    map_id: Optional[int] = None,
-    scenario: Optional[str] = None,
-):
-    """
-    Вернуть сетку тайлов для отображения на Canvas.
-    Response: {
-        "width": 16, "height": 16,
-        "tiles": [[tile_type, ...], ...],  # 16×16 matrix of TileType values
-        "deploy_zones": {
-            "player1": [(x1,y1), (x2,y2), ...],
-            "player2": [(x3,y3), (x4,y4), ...],
-        },
-        "units": [
-            {"name": "Warboss", "x": 2, "y": 3, "faction": "orks",
-             "icon": "/static/icons/character.svg", "color": "#a855f7"},
-        ],
-    }
-    """
-    # Из scenario или дефолтной карты
-    tile_map = load_map(map_id) if map_id else generate_default_map()
-    return tile_map
-```
-
-## Canvas Map Template
-
-```html
-<!-- web/templates/partials/canvas_map.html -->
-<div x-data="canvasMap()"
-     x-init="initMap()"
-     class="bg-gray-900 rounded-lg p-4">
-
-    <div class="flex items-center justify-between mb-3">
-        <h3 class="text-sm font-semibold text-gray-300">Battlefield Map</h3>
-        <div class="flex items-center gap-2">
-            <button @click="zoomOut()" class="text-gray-400 hover:text-white text-sm px-2"
-                    :disabled="zoom <= 0.5">−</button>
-            <span class="text-xs text-gray-500" x-text="Math.round(zoom * 100) + '%'"></span>
-            <button @click="zoomIn()" class="text-gray-400 hover:text-white text-sm px-2"
-                    :disabled="zoom >= 2">+</button>
-            <button @click="resetView()" class="text-gray-400 hover:text-white text-xs ml-2">
-                Reset
-            </button>
-        </div>
-    </div>
-
-    <!-- Legend -->
-    <div class="flex flex-wrap gap-3 mb-3 text-xs">
-        <div class="flex items-center gap-1">
-            <span class="w-3 h-3 rounded" style="background: #2d5a27"></span>
-            <span class="text-gray-400">Light Cover</span>
-        </div>
-        <div class="flex items-center gap-1">
-            <span class="w-3 h-3 rounded" style="background: #4a3728"></span>
-            <span class="text-gray-400">Heavy Cover</span>
-        </div>
-        <div class="flex items-center gap-1">
-            <span class="w-3 h-3 rounded" style="background: #555555"></span>
-            <span class="text-gray-400">Obstacle</span>
-        </div>
-        <div class="flex items-center gap-1">
-            <span class="w-3 h-3 rounded" style="background: #3a5c6e"></span>
-            <span class="text-gray-400">Difficult</span>
-        </div>
-        <div class="flex items-center gap-1">
-            <span class="w-3 h-3 rounded bg-blue-600 opacity-60"></span>
-            <span class="text-gray-400">Deploy Zone P1</span>
-        </div>
-        <div class="flex items-center gap-1">
-            <span class="w-3 h-3 rounded bg-red-600 opacity-60"></span>
-            <span class="text-gray-400">Deploy Zone P2</span>
-        </div>
-    </div>
-
-    <!-- Canvas Container -->
-    <div class="relative overflow-hidden rounded-lg bg-gray-950"
-         style="max-width: 800px; aspect-ratio: 1; cursor: grab;"
-         @mouseup="isDragging = false"
-         @mouseleave="isDragging = false">
-
-        <canvas id="battle-map" width="800" height="800"
-                style="width: 100%; height: auto; display: block;"
-                @mousedown="handleMouseDown($event)"
-                @mousemove="handleMouseMove($event)"
-                @mouseup="handleMouseUp($event)"
-                @click="handleClick($event)"
-                @wheel.prevent="handleScroll($event)">
-        </canvas>
-
-        <!-- Coordinate Tooltip -->
-        <div x-show="hoveredCell"
-             class="absolute bg-gray-800 text-white text-xs px-2 py-1 rounded
-                    border border-gray-600 pointer-events-none z-10"
-             :style="`left: ${tooltipX}px; top: ${tooltipY}px;`">
-            <span x-text="`(${hoveredCell.x}, ${hoveredCell.y})`"></span>
-            <span x-text="hoveredCell.type"></span>
-        </div>
-    </div>
-
-    <!-- Selected Cell Info -->
-    <template x-if="selectedCell">
-        <div class="mt-3 bg-gray-800 rounded p-3 text-sm">
-            <div class="flex justify-between">
-                <span class="text-gray-300">Selected: <strong
-                      x-text="`(${selectedCell.x}, ${selectedCell.y})`"></strong></span>
-                <span class="text-gray-400" x-text="selectedCell.type"></span>
-            </div>
-            <div class="text-xs text-gray-500 mt-1" x-show="selectedCell.unit">
-                Unit: <span class="text-white" x-text="selectedCell.unit.name"></span>
-            </div>
-        </div>
-    </template>
-</div>
-```
-
-## Canvas Rendering Engine (canvas_map.js)
-
-```javascript
 // web/static/canvas_map.js
 function canvasMap() {
     return {
@@ -208,6 +22,7 @@ function canvasMap() {
         tooltipX: 0,
         tooltipY: 0,
         selectedUnitForDrag: null,
+        isDraggingUnit: false,
 
         // Tile type colors (mirrors Python enum)
         TILE_COLORS: {
@@ -220,8 +35,12 @@ function canvasMap() {
         },
 
         TILE_LABELS: {
-            0: 'Open', 1: 'Light Cover', 2: 'Heavy Cover',
+            0: 'Open Ground', 1: 'Light Cover', 2: 'Heavy Cover',
             3: 'Obstacle', 4: 'Difficult Ground', 5: 'Deploy Zone',
+        },
+
+        TILE_SYMBOLS: {
+            0: '', 1: '🌿', 2: '🏛', 3: '🧱', 4: '💧', 5: '',
         },
 
         async initMap() {
@@ -230,14 +49,18 @@ function canvasMap() {
             this.ctx = this.canvas.getContext('2d');
             this.CELL_SIZE = 800 / this.GRID_SIZE; // = 50
 
+            // Make instance globally available for scenario setup
+            window.canvasMapInstance = this;
+
             // Load map data
             try {
                 const resp = await fetch('/api/map/tiles');
                 this.mapData = await resp.json();
                 this.render();
             } catch (e) {
-                // Load default empty map
-                this.mapData = this.generateDefaultMap();
+                console.error('Failed to load map tiles:', e);
+                // Generate default empty map
+                this.generateDefaultMap();
                 this.render();
             }
         },
@@ -253,11 +76,16 @@ function canvasMap() {
                     if ((x >= 6 && x <= 9) && (y >= 6 && y <= 9)) type = 3;
                     // Some cover on flanks
                     if ((x === 3 || x === 12) && y >= 4 && y <= 11) type = 1;
+                    // Difficult terrain near obstacles
+                    if (x >= 5 && x <= 10 && y >= 5 && y <= 10 && type === 0) {
+                        if ((x + y) % 3 === 0) type = 4;
+                    }
                     row.push(type);
                 }
                 tiles.push(row);
             }
-            return {
+
+            this.mapData = {
                 width: this.GRID_SIZE,
                 height: this.GRID_SIZE,
                 tiles: tiles,
@@ -319,7 +147,7 @@ function canvasMap() {
                     }
 
                     // Terrain symbol
-                    const symbol = this.getTileSymbol(type);
+                    const symbol = this.TILE_SYMBOLS[type];
                     if (symbol) {
                         ctx.fillStyle = '#fff';
                         ctx.font = '18px serif';
@@ -334,9 +162,9 @@ function canvasMap() {
             ctx.font = 'bold 11px sans-serif';
             ctx.textAlign = 'center';
             ctx.fillStyle = 'rgba(37, 99, 235, 0.7)';
-            ctx.fillText('PLAYER 1 DEPLOY ZONE', 4 * size, 1.5 * size);
+            ctx.fillText('PLAYER 1 DEPLOY ZONE', 2 * size, 1.5 * size);
             ctx.fillStyle = 'rgba(220, 38, 38, 0.7)';
-            ctx.fillText('PLAYER 2 DEPLOY ZONE', 12 * size, 1.5 * size);
+            ctx.fillText('PLAYER 2 DEPLOY ZONE', 14 * size, 1.5 * size);
 
             // Draw units
             if (this.mapData.units) {
@@ -357,7 +185,7 @@ function canvasMap() {
             }
 
             // Hover highlight
-            if (this.hoveredCell && !this.isDragging) {
+            if (this.hoveredCell && !this.isDragging && !this.isDraggingUnit) {
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
                 ctx.fillRect(
                     this.hoveredCell.x * size,
@@ -409,7 +237,7 @@ function canvasMap() {
             return { x: gridX, y: gridY };
         },
 
-        // Handlers
+        // Event handlers
         handleMouseDown(event) {
             const cell = this.screenToGrid(event.clientX, event.clientY);
             if (!cell) return;
@@ -418,6 +246,7 @@ function canvasMap() {
             const unit = this.getUnitAt(cell.x, cell.y);
             if (unit) {
                 this.selectedUnitForDrag = unit;
+                this.isDraggingUnit = true;
             }
 
             this.isDragging = true;
@@ -438,8 +267,8 @@ function canvasMap() {
                 this.hoveredCell = null;
             }
 
-            if (this.isDragging && !this.selectedUnitForDrag) {
-                // Pan
+            if (this.isDragging && !this.isDraggingUnit) {
+                // Pan the map
                 const dx = event.clientX - this.dragStartX;
                 const dy = event.clientY - this.dragStartY;
                 this.offsetX += dx;
@@ -457,12 +286,13 @@ function canvasMap() {
                     this.moveUnit(this.selectedUnitForDrag.name, cell.x, cell.y);
                 }
                 this.selectedUnitForDrag = null;
+                this.isDraggingUnit = false;
             }
             this.isDragging = false;
         },
 
         handleClick(event) {
-            if (this.isDragging) return;
+            if (this.isDragging || this.isDraggingUnit) return;
             const cell = this.screenToGrid(event.clientX, event.clientY);
             if (cell) {
                 this.selectedCell = {
@@ -477,12 +307,15 @@ function canvasMap() {
         handleScroll(event) {
             const delta = event.deltaY > 0 ? -0.1 : 0.1;
             const newZoom = Math.max(0.5, Math.min(2, this.zoom + delta));
+
             // Zoom toward cursor position
             const rect = this.canvas.getBoundingClientRect();
             const mouseX = (event.clientX - rect.left) * (800 / rect.width);
             const mouseY = (event.clientY - rect.top) * (800 / rect.height);
+
             this.offsetX = mouseX - (mouseX - this.offsetX) * (newZoom / this.zoom);
             this.offsetY = mouseY - (mouseY - this.offsetY) * (newZoom / this.zoom);
+
             this.zoom = newZoom;
             this.render();
         },
@@ -494,11 +327,16 @@ function canvasMap() {
 
         moveUnit(name, newX, newY) {
             const unit = this.mapData?.units?.find(u => u.name === name);
-            if (unit) {
+            if (unit && !this.getUnitAt(newX, newY)) { // Don't allow stacking units
                 unit.x = newX;
                 unit.y = newY;
                 this.render();
             }
+        },
+
+        startUnitDrag(unit) {
+            this.selectedUnitForDrag = unit;
+            this.isDraggingUnit = true;
         },
 
         isDeployZone(x, y, player) {
@@ -506,51 +344,28 @@ function canvasMap() {
             return zones.some(([zx, zy]) => zx === x && zy === y);
         },
 
-        getTileSymbol(type) {
-            return ['', '🌿', '🏛', '🧱', '💧', ''][type] || '';
+        // Controls
+        zoomIn() {
+            if (this.zoom < 2) {
+                this.zoom = Math.min(2, this.zoom + 0.2);
+                this.render();
+            }
         },
 
-        zoomIn() { this.zoom = Math.min(2, this.zoom + 0.2); this.render(); },
-        zoomOut() { this.zoom = Math.max(0.5, this.zoom - 0.2); this.render(); },
+        zoomOut() {
+            if (this.zoom > 0.5) {
+                this.zoom = Math.max(0.5, this.zoom - 0.2);
+                this.render();
+            }
+        },
+
         resetView() {
             this.zoom = 1;
             this.offsetX = 0;
             this.offsetY = 0;
+            this.selectedCell = null;
+            this.hoveredCell = null;
             this.render();
         },
     };
 }
-```
-
-## Edge Cases
-
-| Ситуация | Поведение |
-|----------|-----------|
-| Canvas resize (responsive) | CSS `width: 100%; height: auto;` — aspect-ratio сохраняется |
-| Zoom out max (0.5x) | Кнопка − disabled, tooltip "Min zoom" |
-| Zoom in max (2x) | Кнопка + disabled, tooltip "Max zoom" |
-| Перетаскивание за край | Pan ограничен: offsetX/Y не выходят за границы |
-| Клик вне сетки | hoveredCell = null, selectedCell не меняется |
-| Юнит на занятой клетке | Старый юнит остаётся; подсказка "Cell occupied" |
-
-## Тесты
-
-```python
-def test_map_tiles_endpoint(client):
-    resp = client.get("/api/map/tiles")
-    assert resp.status_code == 200
-    data = resp.json()
-    assert data["width"] == 16
-    assert data["height"] == 16
-    assert len(data["tiles"]) == 16
-    assert len(data["tiles"][0]) == 16
-
-def test_map_tiles_with_scenario(client):
-    resp = client.get("/api/map/tiles?scenario=balanced")
-    assert resp.status_code == 200
-    assert "deploy_zones" in resp.json()
-
-def test_canvas_map_page(client):
-    resp = client.get("/scenario-setup")
-    assert "battle-map" in resp.text or "canvasMap" in resp.text
-```

@@ -7,7 +7,7 @@
 
 ---
 
-## [Unreleased] — 2026-05-03
+## 2026-05-03
 
 ### Added
 - **F3.1 Greedy Decision Engine** — `backend/engine/ai/decision.py`: ActionType, Action, EvaluationContext, choose_action() с взвешенной оценкой (shoot/charge/move), генерация кандидатов по фазам, поддержка opponent_units_map для статов целей
@@ -44,8 +44,6 @@
 - main.py — роуты не грузились при импорте `main:app` (uvicorn) из-за вызова create_app() только в `if __name__`
 - TemplateResponse — Starlette 1.0 сигнатура (request, name, context) вместо (name, context)
 - Team Builder — gameSize пропадал при git merge (NaN pts); _units не был реактивным (категории не отображались)
-- Obsidian — удалены битые symlink venv/lib64, venv/bin/
-
 ---
 
 ## [0.4.0] — 2026-05-02

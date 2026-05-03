@@ -239,10 +239,8 @@ class WikiRegistry:
         return list(self.detachments.keys())
 
     def list_factions(self) -> list[str]:
-        """List all available factions."""
-        unit_factions = set(unit.faction for unit in self.units.values())
-        det_factions = set(det.faction for det in self.detachments.values())
-        return sorted(unit_factions.union(det_factions))
+        """List all available factions (from units only)."""
+        return sorted(set(unit.faction for unit in self.units.values()))
 
 
 registry: WikiRegistry | None = None

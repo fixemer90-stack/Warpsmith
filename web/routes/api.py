@@ -441,6 +441,93 @@ async def detachment_detail(detachment_name: str):
     }
 
 
+@router.get("/map/tiles")
+async def get_map_tiles(
+    map_id: Optional[int] = None,
+    scenario: Optional[str] = None,
+):
+    """
+    Вернуть сетку тайлов для отображения на Canvas.
+    Response: {
+        "width": 16, "height": 16,
+        "tiles": [[tile_type, ...], ...],  # 16×16 matrix of TileType values
+        "deploy_zones": {
+            "player1": [(x1,y1), (x2,y2), ...],
+            "player2": [(x3,y3), (x4,y4), ...],
+        },
+        "units": [
+            {"name": "Warboss", "x": 2, "y": 3, "faction": "orks",
+             "icon": "/static/icons/character.svg", "color": "#a855f7"},
+        ],
+    }
+    """
+    from backend.loader.icon_map import ICON_MAP, CATEGORY_COLORS
+    from enum import Enum
+
+    class TileType(Enum):
+        OPEN = 0
+        LIGHT_COVER = 1
+        HEAVY_COVER = 2
+        OBSTACLE = 3
+        DIFFICULT = 4
+        DEPLOY_ZONE = 5
+
+    GRID_SIZE = 16
+
+    # Generate a balanced map with central obstacles
+    tiles = []
+    for y in range(GRID_SIZE):
+        row = []
+        for x in range(GRID_SIZE):
+            # Default to open ground
+            tile_type = TileType.OPEN.value
+
+            # Central obstacle cluster
+            if 6 <= x <= 9 and 6 <= y <= 9:
+                tile_type = TileType.OBSTACLE.value
+            # Light cover on flanks
+            elif (x == 3 or x == 12) and 4 <= y <= 11:
+                tile_type = TileType.LIGHT_COVER.value
+            # Heavy cover in corners
+            elif (x <= 2 or x >= 13) and (y <= 2 or y >= 13):
+                tile_type = TileType.HEAVY_COVER.value
+            # Difficult terrain near obstacles
+            elif 5 <= x <= 10 and 5 <= y <= 10 and tile_type == TileType.OPEN.value:
+                if (x + y) % 3 == 0:
+                    tile_type = TileType.DIFFICULT.value
+
+            row.append(tile_type)
+        tiles.append(row)
+
+    # Deploy zones
+    deploy_zones = {
+        "player1": [],  # left side (x: 0-3)
+        "player2": [],  # right side (x: 12-15)
+    }
+
+    for x in range(4):  # player1: x 0-3
+        for y in range(GRID_SIZE):
+            deploy_zones["player1"].append([x, y])
+
+    for x in range(12, GRID_SIZE):  # player2: x 12-15
+        for y in range(GRID_SIZE):
+            deploy_zones["player2"].append([x, y])
+
+    # Mark deploy zone tiles
+    for coord in deploy_zones["player1"] + deploy_zones["player2"]:
+        x, y = coord
+        if tiles[y][x] == TileType.OPEN.value:
+            tiles[y][x] = TileType.DEPLOY_ZONE.value
+
+    return {
+        "width": GRID_SIZE,
+        "height": GRID_SIZE,
+        "tiles": tiles,
+        "deploy_zones": deploy_zones,
+        "units": [],  # Empty for now, can be populated from scenario
+    }
+
+
 @router.get("/health")
 async def health():
     return {"status": "ok", "version": "0.3.0"}
@@ -483,58 +570,6 @@ async def list_factions():
             for f in faction_names
         ]
     }
-
-
-def _faction_detachment_dir(wiki_path, faction_id: str):
-    """Map faction ID (e.g. 'adeptus-mechanicus') to its detachments directory name ('mechanicus')."""
-    from pathlib import Path
-    import frontmatter
-
-    units_dir = wiki_path / "units"
-    if not units_dir.exists():
-        return None
-
-    # Scan units subdirectories to find which one has the matching faction YAML
-    for subdir in sorted(units_dir.iterdir()):
-        if not subdir.is_dir():
-            continue
-        # Check if the directory name itself matches (common case: orks→orks)
-        if subdir.name == faction_id:
-            det_dir = wiki_path / "detachments" / subdir.name
-            if det_dir.exists():
-                return det_dir
-        # Check first .md file for faction: field
-        for f in subdir.glob("*.md"):
-            try:
-                post = frontmatter.load(str(f))
-                if post.metadata.get("faction") == faction_id:
-                    det_dir = wiki_path / "detachments" / subdir.name
-                    return det_dir if det_dir.exists() else None
-            except Exception:
-                continue
-            break  # only need first file
-    return None
-
-
-@router.get("/detachments")
-async def list_detachments(faction: str = ""):
-    """Список детачментов (всех или по фракции)."""
-    try:
-        wiki.load()
-    except Exception:
-        return {"detachments": []}
-
-    from pathlib import Path
-    wiki_path = wiki.wiki_path
-    det_dir = wiki_path / "detachments" / faction
-    if not det_dir.exists():
-        # Try resolving faction ID → directory name (e.g. adeptus-mechanicus → mechanicus)
-        det_dir = _faction_detachment_dir(wiki_path, faction)
-    if not det_dir or not det_dir.exists():
-        return {"detachments": []}
-
-    detachments = sorted(f.stem for f in det_dir.glob("*.md"))
-    return {"detachments": detachments}
 
 
 # ── Roster CRUD ─────────────────────────────────────────
