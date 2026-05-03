@@ -1,4 +1,13 @@
 // Team Builder — Alpine.js component
+
+// Global helper: inline SVG icon
+function getIconHtml(category, size = 16) {
+    const svgMap = window._iconSvgMap || {};
+    const svg = svgMap[category] || svgMap['infantry'] || '';
+    if (!svg) return '';
+    return svg.replace('<svg ', `<svg width="${size}" height="${size}" style="fill: currentColor" `);
+}
+
 function teamBuilder() {
     return {
         // State
