@@ -89,7 +89,7 @@
 ## 🧠 Phase 3: AI & Automation
 
 ```
-[██████░░░░░░░░░░░░] 28.6% · 2/7 features
+[████████░░░░░░░░░░] 42.9% · 3/7 features
 ```
 
 **Цель:** Нажать "Simulate" → AI разыгрывает 5 раундов → replay.
@@ -99,7 +99,7 @@
 || # | Статус | Фича | Часы |
 ||----|--------|------|------|
 || 3.1 | ✅ | Greedy decision engine — target/action evaluation | 6h |
-|| 3.2 | 🆕 | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h |
+|| 3.2 | ✅ | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h |
 || 3.3 | ✅ | Deployment AI: zone placement logic | 3h |
 || 3.4 | ⚪ | Auto-play: AI vs AI full scenario | 6h |
 || 3.5 | ⚪ | Replay recording: JSON event log per round/phase | 3h |
@@ -205,7 +205,7 @@
 | **0. Foundation** | 12 | ~40ч | ✅ 100% | Скелет проекта + wiki |
 | **1. Combat Engine** | 12 | ~60ч | ✅ 100% | `curl /api/simulate` → JSON + PMF |
 | **2. Game System** | 12 | ~40ч | ✅ 100% | Полный Game Loop |
-| **3. AI & Automation** | 7 | ~35ч | 🟢 14% |
+| **3. AI & Automation** | 7 | ~35ч | 🟢 43% |
 | **4. Web UI Polish** | 8 | ~35ч | ✅ 75% |
 | **5. Production** | 7 | ~15ч | 🟢 29% |
 | **6. Monetization** | 6 | ~15ч | ⏳ 0% | Первый платящий |

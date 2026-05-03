@@ -25,6 +25,8 @@
 ## 2026-05-03
 
 ### Added
+- **F3.2 Faction AI Profiles** — `backend/engine/ai/faction_ai.py`: FactionAIProfile, load_profile() из YAML ai: секции wiki/factions/*.md, get_weights() с учётом активных behaviors (Waaagh!, Kauyon, Mont'ka, Doctrina Imperatives), get_target_multiplier(), get_active_behavior_override(), choose_action_with_faction_ai() для интеграции с F3.1
+- **Тесты F3.2** — `tests/test_faction_ai.py`: 18 тестов (загрузка профилей 3 фракций, активация behaviors, cooldown, target_priority, action_override, deployment)
 - **F3.1 Greedy Decision Engine** — `backend/engine/ai/decision.py`: ActionType, Action, EvaluationContext, choose_action() с взвешенной оценкой (shoot/charge/move), генерация кандидатов по фазам, поддержка opponent_units_map для статов целей
 - **F4.3 Detachment Picker with Rule Preview** — `backend/loader/registry.py` расширение с Detachment/Stratagem/Enhancement классами, `/api/detachments` endpoints, `web/templates/partials/detachment_picker.html`, `web/static/detachment_picker.js` с HTMX reactive loading и detail modal
 - **F4.4 Synergy Hints: Leader Compatibility, Transport Capacity** — `/api/rosters/synergies` endpoint с SynergyCheck моделью, `web/templates/partials/synergy_panel.html`, `web/static/synergy_hints.js` с 500ms debouncing, визуальные индикаторы (dots/borders) в roster списке, wiki synergies из YAML
