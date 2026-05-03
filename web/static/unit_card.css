@@ -1,0 +1,53 @@
+/* Unit Card SVG Icon Styles — F4.8 */
+
+.unit-card {
+  border-left-width: 3px;
+  border-left-style: solid;
+  transition: all 0.2s ease;
+}
+.unit-card:hover {
+  transform: scale(1.02);
+}
+
+.unit-card .icon-category {
+  display: inline-block;
+  vertical-align: middle;
+  fill: currentColor;
+  stroke: currentColor;
+  transition: transform 0.2s ease;
+}
+.unit-card:hover .icon-category {
+  transform: scale(1.15);
+}
+
+.category-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Icon glow on hover (Expert mode) */
+.mode-expert .unit-card:hover .icon-category {
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+/* Roster icon size for list items */
+.roster-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}

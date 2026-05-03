@@ -133,7 +133,7 @@
 ## ☁️ Phase 5: Production
 
 ```
-[░░░░░░░░░░░░░░░░░░] 0% · 7 features
+[█░░░░░░░░░░░░░░░░░] 14.3% · 1/7 features
 ```
 
 **Цель:** Приложение на сервере, HTTPS, мониторинг.
@@ -142,7 +142,7 @@
 
 | # | Статус | Фича | Часы |
 |---|--------|------|------|
-| 5.1 | ⚪ | Dockerfile + docker-compose | 3h |
+| 5.1 | ✅ | Dockerfile + docker-compose | 3h |
 | 5.2 | ⚪ | Deployment (Dokku / Railway / self-host) | 4h |
 | 5.3 | ⚪ | Rate limiting (slowapi) | 1h |
 | 5.4 | ⚪ | CORS hardening + CSP security headers | 1h |

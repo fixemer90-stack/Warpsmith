@@ -21,15 +21,17 @@ async def faction_browser(request: Request):
 @router.get("/team-builder", response_class=HTMLResponse)
 async def team_builder(request: Request):
     """Сбор армии."""
+    import json
+    from pathlib import Path
+
     # Load factions for the selector
     from backend.loader.registry import registry as wiki
+    from backend.loader.icon_map import get_icon_svg_map
     try:
         wiki.load()
         raw_factions = wiki.list_factions()
     except Exception:
         raw_factions = []
-    # Build faction list with labels
-    from pathlib import Path
     import frontmatter
     factions = []
     for f_id in raw_factions:
@@ -47,9 +49,15 @@ async def team_builder(request: Request):
             except Exception:
                 pass
         factions.append({"id": f_id, "label": label})
+
     return templates.TemplateResponse(
         request, "team_builder.html",
-        {"request": request, "title": "Team Builder", "factions": factions},
+        {
+            "request": request,
+            "title": "Team Builder",
+            "factions": factions,
+            "_icon_svg_map_json": json.dumps(get_icon_svg_map()),
+        },
     )
 
 
