@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div x-data="factionBrowser()" class="max-w-7xl mx-auto py-8 px-4">
+    <script src="/static/faction_browser.js"></script>
+
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-white">Faction Browser</h1>
+        <div class="flex items-center gap-2">
+            <template x-if="activeFilterCount > 0">
+                <button @click="clearFilters()"
+                        class="text-xs text-gray-400 hover:text-white bg-gray-700 px-3 py-1 rounded">
+                    Clear filters (<span x-text="activeFilterCount"></span>)
+                </button>
+            </template>
+        </div>
+    </div>
+
+    <!-- Quick Presets -->
+    <div class="flex flex-wrap gap-2 mb-4">
+        <template x-for="[key, preset] in Object.entries(presets)" :key="key">
+            <button @click="applyPreset(preset)"
+                    class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1.5 rounded-full transition"
+                    x-text="preset.label"></button>
+        </template>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="bg-gray-800 rounded-lg p-4 mb-4">
+        <div class="flex flex-wrap gap-3">
+            <select name="faction" x-model="selectedFaction" @change="refresh()"
+                    class="bg-gray-700 text-white rounded px-3 py-2 text-sm">
+                <option value="">All Factions</option>
+                <template x-for="f in factions" :key="f">
+                    <option :value="f" x-text="f.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())"></option>
+                </template>
+            </select>
+
+            <select name="category" x-model="selectedCategory" @change="refresh()"
+                    class="bg-gray-700 text-white rounded px-3 py-2 text-sm">
+                <option value="">All Categories</option>
+                <template x-for="cat in categories" :key="cat">
+                    <option :value="cat" x-text="cat.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())"></option>
+                </template>
+            </select>
+
+            <input type="number" x-model.number="ptsMin" @input.debounce.300ms="refresh()"
+                   placeholder="Min PTS"
+                   class="bg-gray-700 text-white rounded px-3 py-2 text-sm w-24">
+
+            <input type="number" x-model.number="ptsMax" @input.debounce.300ms="refresh()"
+                   placeholder="Max PTS"
+                   class="bg-gray-700 text-white rounded px-3 py-2 text-sm w-24">
+
+            <input type="text" x-model="searchQuery" @input.debounce.400ms="refresh()"
+                   placeholder="Search units..."
+                   class="bg-gray-700 text-white rounded px-3 py-2 text-sm flex-1 min-w-[180px]">
+
+            <select name="role" x-model="selectedRole" @change="refresh()"
+                    class="bg-gray-700 text-white rounded px-3 py-2 text-sm">
+                <option value="">Any Role</option>
+                <option value="leader">Leaders</option>
+                <option value="transport">Transports</option>
+                <option value="battleline">Battleline</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Sort Controls -->
+    <div class="flex items-center gap-3 mb-4 text-sm text-gray-400">
+        <span x-text="`${total} units`"></span>
+        <span class="text-gray-600">|</span>
+        <span>Sort:</span>
+        <button @click="setSort('name')"
+                :class="sortBy === 'name' ? 'text-yellow-400' : 'text-gray-400 hover:text-white'"
+                class="hover:text-white transition">Name</button>
+        <button @click="setSort('points')"
+                :class="sortBy === 'points' ? 'text-yellow-400' : 'text-gray-400 hover:text-white'"
+                class="hover:text-white transition">PTS</button>
+        <button @click="setSort('category')"
+                :class="sortBy === 'category' ? 'text-yellow-400' : 'text-gray-400 hover:text-white'"
+                class="hover:text-white transition">Category</button>
+        <button @click="toggleSortDir()" class="text-gray-400 hover:text-white transition ml-1">
+            <span x-text="sortDir === 'asc' ? '\u2191' : '\u2193'"></span>
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <template x-if="loading">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            <template x-for="i in 8" :key="i">
+                <div class="bg-gray-700 rounded-lg p-3 animate-pulse">
+                    <div class="h-4 bg-gray-600 rounded w-3/4 mb-2"></div>
+                    <div class="h-3 bg-gray-600 rounded w-1/2 mb-1"></div>
+                    <div class="h-3 bg-gray-600 rounded w-2/3"></div>
+                </div>
+            </template>
+        </div>
+    </template>
+
+    <!-- Error State -->
+    <template x-if="error">
+        <div class="text-center py-12">
+            <div class="text-4xl mb-2">!</div>
+            <p class="text-lg text-gray-400">Failed to load units</p>
+            <button @click="refresh()"
+                    class="mt-3 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm transition">
+                Retry
+            </button>
+        </div>
+    </template>
+
+    <!-- Empty State -->
+    <template x-if="!loading && !error && items.length === 0">
+        <div class="text-center py-12 text-gray-400">
+            <div class="text-4xl mb-2">&#128269;</div>
+            <p class="text-lg">No units match your filters</p>
+            <p class="text-sm text-gray-500 mt-1">Try adjusting the search criteria</p>
+        </div>
+    </template>
+
+    <!-- Unit Grid -->
+    <template x-if="!loading && !error && items.length > 0">
+        <div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                <template x-for="unit in items" :key="unit.name">
+                    <div class="unit-card bg-gray-700 rounded-lg p-3 cursor-pointer
+                                hover:bg-gray-600 transition-colors"
+                         @click="openDetail(unit)"
+                         :style="`border-left: 3px solid ${unit.color}`">
+                        <div class="flex items-center gap-2 mb-2">
+                            <img :src="unit.icon_url" :alt="unit.category"
+                                 class="w-6 h-6 opacity-70">
+                            <span class="text-white font-medium text-sm truncate"
+                                  x-text="unit.name"></span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-yellow-400" x-text="unit.points + 'pts'"></span>
+                            <span class="text-gray-400"
+                                  x-text="unit.category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())"></span>
+                        </div>
+                        <div class="text-gray-400 text-xs mt-1">
+                            <span x-text="`M${unit.movement} T${unit.toughness} SV${unit.save}+ W${unit.wounds} LD${unit.leadership} OC${unit.oc}`"></span>
+                        </div>
+                        <template x-if="unit.role_flags && unit.role_flags.length > 0">
+                            <div class="flex gap-1 mt-1.5">
+                                <template x-for="flag in unit.role_flags" :key="flag">
+                                    <span class="text-[10px] bg-gray-600 text-gray-300 px-1.5 py-0.5 rounded"
+                                          x-text="flag.replace(/-/g, ' ')"></span>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Pagination -->
+            <template x-if="pages > 1">
+                <div class="flex items-center justify-center gap-3 mt-6 text-sm">
+                    <button @click="goPage(currentPage - 1)"
+                            :disabled="currentPage <= 1"
+                            class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded
+                                   disabled:opacity-30 disabled:cursor-not-allowed transition">
+                        Prev
+                    </button>
+                    <span class="text-gray-400">
+                        Page <span x-text="currentPage"></span> of <span x-text="pages"></span>
+                    </span>
+                    <button @click="goPage(currentPage + 1)"
+                            :disabled="currentPage >= pages"
+                            class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded
+                                   disabled:opacity-30 disabled:cursor-not-allowed transition">
+                        Next
+                    </button>
+                </div>
+            </template>
+        </div>
+    </template>
+
+    <!-- Unit Detail Modal -->
+    <div x-show="showDetail" x-cloak
+         @click.away="showDetail = false"
+         @keydown.escape.window="showDetail = false"
+         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4"
+             @click.stop>
+            <div class="flex items-center gap-3 mb-4">
+                <img :src="detailUnit?.icon_url" class="w-8 h-8 opacity-70">
+                <h2 class="text-lg font-bold text-white" x-text="detailUnit?.name"></h2>
+            </div>
+            <div class="grid grid-cols-4 gap-2 text-center mb-4">
+                <div class="bg-gray-700 rounded p-2">
+                    <div class="text-gray-400 text-xs">M</div>
+                    <div class="text-white font-bold" x-text="detailUnit?.movement"></div>
+                </div>
+                <div class="bg-gray-700 rounded p-2">
+                    <div class="text-gray-400 text-xs">T</div>
+                    <div class="text-white font-bold" x-text="detailUnit?.toughness"></div>
+                </div>
+                <div class="bg-gray-700 rounded p-2">
+                    <div class="text-gray-400 text-xs">SV</div>
+                    <div class="text-white font-bold" x-text="(detailUnit?.save || '?') + '+'"></div>
+                </div>
+                <div class="bg-gray-700 rounded p-2">
+                    <div class="text-gray-400 text-xs">W</div>
+                    <div class="text-white font-bold" x-text="detailUnit?.wounds"></div>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center mb-4">
+                <div class="bg-gray-700 rounded p-2">
+                    <div class="text-gray-400 text-xs">LD</div>
+                    <div class="text-white font-bold" x-text="detailUnit?.leadership"></div>
+                </div>
+                <div class="bg-gray-700 rounded p-2">
+                    <div class="text-gray-400 text-xs">OC</div>
+                    <div class="text-white font-bold" x-text="detailUnit?.oc"></div>
+                </div>
+                <div class="bg-gray-700 rounded p-2">
+                    <div class="text-gray-400 text-xs">PTS</div>
+                    <div class="text-yellow-400 font-bold" x-text="detailUnit?.points"></div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 mb-4">
+                <span class="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded"
+                      x-text="detailUnit?.faction?.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())"></span>
+                <span class="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded"
+                      x-text="detailUnit?.category?.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())"></span>
+            </div>
+            <div class="flex justify-end">
+                <button @click="showDetail = false"
+                        class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded text-sm transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -215,9 +215,110 @@ async def simulate_unit(request: SimulationRequest):
     return response
 
 
+@router.get("/units/browse")
+async def browse_units(
+    faction: Optional[str] = None,
+    category: Optional[str] = None,
+    pts_min: Optional[int] = None,
+    pts_max: Optional[int] = None,
+    search: Optional[str] = None,
+    role: Optional[str] = None,
+    sort_by: str = "name",
+    sort_dir: str = "asc",
+    page: int = 1,
+    per_page: int = 50,
+):
+    from backend.loader.icon_map import ICON_MAP, CATEGORY_COLORS, CATEGORY_ORDER
+
+    try:
+        wiki.load()
+    except Exception:
+        return {"items": [], "total": 0, "page": page, "pages": 0,
+                "factions": [], "categories": []}
+
+    all_units = list(wiki.units.values())
+
+    if faction:
+        all_units = [u for u in all_units if u.faction == faction]
+    if category:
+        all_units = [u for u in all_units if u.category.lower() == category.lower()]
+    if pts_min is not None:
+        all_units = [u for u in all_units if u.points >= pts_min]
+    if pts_max is not None:
+        all_units = [u for u in all_units if u.points <= pts_max]
+    if search:
+        q = search.lower()
+        all_units = [u for u in all_units if q in u.name.lower() or q in u.faction.lower()]
+    if role:
+        role = role.lower()
+        if role == "leader":
+            all_units = [u for u in all_units if u.is_leader or u.can_be_warlord or u.category.lower() == "character"]
+        elif role == "transport":
+            all_units = [u for u in all_units if "transport" in u.tags or u.category.lower() == "transport"]
+        elif role == "battleline":
+            all_units = [u for u in all_units if u.category.lower() == "battleline" or "battleline" in u.tags]
+
+    reverse = sort_dir.lower() == "desc"
+    if sort_by == "points":
+        all_units.sort(key=lambda u: u.points, reverse=reverse)
+    elif sort_by == "category":
+        cat_order = {c: i for i, c in enumerate(CATEGORY_ORDER)}
+        all_units.sort(key=lambda u: (cat_order.get(u.category.lower(), 99), u.name), reverse=reverse)
+    else:
+        all_units.sort(key=lambda u: u.name.lower(), reverse=reverse)
+
+    total = len(all_units)
+    pages = max(1, (total + per_page - 1) // per_page)
+    start = (page - 1) * per_page
+    page_units = all_units[start:start + per_page]
+
+    items = []
+    for u in page_units:
+        cat_lower = u.category.lower()
+        icon_file = ICON_MAP.get(cat_lower, "infantry.svg")
+        color = CATEGORY_COLORS.get(cat_lower, "#6b7280")
+        role_flags = []
+        if u.is_leader or u.can_be_warlord or cat_lower == "character":
+            role_flags.append("leader")
+        if "transport" in u.tags or cat_lower == "transport":
+            role_flags.append("transport")
+        if cat_lower == "battleline" or "battleline" in u.tags:
+            role_flags.append("battleline")
+        if u.is_epic_hero:
+            role_flags.append("epic-hero")
+
+        items.append({
+            "name": u.name,
+            "faction": u.faction,
+            "category": u.category,
+            "points": u.points,
+            "movement": u.movement,
+            "toughness": u.toughness,
+            "save": u.save,
+            "wounds": u.wounds,
+            "leadership": u.leadership,
+            "oc": u.objective_control,
+            "icon_url": f"/static/icons/{icon_file}",
+            "color": color,
+            "role_flags": role_flags,
+        })
+
+    factions = sorted(set(u.faction for u in wiki.units.values()))
+    categories = sorted(set(u.category for u in wiki.units.values()), key=lambda c: CATEGORY_ORDER.index(c.lower()) if c.lower() in CATEGORY_ORDER else 99)
+
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "pages": pages,
+        "factions": factions,
+        "categories": categories,
+    }
+
+
 @router.get("/health")
 async def health():
-    return {"status": "ok", "version": "0.2.1"}
+    return {"status": "ok", "version": "0.3.0"}
 
 
 @router.get("/factions")

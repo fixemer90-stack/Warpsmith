@@ -90,27 +90,26 @@ flowchart LR
 
 | # | Фича | Часы | Приоритет |
 |---|------|------|-----------|
-| [F3.1](f3.1-greedy-decision-engine.md) | Greedy decision engine — target/action evaluation | 6h | 1 |
-| [F3.2](f3.2-ork-ai.md) | Ork AI: charge priority, Waaagh! timing, melee focus | 4h | 2 |
-| [F3.3](f3.3-tau-ai.md) | T'au AI: distance control, Guided Fire, Kauyon/Mont'ka | 4h | 2 |
-| [F3.4](f3.4-deployment-ai.md) | Deployment AI: zone placement logic | 3h | 3 |
-| [F3.5](f3.5-autoplay.md) | Auto-play: AI vs AI full scenario | 6h | 3 |
-| [F3.6](f3.6-replay-recording.md) | Replay recording: JSON event log per round/phase | 3h | 4 |
-| [F3.7](f3.7-round-viewer.md) | Round viewer: step-by-step replay UI | 6h | 5 |
-| [F3.8](f3.8-result-screen.md) | Result screen: kills, damage, VP timeline chart | 3h | 5 |
+| [F3.1](f3.1-greedy-decision-engine.md) | Greedy decision engine — target/action evaluation | 6h | 1 | ✅ |
+| [F3.2](f3.2-faction-ai-profiles.md) | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h | 2 | ⏳ |
+| [F3.3](f3.3-deployment-ai.md) | Deployment AI: zone placement logic | 3h | 3 | ⏳ |
+| [F3.4](f3.4-autoplay.md) | Auto-play: AI vs AI full scenario | 6h | 3 | ⏳ |
+| [F3.5](f3.5-replay-recording.md) | Replay recording: JSON event log per round/phase | 3h | 4 | ⏳ |
+| [F3.6](f3.6-round-viewer.md) | Round viewer: step-by-step replay UI | 6h | 5 | ⏳ |
+| [F3.7](f3.7-result-screen.md) | Result screen: kills, damage, VP timeline chart | 3h | 5 | ⏳ |
 
-**Всего:** 8 features, ~35 часов. ⏳ 0%
+**Всего:** 7 features, ~35 часов. 🟢 14%
 
 ### Рекомендуемый порядок имплементации
 
 | Шаг | Фичи | Почему |
 |-----|------|--------|
-| 1 | **F3.1** — Greedy decision engine | Ядро AI, всё строится на нём |
-| 2 | **F3.2 + F3.3** — Ork + T'au AI | Фракционные профили используют F3.1 |
-| 3 | **F3.4** — Deployment AI | Нужен для полного цикла |
-| 4 | **F3.5** — Auto-play | Интеграция всех компонентов |
-| 5 | **F3.6** — Replay recording | Логирование результатов |
-| 6 | **F3.7 + F3.8** — Round viewer + Result screen | UI для просмотра реплеев |
+| 1 | **F3.1** — Greedy decision engine | Ядро AI, готово ✅ |
+| 2 | **F3.2** — Faction AI Profiles | Читает профили из wiki, без хардкода |
+| 3 | **F3.3** — Deployment AI | Нужен для полного цикла |
+| 4 | **F3.4** — Auto-play | Интеграция всех компонентов |
+| 5 | **F3.5** — Replay recording | Логирование результатов |
+| 6 | **F3.6 + F3.7** — Round viewer + Result screen | UI для просмотра реплеев |
 
 ---
 

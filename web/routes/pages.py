@@ -10,6 +10,14 @@ router = APIRouter()
 templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
 
 
+@router.get("/faction-browser", response_class=HTMLResponse)
+async def faction_browser(request: Request):
+    return templates.TemplateResponse(
+        request, "faction_browser.html",
+        {"request": request, "title": "Faction Browser — Warpsmith"},
+    )
+
+
 @router.get("/team-builder", response_class=HTMLResponse)
 async def team_builder(request: Request):
     """Сбор армии."""

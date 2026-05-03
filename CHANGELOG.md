@@ -7,6 +7,41 @@
 
 ---
 
+## [Unreleased] — 2026-05-03
+
+### Added
+- **F3.1 Greedy Decision Engine** — `backend/engine/ai/decision.py`: ActionType, Action, EvaluationContext, choose_action() с взвешенной оценкой (shoot/charge/move), генерация кандидатов по фазам, поддержка opponent_units_map для статов целей
+- **Тесты F3.1** — `tests/test_ai_decision.py`: 26 тестов (дистанция, дальность, ожидаемый урон, генерация кандидатов, скоринг, choose_action, custom weights)
+- GET /api/rosters/generate — эндпоинт для генерации случайного валидного ростера AI-оппонента (Warlord, 3x cap, Epic Hero unique, PTS budget)
+- get_current_user_optional — опциональная аутентификация (возвращает None вместо 401)
+- Scenario Setup UI — выбор ростера для Player 1 / Player 2, кнопка "Generate Random Opponent", выбор миссии/карты/очередности хода
+- Epic Hero — отдельная категория в парсере и UI (выше Character)
+- SVG иконки для юнитов — маппинг из YAML tags, несколько иконок на юнит (vehicle+fly), отображение после имени
+- Kroot Hunting Pack — новый детачмент Tau (5 детачментов)
+- Transport — приоритет выше Vehicle в категориях
+- Legends — отдельная категория для Legends-юнитов
+- Feature specs для Phase 3 (8 файлов), Phase 4 (8 файлов), Phase 5 (7 файлов)
+
+### Changed
+- Версия: 0.4.0 → путь к 0.5.0 (Phase 3 начата)
+- `_infer_category`: добавлены приоритеты epic-hero, transport, legends; Character не перекрывает Monster/Vehicle
+- `can_be_warlord`: авто-определение из YAML tags + body keywords (47 кандидатов вместо 1)
+- Wiki loader: поле `tags` добавлено в Unit dataclass и LIST_FIELDS
+- Points: добавлены PTS для 21 не-Legends юнита (Orks: Beastboss 80, Big Mek 90, Breaka Boyz 140, Tankbustas 140 и др.; Tau: Broadside 80, Cadre Fireblade 50, Ethereal 50 и др.)
+- `flyer.svg` → `fly.svg` (совпадение с YAML тегом)
+- Save formula в decision engine: AP правильно ухудшает save; fail_save = (effective - 1)/6
+- Wound table: корректная 10th edition (S ≥ 2T → 2+, S > T → 3+, S == T → 4+)
+
+### Fixed
+- `/api/units?faction=...` — баг: `result` объявлялся только внутри else-блока (500 при указании фракции)
+- `/api/detachments?faction=adeptus-mechanicus` — маппинг faction ID → directory name через _faction_detachment_dir()
+- main.py — роуты не грузились при импорте `main:app` (uvicorn) из-за вызова create_app() только в `if __name__`
+- TemplateResponse — Starlette 1.0 сигнатура (request, name, context) вместо (name, context)
+- Team Builder — gameSize пропадал при git merge (NaN pts); _units не был реактивным (категории не отображались)
+- Obsidian — удалены битые symlink venv/lib64, venv/bin/
+
+---
+
 ## [0.4.0] — 2026-05-02
 
 ### Added
@@ -45,42 +80,6 @@
 - Версия: 0.3.0 → 0.4.0 (Phase 2 завершена, начинается Phase 3)
 
 ---
-
-## [Unreleased] — 2026-05-03
-
-### Added
-- **F3.1 Greedy Decision Engine** — `backend/engine/ai/decision.py`: ActionType, Action, EvaluationContext, choose_action() с взвешенной оценкой (shoot/charge/move), генерация кандидатов по фазам, поддержка opponent_units_map для статов целей
-- **Тесты F3.1** — `tests/test_ai_decision.py`: 26 тестов (дистанция, дальность, ожидаемый урон, генерация кандидатов, скоринг, choose_action, custom weights)
-- GET /api/rosters/generate — эндпоинт для генерации случайного валидного ростера AI-оппонента (Warlord, 3x cap, Epic Hero unique, PTS budget)
-- get_current_user_optional — опциональная аутентификация (возвращает None вместо 401)
-- Scenario Setup UI — выбор ростера для Player 1 / Player 2, кнопка "Generate Random Opponent", выбор миссии/карты/очередности хода
-- Epic Hero — отдельная категория в парсере и UI (выше Character)
-- SVG иконки для юнитов — маппинг из YAML tags, несколько иконок на юнит (vehicle+fly), отображение после имени
-- Kroot Hunting Pack — новый детачмент Tau (5 детачментов)
-- Transport — приоритет выше Vehicle в категориях
-- Legends — отдельная категория для Legends-юнитов
-- Feature specs для Phase 3 (8 файлов), Phase 4 (8 файлов), Phase 5 (7 файлов)
-
-### Changed
-- Версия: 0.4.0 → путь к 0.5.0 (Phase 3 начата)
-- `_infer_category`: добавлены приоритеты epic-hero, transport, legends; Character не перекрывает Monster/Vehicle
-- `can_be_warlord`: авто-определение из YAML tags + body keywords (47 кандидатов вместо 1)
-- Wiki loader: поле `tags` добавлено в Unit dataclass и LIST_FIELDS
-- Points: добавлены PTS для 21 не-Legends юнита (Orks: Beastboss 80, Big Mek 90, Breaka Boyz 140, Tankbustas 140 и др.; Tau: Broadside 80, Cadre Fireblade 50, Ethereal 50 и др.)
-- `flyer.svg` → `fly.svg` (совпадение с YAML тегом)
-- Save formula в decision engine: AP правильно ухудшает save; fail_save = (effective - 1)/6
-- Wound table: корректная 10th edition (S ≥ 2T → 2+, S > T → 3+, S == T → 4+)
-
-### Fixed
-- `/api/units?faction=...` — баг: `result` объявлялся только внутри else-блока (500 при указании фракции)
-- `/api/detachments?faction=adeptus-mechanicus` — маппинг faction ID → directory name через _faction_detachment_dir()
-- main.py — роуты не грузились при импорте `main:app` (uvicorn) из-за вызова create_app() только в `if __name__`
-- TemplateResponse — Starlette 1.0 сигнатура (request, name, context) вместо (name, context)
-- Team Builder — gameSize пропадал при git merge (NaN pts); _units не был реактивным (категории не отображались)
-- Obsidian — удалены битые symlink venv/lib64, venv/bin/
-
----
-
 
 ## [0.2.1] — 2026-05-01
 
