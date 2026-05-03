@@ -2,6 +2,9 @@
 {% block content %}
 <div x-data="scenarioSetup()" class="max-w-6xl mx-auto">
     <script src="/static/scenario_setup.js"></script>
+    <script>
+        window._rosters = {{ rosters_json | safe }};
+    </script>
     <script src="/static/canvas_map.js"></script>
 
     <h1 class="text-2xl font-bold text-white mb-6">🗺 Scenario Setup</h1>

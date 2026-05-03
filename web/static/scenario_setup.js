@@ -9,7 +9,7 @@ function scenarioSetup() {
         mission: 'only-war',
         mapSize: 'strike-force',
         firstTurn: 'roll-off',
-        rosters: [],
+        rosters: window._rosters || [],
         factions: [],
         generating: false,
         player1Units: [],

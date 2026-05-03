@@ -176,8 +176,8 @@ def score_kill_points(mission: 'Mission') -> Dict[int, int]:
     
     if len(player_ids) >= 2:
         # Calculate destroyed points for each player
-        p1_destroyed = 0
-        p2_destroyed = 0
+        p1_destroyed = 0  # points destroyed by player 1 (of player 2's army)
+        p2_destroyed = 0  # points destroyed by player 2 (of player 1's army)
         
         # Points destroyed by player 1 (against player 2)
         if player_ids[1] in mission.state.players:
@@ -200,16 +200,16 @@ def score_kill_points(mission: 'Mission') -> Dict[int, int]:
         if player_ids[0] in mission.state.players:
             for unit in mission.state.players[player_ids[0]].units.values():
                 p1_total += unit.max_wounds * 10  # Rough approximation
-                
+        
         if player_ids[1] in mission.state.players:
             for unit in mission.state.players[player_ids[1]].units.values():
                 p2_total += unit.max_wounds * 10  # Rough approximation
         
         # Calculate VP as percentage of opponent's army destroyed
-        if p1_total > 0:
-            vp[player_ids[0]] = int((p2_destroyed / p1_total) * 100)
         if p2_total > 0:
-            vp[player_ids[1]] = int((p1_destroyed / p2_total) * 100)
+            vp[player_ids[0]] = int((p1_destroyed / p2_total) * 100)  # p1 gets VP for what they destroyed of p2
+        if p1_total > 0:
+            vp[player_ids[1]] = int((p2_destroyed / p1_total) * 100)  # p2 gets VP for what they destroyed of p1
     
     return vp
 
