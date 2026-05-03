@@ -316,6 +316,70 @@ async def browse_units(
     }
 
 
+@router.get("/units/{unit_name}/detail")
+async def unit_detail(unit_name: str):
+    """Полные данные юнита для модалки."""
+    try:
+        wiki.load()
+    except Exception:
+        pass
+
+    unit = wiki.get_unit(unit_name)
+    if not unit:
+        raise HTTPException(404, detail="Unit not found")
+
+    from backend.loader.icon_map import ICON_MAP, CATEGORY_COLORS
+
+    # Get all weapons (ranged + melee)
+    weapons = []
+    for w in (getattr(unit, "ranged_weapons", []) + getattr(unit, "melee_weapons", [])):
+        weapons.append({
+            "name": w.name,
+            "type": w.type,
+            "range": w.range_max if w.type == "ranged" else None,
+            "attacks": f"{w.attacks_dice[0]}D{w.attacks_dice[1]}" if w.attacks_dice[0] > 0 else str(w.attacks_dice[2]),
+            "skill": w.skill,
+            "strength": w.strength,
+            "ap": w.ap,
+            "damage": f"{w.damage_dice[0]}D{w.damage_dice[1]}" if w.damage_dice[0] > 0 else str(w.damage_dice[2]),
+            "keywords": getattr(w, "tags", []),
+        })
+
+    # Get wargear options from frontmatter (F4.2 extended system)
+    extended_wargear_options = getattr(unit, "extended_wargear_options", [])
+    nob_options = getattr(unit, "nob_options", [])
+    squad_size = getattr(unit, "squad_size", {"min": 1, "max": 1, "step": 1})
+
+    # Abilities
+    abilities = getattr(unit, "abilities", [])
+    if isinstance(abilities, list):
+        abilities = [{"name": a, "description": ""} if isinstance(a, str) else a for a in abilities]
+
+    return {
+        "name": unit.name,
+        "faction": unit.faction,
+        "category": unit.category,
+        "points": unit.points,
+        "movement": unit.movement,
+        "toughness": unit.toughness,
+        "save": unit.save,
+        "wounds": unit.wounds,
+        "leadership": unit.leadership,
+        "oc": unit.objective_control,
+        "abilities": abilities,
+        "squad_size": squad_size,
+        "wargear_options": extended_wargear_options,
+        "nob_options": nob_options,
+        "weapons": weapons,
+        "transport_capacity": getattr(unit, "transport_capacity", None),
+        "leader_for": getattr(unit, "leader_for", []),
+        "keywords": getattr(unit, "keywords", []),
+        "faction_keywords": getattr(unit, "faction_keywords", []),
+        "icon_url": f"/static/icons/{ICON_MAP.get(unit.category.lower(), 'infantry.svg')}",
+        "color": CATEGORY_COLORS.get(unit.category.lower(), "#6b7280"),
+    }
+
+
 @router.get("/health")
 async def health():
     return {"status": "ok", "version": "0.3.0"}

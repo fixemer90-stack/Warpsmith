@@ -83,6 +83,10 @@ def parse_unit(filepath: Path) -> Unit | None:
         kwargs["can_be_warlord"] = "character" in all_tags
     kwargs["is_leader"] = parse_bool(metadata.get("is_leader", False))
     kwargs["wargear_options"] = _parse_wargear_options(metadata.get("wargear_options", []))
+    # F4.2: Extended wargear system
+    kwargs["squad_size"] = metadata.get("squad_size", {"min": 1, "max": 1, "step": 1})
+    kwargs["extended_wargear_options"] = ensure_list(metadata.get("extended_wargear_options", []))
+    kwargs["nob_options"] = ensure_list(metadata.get("nob_options", []))
 
     weapons_data = metadata.get("weapons", [])
     ranged_weapons, melee_weapons = _parse_weapons_from_frontmatter(ensure_list(weapons_data))

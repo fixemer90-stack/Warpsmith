@@ -1,111 +1,3 @@
----
-title: "F4.2 — Unit Modal: Squad Size, Loadout, Wargear Selection"
-parent: phase4-web-ui-polish
-status: done
-priority: 1
----
-
-# F4.2: Unit Modal — Squad Size, Loadout, Wargear Selection
-
-**Файлы:** `web/templates/partials/unit_modal.html` (создать),
-`web/static/unit_modal.js` (создать/расширить), `web/routes/api.py` (расширение)
-**Зависимости:** F4.1 (Faction Browser), F1.1 (Unit Dataclass), F1.2 (Weapon Dataclass)
-**Часы:** 6h
-
-**Цель (SMART):** Реализовать модальное окно добавления юнита с full datasheet: выбор squad
-size (min/max из wiki), выбор loadout (wargear options из YAML frontmatter), расчёт
-итоговой PTS стоимости в реальном времени. Критерий: Alpine.js обновляет PTS при смене
-loadout или размера, модалка показывает статы и оружие выбранного loadout, wargear
-опции фильтруются по совместимости с юнитом. 6 часов.
-
----
-
-## Data Model — Wargear Options
-
-```yaml
-# wiki/units/orks/Boyz.md — frontmatter расширение
-wargear_options:
-  - name: "Slugga + Choppa"
-    type: "default"
-    points: 0
-    weapons:
-      - "slugga"
-      - "choppa"
-    description: "Базовое снаряжение. Хорошо в ближнем бою."
-    recommended: true
-
-  - name: "Shoota"
-    type: "alternative"
-    points: 0
-    weapons:
-      - "shoota"
-    description: "Увеличенная дальность стрельбы."
-
-nob_options:
-  - name: "Power Klaw"
-    points: 10
-    replaces: "choppa"
-    weapons:
-      - "power-klaw"
-  - name: "Big Choppa"
-    points: 5
-    replaces: "choppa"
-    weapons:
-      - "big-choppa"
-  - name: "Kombi-Weapon"
-    points: 10
-    replaces: "shoota"
-    weapons:
-      - "kombi-weapon"
-
-squad_size:
-  min: 10
-  max: 20
-  step: 5
-```
-
-## API Endpoint
-
-```python
-@router.get("/api/units/{unit_name}/detail")
-async def unit_detail(unit_name: str):
-    """
-    Вернуть полные данные юнита для модалки.
-    Включает: wargear_options, nob_options, squad_size, synergies,
-    image, abilities, transport_capacity, leader_for, all weapons.
-    """
-    unit = registry.get_unit(unit_name)
-    if not unit:
-        raise HTTPException(404, detail="Unit not found")
-
-    return {
-        "name": unit.name,
-        "faction": unit.faction,
-        "category": unit.category,
-        "points": unit.points,
-        "movement": unit.movement,
-        "toughness": unit.toughness,
-        "save": unit.save,
-        "wounds": unit.wounds,
-        "leadership": unit.leadership,
-        "oc": unit.oc,
-        "abilities": getattr(unit, "abilities", []),
-        "squad_size": getattr(unit, "squad_size", {"min": 1, "max": 1, "step": 1}),
-        "wargear_options": getattr(unit, "wargear_options", []),
-        "nob_options": getattr(unit, "nob_options", []),
-        "weapons": [w.to_dict() for w in (getattr(unit, "weapons", []) or [])],
-        "transport_capacity": getattr(unit, "transport_capacity", None),
-        "leader_for": getattr(unit, "leader_for", []),
-        "keywords": getattr(unit, "keywords", []),
-        "faction_keywords": getattr(unit, "faction_keywords", []),
-        "icon_url": icon_map.get_icon_url(unit.category),
-        "color": icon_map.get_color(unit.category),
-    }
-```
-
-## Template — Unit Modal
-
-```html
 <!-- web/templates/partials/unit_modal.html -->
 <div x-show="showUnitModal" x-cloak
      class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
@@ -130,12 +22,17 @@ async def unit_detail(unit_name: str):
                             flex items-center gap-3">
                     <img :src="unitDetail.icon_url" alt="" class="w-8 h-8"
                          :style="`filter: brightness(0) saturate(100%) invert(1)
-                         sepia(1) hue-rotate(...)`">
+                         sepia(1) hue-rotate(${unitDetail.color === '#a855f7' ? 260 :
+                         unitDetail.color === '#ec4899' ? 320 : unitDetail.color === '#22c55e' ? 120 :
+                         unitDetail.color === '#eab308' ? 45 : unitDetail.color === '#6b7280' ? 0 :
+                         unitDetail.color === '#3b82f6' ? 210 : unitDetail.color === '#f97316' ? 25 :
+                         unitDetail.color === '#ef4444' ? 0 : unitDetail.color === '#dc2626' ? 0 :
+                         unitDetail.color === '#8b5cf6' ? 270 : 0})`">
                     <div class="flex-1">
                         <h2 class="text-lg font-bold text-white"
                             x-text="unitDetail.name"></h2>
                         <span class="text-xs text-gray-400"
-                              x-text="`${unitDetail.faction|title} · ${unitDetail.category|title}`">
+                              x-text="`${unitDetail.faction.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} · ${unitDetail.category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`">
                         </span>
                     </div>
                     <span class="text-yellow-400 font-bold text-lg"
@@ -191,13 +88,13 @@ async def unit_detail(unit_name: str):
                                   x-text="`(${unitDetail.squad_size.min}-${unitDetail.squad_size.max})`">
                             </span>
                         </label>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 flex-wrap">
                             <button @click="squadSize = Math.max(unitDetail.squad_size.min, squadSize - unitDetail.squad_size.step)"
                                     class="bg-gray-700 text-white px-3 py-1 rounded hover:bg-gray-600"
                                     :disabled="squadSize <= unitDetail.squad_size.min">
                                 −
                             </button>
-                            <input type="number" x-model="squadSize"
+                            <input type="number" x-model.number="squadSize"
                                    :min="unitDetail.squad_size.min"
                                    :max="unitDetail.squad_size.max"
                                    class="w-20 bg-gray-700 text-white text-center rounded px-2 py-1">
@@ -220,18 +117,18 @@ async def unit_detail(unit_name: str):
                     </div>
 
                     <!-- Loadout / Wargear Selection -->
-                    <div x-show="unitDetail.wargear_options?.length > 0">
+                    <div x-show="unitDetail.wargear_options && unitDetail.wargear_options.length > 0">
                         <label class="block text-sm text-gray-300 mb-2">Loadout</label>
                         <div class="space-y-2">
                             <template x-for="option in unitDetail.wargear_options" :key="option.name">
                                 <label class="flex items-start gap-3 bg-gray-700 rounded p-3
-                                              cursor-pointer hover:bg-gray-600"
+                                              cursor-pointer hover:bg-gray-600 transition"
                                        :class="selectedLoadout === option.name
                                            ? 'ring-2 ring-blue-500' : ''">
                                     <input type="radio" name="loadout"
                                            :value="option.name"
                                            x-model="selectedLoadout"
-                                           class="mt-1">
+                                           class="mt-1 text-blue-500">
                                     <div class="flex-1">
                                         <div class="flex justify-between">
                                             <span class="text-white text-sm font-medium"
@@ -241,7 +138,7 @@ async def unit_detail(unit_name: str):
                                             </span>
                                         </div>
                                         <div class="text-gray-400 text-xs mt-1"
-                                             x-text="option.description"></div>
+                                             x-text="option.description || 'No description'"></div>
                                         <template x-if="option.recommended">
                                             <span class="inline-block bg-blue-900 text-blue-300
                                                          text-xs px-2 py-0.5 rounded mt-1">
@@ -255,7 +152,7 @@ async def unit_detail(unit_name: str):
                     </div>
 
                     <!-- Nob / Sergeant Options -->
-                    <div x-show="unitDetail.nob_options?.length > 0">
+                    <div x-show="unitDetail.nob_options && unitDetail.nob_options.length > 0">
                         <label class="block text-sm text-gray-300 mb-2">
                             Nob / Sergeant Upgrade
                         </label>
@@ -271,22 +168,22 @@ async def unit_detail(unit_name: str):
                     </div>
 
                     <!-- Abilities -->
-                    <div x-show="unitDetail.abilities?.length > 0">
+                    <div x-show="unitDetail.abilities && unitDetail.abilities.length > 0">
                         <label class="block text-sm text-gray-300 mb-2">Abilities</label>
                         <div class="space-y-2">
-                            <template x-for="ability in unitDetail.abilities" :key="ability.name">
+                            <template x-for="ability in unitDetail.abilities" :key="ability.name || ability">
                                 <div class="bg-gray-700/50 rounded p-2">
                                     <span class="text-blue-300 text-xs font-medium"
-                                          x-text="ability.name + ':'"></span>
-                                    <span class="text-gray-400 text-xs"
-                                          x-text="ability.description"></span>
+                                          x-text="(ability.name || ability) + ':'"></span>
+                                    <span class="text-gray-400 text-xs ml-1"
+                                          x-text="ability.description || 'No description'"></span>
                                 </div>
                             </template>
                         </div>
                     </div>
 
                     <!-- Weapons Table -->
-                    <div x-show="currentWeapons?.length > 0">
+                    <div x-show="currentWeapons && currentWeapons.length > 0">
                         <label class="block text-sm text-gray-300 mb-2">Weapons</label>
                         <div class="overflow-x-auto">
                             <table class="w-full text-xs">
@@ -306,9 +203,9 @@ async def unit_detail(unit_name: str):
                                     <template x-for="wpn in currentWeapons" :key="wpn.name">
                                         <tr class="border-b border-gray-700/50 text-gray-300">
                                             <td class="py-1 pr-2 font-medium" x-text="wpn.name"></td>
-                                            <td class="py-1 px-2 text-center" x-text="wpn.range || '-'"></td>
+                                            <td class="py-1 px-2 text-center" x-text="wpn.range ? wpn.range + '&#34;' : '-'"></td>
                                             <td class="py-1 px-2 text-center" x-text="wpn.attacks"></td>
-                                            <td class="py-1 px-2 text-center" x-text="wapon.skill + '+'"></td>
+                                            <td class="py-1 px-2 text-center" x-text="wpn.skill + '+'"></td>
                                             <td class="py-1 px-2 text-center" x-text="wpn.strength"></td>
                                             <td class="py-1 px-2 text-center" x-text="wpn.ap"></td>
                                             <td class="py-1 px-2 text-center" x-text="wpn.damage"></td>
@@ -351,138 +248,3 @@ async def unit_detail(unit_name: str):
         </template>
     </div>
 </div>
-```
-
-## Alpine.js Logic (unit_modal.js)
-
-```javascript
-// web/static/unit_modal.js — расширение teamBuilder()
-{
-    // State
-    showUnitModal: false,
-    unitDetail: null,
-    unitLoading: false,
-    squadSize: 5,
-    selectedLoadout: '',
-    selectedNobOption: '',
-    currentUnitName: '',
-
-    openUnitModal(unitName) {
-        this.currentUnitName = unitName;
-        this.showUnitModal = true;
-        this.unitLoading = true;
-        this.unitDetail = null;
-
-        fetch(`/api/units/${encodeURIComponent(unitName)}/detail`)
-            .then(r => r.json())
-            .then(data => {
-                this.unitDetail = data;
-                this.squadSize = data.squad_size.min || 5;
-                this.selectedLoadout = data.wargear_options?.[0]?.name || '';
-                this.selectedNobOption = '';
-                this.unitLoading = false;
-            })
-            .catch(() => {
-                this.unitLoading = false;
-            });
-    },
-
-    get currentWeapons() {
-        if (!this.unitDetail) return [];
-        // Resolve weapons from selected loadout + nob option
-        const loadout = this.unitDetail.wargear_options
-            ?.find(o => o.name === this.selectedLoadout);
-        const nobOpt = this.unitDetail.nob_options
-            ?.find(o => o.name === this.selectedNobOption);
-
-        let weaponNames = loadout?.weapons || [];
-        // If nob option has weapons, they replace the default
-        if (nobOpt?.replaces && nobOpt?.weapons) {
-            weaponNames = weaponNames.filter(w => w !== nobOpt.replaces);
-            weaponNames.push(...nobOpt.weapons);
-        }
-
-        return this.unitDetail.weapons
-            ?.filter(w => weaponNames.includes(w.name)) || [];
-    },
-
-    get totalCost() {
-        if (!this.unitDetail) return 0;
-        const basePts = this.unitDetail.points;
-        // Wargear option cost (per model)
-        const loadout = this.unitDetail.wargear_options
-            ?.find(o => o.name === this.selectedLoadout);
-        const loadoutPts = loadout?.points || 0;
-        // Nob option cost (one-time)
-        const nobOpt = this.unitDetail.nob_options
-            ?.find(o => o.name === this.selectedNobOption);
-        const nobPts = nobOpt?.points || 0;
-
-        return (basePts + loadoutPts) * this.squadSize + nobPts;
-    },
-
-    getQuickSizes() {
-        if (!this.unitDetail?.squad_size) return [];
-        const { min, max, step } = this.unitDetail.squad_size;
-        const sizes = [];
-        for (let s = min; s <= max; s += step) sizes.push(s);
-        return sizes;
-    },
-
-    addUnitToRoster() {
-        if (!this.unitDetail) return;
-        this.roster.push({
-            name: this.unitDetail.name,
-            squad_size: this.squadSize,
-            pts: this.totalCost,
-            loadout: this.selectedLoadout,
-            nob_option: this.selectedNobOption,
-            weapons: this.currentWeapons,
-            category: this.unitDetail.category,
-        });
-        this.showUnitModal = false;
-        this.validationErrors = [];
-    },
-}
-```
-
-## Edge Cases
-
-| Ситуация | Поведение |
-|----------|-----------|
-| Юнит без wargear options | Секция loadout скрыта, PTS = base × squad_size |
-| Nob option с replaces, но оружия нет в текущем loadout | Опция скрыта или показана с предупреждением |
-| Squad size min = max | Счётчик заблокирован, показано "Fixed size: X" |
-| Ошибка загрузки /api/units/{name}/detail | В модалке красное сообщение, кнопка Retry |
-| Модалка открыта, смена вкладки браузера | Сохраняется состояние (Alpine.js reactive) |
-
-## Тесты
-
-```python
-def test_unit_detail_endpoint(client):
-    resp = client.get("/api/units/Boyz/detail")
-    assert resp.status_code == 200
-    data = resp.json()
-    assert "name" in data
-    assert "wargear_options" in data
-    assert "squad_size" in data
-    assert data["squad_size"]["min"] <= data["squad_size"]["max"]
-
-def test_unit_detail_not_found(client):
-    resp = client.get("/api/units/NonExistentUnit/detail")
-    assert resp.status_code == 404
-
-def test_unit_detail_weapons_resolved(client):
-    resp = client.get("/api/units/Boyz/detail")
-    data = resp.json()
-    assert len(data["weapons"]) > 0
-
-def test_unit_modal_htmx_partial(client):
-    resp = client.get("/team-builder")
-    assert "unit_modal" in resp.text or "openUnitModal" in resp.text
-
-def test_squad_size_validation():
-    """Squad size respects min/max bounds."""
-    # Проверка на уровне Alpine — unit test mock
-    assert True  # placeholder
-```

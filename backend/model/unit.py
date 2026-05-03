@@ -113,6 +113,10 @@ class Unit:
     can_be_warlord: bool = False
     is_leader: bool = False
     leader_for: list[str] = field(default_factory=list)
+    # F4.2: Extended wargear system for team builder modal
+    squad_size: dict[str, int] = field(default_factory=lambda: {"min": 1, "max": 1, "step": 1})
+    extended_wargear_options: list[dict] = field(default_factory=list)
+    nob_options: list[dict] = field(default_factory=list)
     edition: str = "10e"
 
     def __post_init__(self) -> None:

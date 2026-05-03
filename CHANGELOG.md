@@ -23,6 +23,7 @@
 - Feature specs для Phase 3 (8 файлов), Phase 4 (8 файлов), Phase 5 (7 файлов)
 
 ### Changed
+- **Архитектура AI: хардкод → wiki-driven**. F3.2, F3.3, F3.9 (Ork/Tau/AdMech AI) объединены в один [F3.2 Faction AI Profiles](docs/features/f3.2-faction-ai-profiles.md). Все поведенческие параметры читаются из YAML `ai:` секции wiki/factions/*.md. Новая фракция = новый .md, ноль строк Python.
 - Версия: 0.4.0 → путь к 0.5.0 (Phase 3 начата)
 - `_infer_category`: добавлены приоритеты epic-hero, transport, legends; Character не перекрывает Monster/Vehicle
 - `can_be_warlord`: авто-определение из YAML tags + body keywords (47 кандидатов вместо 1)
