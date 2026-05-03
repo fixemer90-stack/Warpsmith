@@ -1,0 +1,13 @@
+{
+  "name": "warpsmith",
+  "description": "WH40k Battle Simulator — сбор армии, AI-vs-AI бой, пораундовый реплей",
+  "scripts": {
+    "dokku": {
+      "predeploy": "python -c 'from backend.db.database import db; db.migrate()'"
+    }
+  },
+  "env": {
+    "HOSTING": { "value": "true" },
+    "DB_PATH": { "value": "/data/simulator.db" }
+  }
+}

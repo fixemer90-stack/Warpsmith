@@ -104,6 +104,8 @@ async def scenario_setup(request: Request):
     except Exception:
         pass
 
+    import json
+
     return templates.TemplateResponse(
         request, "scenario_setup.html",
         {
@@ -111,6 +113,7 @@ async def scenario_setup(request: Request):
             "title": "Scenario Setup",
             "factions": factions,
             "rosters": rosters,
+            "rosters_json": json.dumps(rosters),
         },
     )
 

@@ -8,28 +8,19 @@
     <link rel="stylesheet" href="/static/unit_card.css">
     <h1 class="text-2xl font-bold text-white mb-6">🛠 Team Builder</h1>
     <script src="/static/synergy_hints.js"></script>
+    <script src="/static/detachment_picker.js"></script>
 
-    <!-- Step 1: Faction + Detachment + Game Size + Roster Name -->
+    <!-- Step 1: Faction + Game Size + Roster Name -->
     <div class="bg-gray-800 rounded-lg p-4 mb-4">
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-4">
             <div>
                 <label class="block text-sm text-gray-300 mb-1">Faction</label>
-                <select x-model="faction" @change="loadUnits()"
+                <select x-model="faction" @change="onFactionChange()"
                         class="w-full bg-gray-700 text-white rounded px-3 py-2">
                     <option value="">-- Select Faction --</option>
                     {% for faction in factions %}
                     <option value="{{ faction.id }}">{{ faction.label }}</option>
                     {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm text-gray-300 mb-1">Detachment</label>
-                <select x-model="detachment"
-                        class="w-full bg-gray-700 text-white rounded px-3 py-2">
-                    <option value="">-- Select Detachment --</option>
-                    <template x-for="d in detachments" :key="d">
-                        <option x-text="d" :value="d"></option>
-                    </template>
                 </select>
             </div>
         </div>
@@ -83,7 +74,7 @@
                     <p class="text-gray-500 text-sm text-center py-8">Select a faction to see units.</p>
                 </template>
                 <template x-for="unit in filteredUnits" :key="unit.name">
-                    <div @click="openUnitModal(unit)"
+                    <div @click="openUnitModal(unit.name)"
                          class="bg-gray-700 rounded p-2 cursor-pointer hover:bg-gray-600 transition">
                         <div class="flex justify-between items-center">
                             <span class="flex items-center gap-1.5 text-white text-xs font-medium truncate">
@@ -128,7 +119,6 @@
                 <template x-for="(entry, idx) in roster" :key="idx">
                     <div class="rounded p-2 flex justify-between items-center"
                          :class="getSynergyClass(entry.name)">
-                        <!-- Status dot -->
                         <span class="w-2 h-2 rounded-full flex-shrink-0 mr-2"
                               :class="getSynergyDot(entry.name)"></span>
                         <div class="flex-1">
@@ -167,11 +157,11 @@
     {% include "partials/synergy_panel.html" %}
 
     <!-- Unit Modal -->
-    <div x-show="showModal" @click.away="showModal = false"
+    <div x-show="showUnitModal" @click.away="showUnitModal = false"
          class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
-            <h2 class="text-lg font-bold text-white mb-2" x-text="selectedUnit?.name"></h2>
-            <div class="text-gray-400 text-sm mb-4" x-text="selectedUnit?.ability_text"></div>
+            <h2 class="text-lg font-bold text-white mb-2" x-text="unitDetail?.name"></h2>
+            <div class="text-gray-400 text-sm mb-4" x-text="unitDetail?.ability_text"></div>
 
             <div class="mb-4">
                 <label class="block text-sm text-gray-300 mb-1">Squad Size</label>
@@ -180,9 +170,9 @@
             </div>
 
             <div class="flex justify-end gap-2">
-                <button @click="showModal = false"
+                <button @click="showUnitModal = false"
                         class="bg-gray-600 text-white px-4 py-2 rounded">Cancel</button>
-                <button @click="addUnit()"
+                <button @click="addUnitToRoster()"
                         class="bg-blue-600 text-white px-4 py-2 rounded">Add to Roster</button>
             </div>
         </div>

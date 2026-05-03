@@ -32,7 +32,7 @@ class SimulationRequest(BaseModel):
 def _unit_icons(unit) -> list[str]:
     """All SVG icons for a unit based on its YAML tags, in priority order."""
     tags = {t.lower().replace(" ", "-") for t in unit.tags}
-    priority = ["epic-hero", "psyker", "titanic", "monster", "dreadnought",
+    priority = ["legends", "epic-hero", "psyker", "titanic", "monster", "dreadnought",
                 "walker", "battlesuit", "transport", "vehicle", "fly", "artillery",
                 "battleline", "character", "elite", "infantry", "medic", "speed-freek"]
     seen = set()
@@ -397,6 +397,10 @@ async def list_detachments(faction: Optional[str] = None):
                 "name": det.name,
                 "faction": det.faction,
                 "description": det.description[:100] + "..." if len(det.description) > 100 else det.description,
+                "rule_name": det.detachment_rule.name if det.detachment_rule else None,
+                "rule_description": det.detachment_rule.description[:80] + "..." if det.detachment_rule and len(det.detachment_rule.description) > 80 else (det.detachment_rule.description if det.detachment_rule else None),
+                "stratagem_count": len(det.stratagems),
+                "enhancement_count": len(det.enhancements),
             })
     return result
 

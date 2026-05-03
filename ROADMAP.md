@@ -89,7 +89,7 @@
 ## 🧠 Phase 3: AI & Automation
 
 ```
-[█░░░░░░░░░░░░░░░░░░] 6% · 1/8 features
+[██████░░░░░░░░░░░░] 28.6% · 2/7 features
 ```
 
 **Цель:** Нажать "Simulate" → AI разыгрывает 5 раундов → replay.
@@ -100,7 +100,7 @@
 ||----|--------|------|------|
 || 3.1 | ✅ | Greedy decision engine — target/action evaluation | 6h |
 || 3.2 | 🆕 | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h |
-|| 3.3 | ⚪ | Deployment AI: zone placement logic | 3h |
+|| 3.3 | ✅ | Deployment AI: zone placement logic | 3h |
 || 3.4 | ⚪ | Auto-play: AI vs AI full scenario | 6h |
 || 3.5 | ⚪ | Replay recording: JSON event log per round/phase | 3h |
 || 3.6 | ⚪ | Round viewer: step-by-step replay UI | 6h |
@@ -110,7 +110,7 @@
 ## 🎨 Phase 4: Web UI Polish
 
 ```
-[█████░░░░░░░░░░░░░] 62.5% · 5/8 features
+[████████░░░░░░░░░░] 75% · 6/8 features
 ```
 
 **Цель:** Полноценное веб-приложение, готовое к пользователям.
@@ -125,15 +125,15 @@
 | 4.4 | ✅ | Synergy hints: leader compatibility, transport capacity | 4h |
 | 4.5 | ✅ | Canvas map: terrain tiles + deploy zones interactivity | 8h |
 | 4.6 | ⚪ | Progressive Disclosure: Beginner / Intermediate / Expert | 4h |
-| 4.7 | ⚪ | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h |
-| 4.8 | ⚪ | SVG icons integration in unit cards | 2h |
+|| 4.7 | ⚪ | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h |
+|| 4.8 | ✅ | SVG icons integration in unit cards | 2h |
 
 ---
 
 ## ☁️ Phase 5: Production
 
 ```
-[█░░░░░░░░░░░░░░░░░] 14.3% · 1/7 features
+[██░░░░░░░░░░░░░░░░] 28.6% · 2/7 features
 ```
 
 **Цель:** Приложение на сервере, HTTPS, мониторинг.
@@ -143,7 +143,7 @@
 | # | Статус | Фича | Часы |
 |---|--------|------|------|
 | 5.1 | ✅ | Dockerfile + docker-compose | 3h |
-| 5.2 | ⚪ | Deployment (Dokku / Railway / self-host) | 4h |
+| 5.2 | ✅ | Deployment (Dokku / Railway / self-host) | 4h |
 | 5.3 | ⚪ | Rate limiting (slowapi) | 1h |
 | 5.4 | ⚪ | CORS hardening + CSP security headers | 1h |
 | 5.5 | ⚪ | Logging (structlog) + Sentry error tracking | 2h |
@@ -205,9 +205,9 @@
 | **0. Foundation** | 12 | ~40ч | ✅ 100% | Скелет проекта + wiki |
 | **1. Combat Engine** | 12 | ~60ч | ✅ 100% | `curl /api/simulate` → JSON + PMF |
 | **2. Game System** | 12 | ~40ч | ✅ 100% | Полный Game Loop |
-|| **3. AI & Automation** | 7 | ~35ч | 🟢 14% |
-| **4. Web UI Polish** | 8 | ~35ч | ⏳ 0% | Готовый UX |
-| **5. Production** | 7 | ~15ч | ⏳ 0% | Развёрнуто на сервере |
+| **3. AI & Automation** | 7 | ~35ч | 🟢 14% |
+| **4. Web UI Polish** | 8 | ~35ч | ✅ 75% |
+| **5. Production** | 7 | ~15ч | 🟢 29% |
 | **6. Monetization** | 6 | ~15ч | ⏳ 0% | Первый платящий |
 | **7. Expansion** | 10 | ~40ч | ⏳ 0% | Новые фичи |
 | **Итого** | **~75** | **~270ч** | | |
