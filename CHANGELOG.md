@@ -60,9 +60,10 @@
 |- Team Builder: дублирование заголовка, два селекта Detachment, `@change="loadUnits()"` → `@change="onFactionChange()"`
 |- Detachment Picker: collapsed/expand, `detachment_picker.js` не подгружался
 |- YAML parsing: апострофы в `'Ere We Go` и `'Ard as Nails`
-|- WatchFiles reload отключён
-
-### Implemented
+||- WatchFiles reload отключён
+|||- **Phase 4 cleanup** — `GET /api/rosters/generate` → `POST` (REST-корректно); `scenario_setup.js` отправляет POST с JSON body; добавлены `test_icon_map.py` (10 тестов), `test_generate_roster.py` (7 тестов). Phase 4 верифицирована: 102 теста ✅\n|||- **F3.7 Round Viewer** — `web/templates/round_viewer.html` (полный Alpine.js реплей вьювер с Canvas), `web/static/replay_viewer.js`, роуты `/api/replays/{game_id}`, `/replay/{game_id}`; 5 тестов\n|||- **F3.8 Result Screen** — `web/templates/result.html`, `web/static/result_chart.js` (Chart.js VP timeline), роуты `/api/results/{game_id}`, `/result/{game_id}`; 6 тестов\n|||- **F5.3 Rate limiting** — slowapi: 30 req/min anon, health exempt, `RATE_LIMIT_*` env vars; 3 теста\n|||- **F5.4 Security headers** — `backend/security/headers.py`: X-Content-Type-Options, X-Frame-Options, CSP, HSTS, Referrer-Policy, Permissions-Policy; CORS production-aware; 3 теста\n|||- **Dockerfile** — `python:3.12-slim-bookworm`, `requirements.txt` вместо `-e .`, shell-form CMD с `${PORT:-8000}`
+|
+|### Implemented
 |- **F2.5 Game Loop** — реализованы все 6 фаз в `backend/engine/scenario.py`:
   - Command: CP генерация, warlord bonus, VP scoring (было)
   - Movement: юниты двигаются к центру карты, Fall Back из engagement

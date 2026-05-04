@@ -66,6 +66,7 @@ class WikiRegistry:
         env_path = os.getenv("WIKI_PATH")
         candidates = [
             Path(env_path) if env_path else None,
+            Path(__file__).parent.parent.parent / "wiki",
             Path.cwd() / "wiki",
             Path.cwd().parent / "wiki",
         ]

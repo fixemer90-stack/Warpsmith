@@ -20,6 +20,30 @@ from fastapi.templating import Jinja2Templates
 from backend.db.database import db
 from backend.loader.icon_map import CATEGORY_COLORS, get_card_style, get_icon_html
 from backend.logging_setup import RequestLoggingMiddleware, setup_logging, setup_sentry
+from backend.security.headers import CSPMiddleware, SecurityHeadersMiddleware
+
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
+
+
+# ── Rate limiter ──────────────────────────────────────────────────
+
+
+def _rate_limit_key(request: Request) -> str:
+    """Use user from request.state if available, else remote IP."""
+    if hasattr(request.state, "user") and request.state.user:
+        return str(request.state.user)
+    return get_remote_address(request)
+
+
+limiter = Limiter(
+    key_func=_rate_limit_key,
+    default_limits=[os.getenv("RATE_LIMIT_ANON", "30/minute")],
+    storage_uri=os.getenv("RATE_LIMIT_STORAGE", "memory://"),
+    headers_enabled=True,
+)
+
 
 # ── Конфигурация ─────────────────────────────────────────────────
 
@@ -53,14 +77,30 @@ def create_app() -> FastAPI:
         description="Warpsmith — симулятор сценариев боёв Warhammer 40,000: сбор армии, AI-vs-AI бой, пораундовый реплей.",
     )
 
-    # CORS
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=ALLOWED_ORIGINS,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+    # CORS — production-aware
+    if IS_PRODUCTION:
+        production_origin = os.getenv(
+            "PRODUCTION_ORIGIN", "https://warpsmith-production.up.railway.app"
+        )
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=[production_origin],
+            allow_credentials=True,
+            allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH"],
+            allow_headers=["Content-Type", "Authorization"],
+        )
+    else:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=ALLOWED_ORIGINS,
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+
+    # Security headers
+    app.add_middleware(SecurityHeadersMiddleware)
+    app.add_middleware(CSPMiddleware)
 
     # Request logging middleware
     app.add_middleware(RequestLoggingMiddleware)
@@ -68,8 +108,13 @@ def create_app() -> FastAPI:
     # Templates — inject into app state for routes
     app.state.templates = templates
 
+    # Rate limiting
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
     # Index route
     @app.get("/", response_class=HTMLResponse)
+    @limiter.limit(os.getenv("RATE_LIMIT_ANON", "30/minute"))
     async def index(request: Request):
         return templates.TemplateResponse(request, "index.html", {"request": request})
 
@@ -97,6 +142,12 @@ def create_app() -> FastAPI:
     @app.get("/sentry-debug")
     async def trigger_error():
         division_by_zero = 1 / 0  # noqa
+
+    # Healthcheck — exempt from rate limiting
+    @app.get("/health")
+    @limiter.exempt
+    async def health_check():
+        return {"status": "ok"}
 
     return app
 

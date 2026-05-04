@@ -91,7 +91,12 @@ function scenarioSetup() {
                 const faction = this.player2Faction || '';
 
                 const resp = await fetch(
-                    `/api/rosters/generate?faction=${encodeURIComponent(faction)}&pts_limit=${pts}`
+                    `/api/rosters/generate`,
+                    {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({faction, pts_limit: pts}),
+                    }
                 );
                 if (resp.ok) {
                     const data = await resp.json();

@@ -34,15 +34,18 @@ class TestDockerFiles:
         assert "AS builder" not in content
         assert "AS runtime" not in content
 
-        # Check for security features
-        # Note: single-stage build doesn't need non-root user
-        # since containers run with limited permissions by default on Railway
+        # Check for requirements.txt approach (not pyproject.toml install)
+        assert "requirements.txt" in content
 
-        # Check for healthcheck
-        assert "HEALTHCHECK" in content
+        # Check for no editable install
+        assert "-e ." not in content
 
-        # Check for proper CMD
-        assert 'CMD ["uvicorn", "main:app"' in content
+        # Check for no healthcheck in CMD (Railway manages healthchecks)
+        # HEALTHCHECK removed — Railway handles it via railway.json
+
+        # Check for proper CMD (shell form, PORT env var)
+        assert "uvicorn main:app" in content
+        assert "${PORT:-8000}" in content
 
     def test_dockerignore_content(self):
         """dockerignore should exclude development files."""

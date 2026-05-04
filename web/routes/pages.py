@@ -173,3 +173,23 @@ async def billing_page(request: Request):
         "pricing.html",
         {"request": request, "title": "Billing — Warpsmith"},
     )
+
+
+@router.get("/replay/{game_id}", response_class=HTMLResponse)
+async def replay_viewer(request: Request, game_id: str):
+    """Просмотр реплея игры."""
+    return templates.TemplateResponse(
+        request,
+        "round_viewer.html",
+        {"request": request, "game_id": game_id, "title": "Round Viewer — Warpsmith"},
+    )
+
+
+@router.get("/result/{game_id}", response_class=HTMLResponse)
+async def result_screen(request: Request, game_id: str):
+    """Страница результатов симуляции."""
+    return templates.TemplateResponse(
+        request,
+        "result.html",
+        {"request": request, "game_id": game_id, "title": "Battle Result — Warpsmith"},
+    )
