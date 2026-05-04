@@ -1,7 +1,6 @@
 """Leader compatibility checking for Warhammer 40k roster building."""
 
 from dataclasses import dataclass, field
-from typing import List, Optional
 
 from backend.model.unit import Unit
 
@@ -56,7 +55,7 @@ def check_leader_compatibility(
 
     # Rule 4: Only 1 "Captain" type leader (not both can lead)
     if existing_leaders:
-        leader_types = {_get_leader_type(l) for l in existing_leaders}
+        leader_types = {_get_leader_type(ldr) for ldr in existing_leaders}
         new_type = _get_leader_type(leader)
         if new_type in leader_types:
             return LeaderCompatibilityResult.fail(
@@ -119,10 +118,10 @@ def validate_leader_assignments(
     leaders_by_unit: dict[str, list[Unit]] = {}
 
     # Group leaders by their target unit (simplified: assume they attach to first suitable non-leader unit)
-    for unit, squad_size in roster_units:
+    for unit, _squad_size in roster_units:
         if unit.is_leader:
             # Find the first non-leader unit that this leader could lead
-            for target_unit, target_squad_size in roster_units:
+            for target_unit, _target_squad_size in roster_units:
                 if not target_unit.is_leader and _is_compatible_unit(unit, target_unit):
                     target_name = target_unit.name
                     if target_name not in leaders_by_unit:
@@ -137,7 +136,7 @@ def validate_leader_assignments(
             continue
         for leader in attached_leaders:
             # Exclude the current leader from existing_leaders when checking compatibility
-            existing_leaders = [l for l in attached_leaders if l != leader]
+            existing_leaders = [ldr for ldr in attached_leaders if ldr != leader]
             result = check_leader_compatibility(leader, bodyguard, existing_leaders)
             if not result.is_compatible:
                 results.append(result)
@@ -164,7 +163,7 @@ def get_leader_hints(unit: Unit, all_units: dict[str, Unit]) -> list[str]:
         List of hint strings indicating which leaders can lead this unit
     """
     hints = []
-    for name, candidate in all_units.items():
+    for _name, candidate in all_units.items():
         if not candidate.is_leader:
             continue
         if _is_compatible_unit(candidate, unit):

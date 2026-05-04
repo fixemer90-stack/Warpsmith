@@ -84,14 +84,14 @@ body {
 
   <div class="header">
     <h1><span class="g1">🔧</span> Warpsmith <span class="g2">⟡</span> Roadmap</h1>
-    <div class="sub"><span class="pulse-dot"></span>v0.6.0 · 7 phases · ~75 features · ~270h</div>
+    <div class="sub"><span class="pulse-dot"></span>v0.6.6 · 7 phases · ~75 features · ~280h</div>
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="val g1">5</div><div class="lbl">Phases In Progress</div></div>
-    <div class="stat"><div class="val g2">44</div><div class="lbl">Features Complete</div></div>
-    <div class="stat"><div class="val g3">481</div><div class="lbl">Wiki Pages</div></div>
-    <div class="stat"><div class="val g4">0.6.0</div><div class="lbl">Current Version</div></div>
+    <div class="stat"><div class="val g1">3</div><div class="lbl">Phases In Progress</div></div>
+    <div class="stat"><div class="val g2">51</div><div class="lbl">Features Complete</div></div>
+    <div class="stat"><div class="val g3">490</div><div class="lbl">Wiki Pages</div></div>
+    <div class="stat"><div class="val g4">0.6.6</div><div class="lbl">Current Version</div></div>
   </div>
 
   <div class="phases">
@@ -198,21 +198,21 @@ body {
         <div class="phase-info">
           <div class="num">Phase 3 · 7 features</div>
           <div class="name">🧠 AI & Automation</div>
-          <div class="desc">Greedy AI · Deployment AI · Faction Profiles</div>
+          <div class="desc">Greedy AI · Faction Profiles · Deployment AI</div>
         </div>
-        <div class="phase-pct"><span class="pct-active">29%</span></div>
+        <div class="phase-pct"><span class="pct-active">43%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
-      <div class="phase-progress"><div class="fill active" style="width:29%"></div></div>
+      <div class="phase-progress"><div class="fill active" style="width:43%"></div></div>
       <div class="features" hidden>
         <div class="feature-list">
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🤖</span><span class="f-name">Greedy decision engine</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status wip"></span><span class="f-icon">💚</span><span class="f-name">Faction AI Profiles (wiki-driven)</span><span class="f-hours">🟢</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">💚</span><span class="f-name">Faction AI Profiles (Orks/Tau/AdMech)</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">📍</span><span class="f-name">Deployment AI (4 deploy types)</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">▶️</span><span class="f-name">Auto-play: AI vs AI scenario</span><span class="f-hours">⏳</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📼</span><span class="f-name">Replay recording (JSON event log)</span><span class="f-hours">⏳</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">👀</span><span class="f-name">Round viewer: step-by-step replay</span><span class="f-hours">⏳</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📊</span><span class="f-name">Result screen: kills, damage, VP chart</span><span class="f-hours">⏳</span></div>
+          <div class="feature"><span class="f-status wip"></span><span class="f-icon">▶️</span><span class="f-name">Auto-play: AI vs AI (dataclasses OK, run_auto_game сломан)</span><span class="f-hours">🟡</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📼</span><span class="f-name">Replay recording (JSON event log)</span><span class="f-hours">❌</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">👀</span><span class="f-name">Round viewer: HTML есть, JS нет</span><span class="f-hours">🟡</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📊</span><span class="f-name">Result screen: kills, damage, VP chart</span><span class="f-hours">❌</span></div>
         </div>
       </div>
     </div>
@@ -222,7 +222,7 @@ body {
       <div class="phase-header">
         <div class="phase-bar done"></div>
         <div class="phase-info">
-          <div class="num">Phase 4 · 8 features</div>
+          <div class="num">Phase 4 · 9 features</div>
           <div class="name">🎨 Web UI Polish</div>
           <div class="desc">Faction browser · Unit modal · Detachments · Synergy · Map · Icons · Modes · Tooltips</div>
         </div>
@@ -240,6 +240,7 @@ body {
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🖼️</span><span class="f-name">SVG icons (19 categories) in unit cards</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">📖</span><span class="f-name">Progressive Disclosure (3 modes)</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">❓</span><span class="f-name">Tooltips on every stat</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🎲</span><span class="f-name">Generate Random Opponent</span><span class="f-hours">✅</span></div>
         </div>
       </div>
     </div>
@@ -253,19 +254,19 @@ body {
           <div class="name">☁️ Production</div>
           <div class="desc">Docker · Deploy scripts · Rate limiting · CI/CD</div>
         </div>
-        <div class="phase-pct"><span class="pct-active">29%</span></div>
+        <div class="phase-pct"><span class="pct-active">71%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
-      <div class="phase-progress"><div class="fill active" style="width:29%"></div></div>
+      <div class="phase-progress"><div class="fill active" style="width:71%"></div></div>
       <div class="features" hidden>
         <div class="feature-list">
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🐳</span><span class="f-name">Dockerfile + docker-compose</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🚀</span><span class="f-name">Deploy: Dokku, Railway, self-host</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">🚦</span><span class="f-name">Rate limiting (slowapi)</span><span class="f-hours">⏳</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">🛡️</span><span class="f-name">CORS hardening + CSP headers</span><span class="f-hours">⏳</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📝</span><span class="f-name">Logging (structlog) + Sentry</span><span class="f-hours">⏳</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🔄</span><span class="f-name">CI/CD: GitHub Actions</span><span class="f-hours">⏳</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">💾</span><span class="f-name">SQLite backup strategy</span><span class="f-hours">⏳</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📝</span><span class="f-name">Logging (structlog) + Sentry</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔄</span><span class="f-name">CI/CD: GitHub Actions</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">💾</span><span class="f-name">SQLite backup strategy</span><span class="f-hours">✅</span></div>
         </div>
       </div>
     </div>
@@ -382,12 +383,12 @@ body {
     <span>P0: <span class="sw done"></span> 100%</span>
     <span>P1: <span class="sw done"></span> 100%</span>
     <span>P2: <span class="sw done"></span> 100%</span>
-    <span>P3: <span class="sw wip"></span> 29%</span>
+    <span>P3: <span class="sw wip"></span> 43%</span>
     <span>P4: <span class="sw done"></span> 100%</span>
-    <span>P5: <span class="sw wip"></span> 29%</span>
+    <span>P5: <span class="sw wip"></span> 43%</span>
   </div>
 
-  <div class="footer">Warpsmith · v0.6.0 · 2026-05-04</div>
+  <div class="footer">Warpsmith · v0.6.6 · 2026-05-04</div>
 
 </div>
 

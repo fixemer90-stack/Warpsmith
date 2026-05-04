@@ -13,11 +13,12 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
 
 import frontmatter
 
 from backend.state.game_state import GamePhase
+
+from .decision import Action
 
 logger = logging.getLogger(__name__)
 
@@ -205,9 +206,12 @@ def _is_behavior_active(
         return False
 
     # Если cooldown > 0 — проверяем, прошло ли достаточно раундов
-    if behavior.trigger.cooldown > 0 and behavior.last_used_round > 0:
-        if turn - behavior.last_used_round <= behavior.trigger.cooldown:
-            return False
+    if (
+        behavior.trigger.cooldown > 0
+        and behavior.last_used_round > 0
+        and turn - behavior.last_used_round <= behavior.trigger.cooldown
+    ):
+        return False
 
     # Валидация phase
     known_phases = {p.value for p in GamePhase} | {"any"}
@@ -304,7 +308,7 @@ def choose_action_with_faction_ai(
     Returns:
         Action или None, если действие не найдено
     """
-    from backend.engine.ai.decision import Action, choose_action
+    from backend.engine.ai.decision import choose_action
     from backend.loader.registry import registry
 
     if registry is None:

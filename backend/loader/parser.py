@@ -1,5 +1,6 @@
 """Parse YAML frontmatter and markdown tables into Unit and Weapon models."""
 
+import contextlib
 import logging
 import re
 from pathlib import Path
@@ -380,10 +381,8 @@ def _parse_profile_from_markdown(body: str) -> dict[str, int]:
             # Only treat as INV if it's a number (with optional +)
             if inv_raw and not any(c.isalpha() for c in inv_raw):
                 inv_str = inv_raw.replace("+", "").strip()
-                try:
+                with contextlib.suppress(ValueError):
                     result["invulnerable_save"] = int(inv_str)
-                except ValueError:
-                    pass
 
         return result
 

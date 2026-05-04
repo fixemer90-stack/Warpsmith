@@ -36,13 +36,13 @@ def test_battle_shock_above_half_strength():
     scenario = Scenario(game_state)
 
     # Before morale phase
-    assert unit_full.is_battle_shocked == False
+    assert not unit_full.is_battle_shocked
 
     # Execute morale phase
     scenario._morale_phase()
 
     # Unit should not have taken battle-shock test and should remain unshocked
-    assert unit_full.is_battle_shocked == False
+    assert not unit_full.is_battle_shocked
 
 
 def test_battle_shock_below_half_snake_eyes():
@@ -83,7 +83,7 @@ def test_battle_shock_below_half_snake_eyes():
         scenario._morale_phase()
 
         # Unit should have failed battle-shock
-        assert unit.is_battle_shocked == True
+        assert unit.is_battle_shocked
     finally:
         # Restore original random function
         random.randint = original_randint
@@ -127,7 +127,7 @@ def test_battle_shock_below_half_boxcars():
         scenario._morale_phase()
 
         # Unit should have passed battle-shock
-        assert unit.is_battle_shocked == False
+        assert not unit.is_battle_shocked
     finally:
         # Restore original random function
         random.randint = original_randint
@@ -181,7 +181,7 @@ def test_battle_shock_normal_roll():
         scenario._morale_phase()
 
         # Roll is 7, leadership is 7, so roll >= LD -> pass (not shocked)
-        assert unit.is_battle_shocked == False
+        assert not unit.is_battle_shocked
     finally:
         # Restore original random function
         random.randint = original_randint

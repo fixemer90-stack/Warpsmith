@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
@@ -51,9 +50,8 @@ class BattlefieldMap:
     def __post_init__(self):
         """Validate terrain array dimensions."""
         if self.terrain.shape != (self.height, self.width):
-            raise ValueError(
-                f"Terrain array shape {self.terrain.shape} does not match map dimensions {self.height}x{self.width}"
-            )
+            msg = f"Terrain array shape {self.terrain.shape} does not match map dimensions {self.height}x{self.width}"
+            raise ValueError(msg)
 
     @classmethod
     def create_empty(
@@ -99,13 +97,15 @@ class BattlefieldMap:
     def set_terrain(self, x: int, y: int, terrain_type: TerrainType):
         """Set terrain type at a specific position."""
         if not self._is_valid_position(x, y):
-            raise ValueError(f"Position ({x}, {y}) is out of bounds")
+            msg = f"Position ({x}, {y}) is out of bounds"
+            raise ValueError(msg)
         self.terrain[y, x] = terrain_type
 
     def get_terrain(self, x: int, y: int) -> TerrainType:
         """Get terrain type at a specific position."""
         if not self._is_valid_position(x, y):
-            raise ValueError(f"Position ({x}, {y}) is out of bounds")
+            msg = f"Position ({x}, {y}) is out of bounds"
+            raise ValueError(msg)
         return self.terrain[y, x]
 
     def add_deployment_zone(
@@ -119,7 +119,8 @@ class BattlefieldMap:
         # Validate coordinates
         for x, y in coordinates:
             if not self._is_valid_position(x, y):
-                raise ValueError(f"Invalid coordinate ({x}, {y}) in deployment zone {name}")
+                msg = f"Invalid coordinate ({x}, {y}) in deployment zone {name}"
+                raise ValueError(msg)
 
         zone = DeploymentZone(
             name=name,
@@ -133,7 +134,8 @@ class BattlefieldMap:
         """Add an objective marker at a position."""
         x, y = position
         if not self._is_valid_position(x, y):
-            raise ValueError(f"Invalid objective position ({x}, {y})")
+            msg = f"Invalid objective position ({x}, {y})"
+            raise ValueError(msg)
         self.objectives[name] = position
 
     def get_deployment_zone_for_player(self, player_id: str) -> DeploymentZone | None:
@@ -254,6 +256,66 @@ class BattlefieldMap:
     def _is_valid_position(self, x: int, y: int) -> bool:
         """Check if a position is within map bounds."""
         return 0 <= x < self.width and 0 <= y < self.height
+
+    # ── Line of Sight ─────────────────────────────────────────────
+
+    _los_cache: dict[tuple[int, int, int, int], bool] = field(default_factory=dict)
+
+    @staticmethod
+    def _is_blocking_los(terrain_type: TerrainType) -> bool:
+        """Return True if terrain type blocks line of sight entirely."""
+        return terrain_type == TerrainType.IMPASSABLE
+
+    def has_los(self, x1: int, y1: int, x2: int, y2: int) -> bool:
+        """Check LoS between (x1,y1) and (x2,y2) via Bresenham ray casting.
+
+        Impassable terrain cells block LoS. Start/end cells are ignored
+        (a unit can always see from its own cell and to the target cell).
+        Results are cached for performance.
+        """
+        # Normalize cache key (always low-to-high)
+        ax, ay = (x1, y1) if x1 < x2 or (x1 == x2 and y1 < y2) else (x2, y2)
+        bx, by = (x2, y2) if x1 < x2 or (x1 == x2 and y1 < y2) else (x1, y1)
+        key = (ax, ay, bx, by)
+        if key in self._los_cache:
+            return self._los_cache[key]
+
+        dx = abs(x2 - x1)
+        dy = -abs(y2 - y1)
+        sx = 1 if x1 < x2 else -1
+        sy = 1 if y1 < y2 else -1
+        err = dx + dy
+
+        x, y = x1, y1
+        blocked = False
+
+        while True:
+            # Check terrain at current cell (skip start and end)
+            if (
+                (x, y) != (x1, y1)
+                and (x, y) != (x2, y2)
+                and self._is_blocking_los(self.terrain[y, x])
+            ):
+                blocked = True
+                break
+
+            if (x, y) == (x2, y2):
+                break
+
+            e2 = 2 * err
+            if e2 >= dy:
+                err += dy
+                x += sx
+            if e2 <= dx:
+                err += dx
+                y += sy
+
+        self._los_cache[key] = not blocked
+        return not blocked
+
+    def clear_los_cache(self):
+        """Clear the LoS cache (call when terrain changes)."""
+        self._los_cache.clear()
 
 
 # Utility functions for creating specific mission maps

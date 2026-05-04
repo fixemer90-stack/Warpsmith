@@ -76,7 +76,7 @@ class TestSynergyAPI:
             },
         )
         data = resp.json()
-        leader_checks = [c for c in data["checks"] if c["type"] == "leader"]
+        _leader_checks = [c for c in data["checks"] if c["type"] == "leader"]
         # This will depend on actual wiki data and leader_for fields
 
     def test_synergies_score_calculation(self):
@@ -125,7 +125,7 @@ class TestSynergyAPI:
             },
         )
         data = resp.json()
-        synergy_checks = [c for c in data["checks"] if c["type"] == "synergy"]
+        _synergy_checks = [c for c in data["checks"] if c["type"] == "synergy"]
         # This depends on whether wiki units have synergies field
 
 

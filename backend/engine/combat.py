@@ -132,7 +132,7 @@ def _resolve_attack_chain(
 ) -> int:
     """Resolve a single attack: Hit → Wound → Save → Damage → FNP."""
     # Hit roll
-    hit_result, hit_modifiers = _resolve_hit_roll(rng, weapon, modifiers, context)
+    hit_result, _hit_modifiers = _resolve_hit_roll(rng, weapon, modifiers, context)
     if not hit_result.success:
         return 0
 
@@ -247,19 +247,19 @@ def _expected_steps(
 
     # Expected hits (simplified)
     hit_target = weapon.skill
-    hit_modifiers = apply_modifiers("hit_roll", hit_target, modifiers, context, None)
+    apply_modifiers("hit_roll", hit_target, modifiers, context, None)
     hit_prob = max(0, min(1, (7 - hit_target) / 6))
     avg_hits = hit_prob
 
     # Expected wounds
     wound_target = defender.effective_toughness(weapon.strength)
-    wound_modifiers = apply_modifiers("wound_roll", wound_target, modifiers, context, None)
+    apply_modifiers("wound_roll", wound_target, modifiers, context, None)
     wound_prob = max(0, min(1, (7 - wound_target) / 6))
     avg_wounds = avg_hits * wound_prob
 
     # Expected unsaved wounds
     save_target = defender.best_save(weapon.ap)
-    save_modifiers = apply_modifiers("save_roll", save_target, modifiers, context, None)
+    apply_modifiers("save_roll", save_target, modifiers, context, None)
     save_prob = max(0, min(1, (7 - save_target) / 6))
     avg_unsaved = avg_wounds * (1 - save_prob)
 

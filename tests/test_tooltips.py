@@ -1,6 +1,8 @@
-"""Tests for F4.7 — Tooltips on Every Stat (M/T/SV/W/LD/OC)."""
+"""Tests for F4.7 -- Tooltips on Every Stat (M/T/SV/W/LD/OC)."""
+# ruff: noqa: N802
 
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)

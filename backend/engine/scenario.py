@@ -1,17 +1,28 @@
 """Game loop scenario for Warhammer 40k battles."""
 
+from __future__ import annotations
+
 from typing import Optional
 
+from ..model.unit import Unit
 from ..state.game_state import GamePhase, GameState
+from ..state.map import BattlefieldMap
 from ..state.mission import Mission
 
 
 class Scenario:
     """Manages the game loop for a Warhammer 40k battle."""
 
-    def __init__(self, game_state: GameState):
+    def __init__(
+        self,
+        game_state: GameState,
+        unit_models: dict[str, Unit] | None = None,
+        battlefield: BattlefieldMap | None = None,
+    ):
         self.state = game_state
         self.log = []  # Additional scenario-specific log
+        self._unit_models = unit_models or {}  # unit_id → full Unit model (for combat engine)
+        self.battlefield = battlefield  # for LoS checks
 
     def run_game(self, max_rounds: int | None = None) -> None:
         """Run the game until completion or max_rounds reached."""
@@ -85,33 +96,146 @@ class Scenario:
                     )
 
     def _movement_phase(self) -> None:
-        """Movement phase logic: move units."""
-        # In a real implementation, we would allow players to move their units
-        # For now, we'll just log that movement phase occurred
+        """Movement phase: normal move / advance / fall back for active player's units."""
         self.state.game_log.append("Movement phase: units may move")
-        # Reset has_moved flags at start of phase? Actually, they are reset at start of round in next_phase
-        # But we might want to prevent moving twice in a phase - we'll rely on the has_moved flag
-        # For now, no automatic movement - players would decide via UI/API
+        for player in self.state.players.values():
+            for unit in player.units.values():
+                if not unit.is_alive or unit.has_moved:
+                    continue
+                if unit.is_engaged:
+                    # Fall Back — move away from engagement
+                    # Simplified: move 3 cells away from current position
+                    new_x = min(unit.position[0] + 3, self.state.map_width - 1)
+                    new_y = unit.position[1]
+                    if self.state.move_unit(unit.unit_id, (new_x, new_y)):
+                        self.state.game_log.append(f"{unit.name} falls back to ({new_x}, {new_y})")
+                else:
+                    # Normal Move — simplified: move 1 cell toward center
+                    center_x = self.state.map_width // 2
+                    dx = (
+                        1
+                        if unit.position[0] < center_x
+                        else (-1 if unit.position[0] > center_x else 0)
+                    )
+                    new_x = unit.position[0] + dx
+                    new_y = unit.position[1]
+                    if self.state.move_unit(unit.unit_id, (new_x, new_y)):
+                        self.state.game_log.append(f"{unit.name} moves to ({new_x}, {new_y})")
+                unit.has_moved = True
 
     def _shooting_phase(self) -> None:
-        """Shooting phase logic: resolve shooting attacks."""
+        """Shooting phase: find targets in range, resolve damage via combat engine."""
         self.state.game_log.append("Shooting phase: units may shoot")
-        # In a full implementation, we would iterate over units that can shoot and haven't shot yet
-        # For each unit, resolve shooting attacks using the combat engine
-        # We'll leave the actual shooting logic to be implemented based on player input
-        # For now, we just note that shooting happened
-        # Example of how it might work:
-        # for player in self.state.players.values():
-        #     for unit in player.units.values():
-        #         if unit.is_alive and not unit.has_shot:
-        #             # Resolve shooting for this unit
-        #             # ... combat logic ...
-        #             unit.has_shot = True
+        import numpy as np
+
+        for player in self.state.players.values():
+            for unit in player.units.values():
+                if not unit.is_alive or unit.has_shot or unit.is_engaged:
+                    continue
+                # Find opponent
+                opponent_pid = next(
+                    (pid for pid in self.state.players if pid != player.player_id), None
+                )
+                if opponent_pid is None:
+                    continue
+                opponent = self.state.players[opponent_pid]
+                targets = []
+                for target in opponent.units.values():
+                    if not target.is_alive:
+                        continue
+                    dist = (
+                        (unit.position[0] - target.position[0]) ** 2
+                        + (unit.position[1] - target.position[1]) ** 2
+                    ) ** 0.5
+                    if dist > 12:
+                        continue
+                    # LoS check if battlefield is available
+                    if self.battlefield is not None and not self.battlefield.has_los(
+                        unit.position[0],
+                        unit.position[1],
+                        target.position[0],
+                        target.position[1],
+                    ):
+                        continue
+                    targets.append(target)
+                if not targets:
+                    continue
+                # Target closest enemy
+                target = min(
+                    targets,
+                    key=lambda t: (
+                        (unit.position[0] - t.position[0]) ** 2
+                        + (unit.position[1] - t.position[1]) ** 2
+                    ),
+                )
+                # Resolve damage using combat engine if models available
+                attacker_model = self._unit_models.get(unit.unit_id)
+                defender_model = self._unit_models.get(target.unit_id)
+                if attacker_model and defender_model and attacker_model.ranged_weapons:
+                    from backend.engine.combat import simulate_unit_attack
+
+                    result = simulate_unit_attack(
+                        attacker=attacker_model,
+                        defender=defender_model,
+                        n_iterations=1000,
+                        squad_size=unit.models_remaining,
+                        distance=int(dist),
+                    )
+                    damage = int(result.stats.mean)
+                    self.state.game_log.append(
+                        f"{unit.name} shoots {target.name} — expected {result.stats.mean:.1f} dmg"
+                    )
+                else:
+                    # Simplified damage fallback
+                    damage = max(1, unit.models_remaining // 2)
+                self.state.deal_damage(target.unit_id, damage)
+                self.state.game_log.append(f"{unit.name} hits {target.name} for {damage} damage")
+                unit.has_shot = True
 
     def _charge_phase(self) -> None:
-        """Charge phase logic: resolve charge moves."""
+        """Charge phase: roll 2D6, move into engagement if in range."""
         self.state.game_log.append("Charge phase: units may charge")
-        # Similar to shooting, but for charges
+        import random
+
+        for player in self.state.players.values():
+            for unit in player.units.values():
+                if not unit.is_alive or unit.has_charged or unit.is_engaged:
+                    continue
+                # Find closest enemy
+                opponent_pid = next(
+                    (pid for pid in self.state.players if pid != player.player_id), None
+                )
+                if opponent_pid is None:
+                    continue
+                opponent = self.state.players[opponent_pid]
+                closest = min(
+                    (t for t in opponent.units.values() if t.is_alive),
+                    key=lambda t: (
+                        (unit.position[0] - t.position[0]) ** 2
+                        + (unit.position[1] - t.position[1]) ** 2
+                    ),
+                    default=None,
+                )
+                if closest is None:
+                    continue
+                dist = (
+                    (unit.position[0] - closest.position[0]) ** 2
+                    + (unit.position[1] - closest.position[1]) ** 2
+                ) ** 0.5
+                # Roll 2D6
+                roll = random.randint(1, 6) + random.randint(1, 6)
+                if roll >= dist:
+                    # Charge succeeds — move into engagement
+                    if self.state.move_unit(unit.unit_id, closest.position):
+                        unit.is_engaged = True
+                        self.state.game_log.append(
+                            f'{unit.name} charges {closest.name} (rolled {roll} ≥ {dist:.0f})" – engaged!'
+                        )
+                else:
+                    self.state.game_log.append(
+                        f'{unit.name} fails charge (rolled {roll} < {dist:.0f})")'
+                    )
+                unit.has_charged = True
 
     def _fight_phase(self) -> None:
         """Fight phase logic: resolve fights with alternating activations."""
@@ -135,7 +259,9 @@ class Scenario:
                 order = player_ids
             else:
                 # The non-priority player goes first in Fight phase
-                non_priority_player_id = [pid for pid in player_ids if pid != priority_player_id][0]
+                non_priority_player_id = next(
+                    pid for pid in player_ids if pid != priority_player_id
+                )
                 order = [non_priority_player_id, priority_player_id]
 
         # Continue alternating activations until no more units can fight
@@ -172,12 +298,13 @@ class Scenario:
         enemy_unit = None
         for player in self.state.players.values():
             for unit in player.units.values():
-                if unit.is_alive and unit != attacking_unit:
-                    # Simplified engagement check - same position or adjacent
-                    # In a real implementation, we'd use proper engagement rules
-                    if unit.position == attacking_unit.position:
-                        enemy_unit = unit
-                        break
+                if (
+                    unit.is_alive
+                    and unit != attacking_unit
+                    and unit.position == attacking_unit.position
+                ):
+                    enemy_unit = unit
+                    break
             if enemy_unit:
                 break
 

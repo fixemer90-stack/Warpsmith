@@ -10,6 +10,8 @@
 ## 2026-05-04
 
 ### Added
+- **F5.5 Logging (structlog) + Sentry error tracking** — `backend/logging_setup.py` (создано), `main.py` (патч — инициализация structlog + Sentry), `.env.example` (добавлен SENTRY_DSN, LOG_LEVEL) — структурированное JSON логирование в production, цветное в dev, логирование каждого HTTP-запроса с request_id, duration_ms, status_code, отправка необработанных исключений в Sentry
+- **F5.6 CI/CD — GitHub Actions (lint + test + deploy)** — `.github/workflows/ci.yml` (lint: ruff + mypy, test: pytest с coverage > 80%, docker: build + push в GHCR), `.github/workflows/deploy.yml` (deploy: Dokku/Railway после успешного CI), `tests/test_coverage.py` (порог покрытия), обновлен `pyproject.toml` с `--cov-fail-under=80`
 - **F5.2 Deployment** — `Procfile`, `app.json`, `deploy/dokku-setup.sh`, `deploy/railway.json`, `deploy/systemd.service`, `docs/deployment.md` — поддерживает 3 сценария: Dokku (git push + letsencrypt + volume), Railway (serverless + Dockerfile), self-host (systemd + nginx + certbot)
 - **F4.6 Progressive Disclosure** — `web/static/progressive_disclosure.js`: Alpine.js контроллер с тремя режимами (Beginner/Intermediate/Expert), localStorage, CSS классы `mode-beginner/mode-intermediate/mode-expert` на `<body>`, переключатель B/I/E в хедере; unit cards показывают beginner-friendly/expert-only контент
 - **Тесты F4.6** — `tests/test_progressive_disclosure.py`: 7 тестов (toggle, CSS, JS, mode-классы)
@@ -18,25 +20,50 @@
 - F4.8 SVG icons — `web/static/icons/legends.svg` (tombstone), `_unit_icons()` включает `legends` в priority, `icon_map.py` загружает все SVG динамически
 - API `/api/detachments` — эндпоинт возвращает `rule_name`, `rule_description`, `stratagem_count`, `enhancement_count` для inline preview
 |- Wiki YAML детачментов — `detachment_rule`, `stratagems`, `enhancements` добавлены в frontmatter 21 файла
+- **F4.9 Generate Random Opponent** — `POST /api/rosters/generate` для AI-ростера. Добавлен в ROADMAP.md, Features_index.md, создана feature-спека `f4.9-generate-opponent.md`
 
 ### Changed
 |- **Wiki → Monorepo (fix Railway deploy)** — wiki-хранилище (489 файлов, 35 MB) перемещено из внешнего `/mnt/d/Python/Balthier/wiki/` в `simulator/wiki/`. Данные теперь — часть репозитория, попадают в Docker-образ автоматически.
   - `.dockerignore`: удалена строка `wiki/` — **это была коренная причина пустого Railway**
   - `.gitignore`: `wiki/` больше не игнорируется (комментарий обновлён)
-  - `backend/loader/registry.py`: убраны хардкодные пути `/mnt/d/Python/Balthier/wiki` и `/mnt/d/Python/Maksim/wiki` — `_detect_wiki_path()` теперь использует `cwd/wiki` (приоритет: `WIKI_PATH` env → `cwd/wiki` → `cwd/../wiki`)
-  - `tests/test_docker.py`: проверка `.dockerignore` обновлена — `wiki/` больше не должен быть в исключениях
-  - Локально проверено: `WikiRegistry` находит 160 юнитов, 23 детачмента, 3 фракции из нового пути
-  - Тесты: 340 passed, 0 failed
+  - `backend/loader/registry.py`: убраны хардкодные пути `/mnt/d/Python/Balthier/wiki` и `/mnt/d/Python/Maksim/wiki`
+  - `tests/test_docker.py`: проверка `.dockerignore` обновлена
+  - Локально проверено: 160 юнитов, 23 детачмента, 3 фракции
+- **Версия 0.6.0 → 0.6.6** — `pyproject.toml`, `README.md`, `AGENTS.md`, `DEV_INDEX.md`
+- **AGENTS.md** — полный рерайт под v0.6.6: актуальная структура проекта, AI через F3.2 Faction AI Profiles (не ork_ai/tau_ai), wiki monorepo, Railway deploy, 18 SVG иконок, все JS-файлы
+- **README.md** — переписан под Railway: убран `cd /mnt/d/Python/Balthier/simulator`, все ссылки на `warpsmith-production.up.railway.app`, Phase 3 → 71%, Phase 4 → 9 фич
+- **F2.1 Game State doc** — приведён в соответствие с реальным кодом: `RosterState → PlayerState`, `players: dict` вместо `roster_a/roster_b`, `GamePhase` enum, `next_phase()` метод
+- **F2.5 Game Loop doc** — переписан под актуальный GameState API. Статус: `done → wip`
+- **F3.1 Decision Engine doc** — `EvaluationContext.opponent: RosterState` → `opponent_units: list[UnitState]`, Integration под `state.players`
+- **F2.4 Missions doc** — `score_kill_points()` через `state.players[id]`, тесты под актуальный конструктор
+- **F3.4 Deployment AI doc** — `place_units()` сигнатура под актуальный код, `warlord_unit_name`
+- **F3.5 Autoplay doc** — переписан под реальное состояние: ✅/🟡/❌, разрыв старого API, TODO на завершение
+- **ROADMAP.md** — Phase 4: 9/9 features (+F4.9), Features_index.md обновлён
 
 ### Fixed
-|- **Auth 500 на Railway** — `/data/` директория не существовала, SQLite не мог создать БД. `database.py`: `connect()` теперь создаёт родительскую директорию через `os.makedirs(exist_ok=True)`.
-|- **F4.2 Unit Modal** — создан `web/static/unit_modal.js` (mixin с Alpine.js логикой: openUnitModal, addUnitToRoster, currentWeapons, totalCost, getQuickSizes). HTML модалки в team_builder.html расширен до полного datasheet: stats strip (M/T/SV/W/LD/OC), squad size stepper с +/− и quick presets, wargear options с radio и recommended, nob upgrades, abilities, weapons table, total cost bar.
-|- **F4.8 SVG Icons** — создан `web/templates/partials/unit_card.html` (inline SVG + category color + hover effects). Jinja2 globals `unit_icon`, `card_style`, `CATEGORY_COLORS` зарегистрированы в main.py, pages.py, auth.py.
-|- Team Builder: дублирование заголовка 🛠 Team Builder, два селекта Detachment, `@change="loadUnits()"` → `@change="onFactionChange()"` (диспатчит событие в detachmentPicker)
-|- Detachment Picker: добавлен `collapsed`/`expand` — после выбора список сворачивается, кнопка Change разворачивает
-|- `detachment_picker.js` не подгружался в team_builder.html — добавлен `<script src=...>`
-|- YAML parsing: апострофы в `'Ere We Go` и `'Ard as Nails` ломали frontmatter — обёрнуты в двойные кавычки
-|- WatchFiles reload отключён — файлы больше не откатываются к git-версиям
+|- **Auth 500 на Railway** — `/data/` директория не существовала. `database.py`: `connect()` создаёт родительскую директорию через `os.makedirs(exist_ok=True)`
+|- **F4.2 Unit Modal** — создан `web/static/unit_modal.js`. HTML модалки расширен до полного datasheet: stats strip, squad stepper, wargear, weapons table, total cost
+|- **F4.8 SVG Icons** — создан `web/templates/partials/unit_card.html`. Jinja2 globals `unit_icon`, `card_style`, `CATEGORY_COLORS` в main.py, pages.py, auth.py
+|- **F3.5 Autoplay — импорты** — `DecisionEngine` (не существовал) → `choose_action`, `RosterState` → из `roster.py`, `BattlefieldMap` без `terrain` → с `np.full`
+|- **F3.5 Autoplay — тесты** — `test_autoplay.py` переписан под актуальные `Weapon`, `Unit`, `Mission` API
+|- **F3.5 RosterState** — добавлен `@dataclass RosterState` в `backend/state/roster.py`
+|- **Generate Opponent — 405** — `/api/rosters/generate`: `POST` → `GET` (фронт вызывал `fetch` без `method: 'POST'`)
+|- **Auth bcrypt — Docker fix** — bcrypt C-расширение не загружалось на Railway: скомпилированный `.so` из builder-стадии не подходил runtime (различия libc между кэшированными слоями). Фикс: `pip install bcrypt` в runtime-стадии (manylinux wheel, не требует gcc)
+|- Team Builder: дублирование заголовка, два селекта Detachment, `@change="loadUnits()"` → `@change="onFactionChange()"`
+|- Detachment Picker: collapsed/expand, `detachment_picker.js` не подгружался
+|- YAML parsing: апострофы в `'Ere We Go` и `'Ard as Nails`
+|- WatchFiles reload отключён
+
+### Implemented
+|- **F2.5 Game Loop** — реализованы все 6 фаз в `backend/engine/scenario.py`:
+  - Command: CP генерация, warlord bonus, VP scoring (было)
+  - Movement: юниты двигаются к центру карты, Fall Back из engagement
+  - Shooting: поиск целей в радиусе 12, при наличии unit_models — Monte Carlo combat engine (F1.6)
+  - Charge: 2D6 roll, engagement при успехе
+  - Fight: alternating activations, melee resolution
+  - Morale: battle-shock тесты (2D6, snake eyes/boxcars)
+  - `Scenario.__init__`: добавлен опциональный `unit_models: dict[str, Unit]` и `battlefield: BattlefieldMap` для LoS
+|- **F2.3 Line of Sight** — Bresenham ray casting в `BattlefieldMap.has_los()`. IMPASSABLE terrain блокирует LoS, старт/финиш не проверяются, результаты кэшируются. Подключён к `Scenario._shooting_phase()`
 
 ## 2026-05-03
 

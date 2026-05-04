@@ -1,6 +1,7 @@
 """Tests for F4.6 — Progressive Disclosure: Beginner/Intermediate/Expert Modes."""
 
 from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)

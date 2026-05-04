@@ -13,14 +13,13 @@ F3.4 — Deployment AI: Zone Placement Logic.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
 
 from backend.model.unit import Unit
 from backend.state.game_state import GameState, TerrainType, UnitState
 from backend.state.map import BattlefieldMap
-from backend.state.mission import Mission, MissionObjective
+from backend.state.mission import MissionObjective
 
 
 class DeploymentType(Enum):
@@ -79,7 +78,8 @@ def get_deployment_zone(
             return DeploymentZone(1, 0, w // 2, 0, h // 4, "P1 DoW")
         return DeploymentZone(2, 0, w // 2, 3 * h // 4, h, "P2 DoW")
 
-    raise ValueError(f"Unknown deployment type: {deployment_type}")
+    msg = f"Unknown deployment type: {deployment_type}"
+    raise ValueError(msg)
 
 
 def _distance(a: tuple[int, int], b: tuple[int, int]) -> float:
@@ -137,10 +137,7 @@ def _is_on_objective(
     pos: tuple[int, int],
     objectives: list[MissionObjective],
 ) -> bool:
-    for obj in objectives:
-        if _distance(pos, (obj.x, obj.y)) <= 3:
-            return True
-    return False
+    return any(_distance(pos, (obj.x, obj.y)) <= 3 for obj in objectives)
 
 
 def _is_occupied(
@@ -149,10 +146,7 @@ def _is_occupied(
     occupied: set[tuple[int, int]],
     margin: int = 2,
 ) -> bool:
-    for ox, oy in occupied:
-        if abs(x - ox) <= margin and abs(y - oy) <= margin:
-            return True
-    return False
+    return any(abs(x - ox) <= margin and abs(y - oy) <= margin for ox, oy in occupied)
 
 
 def _sort_units_by_role(

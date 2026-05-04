@@ -60,10 +60,12 @@ class VKProvider(OAuthProvider):
                 },
             )
         if resp.status_code != 200:
-            raise OAuthError(f"Token exchange failed: {resp.text}", self.name)
+            msg = f"Token exchange failed: {resp.text}"
+            raise OAuthError(msg, self.name)
         data: dict = resp.json()
         if "error" in data:
-            raise OAuthError(f"VK API error: {data['error']}", self.name)
+            msg = f"VK API error: {data['error']}"
+            raise OAuthError(msg, self.name)
         result: dict = data["response"]
         return result
 
@@ -79,7 +81,8 @@ class VKProvider(OAuthProvider):
                 },
             )
         if resp.status_code != 200:
-            raise OAuthError(f"User get failed: {resp.text}", self.name)
+            msg = f"User get failed: {resp.text}"
+            raise OAuthError(msg, self.name)
         data = resp.json()
         user = data["response"][0]
         return OAuthUserInfo(

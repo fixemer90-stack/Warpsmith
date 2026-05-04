@@ -139,7 +139,7 @@ class TestBehaviorActivation:
         """Behavior не активируется, если cooldown не прошёл."""
         profile = load_profile("orks")
         # Find ere_we_go behavior (cooldown=1)
-        ere_we_go = [b for b in profile.behaviors if b.id == "ere_we_go"][0]
+        ere_we_go = next(b for b in profile.behaviors if b.id == "ere_we_go")
         assert ere_we_go.trigger.cooldown == 1
 
         # Mark as used in round 1

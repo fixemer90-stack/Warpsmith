@@ -11,7 +11,6 @@ dependencies = [
     "numpy",
     "python-multipart",
     "python-jose[cryptography]",
-    "python-dotenv",
     "bcrypt",
     "pyyaml",
     "python-frontmatter",
@@ -19,6 +18,8 @@ dependencies = [
     "pytest",
     "pytest-asyncio",
     "httpx",
+    "structlog",
+    "sentry-sdk",
 ]
 
 [project.optional-dependencies]
@@ -90,7 +91,7 @@ unfixable = ["F841"]  # unused-variable — ручная проверка
     "S311", "T201", "ANN001", "ANN201", "ANN204",
     "PLR2004", "T20", "D100", "D101", "D102", "D103",
 ]
-"__init__.py" = ["F401", "E402"]
+"__init__.py" = ["F401", "E402", "N999"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
@@ -130,4 +131,4 @@ ignore_errors = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-addopts = "-v --tb=short"
+addopts = "-v --tb=short --cov-fail-under=80"

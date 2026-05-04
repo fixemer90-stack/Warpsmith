@@ -530,7 +530,7 @@ def test_vp_tracker():
     assert vp.total[1] == 15
     assert vp.total[2] == 5
     assert vp.leader() == 1
-    assert vp.is_tied() == False
+    assert not vp.is_tied()
     assert vp.margin() == 10
 
     # Test round VP
