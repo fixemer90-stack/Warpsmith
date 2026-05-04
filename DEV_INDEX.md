@@ -25,9 +25,9 @@ graph TD
     AGENTS --> UI["Jinja2 шаблоны"]
     AGENTS --> WIKI["Wiki-driven — YAML frontmatter"]
 
-    FEAT --> F3["Phase 3: AI (29%)"]
+        FEAT --> F3["Phase 3: AI (100%)"]
     FEAT --> F4["Phase 4: UI (100%)"]
-    FEAT --> F5["Phase 5: Production (29%)"]
+    FEAT --> F5["Phase 5: Production (100%)"]
 
     C4 --> C4L1["Уровень 1: Контекст"]
     C4 --> C4L2["Уровень 2: Auth, Billing, Feature Gate"]

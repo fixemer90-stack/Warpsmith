@@ -1,4 +1,5 @@
 """Tests for F5.4 — CORS hardening + CSP security headers."""
+
 import pytest
 from httpx import ASGITransport, AsyncClient
 
@@ -40,9 +41,10 @@ async def test_cors_production_restricted():
         # Нужно пересоздать приложение с новыми env
         # Перезагружаем модуль main, чтобы IS_PRODUCTION пересчиталась
         import importlib
-        from backend.security import headers
+
         import web.routes.api
         import web.routes.pages
+        from backend.security import headers
 
         # Создаём новое приложение через create_app
         from main import create_app
@@ -50,9 +52,7 @@ async def test_cors_production_restricted():
         test_app = create_app()
 
         transport = ASGITransport(app=test_app)
-        async with AsyncClient(
-            transport=transport, base_url="https://example.com"
-        ) as client:
+        async with AsyncClient(transport=transport, base_url="https://example.com") as client:
             resp = await client.get(
                 "/",
                 headers={"Origin": "https://evil.com"},

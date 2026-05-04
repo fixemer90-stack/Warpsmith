@@ -1,6 +1,7 @@
 """Test the Result Screen (F3.8) feature."""
 
 import json
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -43,7 +44,7 @@ def test_export_json_button(client):
     """Test that the result page includes the Export JSON button with exportJSON handler."""
     response = client.get("/result/export-test")
     assert response.status_code == 200
-    assert "exportJSON" in response.text or "@click=\"exportJSON" in response.text
+    assert "exportJSON" in response.text or '@click="exportJSON' in response.text
     assert "Export JSON" in response.text
     assert "result_chart.js" in response.text
 

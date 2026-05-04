@@ -16,16 +16,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 
 from backend.db.database import db
 from backend.loader.icon_map import CATEGORY_COLORS, get_card_style, get_icon_html
 from backend.logging_setup import RequestLoggingMiddleware, setup_logging, setup_sentry
 from backend.security.headers import CSPMiddleware, SecurityHeadersMiddleware
-
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.errors import RateLimitExceeded
-from slowapi.util import get_remote_address
-
 
 # ── Rate limiter ──────────────────────────────────────────────────
 
