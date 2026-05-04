@@ -10,7 +10,7 @@ dependencies = [
     "jinja2",
     "numpy",
     "python-multipart",
-    "python-jose[cryptography]",
+    "PyJWT[crypto]>=2.8",
     "bcrypt",
     "pyyaml",
     "python-frontmatter",
