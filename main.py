@@ -98,7 +98,7 @@ def create_app() -> FastAPI:
 
     # Security headers
     app.add_middleware(SecurityHeadersMiddleware)
-    app.add_middleware(CSPMiddleware)
+    # app.add_middleware(CSPMiddleware)  # отключено для локальной разработки
 
     # Request logging middleware
     app.add_middleware(RequestLoggingMiddleware)

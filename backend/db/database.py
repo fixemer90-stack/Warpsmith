@@ -83,6 +83,7 @@ class Database:
             email        TEXT NOT NULL UNIQUE,
             password_hash TEXT NOT NULL,
             display_name TEXT DEFAULT '',
+            tier         TEXT DEFAULT 'free',
             created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             last_login   TIMESTAMP
         );
@@ -133,6 +134,9 @@ class Database:
         CREATE INDEX IF NOT EXISTS idx_scenarios_user ON scenarios(user_id);
         """
         self.conn.executescript(schema)
+        # Миграция: добавляем tier для существующих БД
+        with contextlib.suppress(Exception):
+            self.execute("ALTER TABLE users ADD COLUMN tier TEXT DEFAULT 'free'")
         self.commit()
 
 

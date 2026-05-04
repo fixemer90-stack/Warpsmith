@@ -198,8 +198,70 @@ function scenarioSetup() {
 
         async startSimulation() {
             if (!this.canStart) return;
-            // TODO: F3.5 — call auto-play endpoint
-            alert('AI simulation not yet implemented (Phase 3). Coming soon!');
+
+            const rosterAId = this.player1Roster;
+            let rosterBId = this.player2Roster;
+
+            // If using generated opponent — need to save it to DB first?
+            // For now, use POST body approach: if generated, create a temp roster
+            if (this.player2Generated) {
+                // Save generated roster temporarily
+                try {
+                    const saveResp = await fetch('/api/rosters', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            name: this.player2Generated.name,
+                            faction: this.player2Generated.faction || '',
+                            pts_limit: this.player2Generated.total_pts || 2000,
+                            units: (this.player2Generated.units || []).map(u => ({
+                                unit_name: u.unit_name,
+                                squad_size: u.squad_size
+                            })),
+                            is_public: false,
+                        }),
+                    });
+                    if (!saveResp.ok) {
+                        alert('Failed to save generated roster for simulation');
+                        return;
+                    }
+                    const saved = await saveResp.json();
+                    rosterBId = saved.id;
+                } catch (e) {
+                    alert('Network error saving generated roster');
+                    return;
+                }
+            }
+
+            if (!rosterBId) {
+                alert('Please select or generate an opponent roster');
+                return;
+            }
+
+            try {
+                const params = new URLSearchParams({
+                    roster_a_id: rosterAId,
+                    roster_b_id: rosterBId,
+                    mission: this.mission,
+                    max_rounds: '5',
+                    seed: '42',
+                });
+                const resp = await fetch(`/api/auto-play?${params}`, {method: 'POST'});
+                if (resp.ok) {
+                    const data = await resp.json();
+                    // Navigate to round viewer with the game result
+                    if (data.result && data.result.game_id) {
+                        window.location.href = `/round-viewer/${data.result.game_id}`;
+                    } else {
+                        alert('Simulation completed, but no game_id returned');
+                    }
+                } else {
+                    const err = await resp.json().catch(() => ({}));
+                    alert(`Simulation failed: ${err.detail || resp.statusText}`);
+                }
+            } catch (e) {
+                alert(`Network error: ${e.message}`);
+            }
         }
     };
 }
