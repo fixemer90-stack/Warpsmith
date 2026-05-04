@@ -91,7 +91,7 @@ flowchart LR
 | # | Ð¤Ð¸Ñ‡Ð° | Ð§Ð°ÑÑ‹ | ÐŸÑ€Ð¸Ð¾Ñ€Ð¸Ñ‚ÐµÑ‚ | Ð¡Ñ‚Ð°Ñ‚ÑƒÑ |
 |---|------|------|-----------|--------|
 | [F3.1](f3.1-greedy-decision-engine.md) | Greedy decision engine â€” target/action evaluation | 6h | 1 | âœ… |
-| [F3.2](f3.2-faction-ai-profiles.md) | Faction AI Profiles â€” wiki-driven (Orks, Tau, AdMech) | 4h | 2 | ðŸŸ¢ |
+| [F3.2](f3.2-faction-ai-profiles.md) | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h | 2 | ✅ |
 | [F3.4](f3.4-deployment-ai.md) | Deployment AI: zone placement logic | 3h | 3 | âœ… |
 | [F3.4](f3.5-autoplay.md) | Auto-play: AI vs AI full scenario | 6h | 3 | â³ |
 | [F3.5](f3.6-replay-recording.md) | Replay recording: JSON event log per round/phase | 3h | 4 | â³ |
@@ -210,7 +210,7 @@ flowchart LR
 |------|----------|------|--------|
 | **Phase 1** â€” Combat Engine | 12 | ~30h | âœ… 100% |
 | **Phase 2** â€” Game System | 12 | ~45h | âœ… 100% |
-| **Phase 3** â€” AI & Automation | 7 | ~35h | ðŸŸ¢ 29% |
+| **Phase 3** — AI & Automation | 7 | ~35h | 🟢 43% |
 | **Phase 4** â€” Web UI Polish | 8 | ~35h | âœ… 75% |
 | **Phase 5** â€” Production | 7 | ~16h | ðŸŸ¢ 29% |
 | **Phase 6** â€” Monetization | 6 | ~15h | â³ 0% |
