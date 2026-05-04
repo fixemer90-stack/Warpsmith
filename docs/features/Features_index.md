@@ -88,8 +88,9 @@
 | [F4.6](f4.6-progressive-disclosure.md) | Progressive Disclosure: Beginner/Intermediate/Expert | 4h | 4 | ✅ |
 | [F4.7](f4.7-stat-tooltips.md) | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h | 4 | ✅ |
 | [F4.8](f4.8-svg-icons.md) | SVG icons integration in unit cards | 2h | 5 | ✅ |
+| [F4.9](f4.9-generate-opponent.md) | Generate Random Opponent — `/api/rosters/generate` для AI-ростера | 2h | 3 | ✅ |
 
-**Всего:** 8 features, ~35 часов. ✅ 100%
+**Всего:** 9 features, ~37 часов. ✅ 100%
 
 ---
 
@@ -118,7 +119,7 @@
 | **Phase 1** — Combat Engine | 12 | ~30h | ✅ 100% |
 | **Phase 2** — Game System | 12 | ~45h | ✅ 100% |
 | **Phase 3** — AI & Automation | 7 | ~35h | 🟢 43% |
-| **Phase 4** — Web UI Polish | 8 | ~35h | ✅ 100% |
+| **Phase 4** — Web UI Polish | 9 | ~37h | ✅ 100% |
 | **Phase 5** — Production | 7 | ~16h | 🟢 29% |
 | **Phase 6** — Monetization | 6 | ~15h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |

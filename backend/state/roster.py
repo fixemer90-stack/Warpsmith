@@ -12,10 +12,22 @@ Validates:
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Dict, Optional
 
 if TYPE_CHECKING:
     from backend.model.unit import Unit
+
+
+@dataclass
+class RosterState:
+    """Сохранённый ростер: данные из БД или генерации.
+    Отличается от PlayerState (игровой процесс) — это просто данные."""
+    name: str
+    faction: str
+    total_pts: int
+    units: Dict[str, "Unit"] = field(default_factory=dict)
+    warlord_unit_name: Optional[str] = None
+    detachment: str = ""
 
 
 class GameSize(Enum):

@@ -9,10 +9,12 @@ from pydantic import BaseModel, Field
 from backend.auth import User, get_current_user
 from backend.billing.plans import UserFeatures
 from backend.db.database import db
+from backend.engine.ai.autoplay import run_auto_game, AutoPlayConfig
 from backend.engine.combat import MultiAttackResult, simulate_unit_attack, simulate_weapon_attack
 from backend.engine.dice import DicePool
 from backend.loader.registry import registry as wiki
-from backend.state.roster import validate_roster
+from backend.state.mission import Mission
+from backend.state.roster import RosterState, validate_roster
 
 router = APIRouter()
 
@@ -599,6 +601,94 @@ async def health():
     return {"status": "ok", "version": "0.3.0"}
 
 
+@router.post("/auto-play")
+async def auto_play_simulation(
+    roster_a_id: int,
+    roster_b_id: int,
+    mission: str = "only_war",
+    deployment: str = "standard",
+    max_rounds: int = 5,
+    seed: int = 42
+):
+    """Запуск полной AI vs AI симуляции."""
+    try:
+        # Load rosters from database
+        roster_a_row = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_a_id,))
+        roster_b_row = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_b_id,))
+        
+        if not roster_a_row:
+            raise HTTPException(status_code=404, detail=f"Roster A not found: {roster_a_id}")
+        if not roster_b_row:
+            raise HTTPException(status_code=404, detail=f"Roster B not found: {roster_b_id}")
+        
+        # Convert database rows to RosterState objects
+        import json
+        from backend.state.roster import RosterState
+        from backend.model.unit import Unit, Weapon
+        
+        def units_from_db(units_json):
+            units_dict = {}
+            units_data = json.loads(units_json)
+            for u_data in units_data:
+                unit = wiki.get_unit(u_data["unit_name"])
+                if unit:
+                    # Create a copy of the unit with the specified squad size
+                    unit_copy = Unit(
+                        name=unit.name,
+                        faction=unit.faction,
+                        toughness=unit.toughness,
+                        save=unit.save,
+                        wounds=unit.wounds,
+                        squad_size=u_data["squad_size"],
+                        weapons=unit.weapons,
+                        points=unit.points
+                    )
+                    units_dict[unit.name] = unit_copy
+            return units_dict
+        
+        roster_a = RosterState(
+            name=roster_a_row["name"],
+            faction=roster_a_row["faction"],
+            total_pts=roster_a_row["pts_limit"],  # This should be total_pts, but we'll use pts_limit for now
+            units=units_from_db(roster_a_row["units"])
+        )
+        
+        roster_b = RosterState(
+            name=roster_b_row["name"],
+            faction=roster_b_row["faction"],
+            total_pts=roster_b_row["pts_limit"],
+            units=units_from_db(roster_b_row["units"])
+        )
+        
+        # Get mission object
+        mission_obj = Mission(
+            name=mission,
+            description=f"{mission} mission",
+            objectives=[]
+        )
+        
+        # Run auto-play simulation
+        config = AutoPlayConfig(
+            max_rounds=max_rounds,
+            deployment_type=deployment,
+            seed=seed
+        )
+        
+        result = run_auto_game(roster_a, roster_b, mission_obj, config)
+        
+        if result.error:
+            raise HTTPException(status_code=400, detail=result.error)
+        
+        return {
+            "success": True,
+            "result": result.to_dict(),
+            "replay_log": result.round_logs  # This would be enhanced with actual replay data
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/factions")
 async def list_factions():
     """Список доступных фракций."""
@@ -744,7 +834,7 @@ async def get_roster(roster_id: int, user: User = Depends(get_current_user)):
     return dict(row)
 
 
-@router.post("/rosters/generate")
+@router.get("/rosters/generate")
 async def generate_roster(faction: str = "", pts_limit: int = 2000):
     """Сгенерировать случайный валидный ростер для AI-оппонента."""
     import random

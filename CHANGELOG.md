@@ -18,8 +18,8 @@
 - F4.8 SVG icons — `web/static/icons/legends.svg` (tombstone), `_unit_icons()` включает `legends` в priority, `icon_map.py` загружает все SVG динамически
 - API `/api/detachments` — эндпоинт возвращает `rule_name`, `rule_description`, `stratagem_count`, `enhancement_count` для inline preview
 |- Wiki YAML детачментов — `detachment_rule`, `stratagems`, `enhancements` добавлены в frontmatter 21 файла
-|
-|### Changed
+
+### Changed
 |- **Wiki → Monorepo (fix Railway deploy)** — wiki-хранилище (489 файлов, 35 MB) перемещено из внешнего `/mnt/d/Python/Balthier/wiki/` в `simulator/wiki/`. Данные теперь — часть репозитория, попадают в Docker-образ автоматически.
   - `.dockerignore`: удалена строка `wiki/` — **это была коренная причина пустого Railway**
   - `.gitignore`: `wiki/` больше не игнорируется (комментарий обновлён)
@@ -27,13 +27,16 @@
   - `tests/test_docker.py`: проверка `.dockerignore` обновлена — `wiki/` больше не должен быть в исключениях
   - Локально проверено: `WikiRegistry` находит 160 юнитов, 23 детачмента, 3 фракции из нового пути
   - Тесты: 340 passed, 0 failed
-|
-|### Fixed
-- Team Builder: дублирование заголовка 🛠 Team Builder, два селекта Detachment, `@change="loadUnits()"` → `@change="onFactionChange()"` (диспатчит событие в detachmentPicker)
-- Detachment Picker: добавлен `collapsed`/`expand` — после выбора список сворачивается, кнопка Change разворачивает
-- `detachment_picker.js` не подгружался в team_builder.html — добавлен `<script src=...>`
-- YAML parsing: апострофы в `'Ere We Go` и `'Ard as Nails` ломали frontmatter — обёрнуты в двойные кавычки
-- WatchFiles reload отключён — файлы больше не откатываются к git-версиям
+
+### Fixed
+|- **Auth 500 на Railway** — `/data/` директория не существовала, SQLite не мог создать БД. `database.py`: `connect()` теперь создаёт родительскую директорию через `os.makedirs(exist_ok=True)`.
+|- **F4.2 Unit Modal** — создан `web/static/unit_modal.js` (mixin с Alpine.js логикой: openUnitModal, addUnitToRoster, currentWeapons, totalCost, getQuickSizes). HTML модалки в team_builder.html расширен до полного datasheet: stats strip (M/T/SV/W/LD/OC), squad size stepper с +/− и quick presets, wargear options с radio и recommended, nob upgrades, abilities, weapons table, total cost bar.
+|- **F4.8 SVG Icons** — создан `web/templates/partials/unit_card.html` (inline SVG + category color + hover effects). Jinja2 globals `unit_icon`, `card_style`, `CATEGORY_COLORS` зарегистрированы в main.py, pages.py, auth.py.
+|- Team Builder: дублирование заголовка 🛠 Team Builder, два селекта Detachment, `@change="loadUnits()"` → `@change="onFactionChange()"` (диспатчит событие в detachmentPicker)
+|- Detachment Picker: добавлен `collapsed`/`expand` — после выбора список сворачивается, кнопка Change разворачивает
+|- `detachment_picker.js` не подгружался в team_builder.html — добавлен `<script src=...>`
+|- YAML parsing: апострофы в `'Ere We Go` и `'Ard as Nails` ломали frontmatter — обёрнуты в двойные кавычки
+|- WatchFiles reload отключён — файлы больше не откатываются к git-версиям
 
 ## 2026-05-03
 

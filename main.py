@@ -18,6 +18,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from backend.db.database import db
+from backend.loader.icon_map import get_icon_html, get_card_style, CATEGORY_COLORS
 
 # ── Конфигурация ─────────────────────────────────────────────────
 
@@ -28,6 +29,10 @@ ALLOWED_ORIGINS = os.getenv(
 ).split(",")
 
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "web" / "templates"))
+# Jinja2 globals — для использования в шаблонах карточек юнитов
+templates.env.globals["unit_icon"] = get_icon_html
+templates.env.globals["card_style"] = get_card_style
+templates.env.globals["CATEGORY_COLORS"] = CATEGORY_COLORS
 
 
 def create_app() -> FastAPI:
