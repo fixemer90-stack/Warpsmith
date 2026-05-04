@@ -31,15 +31,11 @@ async def test_rate_limit_anon():
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         for _ in range(5):
             resp = await client.get("/")
-            assert resp.status_code == 200, (
-                f"Expected 200, got {resp.status_code}"
-            )
+            assert resp.status_code == 200, f"Expected 200, got {resp.status_code}"
 
         # 6-й запрос должен превысить лимит
         resp = await client.get("/")
-        assert resp.status_code == 429, (
-            f"Expected 429 rate limited, got {resp.status_code}"
-        )
+        assert resp.status_code == 429, f"Expected 429 rate limited, got {resp.status_code}"
 
 
 @pytest.mark.asyncio
@@ -96,9 +92,7 @@ async def test_rate_limit_headers():
         assert resp.status_code == 429
 
         has_retry_after = "retry-after" in resp.headers
-        has_ratelimit = any(
-            k.lower().startswith("x-ratelimit") for k in resp.headers
-        )
+        has_ratelimit = any(k.lower().startswith("x-ratelimit") for k in resp.headers)
         assert has_retry_after or has_ratelimit, (
             "429 response should have Retry-After or X-RateLimit headers. "
             f"Headers: {dict(resp.headers)}"
