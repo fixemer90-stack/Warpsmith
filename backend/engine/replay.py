@@ -22,7 +22,6 @@ from backend.state.game_state import GameState, UnitState
 class ReplayEvent:
     """Одно событие в реплее."""
 
-    timestamp: float  # ms от начала игры
     round: int
     phase: str
     turn: int
@@ -38,6 +37,7 @@ class ReplayEvent:
     detail: str | None = None  # дополнительный текст
     position_before: dict[str, int] | None = None
     position_after: dict[str, int] | None = None
+    timestamp: float = 0.0  # ms от начала игры; устанавливается ReplayRecorder.record()
 
 
 @dataclass
@@ -131,9 +131,9 @@ class ReplayRecorder:
                 turn=turn,
                 event_type="shoot",
                 actor_id=actor.unit_id,
-                actor_name=actor.unit_name,
+                actor_name=actor.name,
                 target_id=target.unit_id,
-                target_name=target.unit_name,
+                target_name=target.name,
                 weapon_name=weapon_name,
                 dice_rolled=dice,
                 result_value=damage,
@@ -159,9 +159,9 @@ class ReplayRecorder:
                 turn=turn,
                 event_type="charge",
                 actor_id=actor.unit_id,
-                actor_name=actor.unit_name,
+                actor_name=actor.name,
                 target_id=target.unit_id,
-                target_name=target.unit_name,
+                target_name=target.name,
                 dice_rolled=[charge_roll],
                 result_value=1.0 if success else 0.0,
                 detail="success" if success else "failed",
@@ -178,9 +178,9 @@ class ReplayRecorder:
                 turn=turn,
                 event_type="kill",
                 actor_id=actor.unit_id,
-                actor_name=actor.unit_name,
+                actor_name=actor.name,
                 target_id=target.unit_id,
-                target_name=target.unit_name,
+                target_name=target.name,
                 result_value=1.0,
             )
         )
@@ -201,7 +201,7 @@ class ReplayRecorder:
                 turn=turn,
                 event_type="move",
                 actor_id=actor.unit_id,
-                actor_name=actor.unit_name,
+                actor_name=actor.name,
                 position_before={"x": from_pos[0], "y": from_pos[1]},
                 position_after={"x": to_pos[0], "y": to_pos[1]},
             )
@@ -224,9 +224,9 @@ class ReplayRecorder:
                 turn=turn,
                 event_type="damage",
                 actor_id=actor.unit_id,
-                actor_name=actor.unit_name,
+                actor_name=actor.name,
                 target_id=target.unit_id,
-                target_name=target.unit_name,
+                target_name=target.name,
                 result_value=damage,
             )
         )
@@ -253,42 +253,33 @@ class ReplayRecorder:
 
 def _snapshot_state(state: GameState) -> dict[str, Any]:
     """Создать снимок GameState для реплея."""
+    units_by_player: dict[str, list[dict]] = {}
+    for pid, player in getattr(state, "players", {}).items():
+        units_by_player[pid] = [_unit_snapshot(u) for u in player.units.values()]
+
     return {
         "round": getattr(state, "current_round", 0),
         "phase": getattr(state, "current_phase", "").value
         if hasattr(getattr(state, "current_phase", None), "value")
         else str(getattr(state, "current_phase", "")),
-        "turn": getattr(state, "turn", 0),
         "victory_points": {
             pid: getattr(player, "victory_points", 0)
             for pid, player in getattr(state, "players", {}).items()
         },
-        "units": {
-            "roster_a": [
-                _unit_snapshot(u)
-                for u in getattr(getattr(state, "roster_a", None), "units", {}).values()
-            ]
-            if hasattr(state, "roster_a")
-            else [],
-            "roster_b": [
-                _unit_snapshot(u)
-                for u in getattr(getattr(state, "roster_b", None), "units", {}).values()
-            ]
-            if hasattr(state, "roster_b")
-            else [],
-        },
+        "units": units_by_player,
     }
 
 
 def _unit_snapshot(unit: UnitState) -> dict[str, Any]:
+    pos = unit.position if hasattr(unit, "position") else (0, 0)
     return {
         "id": getattr(unit, "unit_id", ""),
-        "name": getattr(unit, "unit_name", str(unit)),
-        "squad_size": getattr(unit, "squad_size", 1),
-        "wounds_remaining": getattr(unit, "wounds_remaining", getattr(unit, "wounds", 1)),
-        "position": {"x": getattr(unit.position, "x", 0), "y": getattr(unit.position, "y", 0)}
-        if hasattr(unit, "position")
-        else {"x": 0, "y": 0},
+        "name": getattr(unit, "name", str(unit)),
+        "models_remaining": getattr(unit, "models_remaining", 1),
+        "models_total": getattr(unit, "models_total", 1),
+        "current_wounds": getattr(unit, "current_wounds", getattr(unit, "wounds", 1)),
+        "max_wounds": getattr(unit, "max_wounds", getattr(unit, "wounds", 1)),
+        "position": {"x": pos[0], "y": pos[1]},
         "is_engaged": getattr(unit, "is_engaged", False),
         "is_battle_shocked": getattr(unit, "is_battle_shocked", False),
         "is_alive": getattr(unit, "is_alive", True),
@@ -296,6 +287,8 @@ def _unit_snapshot(unit: UnitState) -> dict[str, Any]:
 
 
 def _pos_dict(pos) -> dict[str, int]:
+    if isinstance(pos, (list, tuple)) and len(pos) >= 2:
+        return {"x": int(pos[0]), "y": int(pos[1])}
     if hasattr(pos, "x") and hasattr(pos, "y"):
         return {"x": int(pos.x), "y": int(pos.y)}
     return {"x": 0, "y": 0}
