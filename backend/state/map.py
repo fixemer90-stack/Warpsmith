@@ -255,6 +255,63 @@ class BattlefieldMap:
         """Check if a position is within map bounds."""
         return 0 <= x < self.width and 0 <= y < self.height
 
+    # ── Line of Sight ─────────────────────────────────────────────
+
+    _los_cache: dict[tuple[int, int, int, int], bool] = field(default_factory=dict)
+
+    @staticmethod
+    def _is_blocking_los(terrain_type: TerrainType) -> bool:
+        """Return True if terrain type blocks line of sight entirely."""
+        return terrain_type == TerrainType.IMPASSABLE
+
+    def has_los(self, x1: int, y1: int, x2: int, y2: int) -> bool:
+        """Check LoS between (x1,y1) and (x2,y2) via Bresenham ray casting.
+
+        Impassable terrain cells block LoS. Start/end cells are ignored
+        (a unit can always see from its own cell and to the target cell).
+        Results are cached for performance.
+        """
+        # Normalize cache key (always low-to-high)
+        ax, ay = (x1, y1) if x1 < x2 or (x1 == x2 and y1 < y2) else (x2, y2)
+        bx, by = (x2, y2) if x1 < x2 or (x1 == x2 and y1 < y2) else (x1, y1)
+        key = (ax, ay, bx, by)
+        if key in self._los_cache:
+            return self._los_cache[key]
+
+        dx = abs(x2 - x1)
+        dy = -abs(y2 - y1)
+        sx = 1 if x1 < x2 else -1
+        sy = 1 if y1 < y2 else -1
+        err = dx + dy
+
+        x, y = x1, y1
+        blocked = False
+
+        while True:
+            # Check terrain at current cell (skip start and end)
+            if (x, y) != (x1, y1) and (x, y) != (x2, y2):
+                if self._is_blocking_los(self.terrain[y, x]):
+                    blocked = True
+                    break
+
+            if (x, y) == (x2, y2):
+                break
+
+            e2 = 2 * err
+            if e2 >= dy:
+                err += dy
+                x += sx
+            if e2 <= dx:
+                err += dx
+                y += sy
+
+        self._los_cache[key] = not blocked
+        return not blocked
+
+    def clear_los_cache(self):
+        """Clear the LoS cache (call when terrain changes)."""
+        self._los_cache.clear()
+
 
 # Utility functions for creating specific mission maps
 def create_dawn_of_war_map() -> BattlefieldMap:

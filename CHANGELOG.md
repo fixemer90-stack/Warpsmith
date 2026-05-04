@@ -10,6 +10,8 @@
 ## 2026-05-04
 
 ### Added
+- **F5.5 Logging (structlog) + Sentry error tracking** — `backend/logging_setup.py` (создано), `main.py` (патч — инициализация structlog + Sentry), `.env.example` (добавлен SENTRY_DSN, LOG_LEVEL) — структурированное JSON логирование в production, цветное в dev, логирование каждого HTTP-запроса с request_id, duration_ms, status_code, отправка необработанных исключений в Sentry
+- **F5.6 CI/CD — GitHub Actions (lint + test + deploy)** — `.github/workflows/ci.yml` (lint: ruff + mypy, test: pytest с coverage > 80%, docker: build + push в GHCR), `.github/workflows/deploy.yml` (deploy: Dokku/Railway после успешного CI), `tests/test_coverage.py` (порог покрытия), обновлен `pyproject.toml` с `--cov-fail-under=80`
 - **F5.2 Deployment** — `Procfile`, `app.json`, `deploy/dokku-setup.sh`, `deploy/railway.json`, `deploy/systemd.service`, `docs/deployment.md` — поддерживает 3 сценария: Dokku (git push + letsencrypt + volume), Railway (serverless + Dockerfile), self-host (systemd + nginx + certbot)
 - **F4.6 Progressive Disclosure** — `web/static/progressive_disclosure.js`: Alpine.js контроллер с тремя режимами (Beginner/Intermediate/Expert), localStorage, CSS классы `mode-beginner/mode-intermediate/mode-expert` на `<body>`, переключатель B/I/E в хедере; unit cards показывают beginner-friendly/expert-only контент
 - **Тесты F4.6** — `tests/test_progressive_disclosure.py`: 7 тестов (toggle, CSS, JS, mode-классы)
@@ -46,10 +48,22 @@
 |- **F3.5 Autoplay — тесты** — `test_autoplay.py` переписан под актуальные `Weapon`, `Unit`, `Mission` API
 |- **F3.5 RosterState** — добавлен `@dataclass RosterState` в `backend/state/roster.py`
 |- **Generate Opponent — 405** — `/api/rosters/generate`: `POST` → `GET` (фронт вызывал `fetch` без `method: 'POST'`)
+|- **Auth bcrypt — Docker fix** — bcrypt C-расширение не загружалось на Railway: скомпилированный `.so` из builder-стадии не подходил runtime (различия libc между кэшированными слоями). Фикс: `pip install bcrypt` в runtime-стадии (manylinux wheel, не требует gcc)
 |- Team Builder: дублирование заголовка, два селекта Detachment, `@change="loadUnits()"` → `@change="onFactionChange()"`
 |- Detachment Picker: collapsed/expand, `detachment_picker.js` не подгружался
 |- YAML parsing: апострофы в `'Ere We Go` и `'Ard as Nails`
 |- WatchFiles reload отключён
+
+### Implemented
+|- **F2.5 Game Loop** — реализованы все 6 фаз в `backend/engine/scenario.py`:
+  - Command: CP генерация, warlord bonus, VP scoring (было)
+  - Movement: юниты двигаются к центру карты, Fall Back из engagement
+  - Shooting: поиск целей в радиусе 12, при наличии unit_models — Monte Carlo combat engine (F1.6)
+  - Charge: 2D6 roll, engagement при успехе
+  - Fight: alternating activations, melee resolution
+  - Morale: battle-shock тесты (2D6, snake eyes/boxcars)
+  - `Scenario.__init__`: добавлен опциональный `unit_models: dict[str, Unit]` и `battlefield: BattlefieldMap` для LoS
+|- **F2.3 Line of Sight** — Bresenham ray casting в `BattlefieldMap.has_los()`. IMPASSABLE terrain блокирует LoS, старт/финиш не проверяются, результаты кэшируются. Подключён к `Scenario._shooting_phase()`
 
 ## 2026-05-03
 

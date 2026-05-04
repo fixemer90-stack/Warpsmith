@@ -30,6 +30,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
+# Install bcrypt binary wheel (manylinux) — C extension из builder может не
+# подойти runtime из-за различий в libc между кэшированными слоями Docker.
+# Binary wheel не требует gcc, только совместимую glibc (есть в slim).
+RUN pip install --no-cache-dir bcrypt
+
 # Copy application code
 COPY . .
 

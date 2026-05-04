@@ -60,12 +60,12 @@
 | [F3.1](f3.1-greedy-decision-engine.md) | Greedy decision engine — target/action evaluation | 6h | 1 | ✅ |
 | [F3.2](f3.2-faction-ai-profiles.md) | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h | 2 | ✅ |
 | [F3.4](f3.4-deployment-ai.md) | Deployment AI: zone placement logic | 3h | 3 | ✅ |
-| [F3.5](f3.5-autoplay.md) | Auto-play: AI vs AI full scenario | 6h | 3 | ✅ |
-| [F3.6](f3.6-replay-recording.md) | Replay recording: JSON event log per round/phase | 3h | 4 | ✅ |
-| [F3.7](f3.7-round-viewer.md) | Round viewer: step-by-step replay UI | 6h | 5 | ⏳ |
-| [F3.8](f3.8-result-screen.md) | Result screen: kills, damage, VP timeline chart | 3h | 5 | ⏳ |
+|| [F3.5](f3.5-autoplay.md) | Auto-play: AI vs AI full scenario | 6h | 3 | ❌ |
+|| [F3.6](f3.6-replay-recording.md) | Replay recording: JSON event log per round/phase | 3h | 4 | ❌ |
+|| [F3.7](f3.7-round-viewer.md) | Round viewer: step-by-step replay UI | 6h | 5 | ⏳ |
+|| [F3.8](f3.8-result-screen.md) | Result screen: kills, damage, VP timeline chart | 3h | 5 | ⏳ |
 
-**Всего:** 7 features, ~35 часов. 🟢 71%
+**Всего:** 7 features, ~35 часов. 🟢 43%
 
 **Deprecated files (заменены):**
 - [F3.2 — Ork AI](f3.2-ork-ai.md) (deprecated → superseded by F3.2 Faction AI Profiles)
@@ -117,7 +117,7 @@
 | Фаза | Features | Часы | Статус |
 |------|----------|------|--------|
 | **Phase 1** — Combat Engine | 12 | ~30h | ✅ 100% |
-| **Phase 2** — Game System | 12 | ~45h | ✅ 100% |
+| **Phase 2** — Game System | 12 | ~40h | ✅ 100% |
 | **Phase 3** — AI & Automation | 7 | ~35h | 🟢 43% |
 | **Phase 4** — Web UI Polish | 9 | ~37h | ✅ 100% |
 | **Phase 5** — Production | 7 | ~16h | 🟢 29% |

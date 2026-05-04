@@ -26,12 +26,10 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - Roster validation + CRUD через `/api/rosters`
 - Team Builder UI: faction picker, unit modal, PTS bar, detachment picker
 
-### 🟢 Phase 3: AI & Automation (71%)
-- Greedy Decision Engine: target/action evaluation
+### 🟢 Phase 3: AI & Automation (43%)
+- Greedy Decision Engine: target/action evaluation (26 тестов)
 - Deployment AI: zone placement (4 deployment types)
-- Faction AI Profiles: wiki-driven (Orks, Tau, AdMech)
-- Auto-play: AI vs AI full scenario
-- Replay recording: JSON event log per round/phase
+- Faction AI Profiles: wiki-driven (Orks, Tau, AdMech) — 3 профиля загружаются
 - Test coverage: 44+ тестов на AI
 
 ### ✅ Phase 4: Web UI Polish (100%)
@@ -43,11 +41,13 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - Progressive Disclosure: Beginner/Intermediate/Expert modes
 - Stat tooltips (M/T/SV/W/LD/OC) with glossary
 - SVG icons (18 categories, inline)
+- Generate Random Opponent: AI-ростер в 1 клик
 
-### 🟢 Phase 5: Production (29%)
+### 🟢 Phase 5: Production (43%)
 - Dockerfile + docker-compose + multi-stage build
 - Deployment: Railway (serverless)
 - Wiki monorepo: data included in Docker-образ автоматически
+- Logging: structlog (JSON в stdout) + Sentry error tracking
 
 ### 🌐 Веб-интерфейс
 - [Team Builder](https://warpsmith-production.up.railway.app/team-builder): faction/units/detachments selection
@@ -60,7 +60,7 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 ```bash
 cd simulator
 python -m pytest tests/ -q
-# → ~340 тестов
+# → ~351 тест
 ```
 
 ## 📁 Структура

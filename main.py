@@ -19,6 +19,7 @@ from fastapi.templating import Jinja2Templates
 
 from backend.db.database import db
 from backend.loader.icon_map import get_icon_html, get_card_style, CATEGORY_COLORS
+from backend.logging_setup import setup_logging, setup_sentry, RequestLoggingMiddleware
 
 # ── Конфигурация ─────────────────────────────────────────────────
 
@@ -37,6 +38,15 @@ templates.env.globals["CATEGORY_COLORS"] = CATEGORY_COLORS
 
 def create_app() -> FastAPI:
     """Создать и настроить FastAPI приложение."""
+    # Настройка логирования до создания app
+    IS_PRODUCTION = os.getenv("HOSTING", "").lower() in ("true", "1", "yes")
+    LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO" if IS_PRODUCTION else "DEBUG")
+    setup_logging(level=LOG_LEVEL)
+    setup_sentry(
+        dsn=os.getenv("SENTRY_DSN"),
+        environment="production" if IS_PRODUCTION else "development",
+    )
+
     app = FastAPI(
         title="Warpsmith — WH40k Battle Simulator",
         version="0.3.0",
@@ -51,6 +61,9 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    # Request logging middleware
+    app.add_middleware(RequestLoggingMiddleware)
 
     # Templates — inject into app state for routes
     app.state.templates = templates
@@ -79,6 +92,11 @@ def create_app() -> FastAPI:
     static_dir = Path(__file__).parent / "web" / "static"
     if static_dir.exists():
         app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+    # Healthcheck для Sentry
+    @app.get("/sentry-debug")
+    async def trigger_error():
+        division_by_zero = 1 / 0  # noqa
 
     return app
 
