@@ -251,8 +251,8 @@ def _clean_range(value: str) -> str:
     """Clean a range value: remove quotes, strip Ranged/Melee prefix, handle non-numeric."""
     cleaned = value.replace('"', "").replace("\u201c", "").replace("\u201d", "").strip()
 
-    # Extract numeric prefix from strings like "Ranged 36", "Ranged 24"
-    match = re.match(r"(\d+)", cleaned)
+    # Extract numeric from strings like "Ranged 36", "Melee" (returns None)
+    match = re.search(r"(\d+)", cleaned)
     if match:
         return match.group(1)
 
@@ -286,8 +286,13 @@ def _parse_weapons_from_markdown(body: str) -> tuple[list[Weapon], list[Weapon]]
         # Map column indices by header name (supports English, Russian, 8 or 9 columns)
         col = _map_header_columns(header_cells)
 
-        # Must have at minimum: name, range/attacks/skill/strength/ap/damage
-        required = {"name", "range", "attacks", "skill", "strength", "ap", "damage"}
+        # Must have at minimum: name, attacks/skill/strength/ap/damage
+        # range may be absent — then type column provides it
+        required = {"name", "attacks", "skill", "strength", "ap", "damage"}
+        if "range" in col:
+            required.add("range")
+        elif "type" not in col:
+            continue
         if not required.issubset(col):
             continue
 
@@ -313,7 +318,9 @@ def _parse_weapons_from_markdown(body: str) -> tuple[list[Weapon], list[Weapon]]
 
             weapon_data: dict[str, Any] = {
                 "name": cells[col["name"]] if col["name"] < len(cells) else "",
-                "range": cells[col["range"]] if col["range"] < len(cells) else "0",
+                "range": cells[col["range"]]
+                if "range" in col and col["range"] < len(cells)
+                else (cells[col["type"]] if "type" in col and col["type"] < len(cells) else "0"),
                 "attacks": cells[col["attacks"]] if col["attacks"] < len(cells) else "1",
                 "skill": cells[col["skill"]] if col["skill"] < len(cells) else "5+",
                 "strength": cells[col["strength"]] if col["strength"] < len(cells) else "3",

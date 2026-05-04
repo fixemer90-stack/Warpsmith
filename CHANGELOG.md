@@ -48,6 +48,14 @@
 |- **F3.5 Autoplay — тесты** — `test_autoplay.py` переписан под актуальные `Weapon`, `Unit`, `Mission` API
 |- **F3.5 RosterState** — добавлен `@dataclass RosterState` в `backend/state/roster.py`
 |- **Generate Opponent — 405** — `/api/rosters/generate`: `POST` → `GET` (фронт вызывал `fetch` без `method: 'POST'`)
+|- **F3.5 Autoplay AI vs AI** — `backend/engine/ai/autoplay.py` переписан: `run_auto_game(roster_a: RosterState, roster_b: RosterState, mission_name, config)`. Создаёт `GameState(players=...)`, использует `Scenario.run_round()` для game loop, `deploy_game()` для размещения. 16 тестов (было 5/12)
+|- **F3.6 Replay Recording** — `backend/engine/replay.py` исправлен под актуальный `GameState` (`state.players` вместо `roster_a/b`), `UnitState` поля (`name`, `models_remaining`), tuple-позиции. 18 тестов (было 14 с 4 known-fail)
+|- **Парсинг оружия (header-aware)** — `backend/loader/parser.py`: `_parse_weapons_from_markdown()` переписан на динамическое маппинг колонок по заголовкам таблицы. Поддержка русских/английских заголовков, 8/9 колонок, `N/A` skill (torrent), `—`/`-` во всех полях, dice-выражения в strength. Колонка `range` опциональна — если таблица использует `тип`/`type` вместо отдельной `Range`, range подставляется из неё. `_clean_range()`: `re.match` → `re.search` (извлекает число из `"Ranged 24"`). 0→406→410 оружий распарсено, 10 осталось (wiki data quality)
+|- **Dockerfile single-stage** — убран мультистейдж, `build-essential`, `COPY --from=builder`. `FROM python:3.12-slim`, `pip install -e .` через manylinux wheels. Нет ABI mismatch
+|- **PyJWT вместо python-jose** — `pyproject.toml`: `python-jose[cryptography]` → `PyJWT[crypto]>=2.8`. Код делает `import jwt`, а `python-jose` даёт `import jose` — это было причиной 500 на Railway
+|- **`.dockerignore` — wiki excluded** — `*.md` заменено на `docs/`. Wiki (`.md` файлы) теперь копируется в Docker-образ
+|- **`/api/rosters/generate` — 401** — роут был зарегистрирован ПОСЛЕ `/rosters/{roster_id}` (с auth). FastAPI матчил `generate` как `{roster_id}` → вызывал `get_roster()` с `Depends(get_current_user)`. Перемещён перед динамическим роутом
+|- **`team_builder.js` — saveRoster** — переписан: валидация полей (`name`, `faction`, PTS), ошибки в `validationErrors` (inline, без `alert`), `errorData.detail.validation_errors` распаковывается корректно. Убран дубликат `detachment: ''`. `this.units` → `this._units`
 |- **Auth bcrypt — Docker fix** — bcrypt C-расширение не загружалось на Railway: скомпилированный `.so` из builder-стадии не подходил runtime (различия libc между кэшированными слоями). Фикс: `pip install bcrypt` в runtime-стадии (manylinux wheel, не требует gcc)
 |- Team Builder: дублирование заголовка, два селекта Detachment, `@change="loadUnits()"` → `@change="onFactionChange()"`
 |- Detachment Picker: collapsed/expand, `detachment_picker.js` не подгружался
