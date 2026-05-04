@@ -60,12 +60,12 @@
 | [F3.1](f3.1-greedy-decision-engine.md) | Greedy decision engine — target/action evaluation | 6h | 1 | ✅ |
 | [F3.2](f3.2-faction-ai-profiles.md) | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h | 2 | ✅ |
 | [F3.4](f3.4-deployment-ai.md) | Deployment AI: zone placement logic | 3h | 3 | ✅ |
-| [F3.5](f3.5-autoplay.md) | Auto-play: AI vs AI full scenario | 6h | 3 | ⏳ |
-| [F3.6](f3.6-replay-recording.md) | Replay recording: JSON event log per round/phase | 3h | 4 | ⏳ |
+| [F3.5](f3.5-autoplay.md) | Auto-play: AI vs AI full scenario | 6h | 3 | ✅ |
+| [F3.6](f3.6-replay-recording.md) | Replay recording: JSON event log per round/phase | 3h | 4 | ✅ |
 | [F3.7](f3.7-round-viewer.md) | Round viewer: step-by-step replay UI | 6h | 5 | ⏳ |
 | [F3.8](f3.8-result-screen.md) | Result screen: kills, damage, VP timeline chart | 3h | 5 | ⏳ |
 
-**Всего:** 7 features, ~35 часов. 🟢 43%
+**Всего:** 7 features, ~35 часов. 🟢 71%
 
 **Deprecated files (заменены):**
 - [F3.2 — Ork AI](f3.2-ork-ai.md) (deprecated → superseded by F3.2 Faction AI Profiles)
@@ -85,11 +85,11 @@
 | [F4.3](f4.3-detachment-picker.md) | Detachment picker with rule preview | 3h | 2 | ✅ |
 | [F4.4](f4.4-synergy-hints.md) | Synergy hints: leader compatibility, transport capacity | 4h | 2 | ✅ |
 | [F4.5](f4.5-canvas-map.md) | Canvas map: terrain tiles + deploy zones interactivity | 8h | 3 | ✅ |
-| [F4.6](f4.6-progressive-disclosure.md) | Progressive Disclosure: Beginner/Intermediate/Expert | 4h | 4 | ⏳ |
-| [F4.7](f4.7-stat-tooltips.md) | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h | 4 | ⏳ |
+| [F4.6](f4.6-progressive-disclosure.md) | Progressive Disclosure: Beginner/Intermediate/Expert | 4h | 4 | ✅ |
+| [F4.7](f4.7-stat-tooltips.md) | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h | 4 | ✅ |
 | [F4.8](f4.8-svg-icons.md) | SVG icons integration in unit cards | 2h | 5 | ✅ |
 
-**Всего:** 8 features, ~35 часов. ✅ 75%
+**Всего:** 8 features, ~35 часов. ✅ 100%
 
 ---
 
@@ -118,7 +118,7 @@
 | **Phase 1** — Combat Engine | 12 | ~30h | ✅ 100% |
 | **Phase 2** — Game System | 12 | ~45h | ✅ 100% |
 | **Phase 3** — AI & Automation | 7 | ~35h | 🟢 43% |
-| **Phase 4** — Web UI Polish | 8 | ~35h | ✅ 75% |
+| **Phase 4** — Web UI Polish | 8 | ~35h | ✅ 100% |
 | **Phase 5** — Production | 7 | ~16h | 🟢 29% |
 | **Phase 6** — Monetization | 6 | ~15h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |

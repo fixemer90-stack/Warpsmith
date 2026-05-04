@@ -69,8 +69,6 @@ class WikiRegistry:
             Path(env_path) if env_path else None,
             Path.cwd() / "wiki",
             Path.cwd().parent / "wiki",
-            Path("/mnt/d/Python/Balthier/wiki"),
-            Path("/mnt/d/Python/Maksim/wiki"),
         ]
         for candidate in candidates:
             if candidate is not None and (candidate / "units").exists():

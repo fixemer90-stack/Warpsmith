@@ -53,7 +53,7 @@ class TestDockerFiles:
         assert "*.pyc" in content
         assert ".git/" in content
         assert ".pytest_cache/" in content
-        assert "wiki/" in content
+        assert "wiki/" not in content  # wiki — часть репозитория, не исключаем
         assert "*.db" in content
         assert ".env" in content
 

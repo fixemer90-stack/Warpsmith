@@ -24,12 +24,14 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - Roster validation + CRUD через `/api/rosters`
 - Team Builder UI: faction picker, unit modal, PTS bar, detachment picker
 
-### ✅ Phase 3: AI & Automation (29%)
+### ✅ Phase 3: AI & Automation (71%)
 - Greedy Decision Engine: target/action evaluation
 - Deployment AI: zone placement (4 deployment types)
-- Faction AI Profiles: wiki-driven (WIP)
+- Faction AI Profiles: wiki-driven (Orks, Tau)
+- Auto-play: AI vs AI full scenario
+- Replay recording: JSON event log per round/phase
 
-### ✅ Phase 4: Web UI Polish (75%)
+### ✅ Phase 4: Web UI Polish (100%)
 - Faction browser + category/PTS filter
 - Unit modal: squad size, loadout, wargear
 - Detachment picker with rule preview
@@ -38,8 +40,9 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - SVG icons (19 categories)
 
 ### 🟢 Phase 5: Production (29%)
-- Dockerfile + docker-compose
+- Dockerfile + docker-compose + multi-stage build
 - Deployment: Dokku, Railway, self-host (systemd)
+- Wiki monorepo: data included in Docker-образ автоматически
 
 ### 🌐 Веб-интерфейс
 - Team Builder: faction/units/detachments selection
@@ -78,16 +81,14 @@ python -m pytest tests/ -q
 ## 📁 Структура
 
 ```
-/mnt/d/Python/Balthier/
-├── INDEX.md              верхнеуровневый индекс проекта
-├── wiki/                 ~481 .md (юниты, стратагемы, правила)
-└── simulator/
-    ├── DEV_INDEX.md      хаб разработчика
-    ├── main.py           FastAPI
-    ├── backend/          auth · billing · engine · loader · model · db
-    ├── web/              routes · templates · static
-    ├── tests/            27 файлов, ~300 тестов
-    └── docs/             architecture · requirements · features (50 specs)
+simulator/
+├── DEV_INDEX.md          хаб разработчика
+├── main.py               FastAPI приложение
+├── wiki/                 ~490 .md (юниты, стратагемы, правила) — в репозитории
+├── backend/              auth · billing · engine · loader · model · db
+├── web/                  routes · templates · static
+├── tests/                29 файлов, ~340 тестов
+└── docs/                 architecture · requirements · features (50 specs)
 ```
 
 ## 📚 Документация
@@ -101,16 +102,16 @@ python -m pytest tests/ -q
 | [AGENTS.md](AGENTS.md) | Правила разработки для AI |
 | [docs/architecture/C4.md](docs/architecture/C4.md) | Архитектура (4 уровня) |
 | [docs/features/Features_index.md](docs/features/Features_index.md) | 50 feature-спецификаций |
-| [/mnt/d/Python/Balthier/wiki/WIKI_INDEX.md](/mnt/d/Python/Balthier/wiki/WIKI_INDEX.md) | Индекс вики-данных |
+|| [wiki/WIKI_INDEX.md](wiki/WIKI_INDEX.md) | Индекс вики-данных |
 
 ## 📊 Статистика
 
-- **Тестов:** ~300 (27 файлов)
+- **Тестов:** ~340 (29 файлов)
 - **Юнитов:** 160 (Orks 81, Tau 40, AdMech 39)
-- **Wiki:** ~481 .md файлов
+- **Wiki:** ~490 .md файлов — в репозитории (simulator/wiki/)
 - **Стратагем:** 114 (Core 13, Orks 42, AdMech 42, Tau 19)
 - **Энхансментов:** 88
-- **Детачментов:** 22
+- **Детачментов:** 23
 - **API эндпоинтов:** 20+
 - **Фаз:** 7, ~75 фич, ~270 часов
 - **SVG иконок:** 19 категорий

@@ -26,7 +26,7 @@ graph TD
     AGENTS --> WIKI["Wiki-driven — YAML frontmatter"]
 
     FEAT --> F3["Phase 3: AI (29%)"]
-    FEAT --> F4["Phase 4: UI (75%)"]
+    FEAT --> F4["Phase 4: UI (100%)"]
     FEAT --> F5["Phase 5: Production (29%)"]
 
     C4 --> C4L1["Уровень 1: Контекст"]
@@ -178,7 +178,7 @@ curl http://127.0.0.1:8000/api/simulate -X POST \
 | Phase 1: Combat Engine | ✅ 100% | Monte Carlo, Combat Sequence, /api/simulate |
 | Phase 2: Game System | ✅ 100% | Game State, Map, LoS, Missions, Roster CRUD |
 | Phase 3: AI & Automation | 🟢 29% | Greedy AI, Deployment AI |
-| Phase 4: Web UI Polish | ✅ 75% | Faction browser, Unit modal, Detachment picker, Synergy hints, Canvas map, SVG icons |
+| Phase 4: Web UI Polish | ✅ 100% | Faction browser, Unit modal, Detachment picker, Synergy hints, Canvas map, SVG icons, Progressive Disclosure, Stat tooltips |
 | Phase 5: Production | 🟢 29% | Docker, Deployment docs (Dokku/Railway/self-host) |
 | Phase 6: Monetization | ⏳ 0% | Stripe, Ads |
 | Phase 7: Expansion | ⏳ 0% | i18n, Campaigns |
