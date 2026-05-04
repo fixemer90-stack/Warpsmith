@@ -1,7 +1,7 @@
 """
 F3.5 — Auto-play: AI vs AI Full Scenario.
 
-Размещает юниты, запускает полную симуляцию AI vs AI,
+Размещает юниты, запускает полную симуляцию AI vs AI через Scenario (F2.5),
 сбор логов и возврат результата.
 Интегрируется с F3.2 Faction AI Profiles для принятия решений.
 """
@@ -12,12 +12,17 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
-from backend.engine.ai.deployment import DeploymentType, DeploymentZone, place_units
-from backend.engine.ai.faction_ai import choose_action_with_faction_ai, load_profile
+import numpy as np
+
+from backend.engine.ai.deployment import (
+    DeploymentType,
+    deploy_game,
+)
+from backend.engine.ai.faction_ai import load_profile
 from backend.engine.scenario import Scenario
+from backend.model.unit import Unit
 from backend.state.game_state import GamePhase, GameState, PlayerState, UnitState
-from backend.state.map import BattlefieldMap
-from backend.state.mission import Mission
+from backend.state.map import BattlefieldMap, TerrainType
 from backend.state.roster import RosterState
 
 
@@ -52,7 +57,7 @@ class AutoPlayResult:
 
     game_state: GameState
     round_logs: list[dict[str, Any]]
-    placements: dict[int, list[Any]]  # player → [Placement]
+    placements: dict[str, list[Any]]
     error: str | None = None
     total_duration_ms: float = 0.0
     summary: dict[str, Any] = field(default_factory=dict)
@@ -78,7 +83,6 @@ class AutoPlayResult:
         if not hasattr(self.game_state, "players") or len(self.game_state.players) < 2:
             return None
 
-        # Find the two players (assuming 2-player game)
         player_ids = list(self.game_state.players.keys())
         if len(player_ids) < 2:
             return None
@@ -88,7 +92,6 @@ class AutoPlayResult:
         vp_b = getattr(self.game_state.players[player_b_id], "victory_points", 0)
 
         if vp_a > vp_b:
-            # Return the numeric ID if possible, otherwise return the first player's ID
             try:
                 return int(player_a_id)
             except ValueError:
@@ -123,14 +126,12 @@ def _validate_rosters(roster_a: RosterState, roster_b: RosterState) -> list[str]
     """Валидация ростеров перед симуляцией."""
     errors = []
 
-    # Проверка PTS лимитов (примерно 2000 PTS стандартный лимит)
     max_pts = 2000
     if hasattr(roster_a, "total_pts") and roster_a.total_pts > max_pts:
         errors.append(f"Roster A exceeds {max_pts} PTS: {roster_a.total_pts}")
     if hasattr(roster_b, "total_pts") and roster_b.total_pts > max_pts:
         errors.append(f"Roster B exceeds {max_pts} PTS: {roster_b.total_pts}")
 
-    # Проверка наличия_units
     if hasattr(roster_a, "units") and len(roster_a.units) == 0:
         errors.append("Roster A has no units")
     if hasattr(roster_b, "units") and len(roster_b.units) == 0:
@@ -141,33 +142,97 @@ def _validate_rosters(roster_a: RosterState, roster_b: RosterState) -> list[str]
 
 def _create_default_map(seed: int = 42) -> BattlefieldMap:
     """Создать стандартную карту для симуляции."""
-    # Импортируем здесь чтобы избежать циклических зависимостей
-    import numpy as np
-
-    from backend.state.map import BattlefieldMap, TerrainType
-
-    # Устанавливаем seed для воспроизводимости
     np.random.seed(seed)
 
-    # Стандартная карта 60x44 с открытой местностью
     terrain = np.full((44, 60), TerrainType.OPEN_GROUND, dtype=object)
     game_map = BattlefieldMap(width=60, height=44, terrain=terrain)
 
-    # Добавляем немного простого terrains для разнообразия
-    # В реальной реализации здесь была бы более сложная генерация карты
     return game_map
 
 
-def _find_unit_in_roster(roster: RosterState, unit_id: str) -> Any | None:
-    """Найти юнит в ростере по ID."""
-    if hasattr(roster, "units"):
-        return roster.units.get(unit_id)
-    return None
+def _roster_to_player_state(
+    roster: RosterState, player_id: str, config: AutoPlayConfig
+) -> PlayerState:
+    """Convert a RosterState (data) to a PlayerState (runtime game state)."""
+    units: dict[str, UnitState] = {}
+    for unit_name, unit_model in roster.units.items():
+        # Infer squad size from model_count
+        min_size, _ = unit_model.model_count
+        # Use min size for test simplicity; could be parameterized
+        squad_size = min_size
+
+        unit_state = UnitState(
+            unit_id=unit_name,
+            name=unit_name,
+            faction=roster.faction,
+            position=(0, 0),
+            current_wounds=unit_model.wounds * squad_size,
+            max_wounds=unit_model.wounds * squad_size,
+            models_remaining=squad_size,
+            models_total=squad_size,
+            leadership=unit_model.leadership,
+            objective_control=unit_model.objective_control,
+            is_warlord=(unit_name == roster.warlord_unit_name),
+        )
+        units[unit_name] = unit_state
+
+    return PlayerState(
+        player_id=player_id,
+        name=roster.name,
+        faction=roster.faction,
+        units=units,
+    )
 
 
-def _check_game_end(state: GameState, mission: Mission) -> bool:
+def _build_unit_models(roster_a: RosterState, roster_b: RosterState) -> dict[str, Unit]:
+    """Build a flat dict of unit_id → Unit model for both rosters."""
+    models: dict[str, Unit] = {}
+    for unit_name, unit_model in roster_a.units.items():
+        models[unit_name] = unit_model
+    for unit_name, unit_model in roster_b.units.items():
+        models[unit_name] = unit_model
+    return models
+
+
+def _build_summary(
+    state: GameState, round_logs: list[dict[str, Any]], _placements: dict[str, list[Any]]
+) -> dict[str, Any]:
+    """Построить сводку симуляции."""
+    total_kills: dict[str, int] = {}
+    total_damage: dict[str, int] = {}
+    charge_count: dict[str, int] = {}
+
+    for log in round_logs:
+        if isinstance(log, dict) and "events" in log:
+            for event in log["events"]:
+                player = str(event.get("player", "0"))
+                if event.get("type") == "kill":
+                    total_kills[player] = total_kills.get(player, 0) + 1
+                if event.get("damage", 0) > 0:
+                    total_damage[player] = total_damage.get(player, 0) + event["damage"]
+                if event.get("action") == "charge":
+                    charge_count[player] = charge_count.get(player, 0) + 1
+
+    # Army info from state.players
+    army_info: dict[str, dict[str, Any]] = {}
+    for pid, player in state.players.items():
+        army_info[pid] = {
+            "name": player.name,
+            "faction": player.faction,
+        }
+
+    return {
+        "winner": None,  # Будет заполнено в to_dict()
+        "total_kills": total_kills,
+        "total_damage": total_damage,
+        "charge_count": charge_count,
+        "rounds_played": len(round_logs),
+        "armies": army_info,
+    }
+
+
+def _check_game_end(state: GameState) -> bool:
     """Проверить условия окончания игры."""
-    # Простая проверка: если у одного из игроков нет юнитов
     if hasattr(state, "players"):
         players_alive = 0
         for player in state.players.values():
@@ -179,7 +244,6 @@ def _check_game_end(state: GameState, mission: Mission) -> bool:
         if players_alive < 2:
             return True
 
-    # Проверка по максимальному количеству раундов
     return bool(
         hasattr(state, "current_round")
         and hasattr(state, "max_rounds")
@@ -187,278 +251,21 @@ def _check_game_end(state: GameState, mission: Mission) -> bool:
     )
 
 
-def _build_summary(
-    state: GameState, round_logs: list[dict[str, Any]], placements: dict[int, list[Any]]
-) -> dict[str, Any]:
-    """Построить сводку симуляции."""
-    total_kills = {1: 0, 2: 0}
-    total_damage = {1: 0, 2: 0}
-    charge_count = {1: 0, 2: 0}
-
-    # Извлекаем информацию из логов раундов
-    for log in round_logs:
-        # Предполагаем структуру лога в зависимости от реализации
-        if isinstance(log, dict) and "events" in log:
-            for event in log["events"]:
-                player = event.get("player", 0)
-                if event.get("type") == "kill":
-                    total_kills[player] = total_kills.get(player, 0) + 1
-                if event.get("damage", 0) > 0:
-                    total_damage[player] = total_damage.get(player, 0) + event["damage"]
-                if event.get("action") == "charge":
-                    charge_count[player] = charge_count.get(player, 0) + 1
-
-    # Информация об армиях
-    army_a_info = {"faction": "unknown", "pts": 0}
-    army_b_info = {"faction": "unknown", "pts": 0}
-
-    if hasattr(state, "roster_a") and hasattr(state.roster_a, "faction"):
-        army_a_info["faction"] = state.roster_a.faction
-        army_a_info["pts"] = getattr(state.roster_a, "total_pts", 0)
-    if hasattr(state, "roster_b") and hasattr(state.roster_b, "faction"):
-        army_b_info["faction"] = state.roster_b.faction
-        army_b_info["pts"] = getattr(state.roster_b, "total_pts", 0)
-
-    return {
-        "victory_points": {
-            "1": getattr(
-                state.players.get("1", type("obj", (), {"victory_points": 0}))(),
-                "victory_points",
-                0,
-            )
-            if hasattr(state, "players")
-            else 0,
-            "2": getattr(
-                state.players.get("2", type("obj", (), {"victory_points": 0}))(),
-                "victory_points",
-                0,
-            )
-            if hasattr(state, "players")
-            else 0,
-        },
-        "winner": None,  # Будет заполнено в to_dict()
-        "total_kills": total_kills,
-        "total_damage": total_damage,
-        "charge_count": charge_count,
-        "rounds_played": len(round_logs),
-        "army_a": army_a_info,
-        "army_b": army_b_info,
-    }
-
-
-def run_round_with_ai(
-    state: GameState,
-    game_map: BattlefieldMap,
-    mission: Mission,
-    scenario: Scenario,
-    ai_a: object,
-    ai_b: object,
-    config: AutoPlayConfig,
-) -> GameState:
-    """
-    Запустить один раунд игры с использованием AI для принятия решений.
-    """
-    # Log round start
-    state.game_log.append(f"Starting round {state.current_round}")
-
-    # Run through all phases using the game state's phase transition
-    phases_completed = 0
-    max_phases_per_round = 6  # COMMAND, MOVEMENT, SHOOTING, CHARGE, FIGHT, MORALE
-
-    while phases_completed < max_phases_per_round and not state.is_game_over:
-        # Execute current phase with AI
-        _execute_phase_with_ai(state, state.current_phase, ai_a, ai_b)
-        phases_completed += 1
-
-        # Move to next phase (this handles round advancement)
-        if not state.is_game_over:
-            state.next_phase()
-
-    return state
-
-
-def _execute_phase_with_ai(state: GameState, phase: GamePhase, ai_a: object, ai_b: object):
-    """Выполнить логику для конкретной фазы с использованием AI."""
-    state.game_log.append(f"Phase: {phase.value}")
-
-    if phase == GamePhase.COMMAND:
-        _command_phase(state)
-    elif phase == GamePhase.MOVEMENT:
-        _movement_phase_with_ai(state, ai_a, ai_b)
-    elif phase == GamePhase.SHOOTING:
-        _shooting_phase_with_ai(state, ai_a, ai_b)
-    elif phase == GamePhase.CHARGE:
-        _charge_phase_with_ai(state, ai_a, ai_b)
-    elif phase == GamePhase.FIGHT:
-        _fight_phase_with_ai(state, ai_a, ai_b)
-    elif phase == GamePhase.MORALE:
-        _command_phase(state)
-
-
-def _command_phase(state: GameState):
-    """Command phase logic: generate CP, check mission objectives, etc."""
-    # Generate command points for each player
-    for player in state.players.values():
-        # Base CP generation: 1 CP per turn
-        cp_gain = 1
-        # Additional CP if player has a warlord
-        if player.warlord_unit is not None:
-            cp_gain += 1
-        # Apply Leviathan cap: max 10 CP per player
-        if player.command_points + cp_gain > 10:
-            cp_gain = 10 - player.command_points
-        player.command_points += cp_gain
-        state.game_log.append(f"{player.name} gained {cp_gain} CP (total: {player.command_points})")
-
-    # Update mission scoring at end of Command phase
-    if state.mission:
-        vp_awarded = state.mission.calculate_victory_points()
-        for player_id, vp in vp_awarded.items():
-            if player_id in state.players:
-                state.players[player_id].victory_points += vp
-                state.game_log.append(
-                    f"{state.players[player_id].name} gained {vp} VP from mission (total: {state.players[player_id].victory_points})"
-                )
-
-
-def _movement_phase_with_ai(state: GameState, ai_a: object, ai_b: object):
-    """Movement phase logic: move units using AI decisions."""
-    state.game_log.append("Movement phase: units may move")
-    # In a full implementation, we would iterate over units and use AI to decide movement
-    # For now, we'll just note that movement phase occurred
-    # Reset has_moved flags at start of phase? Actually, they are reset at start of round in next_phase
-    # But we might want to prevent moving twice in a phase - we'll rely on the has_moved flag
-    # For now, no automatic movement - players would decide via UI/API
-
-
-def _shooting_phase_with_ai(state: GameState, ai_a: object, ai_b: object):
-    """Shooting phase logic: resolve shooting attacks using AI."""
-    state.game_log.append("Shooting phase: units may shoot")
-    # In a full implementation, we would iterate over units that can shoot and haven't shot yet
-    # For each unit, resolve shooting attacks using the combat engine and AI for target selection
-    # We'll leave the actual shooting logic to be implemented based on player input
-    # For now, we just note that shooting happened
-    # Example of how it might work:
-    # for player in state.players.values():
-    #     for unit in player.units.values():
-    #         if unit.is_alive and not unit.has_shot:
-    #             # Use AI to select target and weapon
-    #             # ... combat logic ...
-    #             unit.has_shot = True
-
-
-def _charge_phase_with_ai(state: GameState, ai_a: object, ai_b: object):
-    """Charge phase logic: resolve charge moves using AI."""
-    state.game_log.append("Charge phase: units may charge")
-    # Similar to shooting, but for charges
-
-
-def _fight_phase_with_ai(state: GameState, ai_a: object, ai_b: object):
-    """Fight phase logic: resolve fights with alternating activations using AI."""
-    state.game_log.append("Fight phase: units may fight")
-
-    # Determine player order for Fight phase: non-priority player goes first
-    player_ids = list(state.players.keys())
-    if len(player_ids) < 2:
-        # If only one player, just let them fight
-        order = player_ids
-    else:
-        # Find which player has priority
-        priority_player_id = None
-        for pid, player in state.players.items():
-            if player.command_priority:
-                priority_player_id = pid
-                break
-
-        if priority_player_id is None:
-            # Fallback: if no priority set, use arbitrary order
-            order = player_ids
-        else:
-            # The non-priority player goes first in Fight phase
-            non_priority_player_id = next(pid for pid in player_ids if pid != priority_player_id)
-            order = [non_priority_player_id, priority_player_id]
-
-    # Continue alternating activations until no more units can fight
-    progress = True
-    while progress:
-        progress = False
-        for player_id in order:
-            player = state.players[player_id]
-            # Find an eligible unit for this player: engaged and not yet fought
-            eligible_unit = None
-            for unit in player.units.values():
-                if unit.is_engaged and not unit.is_fighting and unit.is_alive:
-                    eligible_unit = unit
-                    break
-
-            if eligible_unit is not None:
-                # Resolve melee combat for this unit
-                _resolve_melee_combat(eligible_unit, state)
-                # Mark the unit as having fought
-                eligible_unit.is_fighting = True
-                progress = True
-                state.game_log.append(f"{eligible_unit.name} fought in melee")
-
-    # After Fight phase, reset is_fighting flags (though they will be reset again at start of next round)
-    for player in state.players.values():
-        for unit in player.units.values():
-            unit.is_fighting = False
-
-
-def _resolve_melee_combat(attacking_unit, state: GameState) -> None:
-    """Resolve melee combat for a unit.
-    This is a simplified implementation - in reality this would use the combat engine.
-    """
-    # Find an enemy unit engaged with this unit
-    enemy_unit = None
-    for player in state.players.values():
-        for unit in player.units.values():
-            if (
-                unit.is_alive
-                and unit != attacking_unit
-                and unit.position == attacking_unit.position
-            ):
-                enemy_unit = unit
-                break
-        if enemy_unit:
-            break
-
-    if enemy_unit is None:
-        # No enemy found to fight with
-        return
-
-    # Simple melee resolution: each unit does damage to the other
-    # In reality, we would use Weapon skill, attacks, etc. from the combat engine
-    # For now, we'll do a simple exchange of damage
-
-    # Attacking unit damages enemy
-    damage_to_enemy = 1  # Simplified: 1 damage per attack
-    state.deal_damage(enemy_unit.unit_id, damage_to_enemy)
-    state.game_log.append(
-        f"{attacking_unit.name} hit {enemy_unit.name} for {damage_to_enemy} damage"
-    )
-
-    # Enemy unit damages attacking unit (if still alive)
-    if enemy_unit.is_alive:
-        damage_to_attacker = 1  # Simplified: 1 damage per attack
-        state.deal_damage(attacking_unit.unit_id, damage_to_attacker)
-        state.game_log.append(
-            f"{enemy_unit.name} hit {attacking_unit.name} for {damage_to_attacker} damage"
-        )
-
-
 def run_auto_game(
-    roster_a: PlayerState, roster_b: PlayerState, mission: Mission, config: AutoPlayConfig = None
+    roster_a: RosterState,
+    roster_b: RosterState,
+    mission_name: str = "only_war",
+    config: AutoPlayConfig | None = None,
 ) -> AutoPlayResult:
     """
     Запустить полную AI vs AI симуляцию.
 
     Flow:
-    1. Валидация ростеров
-    2. Создание GameState
-    3. Deploy юнитов на карту
-    4. Создание AI инстансов
-    5. Запуск game loop (run_round × max_rounds)
+    1. Валидация ростеров (RosterState)
+    2. Конвертация RosterState → PlayerState/UnitState
+    3. Создание GameState (миссия создаётся автоматически из mission_name)
+    4. Deploy юнитов на карту
+    5. Запуск Scenario.run_round() × max_rounds
     6. Сбор логов и summary
     7. Возврат результата
     """
@@ -469,139 +276,106 @@ def run_auto_game(
     errors = _validate_rosters(roster_a, roster_b)
     if errors:
         return AutoPlayResult(
-            game_state=None,
+            game_state=None,  # type: ignore[arg-type]
             round_logs=[],
             placements={},
             error=f"Roster validation failed: {'; '.join(errors)}",
         )
 
-    # 2. Create game state
     try:
+        # 2. Create map
         game_map = _create_default_map(seed=config.seed)
 
-        # Создаем базовое GameState
+        # 3. Convert rosters to PlayerState
+        player_a = _roster_to_player_state(roster_a, "1", config)
+        player_b = _roster_to_player_state(roster_b, "2", config)
+
+        # 4. Create GameState — __post_init__ auto-creates Mission from mission_name
         state = GameState(
-            roster_a=roster_a,
-            roster_b=roster_b,
-            seed=config.seed,
-            mission=mission.name if hasattr(mission, "name") else str(mission),
+            game_id=f"auto_{config.seed}",
+            mission_name=mission_name,
             map_width=game_map.width,
             map_height=game_map.height,
+            current_round=1,
+            current_phase=GamePhase.COMMAND,
+            players={"1": player_a, "2": player_b},
+            terrain_map=game_map.terrain if hasattr(game_map, "terrain") else None,
+            max_rounds=config.max_rounds,
         )
-        state.map = game_map  # Привязываем карту к состоянию
 
-        # 3. Deploy
-        deployments = {}
-        unit_models = {}  # В реальной реализации здесь были бы модели единиц из wiki
+        # 5. Build unit_models dict for combat engine
+        unit_models = _build_unit_models(roster_a, roster_b)
 
-        for player, roster in [(1, roster_a), (2, roster_b)]:
-            placements = place_units(
-                player_units=list(getattr(roster, "units", {}).values())
-                if hasattr(roster, "units")
-                else [],
-                unit_models=unit_models,
-                deployment_type=config.deployment_type,
-                player=player,
-                map_size=(game_map.width, game_map.height),
-                battlefield=game_map,
-                objectives=getattr(mission, "objectives", []),
-                warlord_id=getattr(roster, "warlord_unit_id", None)
-                if hasattr(roster, "warlord_unit_id")
-                else None,
-            )
-            deployments[player] = placements
+        # 6. Deploy units
+        placements = deploy_game(
+            game_state=state,
+            unit_models=unit_models,
+            deployment_type=config.deployment_type,
+            battlefield=game_map,
+            objectives=[],
+        )
 
-            # Обновляем позиции юнитов в ростере
-            for placement in placements:
-                unit = _find_unit_in_roster(roster, placement.unit_id)
-                if unit and hasattr(unit, "position"):
-                    unit.position = (placement.x, placement.y)
+        state.game_log.append(
+            f"Deployed {len(player_a.units)} units for Player 1, "
+            f"{len(player_b.units)} units for Player 2"
+        )
 
-        # 4. Create AIs
-        ai_a = resolve_ai_for_faction(getattr(roster_a, "faction", "unknown"))
-        ai_b = resolve_ai_for_faction(getattr(roster_b, "faction", "unknown"))
+        # 7. Create Scenario and run game loop
+        scenario = Scenario(
+            game_state=state,
+            unit_models=unit_models,
+            battlefield=game_map,
+        )
 
-        # 5. Game loop
-        round_logs = []
-        scenario = Scenario(state)
+        round_logs: list[dict[str, Any]] = []
 
-        try:
-            for r in range(config.max_rounds):
-                # Time check
-                elapsed = (time.time() - start) * 1000
-                if elapsed > config.time_limit_seconds * 1000:
-                    tmsg = f"Simulation exceeded {config.time_limit_seconds}s"
-                    raise TimeoutError(tmsg)
+        # Run rounds through Scenario
+        for r in range(config.max_rounds):
+            # Time check
+            elapsed = (time.time() - start) * 1000
+            if elapsed > config.time_limit_seconds * 1000:
+                raise TimeoutError(f"Simulation exceeded {config.time_limit_seconds}s")
 
-                # Запускаем раунд через сценарий с faction AI
-                # Для этого нужно модифицировать сценарий чтобы он принимал AI параметры
-                # Пока используем упрощенный подход - переопределяем choose_action в контексте
-                state = run_round_with_ai(state, game_map, mission, scenario, ai_a, ai_b, config)
+            # Run one round via Scenario
+            scenario.run_round()
 
-                # Собираем лог раунда
-                round_log = {
-                    "round": r + 1,
-                    "events": [],  # В реальности здесь были бы события боя
-                    "phase_logs": getattr(state, "game_log", [])[-10:],  # Последние записи лога
-                }
-                round_logs.append(round_log)
+            # Collect round log
+            round_log = {
+                "round": r + 1,
+                "events": [],
+                "phase_logs": state.game_log[-20:],
+            }
+            round_logs.append(round_log)
 
-                # Проверяем условие окончания игры
-                if _check_game_end(state, mission):
-                    break
+            # Check end condition
+            if _check_game_end(state):
+                break
 
-                # Подготавливаемся к следующему раунду
-                if not state.is_game_over:
-                    # Сбрасываем флаги для следующего раунда
-                    for player in getattr(state, "players", {}).values():
-                        if hasattr(player, "units"):
-                            for unit in player.units.values():
-                                if hasattr(unit, "has_shot"):
-                                    unit.has_shot = False
-                                if hasattr(unit, "has_charged"):
-                                    unit.has_charged = False
-                                if hasattr(unit, "is_fighting"):
-                                    unit.is_fighting = False
-                                if hasattr(unit, "is_battle_shocked"):
-                                    unit.is_battle_shocked = False
-
-        except AutoPlayError as e:
-            return AutoPlayResult(
-                game_state=state,
-                round_logs=round_logs,
-                placements=deployments,
-                error=str(e),
-                total_duration_ms=(time.time() - start) * 1000,
-            )
-
-        # 6. Summary
-        summary = _build_summary(state, round_logs, deployments)
+        # 8. Summary
+        summary = _build_summary(state, round_logs, placements)
 
         return AutoPlayResult(
             game_state=state,
             round_logs=round_logs,
-            placements=deployments,
+            placements=placements,
             total_duration_ms=(time.time() - start) * 1000,
             summary=summary,
         )
 
+    except AutoPlayError as e:
+        return AutoPlayResult(
+            game_state=state if "state" in locals() else None,  # type: ignore[arg-type]
+            round_logs=round_logs if "round_logs" in locals() else [],
+            placements=placements if "placements" in locals() else {},
+            error=str(e),
+            total_duration_ms=(time.time() - start) * 1000,
+        )
+
     except Exception as e:
         return AutoPlayResult(
-            game_state=None,
+            game_state=None,  # type: ignore[arg-type]
             round_logs=[],
             placements={},
             error=f"Unexpected error during simulation: {e!s}",
             total_duration_ms=(time.time() - start) * 1000,
         )
-
-
-# TODO: Добавить API endpoint в web/routes/api.py
-# POST /api/auto-play
-# {
-#   "roster_a_id": "uuid",
-#   "roster_b_id": "uuid",
-#   "mission": "only_war",
-#   "deployment": "standard",
-#   "max_rounds": 5,
-#   "seed": 42
-# }

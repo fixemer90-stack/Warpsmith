@@ -181,9 +181,9 @@ class Scenario:
                         squad_size=unit.models_remaining,
                         distance=int(dist),
                     )
-                    damage = int(result.stats.mean)
+                    damage = int(result.total_stats.mean)
                     self.state.game_log.append(
-                        f"{unit.name} shoots {target.name} — expected {result.stats.mean:.1f} dmg"
+                        f"{unit.name} shoots {target.name} — expected {result.total_stats.mean:.1f} dmg"
                     )
                 else:
                     # Simplified damage fallback

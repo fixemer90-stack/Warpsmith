@@ -33,8 +33,6 @@ htmlcov/
 .tox/
 
 # Documentation
-*.md
-!README.md
 docs/
 
 

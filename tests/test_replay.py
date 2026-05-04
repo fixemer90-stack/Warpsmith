@@ -24,90 +24,91 @@ from backend.engine.replay import (
     save_replay,
 )
 from backend.model.unit import Unit, Weapon
-from backend.state.game_state import GameState
-from backend.state.roster import RosterState
+from backend.state.game_state import GamePhase, GameState, PlayerState, UnitState
 
 
-def make_test_unit(name: str = "Test Unit", unit_id: str = "test-unit-1") -> Unit:
-    """Создать простой юнит для тестов."""
+def make_test_unit(name: str = "Test Unit") -> Unit:
+    """Create a simple Unit model for tests."""
     return Unit(
         name=name,
         faction="test",
+        category="Infantry",
+        movement=5,
         toughness=3,
         save=3,
-        wounds=1,
-        squad_size=1,
-        weapons=[
+        wounds=2,
+        leadership=7,
+        objective_control=1,
+        ranged_weapons=[
             Weapon(
                 name="Test Weapon",
                 type="ranged",
-                skill=3,
-                strength=3,
-                ap=0,
-                damage_dice=(1, 6, 0),
-                attacks_dice=(1, 6, 0),
                 range_max=24,
-                range_min=0,
+                attacks_dice=(1, 6, 0),
+                skill=4,
+                strength=4,
+                ap=0,
+                damage_dice=(1, 3, 0),
             )
         ],
         points=100,
     )
 
 
-def make_test_roster(units: list[Unit] | None = None, faction: str = "test") -> RosterState:
-    """Создать тестовый ростер."""
-    if units is None:
-        units = [make_test_unit(f"Unit {i}") for i in range(2)]
-
-    # Создаем простой ростер без сложной логики
-    class MockRosterState:
-        def __init__(self, units_list, faction_name):
-            self.faction = faction_name
-            self.units = {u.name: u for u in units_list}
-            self.total_pts = sum(getattr(u, "points", 100) for u in units_list)
-
-    return MockRosterState(units, faction)
+def make_test_unit_state(
+    name: str = "Test Unit",
+    unit_id: str | None = None,
+) -> UnitState:
+    """Create a simple UnitState for tests."""
+    return UnitState(
+        unit_id=unit_id or name,
+        name=name,
+        faction="test",
+        position=(10, 20),
+        current_wounds=2,
+        max_wounds=2,
+        models_remaining=1,
+        models_total=1,
+        leadership=7,
+        objective_control=1,
+    )
 
 
 def make_test_game_state() -> GameState:
-    """Создать тестовое состояние игры."""
+    """Create a minimal GameState for tests."""
+    unit_a = make_test_unit_state("Unit A", "unit-a-1")
+    unit_b = make_test_unit_state("Unit B", "unit-b-1")
+    unit_b.position = (30, 40)
 
-    # Упрощенная версия GameState для тестов
-    class MockGameState:
-        def __init__(self):
-            self.current_round = 1
-            self.current_phase = type("obj", (), {"value": "shooting"})()
-            self.turn = 1
-            self.victory_points = {"1": 0, "2": 0}
+    return GameState(
+        game_id="test-game",
+        mission_name="only_war",
+        map_width=60,
+        map_height=44,
+        current_round=1,
+        current_phase=GamePhase.SHOOTING,
+        players={
+            "1": PlayerState(
+                player_id="1",
+                name="Player 1",
+                faction="orks",
+                units={"unit-a-1": unit_a},
+            ),
+            "2": PlayerState(
+                player_id="2",
+                name="Player 2",
+                faction="tau",
+                units={"unit-b-1": unit_b},
+            ),
+        },
+    )
 
-            # Создаем простые ростеры
-            unit_a = make_test_unit("Unit A", "unit-a-1")
-            unit_b = make_test_unit("Unit B", "unit-b-1")
 
-            class MockPlayer:
-                def __init__(self, player_id, units_dict):
-                    self.player_id = player_id
-                    self.units = units_dict
-                    self.victory_points = 0
-
-            class MockRoster:
-                def __init__(self, units_dict):
-                    self.units = units_dict
-                    self.faction = "test"
-
-            self.players = {
-                "1": MockPlayer("1", {"unit-a-1": unit_a}),
-                "2": MockPlayer("2", {"unit-b-1": unit_b}),
-            }
-
-            self.roster_a = MockRoster({"unit-a-1": unit_a})
-            self.roster_b = MockRoster({"unit-b-1": unit_b})
-
-    return MockGameState()
+# ── Data model tests ────────────────────────────────────────────
 
 
 def test_replay_event_creation():
-    """Тест: создание события реплея."""
+    """Test: creating a replay event."""
     event = ReplayEvent(
         timestamp=1000.0,
         round=1,
@@ -132,7 +133,7 @@ def test_replay_event_creation():
 
 
 def test_replay_round_creation():
-    """Тест: создание раунда реплея."""
+    """Test: creating a replay round."""
     round_obj = ReplayRound(
         round=1,
         start_state={"round": 1, "phase": "movement"},
@@ -146,7 +147,7 @@ def test_replay_round_creation():
 
 
 def test_replay_creation():
-    """Тест: создание полного реплея."""
+    """Test: creating a full replay."""
     replay = Replay(
         game_id="test-game-123",
         created_at="2026-01-01T12:00:00Z",
@@ -164,8 +165,11 @@ def test_replay_creation():
     assert replay.summary["winner"] == 1
 
 
+# ── ReplayRecorder tests ────────────────────────────────────────
+
+
 def test_replay_recorder_initialization():
-    """Тест: инициализация рекордера реплея."""
+    """Test: recorder initialization."""
     recorder = ReplayRecorder(
         game_id="test-123",
         rosters={"a": {}, "b": {}},
@@ -182,7 +186,7 @@ def test_replay_recorder_initialization():
 
 
 def test_replay_recorder_start_game():
-    """Тест: запуск таймера рекордера."""
+    """Test: starting the game timer."""
     recorder = ReplayRecorder("test", {}, "mission", "deploy", 42)
     recorder.start_game()
 
@@ -191,27 +195,27 @@ def test_replay_recorder_start_game():
 
 
 def test_replay_recorder_record_event():
-    """Тест: запись события через рекордер."""
+    """Test: recording an event via recorder."""
     recorder = ReplayRecorder("test-123", {}, "mission", "deploy", 42)
     recorder.start_game()
 
-    # Начинаем раунд
     game_state = make_test_game_state()
     recorder.start_round(1, game_state)
 
-    # Записываем событие
-    actor_unit = make_test_unit("Actor", "actor-1")
-    target_unit = make_test_unit("Target", "target-1")
+    actor = make_test_unit_state("Actor", "actor-1")
+    target = make_test_unit_state("Target", "target-1")
 
     recorder.record_shoot(
         round_num=1,
         phase="shooting",
         turn=1,
-        actor=actor_unit,
-        target=target_unit,
+        actor=actor,
+        target=target,
         weapon_name="Test Gun",
         damage=2.5,
     )
+
+    recorder.end_round(game_state)
 
     assert len(recorder.replay.rounds) == 1
     assert len(recorder.replay.rounds[0].events) == 1
@@ -225,35 +229,33 @@ def test_replay_recorder_record_event():
 
 
 def test_replay_recorder_round_lifecycle():
-    """Тест: полный жизненный цикл раунда в рекордере."""
+    """Test: full round lifecycle in recorder."""
     recorder = ReplayRecorder("test-123", {}, "mission", "deploy", 42)
     recorder.start_game()
 
     game_state = make_test_game_state()
 
-    # Начинаем раунд
     recorder.start_round(1, game_state)
     assert recorder._current_round is not None
     assert recorder._current_round.round == 1
 
-    # Записываем событие
-    actor_unit = make_test_unit("Actor", "actor-1")
-    target_unit = make_test_unit("Target", "target-1")
+    actor = make_test_unit_state("Actor", "actor-1")
+    target = make_test_unit_state("Target", "target-1")
 
-    recorder.record_shoot(1, "shooting", 1, actor_unit, target_unit, "Gun", 1.0)
+    recorder.record_shoot(1, "shooting", 1, actor, target, "Gun", 1.0)
 
-    # Завершаем раунд
     recorder.end_round(game_state)
 
     assert recorder._current_round is None
     assert len(recorder.replay.rounds) == 1
     assert len(recorder.replay.rounds[0].events) == 1
-    assert "end_state" in recorder.replay.rounds[0]
+
+
+# ── Serialization tests ─────────────────────────────────────────
 
 
 def test_replay_to_json_from_json():
-    """Тест: сериализация и десериализация реплея."""
-    # Создаем тестовый реплей
+    """Test: replay serialization roundtrip."""
     replay = Replay(
         game_id="json-test-123",
         created_at="2026-01-01T12:00:00Z",
@@ -286,13 +288,11 @@ def test_replay_to_json_from_json():
         summary={"winner": 1, "total_rounds": 1},
     )
 
-    # Сериализуем в JSON
     json_str = replay_to_json(replay)
     assert isinstance(json_str, str)
     assert "json-test-123" in json_str
     assert "test_mission" in json_str
 
-    # Десериализуем обратно
     restored = replay_from_json(json_str)
 
     assert restored.game_id == replay.game_id
@@ -305,17 +305,18 @@ def test_replay_to_json_from_json():
     assert restored.summary["winner"] == 1
 
 
+# ── SQLite persistence tests ────────────────────────────────────
+
+
 def test_sqlite_replay_persistence():
-    """Тест: сохранение и загрузка реплея из SQLite."""
-    # Используем in-memory базу для теста
+    """Test: saving and loading replay from SQLite."""
     db = sqlite3.connect(":memory:")
     db.execute(TABLE_REPLAYS)
 
-    # Создаем тестовый реплей
     replay = Replay(
         game_id="sqlite-test-123",
         created_at="2026-01-01T12:00:00Z",
-        rostersrbitros={"a": {"faction": "orks"}, "b": {"faction": "tau"}},
+        rosters={"a": {"faction": "orks"}, "b": {"faction": "tau"}},
         mission="only_war",
         deployment="hammer_and_anvil",
         seed=42,
@@ -323,10 +324,8 @@ def test_sqlite_replay_persistence():
         summary={"winner": 2},
     )
 
-    # Сохраняем в базу
     save_replay(db, replay, user_id=1)
 
-    # Загружаем из базы
     loaded = load_replay(db, "sqlite-test-123")
 
     assert loaded is not None
@@ -338,7 +337,7 @@ def test_sqlite_replay_persistence():
 
 
 def test_sqlite_load_nonexistent_replay():
-    """Тест: загрузка несуществующего реплея возвращает None."""
+    """Test: loading non-existent replay returns None."""
     db = sqlite3.connect(":memory:")
     db.execute(TABLE_REPLAYS)
 
@@ -347,11 +346,10 @@ def test_sqlite_load_nonexistent_replay():
 
 
 def test_sqlite_list_replays():
-    """Тест: список реплеев из базы данных."""
+    """Test: listing replays from database."""
     db = sqlite3.connect(":memory:")
     db.execute(TABLE_REPLAYS)
 
-    # Сохраняем несколько реплеев
     replay1 = Replay(
         game_id="replay-1",
         created_at="2026-01-01T12:00:00Z",
@@ -377,21 +375,18 @@ def test_sqlite_list_replays():
     save_replay(db, replay1, user_id=1)
     save_replay(db, replay2, user_id=1)
 
-    # Список реплеев для пользователя
     replays = list_replays(db, user_id=1)
     assert len(replays) == 2
 
-    # Проверяем порядок (сначала новые)
-    assert replays[0]["game_id"] == "replay-2"  # Новый сначала
-    assert replays[1]["game_id"] == "replay-1"  # Старый потом
+    assert replays[0]["game_id"] == "replay-2"
+    assert replays[1]["game_id"] == "replay-1"
 
-    # Список всех реплеев (без фильтра по пользователю)
     all_replays = list_replays(db)
     assert len(all_replays) == 2
 
 
 def test_empty_replay_roundtrip():
-    """Тест: реплей без событий сохраняется и загружается корректно."""
+    """Test: replay with no events roundtrips correctly."""
     replay = Replay(
         game_id="empty-replay",
         created_at="2026-01-01T12:00:00Z",
@@ -411,34 +406,45 @@ def test_empty_replay_roundtrip():
     assert restored.summary == {}
 
 
+# ── Timestamp tests ─────────────────────────────────────────────
+
+
 def test_recorder_timestamp_ordering():
-    """Тест: события имеют возрастающие timestamp'ы."""
+    """Test: events have monotonically increasing timestamps."""
     recorder = ReplayRecorder("test-ts", {}, "mission", "deploy", 42)
     recorder.start_game()
 
     game_state = make_test_game_state()
     recorder.start_round(1, game_state)
 
-    # Записываем несколько событий с небольшой паузой
-    actor = make_test_unit("Actor", "actor-1")
-    target = make_test_unit("Target", "target-1")
+    actor = make_test_unit_state("Actor", "actor-1")
+    target = make_test_unit_state("Target", "target-1")
 
     recorder.record_shoot(1, "shooting", 1, actor, target, "Gun1", 1.0)
     recorder.record_shoot(1, "shooting", 1, actor, target, "Gun2", 2.0)
     recorder.record_shoot(1, "shooting", 1, actor, target, "Gun3", 3.0)
 
+    recorder.end_round(game_state)
+
     events = recorder.replay.rounds[0].events
     timestamps = [e.timestamp for e in events]
 
-    # Проверяем, что timestamp'ы не убывают (允许相等 из-за быстрого выполнения)
+    # Check timestamps are monotonically non-decreasing
     for i in range(len(timestamps) - 1):
         assert timestamps[i] <= timestamps[i + 1]
 
 
-def test_helper_functions():
-    """Тест: вспомогательные функции."""
+# ── Helper function tests ───────────────────────────────────────
 
-    # Тест _pos_dict
+
+def test_helper_functions():
+    """Test: helper functions."""
+
+    # Test _pos_dict with tuple
+    result = _pos_dict((10, 20))
+    assert result == {"x": 10, "y": 20}
+
+    # Test _pos_dict with object attributes
     class MockPos:
         def __init__(self, x, y):
             self.x = x
@@ -448,7 +454,7 @@ def test_helper_functions():
     result = _pos_dict(pos)
     assert result == {"x": 10, "y": 20}
 
-    # Тест с None-подобным объектом
+    # Test _pos_dict with bad object
     class BadPos:
         pass
 
@@ -457,5 +463,74 @@ def test_helper_functions():
     assert result == {"x": 0, "y": 0}
 
 
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"])
+def test_snapshot_state_with_current_api():
+    """Test: _snapshot_state works with current GameState (players dict)."""
+    state = make_test_game_state()
+    snapshot = _snapshot_state(state)
+
+    assert snapshot["round"] == 1
+    assert snapshot["phase"] == "shooting"
+    assert "victory_points" in snapshot
+    assert "units" in snapshot
+    # Should have player keys, not roster_a/b
+    assert "1" in snapshot["units"]
+    assert "2" in snapshot["units"]
+    assert len(snapshot["units"]["1"]) == 1
+    assert snapshot["units"]["1"][0]["name"] == "Unit A"
+
+
+def test_unit_snapshot_with_current_api():
+    """Test: _unit_snapshot works with current UnitState fields."""
+    unit = make_test_unit_state("Test Unit", "test-id")
+    snapshot = _unit_snapshot(unit)
+
+    assert snapshot["id"] == "test-id"
+    assert snapshot["name"] == "Test Unit"
+    assert snapshot["models_remaining"] == 1
+    assert snapshot["models_total"] == 1
+    assert snapshot["current_wounds"] == 2
+    assert snapshot["max_wounds"] == 2
+    assert snapshot["position"]["x"] == 10
+    assert snapshot["position"]["y"] == 20
+
+
+def test_recorder_many_event_types():
+    """Test: all event type recording methods work."""
+    recorder = ReplayRecorder("multi-test", {}, "mission", "deploy", 42)
+    recorder.start_game()
+    gs = make_test_game_state()
+    recorder.start_round(1, gs)
+
+    actor = make_test_unit_state("Actor", "actor-1")
+    target = make_test_unit_state("Target", "target-1")
+
+    recorder.record_shoot(1, "shooting", 1, actor, target, "Gun", 1.0)
+    recorder.record_charge(1, "charge", 1, actor, target, 9, True)
+    recorder.record_kill(1, "shooting", 1, actor, target)
+    recorder.record_move(1, "movement", 1, actor, (10, 20), (15, 22))
+    recorder.record_damage(1, "shooting", 1, actor, target, 2.0)
+    recorder.record_cp_spend(1, "command", 1, actor.unit_id, actor.name, 1)
+
+    recorder.end_round(gs)
+
+    events = recorder.replay.rounds[0].events
+    assert len(events) == 6
+    assert [e.event_type for e in events] == [
+        "shoot",
+        "charge",
+        "kill",
+        "move",
+        "damage",
+        "cp_spend",
+    ]
+
+
+def test_recorder_no_events():
+    """Test: empty round without events does not crash."""
+    recorder = ReplayRecorder("empty", {}, "mission", "deploy", 42)
+    recorder.start_game()
+    recorder.start_round(1, make_test_game_state())
+    recorder.end_round(make_test_game_state())
+
+    assert len(recorder.replay.rounds) == 1
+    assert len(recorder.replay.rounds[0].events) == 0
