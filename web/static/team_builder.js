@@ -32,7 +32,7 @@ function teamBuilder() {
         currentUnitName: '',
 
         // Detachment State
-        detachment: '',
+        // (detachment is defined above in State section)
 
         // Computed
         get unitsByCategory() {
@@ -172,7 +172,7 @@ function teamBuilder() {
         },
         async loadUnits() {
             if (!this.faction) {
-                this.units = [];
+                this._units = [];
                 this.detachments = [];
                 return;
             }
@@ -207,8 +207,20 @@ function teamBuilder() {
         },
         
         async saveRoster() {
-            if (!this.isValid) {
-                alert('Please fix validation errors before saving');
+            // Проверка обязательных полей
+            if (!this.name || !this.faction || this.roster.length === 0) {
+                this.validationErrors = [{
+                    code: 'missing_field',
+                    message: 'Name, faction, and at least one unit are required'
+                }];
+                return;
+            }
+            
+            if (this.totalPts > this.ptsLimit) {
+                this.validationErrors = [{
+                    code: 'points_exceeded',
+                    message: `Total points (${this.totalPts}) exceed limit (${this.ptsLimit})`
+                }];
                 return;
             }
             
@@ -220,17 +232,20 @@ function teamBuilder() {
                         name: this.name,
                         faction: this.faction,
                         pts_limit: this.ptsLimit,
-                        detachment: this.detachment,
+                        detachment: this.detachment || '',
                         units: this.roster.map(u => ({
                             unit_name: u.name,
-                            squad_size: u.squad_size
+                            squad_size: u.squad_size,
+                            pts: u.pts,
+                            loadout: u.loadout || '',
+                            weapons: u.weapons || []
                         }))
                     })
                 });
                 
                 if (response.ok) {
                     alert('Roster saved successfully!');
-                    // Reset form after successful save
+                    // Сброс формы
                     this.name = 'My Army';
                     this.faction = '';
                     this.detachment = '';
@@ -238,19 +253,28 @@ function teamBuilder() {
                     this.validationErrors = [];
                 } else {
                     const errorData = await response.json();
-                    if (errorData.validation_errors) {
-                        // Format validation errors for display
-                        this.validationErrors = errorData.validation_errors.map(err => ({
-                            code: err.error || 'validation_error',
-                            message: err.message || 'Validation failed'
-                        }));
+                    const detail = errorData.detail || errorData;
+                    
+                    if (detail.validation_errors) {
+                        this.validationErrors = detail.validation_errors;
+                    } else if (typeof detail === 'string') {
+                        this.validationErrors = [{ 
+                            code: 'error', 
+                            message: detail 
+                        }];
                     } else {
-                        alert('Failed to save roster: ' + (errorData.detail || response.statusText));
+                        this.validationErrors = [{ 
+                            code: 'error', 
+                            message: detail.message || 'Unknown error' 
+                        }];
                     }
                 }
             } catch (error) {
                 console.error('Error saving roster:', error);
-                alert('Failed to save roster due to network error');
+                this.validationErrors = [{ 
+                    code: 'network_error', 
+                    message: 'Failed to save roster due to network error' 
+                }];
             }
         }
     };

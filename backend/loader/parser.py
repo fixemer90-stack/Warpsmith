@@ -196,7 +196,7 @@ def _parse_weapons_from_frontmatter(data: list[Any]) -> tuple[list[Weapon], list
 def _build_weapon(raw_weapon: dict[str, Any]) -> Weapon | None:
     try:
         range_value = _clean_range(str(raw_weapon.get("range", "0")))
-        is_ranged = range_value.lower() not in ("melee", "—", "")
+        is_ranged = range_value.lower() not in ("melee", "—", "", "ближний")
 
         skill_raw = str(raw_weapon.get("skill", "5+")).replace("+", "").strip()
         if skill_raw.lower() in ("", "—", "n/a", "-"):
@@ -294,7 +294,10 @@ def _parse_weapons_from_markdown(body: str) -> tuple[list[Weapon], list[Weapon]]
         rows_text = match.group(2)
         for row in rows_text.strip().splitlines():
             cells = [cell.strip() for cell in row.split("|")[1:-1]]
-            if len(cells) == 0:
+
+            # Skip rows that don't cover required columns
+            max_col = max(col.values())
+            if len(cells) <= max_col:
                 continue
 
             # Extract abilities from the abilities column (if present)
