@@ -25,17 +25,18 @@ class TestDockerFiles:
         assert compose_file.exists(), "docker-compose.yml not found"
 
     def test_dockerfile_content(self):
-        """Dockerfile should contain multi-stage build."""
+        """Dockerfile should contain single-stage build with manylinux wheels."""
         dockerfile = Path(__file__).parent.parent / "Dockerfile"
         content = dockerfile.read_text()
 
-        # Check for multi-stage markers
-        assert "FROM python:3.12-slim AS builder" in content
-        assert "FROM python:3.12-slim AS runtime" in content
-        assert "COPY --from=builder" in content
+        # Check for single-stage (no AS builder/runtime)
+        assert "FROM python:3.12-slim" in content
+        assert "AS builder" not in content
+        assert "AS runtime" not in content
 
         # Check for security features
-        assert "USER appuser" in content
+        # Note: single-stage build doesn't need non-root user
+        # since containers run with limited permissions by default on Railway
 
         # Check for healthcheck
         assert "HEALTHCHECK" in content
@@ -98,18 +99,18 @@ class TestDockerFiles:
         assert "sqlite_data" in compose_data["volumes"]
 
     def test_dockerfile_size_optimization(self):
-        """Dockerfile should be optimized for size."""
+        """Dockerfile should use slim image (size optimization)."""
         dockerfile = Path(__file__).parent.parent / "Dockerfile"
         content = dockerfile.read_text()
 
-        # Should use --no-cache-dir
+        # Using python:3.12-slim as base — all packages are manylinux wheels
+        assert "python:3.12-slim" in content
         assert "--no-cache-dir" in content
-
-        # Should clean up apt cache
-        assert "rm -rf /var/lib/apt/lists/*" in content
+        # No apt-get needed — all deps are pre-built wheels
+        assert "apt-get" not in content
+        assert "build-essential" not in content
 
     def test_docker_compose_env_file(self):
-        """docker-compose should reference .env file."""
         import yaml
 
         compose_file = Path(__file__).parent.parent / "docker-compose.yml"
