@@ -50,7 +50,9 @@ def parse_unit(filepath: Path) -> Unit | None:
         return None
 
     # Skip non-unit concept pages (weapon descriptions, wargear, etc.)
-    if metadata.get("type") != "entity" and not re.search(r"\|\s*M\s*\|\s*T\s*\|\s*SV\s*\|", post.content):
+    if metadata.get("type") != "entity" and not re.search(
+        r"\|\s*M\s*\|\s*T\s*\|\s*SV\s*\|", post.content
+    ):
         logger.debug("Skipping non-unit page: %s", filepath)
         return None
 
@@ -148,7 +150,10 @@ def _build_weapon(raw_weapon: dict[str, Any]) -> Weapon | None:
         is_ranged = range_value.lower() != "melee"
         range_max = int(range_value) if is_ranged and range_value else 0
         skill_raw = str(raw_weapon.get("skill", "5+")).replace("+", "").strip()
-        tags = [str(tag).strip().lower().replace(" ", "_") for tag in ensure_list(raw_weapon.get("tags", []))]
+        tags = [
+            str(tag).strip().lower().replace(" ", "_")
+            for tag in ensure_list(raw_weapon.get("tags", []))
+        ]
         abilities = [str(item).strip() for item in ensure_list(raw_weapon.get("abilities", []))]
 
         return Weapon(
@@ -177,7 +182,9 @@ def _parse_weapons_from_markdown(body: str) -> tuple[list[Weapon], list[Weapon]]
         # Skip profile tables (those with M and T columns)
         header = match.group(1).strip()
         header_cells = [c.strip() for c in header.split("|")]
-        if any(c.upper().startswith("M") for c in header_cells) and any(c.upper().startswith("T") for c in header_cells):
+        if any(c.upper().startswith("M") for c in header_cells) and any(
+            c.upper().startswith("T") for c in header_cells
+        ):
             continue
 
         rows_text = match.group(2)
@@ -232,7 +239,9 @@ def _parse_weapons_from_bullets(body: str) -> tuple[list[Weapon], list[Weapon]]:
     for match in re.finditer(pattern, body):
         abilities = []
         if match.group("abilities"):
-            abilities = [item.strip() for item in match.group("abilities").split(",") if item.strip()]
+            abilities = [
+                item.strip() for item in match.group("abilities").split(",") if item.strip()
+            ]
 
         weapon = _build_weapon(
             {

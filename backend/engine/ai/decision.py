@@ -15,10 +15,10 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Optional
 
-from backend.state.game_state import GameState, UnitState, GamePhase
-from backend.model.unit import Unit, Weapon, resolve_dice
 import numpy as np
 
+from backend.model.unit import Unit, Weapon, resolve_dice
+from backend.state.game_state import GamePhase, GameState, UnitState
 
 # ── Data Model ─────────────────────────────────────────────────
 
@@ -41,10 +41,10 @@ class Action:
     """Одно действие, оценённое decision engine."""
 
     type: ActionType
-    target_id: Optional[str] = None
-    weapon_index: Optional[int] = None
-    mode: Optional[str] = None
-    target_position: Optional[tuple[int, int]] = None
+    target_id: str | None = None
+    weapon_index: int | None = None
+    mode: str | None = None
+    target_position: tuple[int, int] | None = None
     score: float = 0.0
     rationale: str = ""
 
@@ -169,7 +169,7 @@ def _estimate_melee_damage(
 # ── Candidate generation ───────────────────────────────────────
 
 
-def _get_opponent_unit(target: UnitState, ctx: EvaluationContext) -> Optional[Unit]:
+def _get_opponent_unit(target: UnitState, ctx: EvaluationContext) -> Unit | None:
     """Получить полную модель Unit оппонента."""
     return ctx.opponent_units_map.get(target.unit_id)
 
@@ -224,9 +224,7 @@ def _generate_candidates(
                 continue
             dist = _distance(actor.position, target.position)
             if dist <= 12:
-                candidates.append(
-                    Action(type=ActionType.CHARGE, target_id=target.unit_id)
-                )
+                candidates.append(Action(type=ActionType.CHARGE, target_id=target.unit_id))
 
     elif ctx.phase == GamePhase.MOVEMENT:
         for target in ctx.opponent_units:
@@ -357,7 +355,7 @@ def evaluate_action(
     return action
 
 
-def _find_target(target_id: str, units: list[UnitState]) -> Optional[UnitState]:
+def _find_target(target_id: str, units: list[UnitState]) -> UnitState | None:
     for u in units:
         if u.unit_id == target_id:
             return u

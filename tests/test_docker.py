@@ -1,8 +1,9 @@
 """Tests for F5.1 — Dockerfile + docker-compose."""
 
-import pytest
 import os
 from pathlib import Path
+
+import pytest
 
 
 class TestDockerFiles:
@@ -52,7 +53,7 @@ class TestDockerFiles:
         assert "*.pyc" in content
         assert ".git/" in content
         assert ".pytest_cache/" in content
-        assert "wiki/" in content
+        assert "wiki/" not in content  # wiki — часть репозитория, не исключаем
         assert "*.db" in content
         assert ".env" in content
 
@@ -63,9 +64,10 @@ class TestDockerFiles:
     def test_docker_compose_structure(self):
         """docker-compose.yml should have correct structure."""
         import yaml
+
         compose_file = Path(__file__).parent.parent / "docker-compose.yml"
 
-        with open(compose_file, 'r') as f:
+        with open(compose_file) as f:
             compose_data = yaml.safe_load(f)
 
         # Check version
@@ -109,9 +111,10 @@ class TestDockerFiles:
     def test_docker_compose_env_file(self):
         """docker-compose should reference .env file."""
         import yaml
+
         compose_file = Path(__file__).parent.parent / "docker-compose.yml"
 
-        with open(compose_file, 'r') as f:
+        with open(compose_file) as f:
             compose_data = yaml.safe_load(f)
 
         app_service = compose_data["services"]["app"]
@@ -121,9 +124,10 @@ class TestDockerFiles:
     def test_docker_compose_healthcheck(self):
         """docker-compose should have healthcheck."""
         import yaml
+
         compose_file = Path(__file__).parent.parent / "docker-compose.yml"
 
-        with open(compose_file, 'r') as f:
+        with open(compose_file) as f:
             compose_data = yaml.safe_load(f)
 
         app_service = compose_data["services"]["app"]
@@ -140,8 +144,10 @@ class TestDockerFiles:
 class TestDockerIntegration:
     """Integration tests that require Docker (skipped if Docker not available)."""
 
-    @pytest.mark.skipif(not os.path.exists("/usr/bin/docker") and not os.path.exists("/usr/local/bin/docker"),
-                       reason="Docker not available")
+    @pytest.mark.skipif(
+        not os.path.exists("/usr/bin/docker") and not os.path.exists("/usr/local/bin/docker"),
+        reason="Docker not available",
+    )
     def test_docker_build_succeeds(self):
         """Test that Docker build completes successfully."""
         import subprocess
@@ -161,10 +167,11 @@ class TestDockerIntegration:
         #                        capture_output=True, text=True)
         # assert result.returncode == 0
 
-    @pytest.mark.skipif(not os.path.exists("/usr/bin/docker") and not os.path.exists("/usr/local/bin/docker"),
-                       reason="Docker not available")
+    @pytest.mark.skipif(
+        not os.path.exists("/usr/bin/docker") and not os.path.exists("/usr/local/bin/docker"),
+        reason="Docker not available",
+    )
     def test_docker_health_endpoint(self):
         """Test that health endpoint works in Docker container."""
         # This would test that the container starts and health endpoint responds
         # For now, just verify the health endpoint exists in the API
-        pass

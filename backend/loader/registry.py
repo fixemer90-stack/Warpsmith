@@ -3,12 +3,12 @@
 import logging
 import os
 import pickle
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Dict, List, Optional
 
 from backend.loader.parser import parse_unit
 from backend.model.unit import Unit
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class DetachmentRule:
     """Detachment rule with name and description."""
+
     name: str
     description: str
 
@@ -23,6 +24,7 @@ class DetachmentRule:
 @dataclass
 class Stratagem:
     """Stratagem with name, cost, when, and effect."""
+
     name: str
     cost: int
     when: str
@@ -32,6 +34,7 @@ class Stratagem:
 @dataclass
 class Enhancement:
     """Enhancement with name, points, and effect."""
+
     name: str
     points: int
     effect: str
@@ -40,12 +43,13 @@ class Enhancement:
 @dataclass
 class Detachment:
     """Detachment with all its data."""
+
     name: str
     faction: str
     description: str
-    detachment_rule: Optional[DetachmentRule] = None
-    stratagems: List[Stratagem] = field(default_factory=list)
-    enhancements: List[Enhancement] = field(default_factory=list)
+    detachment_rule: DetachmentRule | None = None
+    stratagems: list[Stratagem] = field(default_factory=list)
+    enhancements: list[Enhancement] = field(default_factory=list)
 
 
 class WikiRegistry:
@@ -65,8 +69,6 @@ class WikiRegistry:
             Path(env_path) if env_path else None,
             Path.cwd() / "wiki",
             Path.cwd().parent / "wiki",
-            Path("/mnt/d/Python/Balthier/wiki"),
-            Path("/mnt/d/Python/Maksim/wiki"),
         ]
         for candidate in candidates:
             if candidate is not None and (candidate / "units").exists():
@@ -121,14 +123,19 @@ class WikiRegistry:
                     self._file_mtimes[str(file_path)] = file_path.stat().st_mtime
 
         self.detachments = detachments
-        logger.info("Wiki loaded: %s units, %s detachments from %s files",
-                   len(units), len(detachments), len(self._file_mtimes))
+        logger.info(
+            "Wiki loaded: %s units, %s detachments from %s files",
+            len(units),
+            len(detachments),
+            len(self._file_mtimes),
+        )
         return units
 
     def _parse_detachment(self, filepath: Path) -> Detachment | None:
         """Parse a detachment markdown file into a Detachment instance."""
         try:
             import frontmatter
+
             post = frontmatter.load(str(filepath))
         except Exception as exc:
             logger.error("Failed to parse detachment %s: %s", filepath, exc)
@@ -149,29 +156,33 @@ class WikiRegistry:
             if isinstance(rule_data, dict):
                 detachment_rule = DetachmentRule(
                     name=rule_data.get("name", "Unknown Rule"),
-                    description=rule_data.get("description", "")
+                    description=rule_data.get("description", ""),
                 )
 
         # Parse stratagems
         stratagems = []
         for strat_data in metadata.get("stratagems", []):
             if isinstance(strat_data, dict):
-                stratagems.append(Stratagem(
-                    name=strat_data.get("name", ""),
-                    cost=int(strat_data.get("cost", 1)),
-                    when=strat_data.get("when", ""),
-                    effect=strat_data.get("effect", "")
-                ))
+                stratagems.append(
+                    Stratagem(
+                        name=strat_data.get("name", ""),
+                        cost=int(strat_data.get("cost", 1)),
+                        when=strat_data.get("when", ""),
+                        effect=strat_data.get("effect", ""),
+                    )
+                )
 
         # Parse enhancements
         enhancements = []
         for enh_data in metadata.get("enhancements", []):
             if isinstance(enh_data, dict):
-                enhancements.append(Enhancement(
-                    name=enh_data.get("name", ""),
-                    points=int(enh_data.get("points", 0)),
-                    effect=enh_data.get("effect", "")
-                ))
+                enhancements.append(
+                    Enhancement(
+                        name=enh_data.get("name", ""),
+                        points=int(enh_data.get("points", 0)),
+                        effect=enh_data.get("effect", ""),
+                    )
+                )
 
         return Detachment(
             name=name,
@@ -179,7 +190,7 @@ class WikiRegistry:
             description=metadata.get("description", ""),
             detachment_rule=detachment_rule,
             stratagems=stratagems,
-            enhancements=enhancements
+            enhancements=enhancements,
         )
 
     def _load_from_cache(self) -> bool:
@@ -203,18 +214,18 @@ class WikiRegistry:
         self.detachments = data.get("detachments", {})
         self._file_mtimes = mtimes
         self._loaded = True
-        logger.info("Loaded %s units, %s detachments from cache",
-                   len(self.units), len(self.detachments))
+        logger.info(
+            "Loaded %s units, %s detachments from cache", len(self.units), len(self.detachments)
+        )
         return True
 
     def _save_cache(self) -> None:
         self.cache_path.parent.mkdir(parents=True, exist_ok=True)
         with self.cache_path.open("wb") as cache_file:
-            pickle.dump({
-                "units": self.units,
-                "detachments": self.detachments,
-                "mtimes": self._file_mtimes
-            }, cache_file)
+            pickle.dump(
+                {"units": self.units, "detachments": self.detachments, "mtimes": self._file_mtimes},
+                cache_file,
+            )
 
     def get_unit(self, name: str) -> Unit | None:
         return self.units.get(name)

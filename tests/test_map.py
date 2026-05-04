@@ -5,8 +5,8 @@ import pytest
 
 from backend.state.map import (
     BattlefieldMap,
-    DeploymentZone,
     DeploymentType,
+    DeploymentZone,
     TerrainType,
     create_dawn_of_war_map,
     create_spearhead_map,
@@ -52,10 +52,7 @@ def test_deployment_zones():
     # Add deployment zone
     coords = [(0, 0), (1, 0), (0, 1)]
     battlefield.add_deployment_zone(
-        "test_zone",
-        DeploymentType.PLAYER_1,
-        coords,
-        "Test deployment zone"
+        "test_zone", DeploymentType.PLAYER_1, coords, "Test deployment zone"
     )
 
     assert "test_zone" in battlefield.deployment_zones
@@ -92,17 +89,9 @@ def test_deployment_validation():
     battlefield = BattlefieldMap.create_empty(6, 4)
 
     # Add deployment zones
-    battlefield.add_deployment_zone(
-        "p1_zone",
-        DeploymentType.PLAYER_1,
-        [(0, 0), (1, 0), (0, 1)]
-    )
+    battlefield.add_deployment_zone("p1_zone", DeploymentType.PLAYER_1, [(0, 0), (1, 0), (0, 1)])
 
-    battlefield.add_deployment_zone(
-        "p2_zone",
-        DeploymentType.PLAYER_2,
-        [(4, 2), (5, 2), (4, 3)]
-    )
+    battlefield.add_deployment_zone("p2_zone", DeploymentType.PLAYER_2, [(4, 2), (5, 2), (4, 3)])
 
     # Test valid deployments
     assert battlefield.is_valid_deployment_position(0, 0, "player1")

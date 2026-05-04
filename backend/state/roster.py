@@ -12,7 +12,7 @@ Validates:
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from backend.model.unit import Unit
@@ -56,7 +56,7 @@ class RosterValidationError:
 
     code: str
     message: str
-    detail: Optional[dict] = None
+    detail: dict | None = None
 
 
 @dataclass
@@ -180,7 +180,7 @@ def validate_squad_size(
     unit_name: str,
     squad_size: int,
     unit: "Unit",
-) -> Optional[RosterValidationError]:
+) -> RosterValidationError | None:
     """Check that squad size is within the unit's allowed range.
 
     Returns an error if out of range, None if valid.

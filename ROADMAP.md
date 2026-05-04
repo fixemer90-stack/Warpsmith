@@ -89,7 +89,7 @@
 ## 🧠 Phase 3: AI & Automation
 
 ```
-[██████░░░░░░░░░░░░] 28.6% · 2/7 features
+[████████░░░░░░░░░░] 42.9% · 3/7 features
 ```
 
 **Цель:** Нажать "Simulate" → AI разыгрывает 5 раундов → replay.
@@ -99,7 +99,7 @@
 || # | Статус | Фича | Часы |
 ||----|--------|------|------|
 || 3.1 | ✅ | Greedy decision engine — target/action evaluation | 6h |
-|| 3.2 | 🆕 | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h |
+|| 3.2 | ✅ | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h |
 || 3.3 | ✅ | Deployment AI: zone placement logic | 3h |
 || 3.4 | ⚪ | Auto-play: AI vs AI full scenario | 6h |
 || 3.5 | ⚪ | Replay recording: JSON event log per round/phase | 3h |
@@ -110,7 +110,7 @@
 ## 🎨 Phase 4: Web UI Polish
 
 ```
-[████████░░░░░░░░░░] 75% · 6/8 features
+[████████████████████] 100% · 8/8 features
 ```
 
 **Цель:** Полноценное веб-приложение, готовое к пользователям.
@@ -124,8 +124,8 @@
 | 4.3 | ✅ | Detachment picker with rule preview | 3h |
 | 4.4 | ✅ | Synergy hints: leader compatibility, transport capacity | 4h |
 | 4.5 | ✅ | Canvas map: terrain tiles + deploy zones interactivity | 8h |
-| 4.6 | ⚪ | Progressive Disclosure: Beginner / Intermediate / Expert | 4h |
-|| 4.7 | ⚪ | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h |
+| 4.6 | ✅ | Progressive Disclosure: Beginner / Intermediate / Expert | 4h |
+| 4.7 | ✅ | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h |
 || 4.8 | ✅ | SVG icons integration in unit cards | 2h |
 
 ---
@@ -205,8 +205,8 @@
 | **0. Foundation** | 12 | ~40ч | ✅ 100% | Скелет проекта + wiki |
 | **1. Combat Engine** | 12 | ~60ч | ✅ 100% | `curl /api/simulate` → JSON + PMF |
 | **2. Game System** | 12 | ~40ч | ✅ 100% | Полный Game Loop |
-| **3. AI & Automation** | 7 | ~35ч | 🟢 14% |
-| **4. Web UI Polish** | 8 | ~35ч | ✅ 75% |
+| **3. AI & Automation** | 7 | ~35ч | 🟢 43% |
+| **4. Web UI Polish** | 8 | ~35ч | ✅ 100% |
 | **5. Production** | 7 | ~15ч | 🟢 29% |
 | **6. Monetization** | 6 | ~15ч | ⏳ 0% | Первый платящий |
 | **7. Expansion** | 10 | ~40ч | ⏳ 0% | Новые фичи |

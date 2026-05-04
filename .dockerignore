@@ -37,10 +37,7 @@ htmlcov/
 !README.md
 docs/
 
-# Wiki data (large)
-wiki/
 
-# Local databases
 *.db
 *.db-shm
 *.db-wal

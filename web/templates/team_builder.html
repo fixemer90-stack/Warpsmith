@@ -86,10 +86,25 @@
                             </span>
                             <span class="text-yellow-400 text-xs shrink-0 ml-2" x-text="unit.points + 'pts'"></span>
                         </div>
-                        <div class="text-gray-400 text-xs mt-1">
+                        <!-- Beginner-friendly simplified stats -->
+                        <div class="beginner-friendly hidden text-xs text-gray-500 mt-1">
+                            <span x-text="unit.category"></span>
+                            <span class="mx-1">·</span>
+                            <span x-text="`Speed ${unit.movement}\u2033 · Tough ${unit.toughness} · Save ${unit.save}+`"></span>
+                        </div>
+                        <!-- Intermediate/Expert: full stat line -->
+                        <div class="stat-value text-gray-400 text-xs mt-1 flex gap-2">
                             <span x-text="unit.category"></span>
                             <span class="mx-1">|</span>
-                            <span x-text="`M${unit.movement} T${unit.toughness} SV${unit.save}+ W${unit.wounds}`"></span>
+                            <span data-stat="M" x-text="`M${unit.movement}`"></span>
+                            <span data-stat="T" x-text="`T${unit.toughness}`"></span>
+                            <span data-stat="SV" x-text="`SV${unit.save}+`"></span>
+                            <span data-stat="W" x-text="`W${unit.wounds}`"></span>
+                        </div>
+                        <!-- Expert-only: LD + OC with tooltips -->
+                        <div class="expert-only hidden text-gray-500 text-xs mt-0.5 flex gap-3">
+                            <span data-stat="LD" x-text="`LD ${unit.leadership || '?'}`"></span>
+                            <span data-stat="OC" x-text="`OC ${unit.oc || '?'}`"></span>
                         </div>
                     </div>
                 </template>
@@ -155,6 +170,9 @@
 
     <!-- Step 2.5: Synergy Panel -->
     {% include "partials/synergy_panel.html" %}
+
+    <!-- Tooltip system -->
+    {% include "partials/tooltip_definitions.html" %}
 
     <!-- Unit Modal -->
     <div x-show="showUnitModal" @click.away="showUnitModal = false"

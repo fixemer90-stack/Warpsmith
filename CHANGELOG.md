@@ -11,11 +11,24 @@
 
 ### Added
 - **F5.2 Deployment** — `Procfile`, `app.json`, `deploy/dokku-setup.sh`, `deploy/railway.json`, `deploy/systemd.service`, `docs/deployment.md` — поддерживает 3 сценария: Dokku (git push + letsencrypt + volume), Railway (serverless + Dockerfile), self-host (systemd + nginx + certbot)
+- **F4.6 Progressive Disclosure** — `web/static/progressive_disclosure.js`: Alpine.js контроллер с тремя режимами (Beginner/Intermediate/Expert), localStorage, CSS классы `mode-beginner/mode-intermediate/mode-expert` на `<body>`, переключатель B/I/E в хедере; unit cards показывают beginner-friendly/expert-only контент
+- **Тесты F4.6** — `tests/test_progressive_disclosure.py`: 7 тестов (toggle, CSS, JS, mode-классы)
+- **F4.7 Stat Tooltips** — `web/static/tooltips.js`: STAT_TOOLTIPS с 6 статами (M/T/SV/W/LD/OC), tooltipManager Alpine.js компонент с hover-попапом, auto-flip по краям экрана, glossary модалка по клику; `web/templates/partials/tooltip_definitions.html`; `data-stat` атрибуты на всех статах в team_builder
+- **Тесты F4.7** — `tests/test_tooltips.py`: 10 тестов (JS включён, партиал, все 6 data-stat атрибутов)
 - F4.8 SVG icons — `web/static/icons/legends.svg` (tombstone), `_unit_icons()` включает `legends` в priority, `icon_map.py` загружает все SVG динамически
 - API `/api/detachments` — эндпоинт возвращает `rule_name`, `rule_description`, `stratagem_count`, `enhancement_count` для inline preview
-- Wiki YAML детачментов — `detachment_rule`, `stratagems`, `enhancements` добавлены в frontmatter 21 файла
-
-### Fixed
+|- Wiki YAML детачментов — `detachment_rule`, `stratagems`, `enhancements` добавлены в frontmatter 21 файла
+|
+|### Changed
+|- **Wiki → Monorepo (fix Railway deploy)** — wiki-хранилище (489 файлов, 35 MB) перемещено из внешнего `/mnt/d/Python/Balthier/wiki/` в `simulator/wiki/`. Данные теперь — часть репозитория, попадают в Docker-образ автоматически.
+  - `.dockerignore`: удалена строка `wiki/` — **это была коренная причина пустого Railway**
+  - `.gitignore`: `wiki/` больше не игнорируется (комментарий обновлён)
+  - `backend/loader/registry.py`: убраны хардкодные пути `/mnt/d/Python/Balthier/wiki` и `/mnt/d/Python/Maksim/wiki` — `_detect_wiki_path()` теперь использует `cwd/wiki` (приоритет: `WIKI_PATH` env → `cwd/wiki` → `cwd/../wiki`)
+  - `tests/test_docker.py`: проверка `.dockerignore` обновлена — `wiki/` больше не должен быть в исключениях
+  - Локально проверено: `WikiRegistry` находит 160 юнитов, 23 детачмента, 3 фракции из нового пути
+  - Тесты: 340 passed, 0 failed
+|
+|### Fixed
 - Team Builder: дублирование заголовка 🛠 Team Builder, два селекта Detachment, `@change="loadUnits()"` → `@change="onFactionChange()"` (диспатчит событие в detachmentPicker)
 - Detachment Picker: добавлен `collapsed`/`expand` — после выбора список сворачивается, кнопка Change разворачивает
 - `detachment_picker.js` не подгружался в team_builder.html — добавлен `<script src=...>`
@@ -25,6 +38,8 @@
 ## 2026-05-03
 
 ### Added
+- **F3.2 Faction AI Profiles** — `backend/engine/ai/faction_ai.py`: FactionAIProfile, load_profile() из YAML ai: секции wiki/factions/*.md, get_weights() с учётом активных behaviors (Waaagh!, Kauyon, Mont'ka, Doctrina Imperatives), get_target_multiplier(), get_active_behavior_override(), choose_action_with_faction_ai() для интеграции с F3.1
+- **Тесты F3.2** — `tests/test_faction_ai.py`: 18 тестов (загрузка профилей 3 фракций, активация behaviors, cooldown, target_priority, action_override, deployment)
 - **F3.1 Greedy Decision Engine** — `backend/engine/ai/decision.py`: ActionType, Action, EvaluationContext, choose_action() с взвешенной оценкой (shoot/charge/move), генерация кандидатов по фазам, поддержка opponent_units_map для статов целей
 - **F4.3 Detachment Picker with Rule Preview** — `backend/loader/registry.py` расширение с Detachment/Stratagem/Enhancement классами, `/api/detachments` endpoints, `web/templates/partials/detachment_picker.html`, `web/static/detachment_picker.js` с HTMX reactive loading и detail modal
 - **F4.4 Synergy Hints: Leader Compatibility, Transport Capacity** — `/api/rosters/synergies` endpoint с SynergyCheck моделью, `web/templates/partials/synergy_panel.html`, `web/static/synergy_hints.js` с 500ms debouncing, визуальные индикаторы (dots/borders) в roster списке, wiki synergies из YAML

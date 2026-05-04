@@ -22,8 +22,7 @@ venv/
 *.db-shm
 *.db-wal
 
-# Wiki vault (симлинк или отдельный репозиторий)
-wiki/
+# Wiki vault (теперь часть репозитория — см. simulator/wiki/)
 
 # OS files
 .DS_Store

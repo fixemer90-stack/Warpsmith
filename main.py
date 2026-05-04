@@ -19,7 +19,6 @@ from fastapi.templating import Jinja2Templates
 
 from backend.db.database import db
 
-
 # ── Конфигурация ─────────────────────────────────────────────────
 
 IS_PRODUCTION = os.getenv("HOSTING", "").lower() in ("true", "1", "yes")
