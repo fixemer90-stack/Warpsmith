@@ -30,7 +30,7 @@
   - `tests/test_docker.py`: проверка `.dockerignore` обновлена
   - Локально проверено: 160 юнитов, 23 детачмента, 3 фракции
 - **Версия 0.6.0 → 0.6.6** — `pyproject.toml`, `README.md`, `AGENTS.md`, `DEV_INDEX.md`
-- **AGENTS.md** — полный рерайт под v0.6.6: актуальная структура проекта, AI через F3.2 Faction AI Profiles (не ork_ai/tau_ai), wiki monorepo, Railway deploy, 18 SVG иконок, все JS-файлы
+- **AGENTS.md** — полный рерайт под v0.7.0: актуальная структура проекта, AI через F3.2 Faction AI Profiles (не ork_ai/tau_ai), wiki monorepo, Railway deploy, 18 SVG иконок, все JS-файлы
 - **README.md** — переписан под Railway: убран `cd /mnt/d/Python/Balthier/simulator`, все ссылки на `warpsmith-production.up.railway.app`, Phase 3 → 71%, Phase 4 → 9 фич
 - **F2.1 Game State doc** — приведён в соответствие с реальным кодом: `RosterState → PlayerState`, `players: dict` вместо `roster_a/roster_b`, `GamePhase` enum, `next_phase()` метод
 - **F2.5 Game Loop doc** — переписан под актуальный GameState API. Статус: `done → wip`

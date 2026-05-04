@@ -84,14 +84,14 @@ body {
 
   <div class="header">
     <h1><span class="g1">🔧</span> Warpsmith <span class="g2">⟡</span> Roadmap</h1>
-    <div class="sub"><span class="pulse-dot"></span>v0.6.6 · 7 phases · ~75 features · ~280h</div>
+    <div class="sub"><span class="pulse-dot"></span>v0.7.0 · 7 phases · ~75 features · ~280h</div>
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="val g1">3</div><div class="lbl">Phases In Progress</div></div>
-    <div class="stat"><div class="val g2">51</div><div class="lbl">Features Complete</div></div>
+    <div class="stat"><div class="val g1">0</div><div class="lbl">Phases Remaining</div></div>
+    <div class="stat"><div class="val g2">59</div><div class="lbl">Features Complete</div></div>
     <div class="stat"><div class="val g3">490</div><div class="lbl">Wiki Pages</div></div>
-    <div class="stat"><div class="val g4">0.6.6</div><div class="lbl">Current Version</div></div>
+    <div class="stat"><div class="val g4">0.7.0</div><div class="lbl">Current Version</div></div>
   </div>
 
   <div class="phases">
@@ -194,25 +194,25 @@ body {
     <!-- Phase 3 -->
     <div class="phase">
       <div class="phase-header">
-        <div class="phase-bar active"></div>
+        <div class="phase-bar done"></div>
         <div class="phase-info">
           <div class="num">Phase 3 · 7 features</div>
           <div class="name">🧠 AI & Automation</div>
-          <div class="desc">Greedy AI · Faction Profiles · Deployment AI</div>
+          <div class="desc">Greedy AI · Faction Profiles · Deployment AI · Autoplay · Replay · Viewer</div>
         </div>
-        <div class="phase-pct"><span class="pct-active">43%</span></div>
+        <div class="phase-pct"><span class="pct-done">100%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
-      <div class="phase-progress"><div class="fill active" style="width:43%"></div></div>
+      <div class="phase-progress"><div class="fill done" style="width:100%"></div></div>
       <div class="features" hidden>
         <div class="feature-list">
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🤖</span><span class="f-name">Greedy decision engine</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">💚</span><span class="f-name">Faction AI Profiles (Orks/Tau/AdMech)</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">📍</span><span class="f-name">Deployment AI (4 deploy types)</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status wip"></span><span class="f-icon">▶️</span><span class="f-name">Auto-play: AI vs AI (dataclasses OK, run_auto_game сломан)</span><span class="f-hours">🟡</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📼</span><span class="f-name">Replay recording (JSON event log)</span><span class="f-hours">❌</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">👀</span><span class="f-name">Round viewer: HTML есть, JS нет</span><span class="f-hours">🟡</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📊</span><span class="f-name">Result screen: kills, damage, VP chart</span><span class="f-hours">❌</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">▶️</span><span class="f-name">Auto-play: AI vs AI — 16 тестов, Scenario.run_round()</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📼</span><span class="f-name">Replay recording — 18 тестов, ReplayRecorder, SQLite</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">👀</span><span class="f-name">Round viewer: Alpine.js + Canvas replay viewer</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📊</span><span class="f-name">Result screen: Chart.js VP timeline, phase table</span><span class="f-hours">✅</span></div>
         </div>
       </div>
     </div>
@@ -248,22 +248,22 @@ body {
     <!-- Phase 5 -->
     <div class="phase">
       <div class="phase-header">
-        <div class="phase-bar active"></div>
+        <div class="phase-bar done"></div>
         <div class="phase-info">
           <div class="num">Phase 5 · 7 features</div>
           <div class="name">☁️ Production</div>
           <div class="desc">Docker · Deploy scripts · Rate limiting · CI/CD</div>
         </div>
-        <div class="phase-pct"><span class="pct-active">71%</span></div>
+        <div class="phase-pct"><span class="pct-done">100%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
-      <div class="phase-progress"><div class="fill active" style="width:71%"></div></div>
+      <div class="phase-progress"><div class="fill done" style="width:100%"></div></div>
       <div class="features" hidden>
         <div class="feature-list">
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🐳</span><span class="f-name">Dockerfile + docker-compose</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🚀</span><span class="f-name">Deploy: Dokku, Railway, self-host</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🚦</span><span class="f-name">Rate limiting (slowapi)</span><span class="f-hours">⏳</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🛡️</span><span class="f-name">CORS hardening + CSP headers</span><span class="f-hours">⏳</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🚦</span><span class="f-name">Rate limiting (slowapi) — 30 req/min anon</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🛡️</span><span class="f-name">CORS hardening + CSP — 6 security headers</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">📝</span><span class="f-name">Logging (structlog) + Sentry</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🔄</span><span class="f-name">CI/CD: GitHub Actions</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">💾</span><span class="f-name">SQLite backup strategy</span><span class="f-hours">✅</span></div>
@@ -388,7 +388,7 @@ body {
     <span>P5: <span class="sw wip"></span> 43%</span>
   </div>
 
-  <div class="footer">Warpsmith · v0.6.6 · 2026-05-04</div>
+  <div class="footer">Warpsmith · v0.7.0 · 2026-05-04</div>
 
 </div>
 
