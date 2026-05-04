@@ -1,28 +1,29 @@
 """Tests for F3.1 Greedy Decision Engine."""
 
 import sys
+
 sys.path.insert(0, "/mnt/d/Python/Balthier/simulator")
 
-import pytest
 import numpy as np
+import pytest
+
 from backend.engine.ai.decision import (
-    ActionType,
-    Action,
     DEFAULT_WEIGHTS,
-    _distance,
-    _in_weapon_range,
+    Action,
+    ActionType,
+    EvaluationContext,
     _avg_dice,
     _compute_expected_damage_ranged,
+    _distance,
     _estimate_melee_damage,
     _generate_candidates,
-    score_shoot,
-    score_charge,
+    _in_weapon_range,
     choose_action,
-    EvaluationContext,
+    score_charge,
+    score_shoot,
 )
-from backend.state.game_state import UnitState, GamePhase, GameState
 from backend.model.unit import Unit, Weapon
-
+from backend.state.game_state import GamePhase, GameState, UnitState
 
 # ── Helpers ────────────────────────────────────────────────────
 
@@ -38,9 +39,14 @@ def make_weapon(
     damage_dice: tuple = (1, 1, 0),  # 1 flat
 ) -> Weapon:
     return Weapon(
-        name=name, type=type, range_max=range_max,
-        attacks_dice=attacks_dice, skill=skill,
-        strength=strength, ap=ap, damage_dice=damage_dice,
+        name=name,
+        type=type,
+        range_max=range_max,
+        attacks_dice=attacks_dice,
+        skill=skill,
+        strength=strength,
+        ap=ap,
+        damage_dice=damage_dice,
     )
 
 
@@ -49,19 +55,40 @@ def make_shoota() -> Weapon:
 
 
 def make_heavy_bolter() -> Weapon:
-    return make_weapon("Heavy Bolter", range_max=36, attacks_dice=(3, 1, 0),
-                       skill=4, strength=5, ap=-1, damage_dice=(2, 1, 0))
+    return make_weapon(
+        "Heavy Bolter",
+        range_max=36,
+        attacks_dice=(3, 1, 0),
+        skill=4,
+        strength=5,
+        ap=-1,
+        damage_dice=(2, 1, 0),
+    )
 
 
 def make_plasma() -> Weapon:
-    return make_weapon("Plasma", range_max=24, attacks_dice=(1, 1, 0),
-                       skill=3, strength=8, ap=-3, damage_dice=(2, 1, 0))
+    return make_weapon(
+        "Plasma",
+        range_max=24,
+        attacks_dice=(1, 1, 0),
+        skill=3,
+        strength=8,
+        ap=-3,
+        damage_dice=(2, 1, 0),
+    )
 
 
 def make_choppa() -> Weapon:
-    return Weapon(name="Choppa", type="melee", range_max=None,
-                  attacks_dice=(1, 1, 0), skill=4,
-                  strength=4, ap=-1, damage_dice=(1, 1, 0))
+    return Weapon(
+        name="Choppa",
+        type="melee",
+        range_max=None,
+        attacks_dice=(1, 1, 0),
+        skill=4,
+        strength=4,
+        ap=-1,
+        damage_dice=(1, 1, 0),
+    )
 
 
 def make_unit_state(
@@ -98,10 +125,18 @@ def make_unit_model(
     points: int = 20,
 ) -> Unit:
     return Unit(
-        name=name, faction="test", category="Infantry",
-        movement=6, toughness=toughness, save=save, wounds=3,
-        leadership=7, objective_control=1, points=points,
-        ranged_weapons=ranged or [], melee_weapons=melee or [],
+        name=name,
+        faction="test",
+        category="Infantry",
+        movement=6,
+        toughness=toughness,
+        save=save,
+        wounds=3,
+        leadership=7,
+        objective_control=1,
+        points=points,
+        ranged_weapons=ranged or [],
+        melee_weapons=melee or [],
     )
 
 
@@ -118,8 +153,7 @@ def make_context(
         actor_state = make_unit_state("Shooter", unit_id="me")
     if actor_model is None:
         actor_model = make_unit_model("Shooter", ranged=[make_shoota()])
-    state = GameState(game_id="test", mission_name="Test",
-                      current_round=1, current_phase=phase)
+    state = GameState(game_id="test", mission_name="Test", current_round=1, current_phase=phase)
     opponent_units_map = opponent_units_map or {}
     return EvaluationContext(
         actor=actor_state,
@@ -137,9 +171,14 @@ def make_context(
 
 
 class TestDistance:
-    def test_same_point(self): assert _distance((0, 0), (0, 0)) == 0
-    def test_straight_line(self): assert _distance((0, 0), (3, 4)) == 5.0
-    def test_negative_coords(self): assert _distance((-1, -1), (2, 3)) == 5.0
+    def test_same_point(self):
+        assert _distance((0, 0), (0, 0)) == 0
+
+    def test_straight_line(self):
+        assert _distance((0, 0), (3, 4)) == 5.0
+
+    def test_negative_coords(self):
+        assert _distance((-1, -1), (2, 3)) == 5.0
 
 
 class TestWeaponRange:
@@ -165,10 +204,17 @@ class TestWeaponRange:
 
 
 class TestDiceAvg:
-    def test_fixed(self): assert _avg_dice((3, 1, 0)) == 3
-    def test_d6(self): assert abs(_avg_dice((1, 6, 0)) - 3.5) < 0.001
-    def test_2d6_plus_1(self): assert abs(_avg_dice((2, 6, 1)) - 8.0) < 0.001
-    def test_d3(self): assert _avg_dice((1, 3, 0)) == 2.0
+    def test_fixed(self):
+        assert _avg_dice((3, 1, 0)) == 3
+
+    def test_d6(self):
+        assert abs(_avg_dice((1, 6, 0)) - 3.5) < 0.001
+
+    def test_2d6_plus_1(self):
+        assert abs(_avg_dice((2, 6, 1)) - 8.0) < 0.001
+
+    def test_d3(self):
+        assert _avg_dice((1, 3, 0)) == 2.0
 
 
 class TestExpectedDamage:
@@ -287,9 +333,17 @@ class TestChooseAction:
         a = make_unit_state("S", unit_id="me", position=(0, 0))
         m = make_unit_model(ranged=[make_shoota()])
         t = make_unit_state("T", unit_id="t1", position=(12, 0))
-        ctx = make_context(a, m, [t], weights={
-            "kill_efficiency": 2.0, "threat_reduction": 0.0,
-            "objective_value": 0.0, "survival_risk": 0.0, "synergy_bonus": 0.0,
-        })
+        ctx = make_context(
+            a,
+            m,
+            [t],
+            weights={
+                "kill_efficiency": 2.0,
+                "threat_reduction": 0.0,
+                "objective_value": 0.0,
+                "survival_risk": 0.0,
+                "synergy_bonus": 0.0,
+            },
+        )
         action = choose_action(a, m, ctx)
         assert action.score > 0

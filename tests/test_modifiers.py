@@ -2,8 +2,8 @@ import numpy as np
 
 from backend.engine.modifiers import (
     AntiKeyword,
-    Modifier,
     CriticalEffect,
+    Modifier,
     ModifierContext,
     apply_modifiers,
     build_weapon_modifiers,
@@ -45,7 +45,13 @@ def make_weapon(*, tags: list[str] | None = None, range_max: int | None = 24) ->
     )
 
 
-def make_context(*, weapon: Weapon | None = None, distance: int | None = 12, is_stationary: bool = False, squad_size: int = 1) -> ModifierContext:
+def make_context(
+    *,
+    weapon: Weapon | None = None,
+    distance: int | None = 12,
+    is_stationary: bool = False,
+    squad_size: int = 1,
+) -> ModifierContext:
     return ModifierContext(
         attacker=make_unit("Attacker"),
         defender=make_unit("Defender"),
@@ -139,7 +145,9 @@ def test_half_range_condition() -> None:
 
 
 def test_build_weapon_modifiers_maps_tags() -> None:
-    weapon = make_weapon(tags=["torrent", "sustained_hits_2", "lethal_hits", "devastating_wounds", "ignores_cover"])
+    weapon = make_weapon(
+        tags=["torrent", "sustained_hits_2", "lethal_hits", "devastating_wounds", "ignores_cover"]
+    )
     mods = build_weapon_modifiers(weapon)
 
     assert any(mod.operation == "auto_hit" for mod in mods)
@@ -172,7 +180,9 @@ def test_handle_critical_hit_sustained() -> None:
     weapon = make_weapon(tags=["sustained_hits_1"])
     modifiers = build_weapon_modifiers(weapon)
 
-    critical = handle_critical_hit(type("Roll", (), {"is_crit": True})(), "hit_roll", modifiers, None)
+    critical = handle_critical_hit(
+        type("Roll", (), {"is_crit": True})(), "hit_roll", modifiers, None
+    )
 
     assert critical == CriticalEffect(extra_attacks=1)
 
@@ -181,7 +191,9 @@ def test_handle_critical_hit_lethal() -> None:
     weapon = make_weapon(tags=["lethal_hits"])
     modifiers = build_weapon_modifiers(weapon)
 
-    critical = handle_critical_hit(type("Roll", (), {"is_crit": True})(), "hit_roll", modifiers, None)
+    critical = handle_critical_hit(
+        type("Roll", (), {"is_crit": True})(), "hit_roll", modifiers, None
+    )
 
     assert critical.auto_wound is True
 
@@ -190,7 +202,9 @@ def test_handle_critical_hit_devastating() -> None:
     weapon = make_weapon(tags=["devastating_wounds"])
     modifiers = build_weapon_modifiers(weapon)
 
-    critical = handle_critical_hit(type("Roll", (), {"is_crit": True})(), "wound_roll", modifiers, None)
+    critical = handle_critical_hit(
+        type("Roll", (), {"is_crit": True})(), "wound_roll", modifiers, None
+    )
 
     assert critical.ignore_save is True
 

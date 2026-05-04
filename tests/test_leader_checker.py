@@ -4,8 +4,8 @@ from backend.model.unit import Unit
 from backend.state.leader_checker import (
     LeaderCompatibilityResult,
     check_leader_compatibility,
-    validate_leader_assignments,
     get_leader_hints,
+    validate_leader_assignments,
 )
 
 

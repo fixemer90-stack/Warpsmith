@@ -13,7 +13,8 @@ templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templa
 @router.get("/faction-browser", response_class=HTMLResponse)
 async def faction_browser(request: Request):
     return templates.TemplateResponse(
-        request, "faction_browser.html",
+        request,
+        "faction_browser.html",
         {"request": request, "title": "Faction Browser — Warpsmith"},
     )
 
@@ -24,15 +25,18 @@ async def team_builder(request: Request):
     import json
     from pathlib import Path
 
+    from backend.loader.icon_map import get_icon_svg_map
+
     # Load factions for the selector
     from backend.loader.registry import registry as wiki
-    from backend.loader.icon_map import get_icon_svg_map
+
     try:
         wiki.load()
         raw_factions = wiki.list_factions()
     except Exception:
         raw_factions = []
     import frontmatter
+
     factions = []
     for f_id in raw_factions:
         fp = wiki.wiki_path / "factions" / f"{f_id}.md"
@@ -51,7 +55,8 @@ async def team_builder(request: Request):
         factions.append({"id": f_id, "label": label})
 
     return templates.TemplateResponse(
-        request, "team_builder.html",
+        request,
+        "team_builder.html",
         {
             "request": request,
             "title": "Team Builder",
@@ -69,6 +74,7 @@ async def scenario_setup(request: Request):
 
     try:
         from backend.loader.registry import registry as wiki
+
         wiki.load()
         for f_id in wiki.list_factions():
             fp = wiki.wiki_path / "factions" / f"{f_id}.md"
@@ -76,6 +82,7 @@ async def scenario_setup(request: Request):
             if fp.exists():
                 try:
                     import frontmatter
+
                     post = frontmatter.load(str(fp))
                     label = str(post.metadata.get("title", label))
                 except Exception:
@@ -87,6 +94,7 @@ async def scenario_setup(request: Request):
     # Get user's rosters if authenticated
     from backend.auth import get_current_user_optional
     from backend.db.database import db
+
     try:
         user = await get_current_user_optional(request)
         if user:
@@ -95,19 +103,22 @@ async def scenario_setup(request: Request):
                 (user.id,),
             )
             for row in rows:
-                rosters.append({
-                    "id": row["id"],
-                    "name": row["name"],
-                    "faction": row["faction"],
-                    "pts_limit": row["pts_limit"],
-                })
+                rosters.append(
+                    {
+                        "id": row["id"],
+                        "name": row["name"],
+                        "faction": row["faction"],
+                        "pts_limit": row["pts_limit"],
+                    }
+                )
     except Exception:
         pass
 
     import json
 
     return templates.TemplateResponse(
-        request, "scenario_setup.html",
+        request,
+        "scenario_setup.html",
         {
             "request": request,
             "title": "Scenario Setup",
@@ -122,7 +133,8 @@ async def scenario_setup(request: Request):
 async def pmf_chart(request: Request):
     """PMF chart page for visualizing damage distributions."""
     return templates.TemplateResponse(
-        request, "pmf_chart.html",
+        request,
+        "pmf_chart.html",
         {"request": request, "title": "PMF Chart — Warpsmith"},
     )
 
@@ -131,7 +143,8 @@ async def pmf_chart(request: Request):
 async def round_viewer(request: Request, scenario_id: int):
     """Просмотр результатов симуляции."""
     return templates.TemplateResponse(
-        request, "round_viewer.html",
+        request,
+        "round_viewer.html",
         {"request": request, "scenario_id": scenario_id},
     )
 
@@ -140,7 +153,8 @@ async def round_viewer(request: Request, scenario_id: int):
 async def pricing(request: Request):
     """Страница с планами подписки."""
     return templates.TemplateResponse(
-        request, "pricing.html",
+        request,
+        "pricing.html",
         {"request": request, "title": "Pricing — Warpsmith"},
     )
 
@@ -149,6 +163,7 @@ async def pricing(request: Request):
 async def billing_page(request: Request):
     """Управление подпиской (Stripe Customer Portal stub)."""
     return templates.TemplateResponse(
-        request, "pricing.html",
+        request,
+        "pricing.html",
         {"request": request, "title": "Billing — Warpsmith"},
     )

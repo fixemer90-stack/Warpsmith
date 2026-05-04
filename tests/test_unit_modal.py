@@ -82,6 +82,7 @@ class TestUnitModalIntegration:
 
 class TestSquadSizeLogic:
     """Test squad size logic in modal (placeholder - would need actual unit data)"""
+
     def test_squad_size_validation_placeholder(self):
         """Placeholder test for squad size validation logic."""
         # In a real test, we'd mock the unit data and test the Alpine.js logic
@@ -91,6 +92,7 @@ class TestSquadSizeLogic:
 
 class TestLoadoutLogic:
     """Test loadout selection logic (placeholder)"""
+
     def test_loadout_selection_placeholder(self):
         """Placeholder test for loadout selection and weapon resolution."""
         # Would test that selecting different loadouts changes currentWeapons
@@ -99,6 +101,7 @@ class TestLoadoutLogic:
 
 class TestCostCalculation:
     """Test total cost calculation (placeholder)"""
+
     def test_cost_calculation_placeholder(self):
         """Placeholder test for PTS cost calculation with squad size, loadouts, nob upgrades."""
         # Would test that totalCost updates correctly based on selections

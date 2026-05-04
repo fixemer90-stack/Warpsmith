@@ -30,28 +30,66 @@ ICON_MAP = {
 }
 
 CATEGORY_ORDER = [
-    "epic-hero", "character", "psyker", "medic", "battleline", "elite",
-    "infantry", "transport", "vehicle", "walker", "dreadnought",
-    "battlesuit", "speed-freek", "monster", "titanic", "fly", "artillery", "legends",
+    "epic-hero",
+    "character",
+    "psyker",
+    "medic",
+    "battleline",
+    "elite",
+    "infantry",
+    "transport",
+    "vehicle",
+    "walker",
+    "dreadnought",
+    "battlesuit",
+    "speed-freek",
+    "monster",
+    "titanic",
+    "fly",
+    "artillery",
+    "legends",
 ]
 
 CATEGORY_LABELS = {
-    "epic-hero": "Epic Heroes", "character": "Characters", "psyker": "Psykers",
-    "medic": "Medics", "battleline": "Battleline", "elite": "Elites",
-    "infantry": "Infantry", "transport": "Dedicated Transports",
-    "vehicle": "Vehicles", "walker": "Walkers", "dreadnought": "Dreadnoughts",
-    "battlesuit": "Battlesuits", "speed-freek": "Speed Freeks",
-    "monster": "Monsters", "titanic": "Titanic", "fly": "Flyers",
-    "artillery": "Artillery", "legends": "Legends",
+    "epic-hero": "Epic Heroes",
+    "character": "Characters",
+    "psyker": "Psykers",
+    "medic": "Medics",
+    "battleline": "Battleline",
+    "elite": "Elites",
+    "infantry": "Infantry",
+    "transport": "Dedicated Transports",
+    "vehicle": "Vehicles",
+    "walker": "Walkers",
+    "dreadnought": "Dreadnoughts",
+    "battlesuit": "Battlesuits",
+    "speed-freek": "Speed Freeks",
+    "monster": "Monsters",
+    "titanic": "Titanic",
+    "fly": "Flyers",
+    "artillery": "Artillery",
+    "legends": "Legends",
 }
 
 CATEGORY_COLORS = {
-    "epic-hero": "#a855f7", "character": "#a855f7", "psyker": "#ec4899",
-    "medic": "#22c55e", "battleline": "#22c55e", "elite": "#eab308",
-    "infantry": "#6b7280", "transport": "#3b82f6", "vehicle": "#3b82f6",
-    "walker": "#f97316", "dreadnought": "#f97316", "battlesuit": "#06b6d4",
-    "speed-freek": "#ef4444", "monster": "#ef4444", "titanic": "#dc2626",
-    "fly": "#8b5cf6", "artillery": "#78716c", "legends": "#555555",
+    "epic-hero": "#a855f7",
+    "character": "#a855f7",
+    "psyker": "#ec4899",
+    "medic": "#22c55e",
+    "battleline": "#22c55e",
+    "elite": "#eab308",
+    "infantry": "#6b7280",
+    "transport": "#3b82f6",
+    "vehicle": "#3b82f6",
+    "walker": "#f97316",
+    "dreadnought": "#f97316",
+    "battlesuit": "#06b6d4",
+    "speed-freek": "#ef4444",
+    "monster": "#ef4444",
+    "titanic": "#dc2626",
+    "fly": "#8b5cf6",
+    "artillery": "#78716c",
+    "legends": "#555555",
 }
 
 
@@ -66,13 +104,13 @@ def get_icon_html(category: str, size: int = 24, class_name: str = "") -> str:
     filename = ICON_MAP.get(category, "infantry.svg")
     svg_path = ICONS_DIR / filename
     if not svg_path.exists():
-        return f'<!-- icon {filename} not found -->'
+        return f"<!-- icon {filename} not found -->"
     try:
         svg = svg_path.read_text()
     except Exception:
-        return ''
+        return ""
     svg = svg.replace(
-        '<svg ',
+        "<svg ",
         f'<svg width="{size}" height="{size}" class="{class_name}" ',
         1,
     )

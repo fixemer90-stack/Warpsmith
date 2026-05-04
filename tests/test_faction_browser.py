@@ -112,9 +112,21 @@ class TestBrowseUnitsAPI:
         data = resp.json()
         if data["items"]:
             item = data["items"][0]
-            for key in ["name", "faction", "category", "points", "movement",
-                        "toughness", "save", "wounds", "leadership", "oc",
-                        "icon_url", "color", "role_flags"]:
+            for key in [
+                "name",
+                "faction",
+                "category",
+                "points",
+                "movement",
+                "toughness",
+                "save",
+                "wounds",
+                "leadership",
+                "oc",
+                "icon_url",
+                "color",
+                "role_flags",
+            ]:
                 assert key in item, f"Missing field: {key}"
 
 
@@ -122,7 +134,10 @@ class TestFactionBrowserPage:
     def test_faction_browser_page(self):
         resp = client.get("/faction-browser")
         assert resp.status_code == 200
-        assert "faction-browser" in resp.text.lower() or "factionbrowser" in resp.text.lower().replace(" ", "")
+        assert (
+            "faction-browser" in resp.text.lower()
+            or "factionbrowser" in resp.text.lower().replace(" ", "")
+        )
 
     def test_faction_browser_js_included(self):
         resp = client.get("/faction-browser")

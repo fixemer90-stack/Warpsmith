@@ -17,10 +17,10 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional
 
-from backend.state.game_state import GameState, UnitState, TerrainType
+from backend.model.unit import Unit
+from backend.state.game_state import GameState, TerrainType, UnitState
 from backend.state.map import BattlefieldMap
 from backend.state.mission import Mission, MissionObjective
-from backend.model.unit import Unit
 
 
 class DeploymentType(Enum):
@@ -86,16 +86,12 @@ def _distance(a: tuple[int, int], b: tuple[int, int]) -> float:
     return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
 
 
-def _is_melee_unit(unit_state: UnitState, unit_model: Optional[Unit] = None) -> bool:
+def _is_melee_unit(unit_state: UnitState, unit_model: Unit | None = None) -> bool:
     if unit_model is not None:
         if unit_model.melee_weapons and not unit_model.ranged_weapons:
             return True
-        melee_total = sum(
-            _avg_dice_simple(w.attacks_dice) for w in unit_model.melee_weapons
-        )
-        ranged_total = sum(
-            _avg_dice_simple(w.attacks_dice) for w in unit_model.ranged_weapons
-        )
+        melee_total = sum(_avg_dice_simple(w.attacks_dice) for w in unit_model.melee_weapons)
+        ranged_total = sum(_avg_dice_simple(w.attacks_dice) for w in unit_model.ranged_weapons)
         return melee_total > ranged_total
     keywords = getattr(unit_state, "keywords", [])
     if isinstance(keywords, (list, tuple)):
@@ -103,16 +99,12 @@ def _is_melee_unit(unit_state: UnitState, unit_model: Optional[Unit] = None) -> 
     return False
 
 
-def _is_ranged_unit(unit_state: UnitState, unit_model: Optional[Unit] = None) -> bool:
+def _is_ranged_unit(unit_state: UnitState, unit_model: Unit | None = None) -> bool:
     if unit_model is not None:
         if unit_model.ranged_weapons and not unit_model.melee_weapons:
             return True
-        melee_total = sum(
-            _avg_dice_simple(w.attacks_dice) for w in unit_model.melee_weapons
-        )
-        ranged_total = sum(
-            _avg_dice_simple(w.attacks_dice) for w in unit_model.ranged_weapons
-        )
+        melee_total = sum(_avg_dice_simple(w.attacks_dice) for w in unit_model.melee_weapons)
+        ranged_total = sum(_avg_dice_simple(w.attacks_dice) for w in unit_model.ranged_weapons)
         return ranged_total >= melee_total
     return not _is_melee_unit(unit_state, unit_model)
 
@@ -124,7 +116,7 @@ def _avg_dice_simple(dice: tuple[int, int, int]) -> float:
     return count * (sides + 1) / 2 + modifier
 
 
-def _has_cover_at(battlefield: Optional[BattlefieldMap], x: int, y: int) -> bool:
+def _has_cover_at(battlefield: BattlefieldMap | None, x: int, y: int) -> bool:
     if battlefield is None:
         return False
     if not (0 <= x < battlefield.width and 0 <= y < battlefield.height):
@@ -133,7 +125,7 @@ def _has_cover_at(battlefield: Optional[BattlefieldMap], x: int, y: int) -> bool
     return terrain in (TerrainType.DIFFICULT_TERRAIN, TerrainType.DANGEROUS_TERRAIN)
 
 
-def _is_walkable(battlefield: Optional[BattlefieldMap], x: int, y: int) -> bool:
+def _is_walkable(battlefield: BattlefieldMap | None, x: int, y: int) -> bool:
     if battlefield is None:
         return True
     if not (0 <= x < battlefield.width and 0 <= y < battlefield.height):
@@ -165,8 +157,8 @@ def _is_occupied(
 
 def _sort_units_by_role(
     units: list[UnitState],
-    unit_models: Optional[dict[str, Unit]] = None,
-    warlord_id: Optional[str] = None,
+    unit_models: dict[str, Unit] | None = None,
+    warlord_id: str | None = None,
 ) -> list[UnitState]:
     def sort_key(unit: UnitState) -> int:
         model = unit_models.get(unit.unit_id) if unit_models else None
@@ -189,7 +181,7 @@ def _sort_units_by_role(
 def _find_first_free(
     zone: DeploymentZone,
     occupied: set[tuple[int, int]],
-) -> Optional[tuple[int, int]]:
+) -> tuple[int, int] | None:
     for x in range(zone.x_min, zone.x_max + 1):
         for y in range(zone.y_min, zone.y_max + 1):
             if (x, y) not in occupied:
@@ -200,15 +192,15 @@ def _find_first_free(
 def _find_best_position(
     unit: UnitState,
     zone: DeploymentZone,
-    battlefield: Optional[BattlefieldMap],
+    battlefield: BattlefieldMap | None,
     objectives: list[MissionObjective],
     occupied: set[tuple[int, int]],
-    unit_model: Optional[Unit] = None,
-    warlord_id: Optional[str] = None,
+    unit_model: Unit | None = None,
+    warlord_id: str | None = None,
     is_p1: bool = True,
-) -> Optional[tuple[int, int]]:
+) -> tuple[int, int] | None:
     best_score = -1.0
-    best_pos: Optional[tuple[int, int]] = None
+    best_pos: tuple[int, int] | None = None
 
     front_edge_x = zone.x_max if is_p1 else zone.x_min
     center = (
@@ -248,13 +240,13 @@ def _find_best_position(
 
 def place_units(
     player_units: list[UnitState],
-    unit_models: Optional[dict[str, Unit]] = None,
+    unit_models: dict[str, Unit] | None = None,
     deployment_type: DeploymentType = DeploymentType.STANDARD,
     player: int = 1,
     map_size: tuple[int, int] = (60, 44),
-    battlefield: Optional[BattlefieldMap] = None,
-    objectives: Optional[list[MissionObjective]] = None,
-    warlord_id: Optional[str] = None,
+    battlefield: BattlefieldMap | None = None,
+    objectives: list[MissionObjective] | None = None,
+    warlord_id: str | None = None,
 ) -> list[Placement]:
     zone = get_deployment_zone(deployment_type, player, map_size)
     sorted_units = _sort_units_by_role(player_units, unit_models, warlord_id)
@@ -265,18 +257,25 @@ def place_units(
     for unit in sorted_units:
         model = unit_models.get(unit.unit_id) if unit_models else None
         pos = _find_best_position(
-            unit, zone, battlefield,
-            objectives or [], occupied,
-            model, warlord_id, is_p1,
+            unit,
+            zone,
+            battlefield,
+            objectives or [],
+            occupied,
+            model,
+            warlord_id,
+            is_p1,
         )
         if pos is not None:
-            placements.append(Placement(
-                unit_id=unit.unit_id,
-                x=pos[0],
-                y=pos[1],
-                is_in_cover=_has_cover_at(battlefield, pos[0], pos[1]),
-                is_on_objective=_is_on_objective(pos, objectives or []),
-            ))
+            placements.append(
+                Placement(
+                    unit_id=unit.unit_id,
+                    x=pos[0],
+                    y=pos[1],
+                    is_in_cover=_has_cover_at(battlefield, pos[0], pos[1]),
+                    is_on_objective=_is_on_objective(pos, objectives or []),
+                )
+            )
             occupied.add(pos)
 
     return placements
@@ -284,10 +283,10 @@ def place_units(
 
 def deploy_game(
     game_state: GameState,
-    unit_models: Optional[dict[str, Unit]] = None,
+    unit_models: dict[str, Unit] | None = None,
     deployment_type: DeploymentType = DeploymentType.STANDARD,
-    battlefield: Optional[BattlefieldMap] = None,
-    objectives: Optional[list[MissionObjective]] = None,
+    battlefield: BattlefieldMap | None = None,
+    objectives: list[MissionObjective] | None = None,
 ) -> dict[str, list[Placement]]:
     map_size = (game_state.map_width, game_state.map_height)
     result: dict[str, list[Placement]] = {}

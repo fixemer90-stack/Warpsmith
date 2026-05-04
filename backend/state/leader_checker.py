@@ -1,7 +1,7 @@
 """Leader compatibility checking for Warhammer 40k roster building."""
 
 from dataclasses import dataclass, field
-from typing import Optional, List
+from typing import List, Optional
 
 from backend.model.unit import Unit
 
@@ -9,8 +9,9 @@ from backend.model.unit import Unit
 @dataclass
 class LeaderCompatibilityResult:
     """Result of leader compatibility check."""
+
     is_compatible: bool
-    issues: List[str] = field(default_factory=list)
+    issues: list[str] = field(default_factory=list)
 
     @classmethod
     def ok(cls) -> "LeaderCompatibilityResult":
@@ -24,7 +25,7 @@ class LeaderCompatibilityResult:
 def check_leader_compatibility(
     leader: Unit,
     target_unit: Unit,
-    existing_leaders: Optional[List[Unit]] = None,
+    existing_leaders: list[Unit] | None = None,
 ) -> LeaderCompatibilityResult:
     """Проверить, может ли лидер присоединиться к отряду.
 
@@ -41,15 +42,11 @@ def check_leader_compatibility(
 
     # Rule 1: Leader must have is_leader=True
     if not leader.is_leader:
-        return LeaderCompatibilityResult.fail(
-            f"{leader.name} is not a leader"
-        )
+        return LeaderCompatibilityResult.fail(f"{leader.name} is not a leader")
 
     # Rule 2: Target must be in leader.leader_for list
     if not _is_compatible_unit(leader, target_unit):
-        return LeaderCompatibilityResult.fail(
-            f"{leader.name} cannot lead {target_unit.name}"
-        )
+        return LeaderCompatibilityResult.fail(f"{leader.name} cannot lead {target_unit.name}")
 
     # Rule 3: Max 2 leaders per unit (Captain + Lieutenant rule)
     if existing_leaders and len(existing_leaders) >= 2:
@@ -108,8 +105,8 @@ def _get_leader_type(leader: Unit) -> str:
 
 
 def validate_leader_assignments(
-    roster_units: List[tuple[Unit, int]],
-) -> List[LeaderCompatibilityResult]:
+    roster_units: list[tuple[Unit, int]],
+) -> list[LeaderCompatibilityResult]:
     """Валидация всех привязок лидеров в ростере.
 
     Args:
@@ -119,7 +116,7 @@ def validate_leader_assignments(
         List of LeaderCompatibilityResult for each leader assignment issue
     """
     results = []
-    leaders_by_unit: dict[str, List[Unit]] = {}
+    leaders_by_unit: dict[str, list[Unit]] = {}
 
     # Group leaders by their target unit (simplified: assume they attach to first suitable non-leader unit)
     for unit, squad_size in roster_units:
@@ -148,7 +145,7 @@ def validate_leader_assignments(
     return results
 
 
-def _find_unit(unit_name: str, roster_units: List[tuple[Unit, int]]) -> Optional[Unit]:
+def _find_unit(unit_name: str, roster_units: list[tuple[Unit, int]]) -> Unit | None:
     """Find a unit by name in the roster."""
     for unit, _ in roster_units:
         if unit.name == unit_name:
@@ -156,7 +153,7 @@ def _find_unit(unit_name: str, roster_units: List[tuple[Unit, int]]) -> Optional
     return None
 
 
-def get_leader_hints(unit: Unit, all_units: dict[str, Unit]) -> List[str]:
+def get_leader_hints(unit: Unit, all_units: dict[str, Unit]) -> list[str]:
     """Подсказка: какие лидеры подходят к юниту.
 
     Args:

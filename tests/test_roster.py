@@ -2,8 +2,8 @@
 
 import pytest
 
-from backend.state.roster import validate_roster, validate_squad_size
 from backend.model.unit import Unit, Weapon
+from backend.state.roster import validate_roster, validate_squad_size
 
 
 def _make_unit(
@@ -38,29 +38,43 @@ def _make_unit(
 
 @pytest.fixture
 def boyz():
-    return _make_unit("Boyz", points=85, model_count=(10, 20),
-                       keywords=["Infantry", "Battleline", "Orks"])
+    return _make_unit(
+        "Boyz", points=85, model_count=(10, 20), keywords=["Infantry", "Battleline", "Orks"]
+    )
 
 
 @pytest.fixture
 def warboss():
-    return _make_unit("Warboss", points=80, model_count=(1, 1),
-                       keywords=["Infantry", "Character", "Orks"],
-                       can_be_warlord=True)
+    return _make_unit(
+        "Warboss",
+        points=80,
+        model_count=(1, 1),
+        keywords=["Infantry", "Character", "Orks"],
+        can_be_warlord=True,
+    )
 
 
 @pytest.fixture
 def weirdboy():
-    return _make_unit("Weirdboy", points=65, model_count=(1, 1),
-                       keywords=["Infantry", "Character", "Orks"],
-                       can_be_warlord=True)
+    return _make_unit(
+        "Weirdboy",
+        points=65,
+        model_count=(1, 1),
+        keywords=["Infantry", "Character", "Orks"],
+        can_be_warlord=True,
+    )
 
 
 @pytest.fixture
 def ghaz():
-    return _make_unit("Ghazghkull Thraka", points=235, model_count=(1, 1),
-                       keywords=["Infantry", "Character", "Epic Hero", "Orks"],
-                       can_be_warlord=True, is_epic_hero=True)
+    return _make_unit(
+        "Ghazghkull Thraka",
+        points=235,
+        model_count=(1, 1),
+        keywords=["Infantry", "Character", "Epic Hero", "Orks"],
+        can_be_warlord=True,
+        is_epic_hero=True,
+    )
 
 
 @pytest.fixture
@@ -172,16 +186,18 @@ class TestValidateRoster:
     def test_game_size_incursion(self, registry):
         """Incursion (1000pts) enforces a tighter limit."""
         from backend.state.roster import GameSize
+
         units = [("Warboss", 1)] * 10  # 800pts, over 500
         result = validate_roster(units, registry, game_size=GameSize.INCURSION)
         assert result.total_pts <= 1000
         # 10 Warbosses = 800pts, should pass Incursion
-        excess = [e for e in result.errors if e.code =="pts_exceeded"]
+        excess = [e for e in result.errors if e.code == "pts_exceeded"]
         assert len(excess) == 0, f"800pts should be OK for Incursion: {result.errors}"
 
     def test_game_size_combat_patrol_limits(self, registry):
         """Combat Patrol (500pts) rejects >500pts."""
         from backend.state.roster import GameSize
+
         units = [("Warboss", 10)]  # 800pts
         result = validate_roster(units, registry, game_size=GameSize.COMBAT_PATROL)
         assert any(e.code == "pts_exceeded" for e in result.errors)
@@ -189,6 +205,7 @@ class TestValidateRoster:
     def test_game_size_onslaught(self, registry):
         """Onslaught (3000pts) is more permissive."""
         from backend.state.roster import GameSize
+
         units = [("Warboss", 25)]  # 2000pts
         result = validate_roster(units, registry, game_size=GameSize.ONSLAUGHT)
         excess = [e for e in result.errors if e.code == "pts_exceeded"]
@@ -197,6 +214,7 @@ class TestValidateRoster:
     def test_game_size_properties(self):
         """GameSize enum exposes pts_limit and label."""
         from backend.state.roster import GameSize
+
         assert GameSize.STRIKE_FORCE.pts_limit == 2000
         assert GameSize.STRIKE_FORCE.label == "Strike Force (2000pts)"
         assert GameSize.INCURSION.pts_limit == 1000

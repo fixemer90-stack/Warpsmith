@@ -1,25 +1,26 @@
 """Tests for F3.4 — Deployment AI."""
 
 import pytest
+
 from backend.engine.ai.deployment import (
     DeploymentType,
     DeploymentZone,
     Placement,
-    get_deployment_zone,
-    place_units,
-    deploy_game,
-    _is_melee_unit,
-    _is_ranged_unit,
-    _sort_units_by_role,
     _find_best_position,
     _has_cover_at,
-    _is_on_objective,
+    _is_melee_unit,
     _is_occupied,
+    _is_on_objective,
+    _is_ranged_unit,
+    _sort_units_by_role,
+    deploy_game,
+    get_deployment_zone,
+    place_units,
 )
-from backend.state.game_state import GameState, UnitState, TerrainType
+from backend.model.unit import Unit, Weapon
+from backend.state.game_state import GameState, TerrainType, UnitState
 from backend.state.map import BattlefieldMap
 from backend.state.mission import MissionObjective
-from backend.model.unit import Unit, Weapon
 
 
 def _make_unit_state(
@@ -56,9 +57,15 @@ def _make_unit_model(
     melee: list = None,
 ) -> Unit:
     return Unit(
-        name=name, faction="test", category=category,
-        movement=6, toughness=4, save=3, wounds=3,
-        leadership=7, objective_control=1,
+        name=name,
+        faction="test",
+        category=category,
+        movement=6,
+        toughness=4,
+        save=3,
+        wounds=3,
+        leadership=7,
+        objective_control=1,
         ranged_weapons=ranged or [],
         melee_weapons=melee or [],
     )
@@ -66,17 +73,27 @@ def _make_unit_model(
 
 def _make_shoota() -> Weapon:
     return Weapon(
-        name="Shoota", type="ranged", range_max=24,
-        attacks_dice=(2, 1, 0), skill=4,
-        strength=4, ap=0, damage_dice=(1, 1, 0),
+        name="Shoota",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(2, 1, 0),
+        skill=4,
+        strength=4,
+        ap=0,
+        damage_dice=(1, 1, 0),
     )
 
 
 def _make_choppa() -> Weapon:
     return Weapon(
-        name="Choppa", type="melee", range_max=None,
-        attacks_dice=(3, 1, 0), skill=4,
-        strength=4, ap=-1, damage_dice=(1, 1, 0),
+        name="Choppa",
+        type="melee",
+        range_max=None,
+        attacks_dice=(3, 1, 0),
+        skill=4,
+        strength=4,
+        ap=-1,
+        damage_dice=(1, 1, 0),
     )
 
 
@@ -376,7 +393,8 @@ class TestDeployGame:
     def test_deploy_game_places_all_units(self):
         gs = self._make_game_state()
         result = deploy_game(
-            gs, deployment_type=DeploymentType.STANDARD,
+            gs,
+            deployment_type=DeploymentType.STANDARD,
         )
         total = sum(len(p) for p in result.values())
         assert total == 6

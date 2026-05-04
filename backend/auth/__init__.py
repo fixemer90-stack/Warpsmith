@@ -183,7 +183,6 @@ async def get_current_user(request: Request) -> User:
     return user
 
 
-
 async def get_current_user_optional(request: Request) -> User | None:
     """Get current user or None if not authenticated."""
     try:

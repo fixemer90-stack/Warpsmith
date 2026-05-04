@@ -41,7 +41,7 @@ class BehaviorEffects:
 
     weights_override: dict[str, float] = field(default_factory=dict)
     tags_buff: list[str] = field(default_factory=list)
-    action_override: Optional[str] = None
+    action_override: str | None = None
 
 
 @dataclass
@@ -82,7 +82,7 @@ PROFILE_CACHE: dict[str, FactionAIProfile] = {}
 # ── Profile loading ─────────────────────────────────────────────
 
 
-def load_profile(faction_id: str, wiki_path: Optional[Path] = None) -> Optional[FactionAIProfile]:
+def load_profile(faction_id: str, wiki_path: Path | None = None) -> FactionAIProfile | None:
     """Загрузить AI профиль из wiki/factions/<faction_id>.md.
 
     Args:
@@ -212,7 +212,9 @@ def _is_behavior_active(
     # Валидация phase
     known_phases = {p.value for p in GamePhase} | {"any"}
     if behavior.trigger.phase not in known_phases:
-        logger.warning("Unknown phase '%s' in behavior '%s', ignoring", behavior.trigger.phase, behavior.id)
+        logger.warning(
+            "Unknown phase '%s' in behavior '%s', ignoring", behavior.trigger.phase, behavior.id
+        )
         return False
 
     return True
@@ -276,7 +278,7 @@ def get_active_behavior_override(
     profile: FactionAIProfile,
     phase: GamePhase,
     turn: int,
-) -> Optional[str]:
+) -> str | None:
     """Вернуть action_override от первого активного behavior, у которого он есть."""
     for b in profile.behaviors:
         if _is_behavior_active(b, phase, turn) and b.effects.action_override:
@@ -290,7 +292,7 @@ def get_active_behavior_override(
 def choose_action_with_faction_ai(
     actor_unit,
     ctx,
-) -> Optional["Action"]:
+) -> Action | None:
     """Выбрать действие через F3.1 Greedy Engine с учётом faction AI профиля.
 
     Загружает AI профиль фракции и обновляет ctx.weights перед вызовом choose_action.
@@ -316,6 +318,8 @@ def choose_action_with_faction_ai(
         # Проверяем action_override от активных behaviors
         override = get_active_behavior_override(profile, ctx.phase, ctx.turn)
         if override:
-            logger.debug("Behavior override for %s: forcing action '%s'", ctx.actor.unit_id, override)
+            logger.debug(
+                "Behavior override for %s: forcing action '%s'", ctx.actor.unit_id, override
+            )
 
     return choose_action(ctx.actor, actor_unit, ctx)

@@ -2,8 +2,8 @@
 
 import pytest
 
-from backend.state.map import BattlefieldMap, TerrainType
 from backend.state.line_of_sight import LineOfSightCalculator, calculate_angle, get_positions_in_arc
+from backend.state.map import BattlefieldMap, TerrainType
 
 
 def test_line_of_sight_calculator_creation():
@@ -154,7 +154,9 @@ def test_optimal_firing_position():
     current_pos = (0, 0)
 
     # Find best position within range 4
-    best_pos = los_calc.get_optimal_firing_position(target_pos, weapon_range=4, current_pos=current_pos)
+    best_pos = los_calc.get_optimal_firing_position(
+        target_pos, weapon_range=4, current_pos=current_pos
+    )
 
     assert best_pos is not None
     distance_to_target = battlefield.calculate_distance(best_pos, target_pos)

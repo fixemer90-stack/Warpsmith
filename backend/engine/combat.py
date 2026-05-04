@@ -7,7 +7,6 @@ from typing import Any
 import numpy as np
 
 from backend.engine.dice import DicePool, SimulationStats, compute_stats
-from backend.model.unit import resolve_dice
 from backend.engine.modifiers import (
     Modifier,
     ModifierContext,
@@ -19,7 +18,7 @@ from backend.engine.modifiers import (
     resolve_anti_wound,
     should_reroll,
 )
-from backend.model.unit import Unit, Weapon
+from backend.model.unit import Unit, Weapon, resolve_dice
 
 
 @dataclass
@@ -40,6 +39,7 @@ class CombatResult:
 @dataclass
 class MultiAttackResult:
     """Result of simulating multiple weapons or squad attacks."""
+
     total_damage_per_iter: np.ndarray
     total_stats: SimulationStats
     weapon_results: list[CombatResult]
@@ -112,7 +112,9 @@ def _resolve_attacks(
             attacks -= int(modifier.value)
 
     # Rapid fire modifier
-    rapid_fire_modifiers = [m for m in modifiers if m.operation == "add" and "rapid_fire" in str(m.source)]
+    rapid_fire_modifiers = [
+        m for m in modifiers if m.operation == "add" and "rapid_fire" in str(m.source)
+    ]
     for modifier in rapid_fire_modifiers:
         if modifier.condition and not _check_condition(modifier.condition, context):
             continue
@@ -135,7 +137,9 @@ def _resolve_attack_chain(
         return 0
 
     # Wound roll
-    wound_result = _resolve_wound_chain(rng, weapon, defender, modifiers, context, hit_result.is_crit)
+    wound_result = _resolve_wound_chain(
+        rng, weapon, defender, modifiers, context, hit_result.is_crit
+    )
     return wound_result
 
 
@@ -237,7 +241,9 @@ def _expected_steps(
     squad_size: int,
 ) -> tuple[float, float, float]:
     """Calculate expected values for hits, wounds, and unsaved wounds."""
-    context = _build_modifier_context(attacker, defender, weapon, distance, is_stationary, squad_size)
+    context = _build_modifier_context(
+        attacker, defender, weapon, distance, is_stationary, squad_size
+    )
 
     # Expected hits (simplified)
     hit_target = weapon.skill
@@ -386,25 +392,28 @@ def simulate_unit_attack(
 
     # Get all weapons from the attacker
     all_weapons = []
-    if hasattr(attacker, 'ranged_weapons') and attacker.ranged_weapons:
+    if hasattr(attacker, "ranged_weapons") and attacker.ranged_weapons:
         all_weapons.extend(attacker.ranged_weapons)
-    if hasattr(attacker, 'melee_weapons') and attacker.melee_weapons:
+    if hasattr(attacker, "melee_weapons") and attacker.melee_weapons:
         all_weapons.extend(attacker.melee_weapons)
 
     # If no weapons found, use a default placeholder
     if not all_weapons:
         from backend.model.unit import Weapon
-        all_weapons = [Weapon(
-            name="Default Weapon",
-            type="ranged",
-            range_max=24,
-            attacks_dice=(0, 0, 1),
-            skill=3,
-            strength=4,
-            ap=0,
-            damage_dice=(0, 0, 1),
-            tags=[],
-        )]
+
+        all_weapons = [
+            Weapon(
+                name="Default Weapon",
+                type="ranged",
+                range_max=24,
+                attacks_dice=(0, 0, 1),
+                skill=3,
+                strength=4,
+                ap=0,
+                damage_dice=(0, 0, 1),
+                tags=[],
+            )
+        ]
 
     # Simulate each weapon
     weapon_results = []

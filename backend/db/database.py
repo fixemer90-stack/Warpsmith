@@ -24,7 +24,9 @@ class Database:
                 # Clean them up and fall back to DELETE journal mode
                 db_dir = os.path.dirname(self.db_path) or "."
                 for f in os.listdir(db_dir):
-                    if f.startswith(os.path.basename(self.db_path)) and (f.endswith("-shm") or f.endswith("-wal")):
+                    if f.startswith(os.path.basename(self.db_path)) and (
+                        f.endswith("-shm") or f.endswith("-wal")
+                    ):
                         try:
                             os.remove(os.path.join(db_dir, f))
                         except OSError:

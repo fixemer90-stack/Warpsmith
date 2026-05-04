@@ -1,25 +1,26 @@
 """Test the mission system."""
 
 import pytest
+
+from backend.state.game_state import GameState, PlayerState, UnitState, create_empty_game
 from backend.state.mission import (
+    MISSIONS,
     DeploymentType,
-    MissionObjective,
-    MissionConfig,
+    GameResult,
     Mission,
-    create_mission,
+    MissionConfig,
+    MissionObjective,
+    VPTracker,
     _only_war,
     _purge_the_foe,
     _take_and_hold,
-    MISSIONS,
-    VPTracker,
-    GameResult,
-    check_end_game,
-    score_standard,
-    score_progressive,
-    score_kill_points,
     apply_scoring,
+    check_end_game,
+    create_mission,
+    score_kill_points,
+    score_progressive,
+    score_standard,
 )
-from backend.state.game_state import GameState, PlayerState, UnitState, create_empty_game
 
 
 def test_mission_objective():

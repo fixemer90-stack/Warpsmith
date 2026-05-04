@@ -3,8 +3,8 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from main import app
 from backend.db.database import db
+from main import app
 
 
 def _extract_token(resp) -> str | None:
@@ -26,14 +26,19 @@ def client():
 def auth_headers(client):
     """Register a user and return auth headers. Each call = fresh user."""
     import uuid
+
     suffix = uuid.uuid4().hex[:8]
     email = f"roster{suffix}@test.dev"
 
-    resp = client.post("/auth/register", data={
-        "email": email,
-        "password": "StrongP4ss!",
-        "display_name": "Tester",
-    }, follow_redirects=False)
+    resp = client.post(
+        "/auth/register",
+        data={
+            "email": email,
+            "password": "StrongP4ss!",
+            "display_name": "Tester",
+        },
+        follow_redirects=False,
+    )
 
     token = _extract_token(resp)
     assert token is not None, f"Register failed: {resp.status_code}"
@@ -41,13 +46,15 @@ def auth_headers(client):
 
 
 class TestRosterCRUD:
-
     ROSTER_PAYLOAD = {
         "name": "My Ork Horde",
         "faction": "orks",
         "pts_limit": 2000,
         "detachment": "War Horde",
-        "units": [{"unit_name": "Warboss", "squad_size": 1}, {"unit_name": "Boyz", "squad_size": 10}],
+        "units": [
+            {"unit_name": "Warboss", "squad_size": 1},
+            {"unit_name": "Boyz", "squad_size": 10},
+        ],
     }
 
     def test_create_roster(self, client, auth_headers):
