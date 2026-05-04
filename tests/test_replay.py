@@ -47,10 +47,10 @@ def make_test_unit(name: str = "Test Unit", unit_id: str = "test-unit-1") -> Uni
                 damage_dice=(1, 6, 0),
                 attacks_dice=(1, 6, 0),
                 range_max=24,
-                range_min=0
+                range_min=0,
             )
         ],
-        points=100
+        points=100,
     )
 
 
@@ -64,18 +64,19 @@ def make_test_roster(units: list[Unit] | None = None, faction: str = "test") -> 
         def __init__(self, units_list, faction_name):
             self.faction = faction_name
             self.units = {u.name: u for u in units_list}
-            self.total_pts = sum(getattr(u, 'points', 100) for u in units_list)
+            self.total_pts = sum(getattr(u, "points", 100) for u in units_list)
 
     return MockRosterState(units, faction)
 
 
 def make_test_game_state() -> GameState:
     """Создать тестовое состояние игры."""
+
     # Упрощенная версия GameState для тестов
     class MockGameState:
         def __init__(self):
             self.current_round = 1
-            self.current_phase = type('obj', (), {'value': 'shooting'})()
+            self.current_phase = type("obj", (), {"value": "shooting"})()
             self.turn = 1
             self.victory_points = {"1": 0, "2": 0}
 
@@ -96,7 +97,7 @@ def make_test_game_state() -> GameState:
 
             self.players = {
                 "1": MockPlayer("1", {"unit-a-1": unit_a}),
-                "2": MockPlayer("2", {"unit-b-1": unit_b})
+                "2": MockPlayer("2", {"unit-b-1": unit_b}),
             }
 
             self.roster_a = MockRoster({"unit-a-1": unit_a})
@@ -121,7 +122,7 @@ def test_replay_event_creation():
         dice_rolled=[4, 5, 6],
         result_value=3.0,
         position_before={"x": 10, "y": 20},
-        position_after={"x": 10, "y": 20}
+        position_after={"x": 10, "y": 20},
     )
 
     assert event.timestamp == 1000.0
@@ -136,7 +137,7 @@ def test_replay_round_creation():
         round=1,
         start_state={"round": 1, "phase": "movement"},
         end_state={"round": 1, "phase": "shooting"},
-        events=[]
+        events=[],
     )
 
     assert round_obj.round == 1
@@ -154,7 +155,7 @@ def test_replay_creation():
         deployment="standard",
         seed=42,
         rounds=[],
-        summary={"winner": 1}
+        summary={"winner": 1},
     )
 
     assert replay.game_id == "test-game-123"
@@ -170,7 +171,7 @@ def test_replay_recorder_initialization():
         rosters={"a": {}, "b": {}},
         mission="test_mission",
         deployment="standard",
-        seed=123
+        seed=123,
     )
 
     assert recorder.replay.game_id == "test-123"
@@ -209,7 +210,7 @@ def test_replay_recorder_record_event():
         actor=actor_unit,
         target=target_unit,
         weapon_name="Test Gun",
-        damage=2.5
+        damage=2.5,
     )
 
     assert len(recorder.replay.rounds) == 1
@@ -277,12 +278,12 @@ def test_replay_to_json_from_json():
                         target_id="unit-2",
                         target_name="Test Target",
                         weapon_name="Test Weapon",
-                        result_value=2.0
+                        result_value=2.0,
                     )
-                ]
+                ],
             )
         ],
-        summary={"winner": 1, "total_rounds": 1}
+        summary={"winner": 1, "total_rounds": 1},
     )
 
     # Сериализуем в JSON
@@ -319,7 +320,7 @@ def test_sqlite_replay_persistence():
         deployment="hammer_and_anvil",
         seed=42,
         rounds=[],
-        summary={"winner": 2}
+        summary={"winner": 2},
     )
 
     # Сохраняем в базу
@@ -359,7 +360,7 @@ def test_sqlite_list_replays():
         deployment="std",
         seed=1,
         rounds=[],
-        summary={"winner": 1}
+        summary={"winner": 1},
     )
 
     replay2 = Replay(
@@ -370,7 +371,7 @@ def test_sqlite_list_replays():
         deployment="std",
         seed=2,
         rounds=[],
-        summary={"winner": 2}
+        summary={"winner": 2},
     )
 
     save_replay(db, replay1, user_id=1)
@@ -399,7 +400,7 @@ def test_empty_replay_roundtrip():
         deployment="",
         seed=0,
         rounds=[],
-        summary={}
+        summary={},
     )
 
     json_str = replay_to_json(replay)
@@ -436,6 +437,7 @@ def test_recorder_timestamp_ordering():
 
 def test_helper_functions():
     """Тест: вспомогательные функции."""
+
     # Тест _pos_dict
     class MockPos:
         def __init__(self, x, y):

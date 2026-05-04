@@ -461,9 +461,7 @@ class Mission:
             # Players deploy in long table edges
             # Player 1: bottom edge
             zones[player_ids[0]] = [
-                (x, y)
-                for x in range(map_width)
-                for y in range(min(zone_depth_units, map_height))
+                (x, y) for x in range(map_width) for y in range(min(zone_depth_units, map_height))
             ]
 
             # Player 2: top edge

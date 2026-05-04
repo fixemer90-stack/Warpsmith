@@ -84,6 +84,7 @@ async def test_log_contains_method_and_path(caplog):
 def test_setup_sentry_without_dsn_does_not_crash():
     """setup_sentry() без DSN логирует warning и не падает."""
     from backend.logging_setup import setup_sentry
+
     # Должна отработать без ошибок
     setup_sentry(dsn=None)
     setup_sentry(dsn="")
@@ -97,6 +98,7 @@ def test_setup_sentry_without_dsn_does_not_crash():
 def test_setup_sentry_with_dsn_calls_init():
     """С DSN setup_sentry вызывает sentry_sdk.init."""
     from backend.logging_setup import setup_sentry
+
     with patch("sentry_sdk.init") as mock_init:
         setup_sentry(dsn="https://test@test.ingest.sentry.io/12345")
         mock_init.assert_called_once()
@@ -109,6 +111,7 @@ def test_setup_sentry_with_dsn_calls_init():
 def test_setup_sentry_development_environment():
     """В development окружении environment='development'."""
     from backend.logging_setup import setup_sentry
+
     with patch("sentry_sdk.init"):
         setup_sentry(dsn="https://key@sentry.io/project", environment="development")
         # Не падает — достаточно
@@ -117,6 +120,7 @@ def test_setup_sentry_development_environment():
 def test_structlog_configured():
     """structlog должен быть сконфигурирован (глобальный логгер работает)."""
     import structlog
+
     logger = structlog.get_logger()
     # Должен вернуть BoundLogger, не падать
     assert logger is not None

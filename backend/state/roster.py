@@ -22,6 +22,7 @@ if TYPE_CHECKING:
 class RosterState:
     """Сохранённый ростер: данные из БД или генерации.
     Отличается от PlayerState (игровой процесс) — это просто данные."""
+
     name: str
     faction: str
     total_pts: int

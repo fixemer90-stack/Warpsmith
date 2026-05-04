@@ -206,7 +206,11 @@ def _is_behavior_active(
         return False
 
     # Если cooldown > 0 — проверяем, прошло ли достаточно раундов
-    if behavior.trigger.cooldown > 0 and behavior.last_used_round > 0 and turn - behavior.last_used_round <= behavior.trigger.cooldown:
+    if (
+        behavior.trigger.cooldown > 0
+        and behavior.last_used_round > 0
+        and turn - behavior.last_used_round <= behavior.trigger.cooldown
+    ):
         return False
 
     # Валидация phase

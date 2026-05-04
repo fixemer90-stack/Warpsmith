@@ -50,9 +50,7 @@ class BattlefieldMap:
     def __post_init__(self):
         """Validate terrain array dimensions."""
         if self.terrain.shape != (self.height, self.width):
-            msg = (
-                f"Terrain array shape {self.terrain.shape} does not match map dimensions {self.height}x{self.width}"
-            )
+            msg = f"Terrain array shape {self.terrain.shape} does not match map dimensions {self.height}x{self.width}"
             raise ValueError(msg)
 
     @classmethod
@@ -293,7 +291,11 @@ class BattlefieldMap:
 
         while True:
             # Check terrain at current cell (skip start and end)
-            if (x, y) != (x1, y1) and (x, y) != (x2, y2) and self._is_blocking_los(self.terrain[y, x]):
+            if (
+                (x, y) != (x1, y1)
+                and (x, y) != (x2, y2)
+                and self._is_blocking_los(self.terrain[y, x])
+            ):
                 blocked = True
                 break
 

@@ -21,20 +21,21 @@ from backend.state.game_state import GameState, UnitState
 @dataclass
 class ReplayEvent:
     """Одно событие в реплее."""
+
     timestamp: float  # ms от начала игры
     round: int
     phase: str
     turn: int
-    event_type: str         # "shoot", "charge", "move", "kill", "damage", "cp_spend", etc.
-    actor_id: str           # unit_id инициатора
-    actor_name: str         # удобочитаемое имя
+    event_type: str  # "shoot", "charge", "move", "kill", "damage", "cp_spend", etc.
+    actor_id: str  # unit_id инициатора
+    actor_name: str  # удобочитаемое имя
     target_id: str | None = None
     target_name: str | None = None
     weapon_index: int | None = None
     weapon_name: str | None = None
     dice_rolled: list[int] | None = None
     result_value: float | None = None  # урон, CP, VP
-    detail: str | None = None          # дополнительный текст
+    detail: str | None = None  # дополнительный текст
     position_before: dict[str, int] | None = None
     position_after: dict[str, int] | None = None
 
@@ -42,9 +43,10 @@ class ReplayEvent:
 @dataclass
 class ReplayRound:
     """Один раунд реплея."""
+
     round: int
-    start_state: dict[str, Any]       # снимок GameState в начале раунда
-    end_state: dict[str, Any]         # снимок в конце
+    start_state: dict[str, Any]  # снимок GameState в начале раунда
+    end_state: dict[str, Any]  # снимок в конце
     events: list[ReplayEvent] = field(default_factory=list)
     phase_summary: dict[str, dict[str, Any]] = field(default_factory=dict)
 
@@ -52,22 +54,24 @@ class ReplayRound:
 @dataclass
 class Replay:
     """Полный реплей игры."""
-    game_id: str            # UUID
-    created_at: str         # ISO timestamp
-    rosters: dict[str, Any]           # roster_a, roster_b
+
+    game_id: str  # UUID
+    created_at: str  # ISO timestamp
+    rosters: dict[str, Any]  # roster_a, roster_b
     mission: str
     deployment: str
     seed: int
     rounds: list[ReplayRound]
-    summary: dict[str, Any]           # итоги (кто победил, счёт)
+    summary: dict[str, Any]  # итоги (кто победил, счёт)
     version: str = "1.0"
 
 
 class ReplayRecorder:
     """Записывает события игры в структурированный реплей."""
 
-    def __init__(self, game_id: str, rosters: dict[str, Any],
-                 mission: str, deployment: str, seed: int):
+    def __init__(
+        self, game_id: str, rosters: dict[str, Any], mission: str, deployment: str, seed: int
+    ):
         self.replay = Replay(
             game_id=game_id,
             created_at=datetime.utcnow().isoformat(),
@@ -108,79 +112,140 @@ class ReplayRecorder:
         if self._current_round is not None:
             self._current_round.events.append(event)
 
-    def record_shoot(self, round_num: int, phase: str, turn: int,
-                     actor: UnitState, target: UnitState,
-                     weapon_name: str, damage: float,
-                     dice: list[int] | None = None):
+    def record_shoot(
+        self,
+        round_num: int,
+        phase: str,
+        turn: int,
+        actor: UnitState,
+        target: UnitState,
+        weapon_name: str,
+        damage: float,
+        dice: list[int] | None = None,
+    ):
         """Записать событие стрельбы."""
-        self.record(ReplayEvent(
-            round=round_num, phase=phase, turn=turn,
-            event_type="shoot",
-            actor_id=actor.unit_id, actor_name=actor.unit_name,
-            target_id=target.unit_id, target_name=target.unit_name,
-            weapon_name=weapon_name,
-            dice_rolled=dice,
-            result_value=damage,
-            position_before=_pos_dict(actor.position),
-        ))
+        self.record(
+            ReplayEvent(
+                round=round_num,
+                phase=phase,
+                turn=turn,
+                event_type="shoot",
+                actor_id=actor.unit_id,
+                actor_name=actor.unit_name,
+                target_id=target.unit_id,
+                target_name=target.unit_name,
+                weapon_name=weapon_name,
+                dice_rolled=dice,
+                result_value=damage,
+                position_before=_pos_dict(actor.position),
+            )
+        )
 
-    def record_charge(self, round_num: int, phase: str, turn: int,
-                      actor: UnitState, target: UnitState,
-                      charge_roll: int, success: bool):
+    def record_charge(
+        self,
+        round_num: int,
+        phase: str,
+        turn: int,
+        actor: UnitState,
+        target: UnitState,
+        charge_roll: int,
+        success: bool,
+    ):
         """Записать событие заряда."""
-        self.record(ReplayEvent(
-            round=round_num, phase=phase, turn=turn,
-            event_type="charge",
-            actor_id=actor.unit_id, actor_name=actor.unit_name,
-            target_id=target.unit_id, target_name=target.unit_name,
-            dice_rolled=[charge_roll],
-            result_value=1.0 if success else 0.0,
-            detail="success" if success else "failed",
-        ))
+        self.record(
+            ReplayEvent(
+                round=round_num,
+                phase=phase,
+                turn=turn,
+                event_type="charge",
+                actor_id=actor.unit_id,
+                actor_name=actor.unit_name,
+                target_id=target.unit_id,
+                target_name=target.unit_name,
+                dice_rolled=[charge_roll],
+                result_value=1.0 if success else 0.0,
+                detail="success" if success else "failed",
+            )
+        )
 
-    def record_kill(self, round_num: int, phase: str, turn: int,
-                    actor: UnitState, target: UnitState):
-        self.record(ReplayEvent(
-            round=round_num, phase=phase, turn=turn,
-            event_type="kill",
-            actor_id=actor.unit_id, actor_name=actor.unit_name,
-            target_id=target.unit_id, target_name=target.unit_name,
-            result_value=1.0,
-        ))
+    def record_kill(
+        self, round_num: int, phase: str, turn: int, actor: UnitState, target: UnitState
+    ):
+        self.record(
+            ReplayEvent(
+                round=round_num,
+                phase=phase,
+                turn=turn,
+                event_type="kill",
+                actor_id=actor.unit_id,
+                actor_name=actor.unit_name,
+                target_id=target.unit_id,
+                target_name=target.unit_name,
+                result_value=1.0,
+            )
+        )
 
-    def record_move(self, round_num: int, phase: str, turn: int,
-                    actor: UnitState,
-                    from_pos: tuple, to_pos: tuple):
-        self.record(ReplayEvent(
-            round=round_num, phase=phase, turn=turn,
-            event_type="move",
-            actor_id=actor.unit_id, actor_name=actor.unit_name,
-            position_before={"x": from_pos[0], "y": from_pos[1]},
-            position_after={"x": to_pos[0], "y": to_pos[1]},
-        ))
+    def record_move(
+        self,
+        round_num: int,
+        phase: str,
+        turn: int,
+        actor: UnitState,
+        from_pos: tuple,
+        to_pos: tuple,
+    ):
+        self.record(
+            ReplayEvent(
+                round=round_num,
+                phase=phase,
+                turn=turn,
+                event_type="move",
+                actor_id=actor.unit_id,
+                actor_name=actor.unit_name,
+                position_before={"x": from_pos[0], "y": from_pos[1]},
+                position_after={"x": to_pos[0], "y": to_pos[1]},
+            )
+        )
 
-    def record_damage(self, round_num: int, phase: str, turn: int,
-                      actor: UnitState, target: UnitState,
-                      damage: float):
+    def record_damage(
+        self,
+        round_num: int,
+        phase: str,
+        turn: int,
+        actor: UnitState,
+        target: UnitState,
+        damage: float,
+    ):
         """Записать событие нанесения урона (не убийства)."""
-        self.record(ReplayEvent(
-            round=round_num, phase=phase, turn=turn,
-            event_type="damage",
-            actor_id=actor.unit_id, actor_name=actor.unit_name,
-            target_id=target.unit_id, target_name=target.unit_name,
-            result_value=damage,
-        ))
+        self.record(
+            ReplayEvent(
+                round=round_num,
+                phase=phase,
+                turn=turn,
+                event_type="damage",
+                actor_id=actor.unit_id,
+                actor_name=actor.unit_name,
+                target_id=target.unit_id,
+                target_name=target.unit_name,
+                result_value=damage,
+            )
+        )
 
-    def record_cp_spend(self, round_num: int, phase: str, turn: int,
-                        actor_id: str, actor_name: str,
-                        cp_amount: int):
+    def record_cp_spend(
+        self, round_num: int, phase: str, turn: int, actor_id: str, actor_name: str, cp_amount: int
+    ):
         """Записать трату командных очков."""
-        self.record(ReplayEvent(
-            round=round_num, phase=phase, turn=turn,
-            event_type="cp_spend",
-            actor_id=actor_id, actor_name=actor_name,
-            result_value=float(cp_amount),
-        ))
+        self.record(
+            ReplayEvent(
+                round=round_num,
+                phase=phase,
+                turn=turn,
+                event_type="cp_spend",
+                actor_id=actor_id,
+                actor_name=actor_name,
+                result_value=float(cp_amount),
+            )
+        )
 
     def set_summary(self, summary: dict[str, Any]):
         self.replay.summary = summary
@@ -189,33 +254,49 @@ class ReplayRecorder:
 def _snapshot_state(state: GameState) -> dict[str, Any]:
     """Создать снимок GameState для реплея."""
     return {
-        "round": getattr(state, 'current_round', 0),
-        "phase": getattr(state, 'current_phase', '').value if hasattr(getattr(state, 'current_phase', None), 'value') else str(getattr(state, 'current_phase', '')),
-        "turn": getattr(state, 'turn', 0),
-        "victory_points": {pid: getattr(player, 'victory_points', 0)
-                          for pid, player in getattr(state, 'players', {}).items()},
+        "round": getattr(state, "current_round", 0),
+        "phase": getattr(state, "current_phase", "").value
+        if hasattr(getattr(state, "current_phase", None), "value")
+        else str(getattr(state, "current_phase", "")),
+        "turn": getattr(state, "turn", 0),
+        "victory_points": {
+            pid: getattr(player, "victory_points", 0)
+            for pid, player in getattr(state, "players", {}).items()
+        },
         "units": {
-            "roster_a": [_unit_snapshot(u) for u in getattr(getattr(state, 'roster_a', None), 'units', {}).values()] if hasattr(state, 'roster_a') else [],
-            "roster_b": [_unit_snapshot(u) for u in getattr(getattr(state, 'roster_b', None), 'units', {}).values()] if hasattr(state, 'roster_b') else [],
+            "roster_a": [
+                _unit_snapshot(u)
+                for u in getattr(getattr(state, "roster_a", None), "units", {}).values()
+            ]
+            if hasattr(state, "roster_a")
+            else [],
+            "roster_b": [
+                _unit_snapshot(u)
+                for u in getattr(getattr(state, "roster_b", None), "units", {}).values()
+            ]
+            if hasattr(state, "roster_b")
+            else [],
         },
     }
 
 
 def _unit_snapshot(unit: UnitState) -> dict[str, Any]:
     return {
-        "id": getattr(unit, 'unit_id', ''),
-        "name": getattr(unit, 'unit_name', str(unit)),
-        "squad_size": getattr(unit, 'squad_size', 1),
-        "wounds_remaining": getattr(unit, 'wounds_remaining', getattr(unit, 'wounds', 1)),
-        "position": {"x": getattr(unit.position, 'x', 0), "y": getattr(unit.position, 'y', 0)} if hasattr(unit, 'position') else {"x": 0, "y": 0},
-        "is_engaged": getattr(unit, 'is_engaged', False),
-        "is_battle_shocked": getattr(unit, 'is_battle_shocked', False),
-        "is_alive": getattr(unit, 'is_alive', True),
+        "id": getattr(unit, "unit_id", ""),
+        "name": getattr(unit, "unit_name", str(unit)),
+        "squad_size": getattr(unit, "squad_size", 1),
+        "wounds_remaining": getattr(unit, "wounds_remaining", getattr(unit, "wounds", 1)),
+        "position": {"x": getattr(unit.position, "x", 0), "y": getattr(unit.position, "y", 0)}
+        if hasattr(unit, "position")
+        else {"x": 0, "y": 0},
+        "is_engaged": getattr(unit, "is_engaged", False),
+        "is_battle_shocked": getattr(unit, "is_battle_shocked", False),
+        "is_alive": getattr(unit, "is_alive", True),
     }
 
 
 def _pos_dict(pos) -> dict[str, int]:
-    if hasattr(pos, 'x') and hasattr(pos, 'y'):
+    if hasattr(pos, "x") and hasattr(pos, "y"):
         return {"x": int(pos.x), "y": int(pos.y)}
     return {"x": 0, "y": 0}
 
@@ -239,8 +320,9 @@ CREATE TABLE IF NOT EXISTS replays (
 
 def replay_to_json(replay: Replay) -> str:
     """Сериализовать Replay в JSON."""
+
     def _default(obj):
-        if hasattr(obj, '__dataclass_fields__'):
+        if hasattr(obj, "__dataclass_fields__"):
             return asdict(obj)
         msg = f"Object of type {type(obj).__name__} is not JSON serializable"
         raise TypeError(msg)
@@ -259,13 +341,15 @@ def _replay_from_dict(raw: dict[str, Any]) -> Replay:
     rounds = []
     for r in raw.get("rounds", []):
         events = [ReplayEvent(**e) for e in r.get("events", [])]
-        rounds.append(ReplayRound(
-            round=r["round"],
-            start_state=r.get("start_state", {}),
-            end_state=r.get("end_state", {}),
-            events=events,
-            phase_summary=r.get("phase_summary", {}),
-        ))
+        rounds.append(
+            ReplayRound(
+                round=r["round"],
+                start_state=r.get("start_state", {}),
+                end_state=r.get("end_state", {}),
+                events=events,
+                phase_summary=r.get("phase_summary", {}),
+            )
+        )
 
     return Replay(
         game_id=raw["game_id"],
@@ -280,8 +364,7 @@ def _replay_from_dict(raw: dict[str, Any]) -> Replay:
     )
 
 
-def save_replay(db: sqlite3.Connection, replay: Replay,
-                user_id: int | None = None):
+def save_replay(db: sqlite3.Connection, replay: Replay, user_id: int | None = None):
     """Сохранить реплей в SQLite."""
     db.execute(
         """INSERT OR REPLACE INTO replays
@@ -315,9 +398,9 @@ def load_replay(db: sqlite3.Connection, game_id: str) -> Replay | None:
     return None
 
 
-def list_replays(db: sqlite3.Connection,
-                 user_id: int | None = None,
-                 limit: int = 20) -> list[dict[str, Any]]:
+def list_replays(
+    db: sqlite3.Connection, user_id: int | None = None, limit: int = 20
+) -> list[dict[str, Any]]:
     """Список реплеев (метаданные без полного JSON)."""
     if user_id:
         rows = db.execute(
@@ -337,9 +420,12 @@ def list_replays(db: sqlite3.Connection,
 
     return [
         {
-            "game_id": r[0], "created_at": r[1],
-            "mission": r[2], "deployment": r[3],
-            "seed": r[4], "summary": json.loads(r[5]) if r[5] else {},
+            "game_id": r[0],
+            "created_at": r[1],
+            "mission": r[2],
+            "deployment": r[3],
+            "seed": r[4],
+            "summary": json.loads(r[5]) if r[5] else {},
         }
         for r in rows
     ]

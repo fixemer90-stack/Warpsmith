@@ -52,7 +52,6 @@ def backup_database():
         with open(metadata_file, "w") as f:
             json.dump(metadata, f, indent=2)
 
-
         return backup_file
 
     except Exception:
@@ -115,7 +114,6 @@ def restore_database(backup_path=None, compressed=False):
         _roster_count = cursor.fetchone()[0]
         conn.close()
 
-
         return True
 
     except Exception:
@@ -135,7 +133,6 @@ def list_backups():
 
     if not backup_files:
         return
-
 
     for backup_file in sorted(backup_files, key=lambda x: x.stat().st_mtime, reverse=True):
         stat = backup_file.stat()
@@ -187,7 +184,6 @@ def cleanup_old_backups(keep_count=10):
             removed_count += 1
         except Exception:  # noqa: S110 — cleanup failures are non-critical
             pass
-
 
 
 if __name__ == "__main__":

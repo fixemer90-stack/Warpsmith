@@ -36,6 +36,7 @@ class TimeoutError(AutoPlayError):
 @dataclass
 class AutoPlayConfig:
     """Конфигурация симуляции."""
+
     max_rounds: int = 5
     deployment_type: DeploymentType = DeploymentType.STANDARD
     seed: int = 42
@@ -48,6 +49,7 @@ class AutoPlayConfig:
 @dataclass
 class AutoPlayResult:
     """Результат полной симуляции."""
+
     game_state: GameState
     round_logs: list[dict[str, Any]]
     placements: dict[int, list[Any]]  # player → [Placement]
@@ -58,9 +60,9 @@ class AutoPlayResult:
     def to_dict(self) -> dict[str, Any]:
         """Сериализация результата для JSON."""
         victory_points = {}
-        if hasattr(self.game_state, 'players'):
+        if hasattr(self.game_state, "players"):
             for player_id, player in self.game_state.players.items():
-                victory_points[player_id] = getattr(player, 'victory_points', 0)
+                victory_points[player_id] = getattr(player, "victory_points", 0)
 
         return {
             "rounds": len(self.round_logs),
@@ -73,7 +75,7 @@ class AutoPlayResult:
 
     def _determine_winner(self) -> int | None:
         """Определить победителя по очкам победы."""
-        if not hasattr(self.game_state, 'players') or len(self.game_state.players) < 2:
+        if not hasattr(self.game_state, "players") or len(self.game_state.players) < 2:
             return None
 
         # Find the two players (assuming 2-player game)
@@ -82,8 +84,8 @@ class AutoPlayResult:
             return None
 
         player_a_id, player_b_id = player_ids[0], player_ids[1]
-        vp_a = getattr(self.game_state.players[player_a_id], 'victory_points', 0)
-        vp_b = getattr(self.game_state.players[player_b_id], 'victory_points', 0)
+        vp_a = getattr(self.game_state.players[player_a_id], "victory_points", 0)
+        vp_b = getattr(self.game_state.players[player_b_id], "victory_points", 0)
 
         if vp_a > vp_b:
             # Return the numeric ID if possible, otherwise return the first player's ID
@@ -113,6 +115,7 @@ def resolve_ai_for_faction(faction: str) -> object:
         return profile  # FactionAIProfile с weights/behaviors/target_priority
     # Fallback к generic choose_action для фракций без ai: секции
     from backend.engine.ai.decision import choose_action
+
     return choose_action
 
 
@@ -122,15 +125,15 @@ def _validate_rosters(roster_a: RosterState, roster_b: RosterState) -> list[str]
 
     # Проверка PTS лимитов (примерно 2000 PTS стандартный лимит)
     max_pts = 2000
-    if hasattr(roster_a, 'total_pts') and roster_a.total_pts > max_pts:
+    if hasattr(roster_a, "total_pts") and roster_a.total_pts > max_pts:
         errors.append(f"Roster A exceeds {max_pts} PTS: {roster_a.total_pts}")
-    if hasattr(roster_b, 'total_pts') and roster_b.total_pts > max_pts:
+    if hasattr(roster_b, "total_pts") and roster_b.total_pts > max_pts:
         errors.append(f"Roster B exceeds {max_pts} PTS: {roster_b.total_pts}")
 
     # Проверка наличия_units
-    if hasattr(roster_a, 'units') and len(roster_a.units) == 0:
+    if hasattr(roster_a, "units") and len(roster_a.units) == 0:
         errors.append("Roster A has no units")
-    if hasattr(roster_b, 'units') and len(roster_b.units) == 0:
+    if hasattr(roster_b, "units") and len(roster_b.units) == 0:
         errors.append("Roster B has no units")
 
     return errors
@@ -157,7 +160,7 @@ def _create_default_map(seed: int = 42) -> BattlefieldMap:
 
 def _find_unit_in_roster(roster: RosterState, unit_id: str) -> Any | None:
     """Найти юнит в ростере по ID."""
-    if hasattr(roster, 'units'):
+    if hasattr(roster, "units"):
         return roster.units.get(unit_id)
     return None
 
@@ -165,11 +168,11 @@ def _find_unit_in_roster(roster: RosterState, unit_id: str) -> Any | None:
 def _check_game_end(state: GameState, mission: Mission) -> bool:
     """Проверить условия окончания игры."""
     # Простая проверка: если у одного из игроков нет юнитов
-    if hasattr(state, 'players'):
+    if hasattr(state, "players"):
         players_alive = 0
         for player in state.players.values():
-            if hasattr(player, 'units'):
-                alive_units = [u for u in player.units.values() if getattr(u, 'is_alive', True)]
+            if hasattr(player, "units"):
+                alive_units = [u for u in player.units.values() if getattr(u, "is_alive", True)]
                 if len(alive_units) > 0:
                     players_alive += 1
 
@@ -177,11 +180,16 @@ def _check_game_end(state: GameState, mission: Mission) -> bool:
             return True
 
     # Проверка по максимальному количеству раундов
-    return bool(hasattr(state, 'current_round') and hasattr(state, 'max_rounds') and state.current_round >= state.max_rounds)
+    return bool(
+        hasattr(state, "current_round")
+        and hasattr(state, "max_rounds")
+        and state.current_round >= state.max_rounds
+    )
 
 
-def _build_summary(state: GameState, round_logs: list[dict[str, Any]],
-                   placements: dict[int, list[Any]]) -> dict[str, Any]:
+def _build_summary(
+    state: GameState, round_logs: list[dict[str, Any]], placements: dict[int, list[Any]]
+) -> dict[str, Any]:
     """Построить сводку симуляции."""
     total_kills = {1: 0, 2: 0}
     total_damage = {1: 0, 2: 0}
@@ -190,31 +198,43 @@ def _build_summary(state: GameState, round_logs: list[dict[str, Any]],
     # Извлекаем информацию из логов раундов
     for log in round_logs:
         # Предполагаем структуру лога в зависимости от реализации
-        if isinstance(log, dict) and 'events' in log:
-            for event in log['events']:
-                player = event.get('player', 0)
-                if event.get('type') == 'kill':
+        if isinstance(log, dict) and "events" in log:
+            for event in log["events"]:
+                player = event.get("player", 0)
+                if event.get("type") == "kill":
                     total_kills[player] = total_kills.get(player, 0) + 1
-                if event.get('damage', 0) > 0:
-                    total_damage[player] = total_damage.get(player, 0) + event['damage']
-                if event.get('action') == 'charge':
+                if event.get("damage", 0) > 0:
+                    total_damage[player] = total_damage.get(player, 0) + event["damage"]
+                if event.get("action") == "charge":
                     charge_count[player] = charge_count.get(player, 0) + 1
 
     # Информация об армиях
     army_a_info = {"faction": "unknown", "pts": 0}
     army_b_info = {"faction": "unknown", "pts": 0}
 
-    if hasattr(state, 'roster_a') and hasattr(state.roster_a, 'faction'):
+    if hasattr(state, "roster_a") and hasattr(state.roster_a, "faction"):
         army_a_info["faction"] = state.roster_a.faction
-        army_a_info["pts"] = getattr(state.roster_a, 'total_pts', 0)
-    if hasattr(state, 'roster_b') and hasattr(state.roster_b, 'faction'):
+        army_a_info["pts"] = getattr(state.roster_a, "total_pts", 0)
+    if hasattr(state, "roster_b") and hasattr(state.roster_b, "faction"):
         army_b_info["faction"] = state.roster_b.faction
-        army_b_info["pts"] = getattr(state.roster_b, 'total_pts', 0)
+        army_b_info["pts"] = getattr(state.roster_b, "total_pts", 0)
 
     return {
         "victory_points": {
-            "1": getattr(state.players.get("1", type('obj', (), {'victory_points': 0}))(), 'victory_points', 0) if hasattr(state, 'players') else 0,
-            "2": getattr(state.players.get("2", type('obj', (), {'victory_points': 0}))(), 'victory_points', 0) if hasattr(state, 'players') else 0,
+            "1": getattr(
+                state.players.get("1", type("obj", (), {"victory_points": 0}))(),
+                "victory_points",
+                0,
+            )
+            if hasattr(state, "players")
+            else 0,
+            "2": getattr(
+                state.players.get("2", type("obj", (), {"victory_points": 0}))(),
+                "victory_points",
+                0,
+            )
+            if hasattr(state, "players")
+            else 0,
         },
         "winner": None,  # Будет заполнено в to_dict()
         "total_kills": total_kills,
@@ -226,9 +246,15 @@ def _build_summary(state: GameState, round_logs: list[dict[str, Any]],
     }
 
 
-def run_round_with_ai(state: GameState, game_map: BattlefieldMap, mission: Mission,
-                     scenario: Scenario, ai_a: object, ai_b: object,
-                     config: AutoPlayConfig) -> GameState:
+def run_round_with_ai(
+    state: GameState,
+    game_map: BattlefieldMap,
+    mission: Mission,
+    scenario: Scenario,
+    ai_a: object,
+    ai_b: object,
+    config: AutoPlayConfig,
+) -> GameState:
     """
     Запустить один раунд игры с использованием AI для принятия решений.
     """
@@ -251,8 +277,7 @@ def run_round_with_ai(state: GameState, game_map: BattlefieldMap, mission: Missi
     return state
 
 
-def _execute_phase_with_ai(state: GameState, phase: GamePhase,
-                          ai_a: object, ai_b: object):
+def _execute_phase_with_ai(state: GameState, phase: GamePhase, ai_a: object, ai_b: object):
     """Выполнить логику для конкретной фазы с использованием AI."""
     state.game_log.append(f"Phase: {phase.value}")
 
@@ -283,9 +308,7 @@ def _command_phase(state: GameState):
         if player.command_points + cp_gain > 10:
             cp_gain = 10 - player.command_points
         player.command_points += cp_gain
-        state.game_log.append(
-            f"{player.name} gained {cp_gain} CP (total: {player.command_points})"
-        )
+        state.game_log.append(f"{player.name} gained {cp_gain} CP (total: {player.command_points})")
 
     # Update mission scoring at end of Command phase
     if state.mission:
@@ -390,7 +413,11 @@ def _resolve_melee_combat(attacking_unit, state: GameState) -> None:
     enemy_unit = None
     for player in state.players.values():
         for unit in player.units.values():
-            if unit.is_alive and unit != attacking_unit and unit.position == attacking_unit.position:
+            if (
+                unit.is_alive
+                and unit != attacking_unit
+                and unit.position == attacking_unit.position
+            ):
                 enemy_unit = unit
                 break
         if enemy_unit:
@@ -420,10 +447,9 @@ def _resolve_melee_combat(attacking_unit, state: GameState) -> None:
         )
 
 
-def run_auto_game(roster_a: PlayerState,
-                  roster_b: PlayerState,
-                  mission: Mission,
-                  config: AutoPlayConfig = None) -> AutoPlayResult:
+def run_auto_game(
+    roster_a: PlayerState, roster_b: PlayerState, mission: Mission, config: AutoPlayConfig = None
+) -> AutoPlayResult:
     """
     Запустить полную AI vs AI симуляцию.
 
@@ -458,7 +484,7 @@ def run_auto_game(roster_a: PlayerState,
             roster_a=roster_a,
             roster_b=roster_b,
             seed=config.seed,
-            mission=mission.name if hasattr(mission, 'name') else str(mission),
+            mission=mission.name if hasattr(mission, "name") else str(mission),
             map_width=game_map.width,
             map_height=game_map.height,
         )
@@ -470,26 +496,30 @@ def run_auto_game(roster_a: PlayerState,
 
         for player, roster in [(1, roster_a), (2, roster_b)]:
             placements = place_units(
-                player_units=list(getattr(roster, 'units', {}).values()) if hasattr(roster, 'units') else [],
+                player_units=list(getattr(roster, "units", {}).values())
+                if hasattr(roster, "units")
+                else [],
                 unit_models=unit_models,
                 deployment_type=config.deployment_type,
                 player=player,
                 map_size=(game_map.width, game_map.height),
                 battlefield=game_map,
-                objectives=getattr(mission, 'objectives', []),
-                warlord_id=getattr(roster, 'warlord_unit_id', None) if hasattr(roster, 'warlord_unit_id') else None,
+                objectives=getattr(mission, "objectives", []),
+                warlord_id=getattr(roster, "warlord_unit_id", None)
+                if hasattr(roster, "warlord_unit_id")
+                else None,
             )
             deployments[player] = placements
 
             # Обновляем позиции юнитов в ростере
             for placement in placements:
                 unit = _find_unit_in_roster(roster, placement.unit_id)
-                if unit and hasattr(unit, 'position'):
+                if unit and hasattr(unit, "position"):
                     unit.position = (placement.x, placement.y)
 
         # 4. Create AIs
-        ai_a = resolve_ai_for_faction(getattr(roster_a, 'faction', 'unknown'))
-        ai_b = resolve_ai_for_faction(getattr(roster_b, 'faction', 'unknown'))
+        ai_a = resolve_ai_for_faction(getattr(roster_a, "faction", "unknown"))
+        ai_b = resolve_ai_for_faction(getattr(roster_b, "faction", "unknown"))
 
         # 5. Game loop
         round_logs = []
@@ -512,7 +542,7 @@ def run_auto_game(roster_a: PlayerState,
                 round_log = {
                     "round": r + 1,
                     "events": [],  # В реальности здесь были бы события боя
-                    "phase_logs": getattr(state, 'game_log', [])[-10:],  # Последние записи лога
+                    "phase_logs": getattr(state, "game_log", [])[-10:],  # Последние записи лога
                 }
                 round_logs.append(round_log)
 
@@ -523,16 +553,16 @@ def run_auto_game(roster_a: PlayerState,
                 # Подготавливаемся к следующему раунду
                 if not state.is_game_over:
                     # Сбрасываем флаги для следующего раунда
-                    for player in getattr(state, 'players', {}).values():
-                        if hasattr(player, 'units'):
+                    for player in getattr(state, "players", {}).values():
+                        if hasattr(player, "units"):
                             for unit in player.units.values():
-                                if hasattr(unit, 'has_shot'):
+                                if hasattr(unit, "has_shot"):
                                     unit.has_shot = False
-                                if hasattr(unit, 'has_charged'):
+                                if hasattr(unit, "has_charged"):
                                     unit.has_charged = False
-                                if hasattr(unit, 'is_fighting'):
+                                if hasattr(unit, "is_fighting"):
                                     unit.is_fighting = False
-                                if hasattr(unit, 'is_battle_shocked'):
+                                if hasattr(unit, "is_battle_shocked"):
                                     unit.is_battle_shocked = False
 
         except AutoPlayError as e:

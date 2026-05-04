@@ -68,6 +68,7 @@ from dataclasses import dataclass
 @dataclass
 class _TestMission:
     """Minimal mission stub for autoplay tests."""
+
     name: str = "only_war"
     objectives: list = list
 
@@ -124,9 +125,7 @@ def test_auto_game_returns_result():
 def test_invalid_roster_returns_error():
     """Roster exceeding PTS limit returns error."""
     roster_a = make_test_roster(pts=9999)  # exceeds max_pts
-    result = run_auto_game(
-        roster_a, make_test_roster(faction="tau"), make_test_mission()
-    )
+    result = run_auto_game(roster_a, make_test_roster(faction="tau"), make_test_mission())
     assert result.error is not None
     assert "validation" in result.error.lower()
 

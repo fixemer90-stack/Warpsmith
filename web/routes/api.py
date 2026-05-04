@@ -552,7 +552,12 @@ async def get_map_tiles(
             elif (x <= 2 or x >= 13) and (y <= 2 or y >= 13):
                 tile_type = TileType.HEAVY_COVER.value
             # Difficult terrain near obstacles
-            elif 5 <= x <= 10 and 5 <= y <= 10 and tile_type == TileType.OPEN.value and (x + y) % 3 == 0:
+            elif (
+                5 <= x <= 10
+                and 5 <= y <= 10
+                and tile_type == TileType.OPEN.value
+                and (x + y) % 3 == 0
+            ):
                 tile_type = TileType.DIFFICULT.value
 
             row.append(tile_type)
@@ -599,7 +604,7 @@ async def auto_play_simulation(
     mission: str = "only_war",
     deployment: str = "standard",
     max_rounds: int = 5,
-    seed: int = 42
+    seed: int = 42,
 ):
     """Запуск полной AI vs AI симуляции."""
     try:
@@ -633,7 +638,7 @@ async def auto_play_simulation(
                         wounds=unit.wounds,
                         squad_size=u_data["squad_size"],
                         weapons=unit.weapons,
-                        points=unit.points
+                        points=unit.points,
                     )
                     units_dict[unit.name] = unit_copy
             return units_dict
@@ -641,30 +646,24 @@ async def auto_play_simulation(
         roster_a = RosterState(
             name=roster_a_row["name"],
             faction=roster_a_row["faction"],
-            total_pts=roster_a_row["pts_limit"],  # This should be total_pts, but we'll use pts_limit for now
-            units=units_from_db(roster_a_row["units"])
+            total_pts=roster_a_row[
+                "pts_limit"
+            ],  # This should be total_pts, but we'll use pts_limit for now
+            units=units_from_db(roster_a_row["units"]),
         )
 
         roster_b = RosterState(
             name=roster_b_row["name"],
             faction=roster_b_row["faction"],
             total_pts=roster_b_row["pts_limit"],
-            units=units_from_db(roster_b_row["units"])
+            units=units_from_db(roster_b_row["units"]),
         )
 
         # Get mission object
-        mission_obj = Mission(
-            name=mission,
-            description=f"{mission} mission",
-            objectives=[]
-        )
+        mission_obj = Mission(name=mission, description=f"{mission} mission", objectives=[])
 
         # Run auto-play simulation
-        config = AutoPlayConfig(
-            max_rounds=max_rounds,
-            deployment_type=deployment,
-            seed=seed
-        )
+        config = AutoPlayConfig(max_rounds=max_rounds, deployment_type=deployment, seed=seed)
 
         result = run_auto_game(roster_a, roster_b, mission_obj, config)
 
@@ -674,7 +673,7 @@ async def auto_play_simulation(
         return {
             "success": True,
             "result": result.to_dict(),
-            "replay_log": result.round_logs  # This would be enhanced with actual replay data
+            "replay_log": result.round_logs,  # This would be enhanced with actual replay data
         }
 
     except Exception as e:

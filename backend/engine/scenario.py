@@ -112,7 +112,11 @@ class Scenario:
                 else:
                     # Normal Move — simplified: move 1 cell toward center
                     center_x = self.state.map_width // 2
-                    dx = 1 if unit.position[0] < center_x else (-1 if unit.position[0] > center_x else 0)
+                    dx = (
+                        1
+                        if unit.position[0] < center_x
+                        else (-1 if unit.position[0] > center_x else 0)
+                    )
                     new_x = unit.position[0] + dx
                     new_y = unit.position[1]
                     if self.state.move_unit(unit.unit_id, (new_x, new_y)):
@@ -123,12 +127,15 @@ class Scenario:
         """Shooting phase: find targets in range, resolve damage via combat engine."""
         self.state.game_log.append("Shooting phase: units may shoot")
         import numpy as np
+
         for player in self.state.players.values():
             for unit in player.units.values():
                 if not unit.is_alive or unit.has_shot or unit.is_engaged:
                     continue
                 # Find opponent
-                opponent_pid = next((pid for pid in self.state.players if pid != player.player_id), None)
+                opponent_pid = next(
+                    (pid for pid in self.state.players if pid != player.player_id), None
+                )
                 if opponent_pid is None:
                     continue
                 opponent = self.state.players[opponent_pid]
@@ -136,28 +143,37 @@ class Scenario:
                 for target in opponent.units.values():
                     if not target.is_alive:
                         continue
-                    dist = ((unit.position[0] - target.position[0]) ** 2 +
-                            (unit.position[1] - target.position[1]) ** 2) ** 0.5
+                    dist = (
+                        (unit.position[0] - target.position[0]) ** 2
+                        + (unit.position[1] - target.position[1]) ** 2
+                    ) ** 0.5
                     if dist > 12:
                         continue
                     # LoS check if battlefield is available
                     if self.battlefield is not None and not self.battlefield.has_los(
-                        unit.position[0], unit.position[1],
-                        target.position[0], target.position[1],
+                        unit.position[0],
+                        unit.position[1],
+                        target.position[0],
+                        target.position[1],
                     ):
                         continue
                     targets.append(target)
                 if not targets:
                     continue
                 # Target closest enemy
-                target = min(targets, key=lambda t:
-                    (unit.position[0] - t.position[0]) ** 2 +
-                    (unit.position[1] - t.position[1]) ** 2)
+                target = min(
+                    targets,
+                    key=lambda t: (
+                        (unit.position[0] - t.position[0]) ** 2
+                        + (unit.position[1] - t.position[1]) ** 2
+                    ),
+                )
                 # Resolve damage using combat engine if models available
                 attacker_model = self._unit_models.get(unit.unit_id)
                 defender_model = self._unit_models.get(target.unit_id)
                 if attacker_model and defender_model and attacker_model.ranged_weapons:
                     from backend.engine.combat import simulate_unit_attack
+
                     result = simulate_unit_attack(
                         attacker=attacker_model,
                         defender=defender_model,
@@ -173,34 +189,39 @@ class Scenario:
                     # Simplified damage fallback
                     damage = max(1, unit.models_remaining // 2)
                 self.state.deal_damage(target.unit_id, damage)
-                self.state.game_log.append(
-                    f"{unit.name} hits {target.name} for {damage} damage"
-                )
+                self.state.game_log.append(f"{unit.name} hits {target.name} for {damage} damage")
                 unit.has_shot = True
 
     def _charge_phase(self) -> None:
         """Charge phase: roll 2D6, move into engagement if in range."""
         self.state.game_log.append("Charge phase: units may charge")
         import random
+
         for player in self.state.players.values():
             for unit in player.units.values():
                 if not unit.is_alive or unit.has_charged or unit.is_engaged:
                     continue
                 # Find closest enemy
-                opponent_pid = next((pid for pid in self.state.players if pid != player.player_id), None)
+                opponent_pid = next(
+                    (pid for pid in self.state.players if pid != player.player_id), None
+                )
                 if opponent_pid is None:
                     continue
                 opponent = self.state.players[opponent_pid]
                 closest = min(
                     (t for t in opponent.units.values() if t.is_alive),
-                    key=lambda t: ((unit.position[0] - t.position[0]) ** 2 +
-                                   (unit.position[1] - t.position[1]) ** 2),
+                    key=lambda t: (
+                        (unit.position[0] - t.position[0]) ** 2
+                        + (unit.position[1] - t.position[1]) ** 2
+                    ),
                     default=None,
                 )
                 if closest is None:
                     continue
-                dist = ((unit.position[0] - closest.position[0]) ** 2 +
-                        (unit.position[1] - closest.position[1]) ** 2) ** 0.5
+                dist = (
+                    (unit.position[0] - closest.position[0]) ** 2
+                    + (unit.position[1] - closest.position[1]) ** 2
+                ) ** 0.5
                 # Roll 2D6
                 roll = random.randint(1, 6) + random.randint(1, 6)
                 if roll >= dist:
@@ -208,11 +229,11 @@ class Scenario:
                     if self.state.move_unit(unit.unit_id, closest.position):
                         unit.is_engaged = True
                         self.state.game_log.append(
-                            f"{unit.name} charges {closest.name} (rolled {roll} ≥ {dist:.0f})\" – engaged!"
+                            f'{unit.name} charges {closest.name} (rolled {roll} ≥ {dist:.0f})" – engaged!'
                         )
                 else:
                     self.state.game_log.append(
-                        f"{unit.name} fails charge (rolled {roll} < {dist:.0f})\")"
+                        f'{unit.name} fails charge (rolled {roll} < {dist:.0f})")'
                     )
                 unit.has_charged = True
 
@@ -238,7 +259,9 @@ class Scenario:
                 order = player_ids
             else:
                 # The non-priority player goes first in Fight phase
-                non_priority_player_id = next(pid for pid in player_ids if pid != priority_player_id)
+                non_priority_player_id = next(
+                    pid for pid in player_ids if pid != priority_player_id
+                )
                 order = [non_priority_player_id, priority_player_id]
 
         # Continue alternating activations until no more units can fight
@@ -275,7 +298,11 @@ class Scenario:
         enemy_unit = None
         for player in self.state.players.values():
             for unit in player.units.values():
-                if unit.is_alive and unit != attacking_unit and unit.position == attacking_unit.position:
+                if (
+                    unit.is_alive
+                    and unit != attacking_unit
+                    and unit.position == attacking_unit.position
+                ):
                     enemy_unit = unit
                     break
             if enemy_unit:
