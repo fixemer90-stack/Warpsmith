@@ -102,13 +102,13 @@
 |---|------|------|-----------|--------|
 | [F5.1](f5.1-dockerfile-compose.md) | Dockerfile + docker-compose | 3h | 1 | ✅ |
 | [F5.2](f5.2-deployment.md) | Deployment (Dokku / Railway / self-host) | 4h | 1 | ✅ |
-| [F5.3](f5.3-rate-limiting.md) | Rate limiting (slowapi) | 1h | 2 | ⏳ |
-| [F5.4](f5.4-cors-csp-security.md) | CORS hardening + CSP security headers | 1h | 2 | ⏳ |
+| [F5.3](f5.3-rate-limiting.md) | Rate limiting (slowapi) | 1h | 2 | ✅ |
+| [F5.4](f5.4-cors-csp-security.md) | CORS hardening + CSP security headers | 1h | 2 | ✅ |
 | [F5.5](f5.5-logging-sentry.md) | Logging (structlog) + Sentry error tracking | 2h | 3 | ✅ |
 | [F5.6](f5.6-cicd-github-actions.md) | CI/CD: GitHub Actions (lint + test + deploy) | 4h | 3 | ✅ |
 | [F5.7](f5.7-sqlite-backup.md) | SQLite backup strategy + restore script | 1h | 4 | ✅ |
 
-**Всего:** 7 features, ~16 часов. 🟢 71%
+**Всего:** 7 features, ~16 часов. ✅ 100%
 
 ---
 
@@ -118,9 +118,9 @@
 |------|----------|------|--------|
 | **Phase 1** — Combat Engine | 12 | ~30h | ✅ 100% |
 | **Phase 2** — Game System | 12 | ~40h | ✅ 100% |
-| **Phase 3** — AI & Automation | 7 | ~35h | 🟢 71% |
+| **Phase 3** — AI & Automation | 7 | ~35h | ✅ 100% |
 | **Phase 4** — Web UI Polish | 9 | ~37h | ✅ 100% |
-|| **Phase 5** — Production | 7 | ~16h | 🟢 71% |
+|| **Phase 5** — Production | 7 | ~16h | ✅ 100% |
 | **Phase 6** — Monetization | 6 | ~15h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |
 | **Итого** | **~62** | **~216h** | |

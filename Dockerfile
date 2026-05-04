@@ -10,5 +10,9 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Копируем код приложения
 COPY . .
 
-# Railway сам пробросит PORT
-CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
+# Railway пробрасывает PORT через railway.json startCommand
+# Для локального запуска — явный порт
+ENV PORT=8000
+EXPOSE 8000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

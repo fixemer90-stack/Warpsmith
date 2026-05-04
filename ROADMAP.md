@@ -82,23 +82,23 @@
 
 ---
 
-## 🧠 Phase 3: AI & Automation
+## ✅ Phase 3: AI & Automation
 
 ```
-[███████████████░░░░] 71% · 5/7 features
+[████████████████████] 100% · 7/7 features
 ```
 
-**Цель:** Нажать "Simulate" → AI разыгрывает 5 раундов → replay.
+**Цель:** Нажать "Simulate" → AI разыгрывает 5 раундов → replay. ✅ 418 тестов, Round Viewer + Result Screen + Replay.
 
 | # | Статус | Фича | Часы |
 |---|--------|------|------|
-| 3.1 | ✅ | Greedy decision engine — target/action evaluation (26 тестов) | 6h |
-| 3.2 | ✅ | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h |
-| 3.3 | ✅ | Deployment AI: zone placement logic (4 deployment types) | 3h |
-| 3.4 | ✅ | Auto-play: AI vs AI full scenario — 16 тестов, Scenario.run_round(), deploy_game(), F3.2 AI | 6h |
-| 3.5 | ✅ | Replay recording: JSON event log per round/phase — 18 тестов, ReplayRecorder, SQLite persistence | 3h |
-| 3.6 | ❌ | Round viewer: step-by-step replay UI | 6h |
-| 3.7 | ❌ | Result screen: kills, damage, VP timeline chart | 3h |
+|| 3.1 | ✅ | Greedy decision engine — target/action evaluation (26 тестов) | 6h |
+|| 3.2 | ✅ | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h |
+|| 3.3 | ✅ | Deployment AI: zone placement logic (4 deployment types) | 3h |
+|| 3.4 | ✅ | Auto-play: AI vs AI full scenario — 16 тестов, Scenario.run_round(), deploy_game(), F3.2 AI | 6h |
+|| 3.5 | ✅ | Replay recording: JSON event log per round/phase — 18 тестов, ReplayRecorder, SQLite persistence | 3h |
+|| 3.6 | ✅ | Round viewer: step-by-step replay UI — Alpine.js Canvas, replay_viewer.js | 6h |
+|| 3.7 | ✅ | Result screen: kills, damage, VP timeline chart — Chart.js, result_chart.js | 3h |
 
 **Deprecated (заменены F3.2):** Ork AI, T'au AI, AdMech AI.
 
@@ -191,9 +191,9 @@
 | **0. Foundation** | 12 | ~40ч | ✅ 100% |
 | **1. Combat Engine** | 12 | ~60ч | ✅ 100% |
 | **2. Game System** | 12 | ~40ч | ✅ 100% |
-| **3. AI & Automation** | 7 | ~35ч | 🟢 43% |
-| **4. Web UI Polish** | 9 | ~37ч | ✅ 100% |
-| **5. Production** | 7 | ~15ч | 🟢 71% |
+|| **3. AI & Automation** | 7 | ~35ч | ✅ 100% |
+|| **4. Web UI Polish** | 9 | ~37ч | ✅ 100% |
+|| **5. Production** | 7 | ~15ч | ✅ 100% |
 | **6. Monetization** | 6 | ~15ч | ⏳ 0% |
 | **7. Expansion** | 10 | ~40ч | ⏳ 0% |
 | **Итого** | **~75** | **~280ч** | |

@@ -43,9 +43,11 @@ class TestDockerFiles:
         # Check for no healthcheck in CMD (Railway manages healthchecks)
         # HEALTHCHECK removed — Railway handles it via railway.json
 
-        # Check for proper CMD (shell form, PORT env var)
-        assert "uvicorn main:app" in content
-        assert "${PORT:-8000}" in content
+        # Check for proper CMD (exec form, hardcoded port for local runs)
+        assert "CMD" in content
+        assert "uvicorn" in content
+        assert "main:app" in content
+        assert "8000" in content
 
     def test_dockerignore_content(self):
         """dockerignore should exclude development files."""
