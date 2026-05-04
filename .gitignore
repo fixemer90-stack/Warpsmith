@@ -24,6 +24,9 @@ venv/
 
 # Wiki vault (теперь часть репозитория — см. simulator/wiki/)
 
+# Test credentials (локальная разработка)
+.test-credentials
+
 # OS files
 .DS_Store
 Thumbs.db

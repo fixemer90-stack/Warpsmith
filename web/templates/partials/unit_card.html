@@ -1,0 +1,43 @@
+{# Unit Card Component (F4.8) — inline SVG icons + category color #}
+{# Usage: {% include "partials/unit_card.html" %} #}
+<div class="unit-card bg-gray-700 rounded-lg p-3 cursor-pointer
+            hover:bg-gray-600 transition-all duration-200
+            hover:scale-[1.02] group"
+     style="{{ card_style(unit.category) }}"
+     @click="openUnitModal('{{ unit.name }}')">
+
+    <div class="flex items-center gap-2 mb-2">
+        <!-- SVG Icon — inline, with hover effect -->
+        <span class="flex-shrink-0 w-6 h-6 transition-transform duration-200
+                     group-hover:scale-110 icon-category"
+              style="color: {{ CATEGORY_COLORS.get(unit.category, '#6b7280') }}">
+            {{ unit_icon(unit.category, size=24, class_name="icon-category") | safe }}
+        </span>
+
+        <div class="flex-1 min-w-0">
+            <span class="text-white text-sm font-medium truncate block">
+                {{ unit.name }}
+            </span>
+        </div>
+
+        <span class="text-yellow-400 text-xs font-bold whitespace-nowrap">
+            {{ unit.points }}pts
+        </span>
+    </div>
+
+    <div class="flex items-center gap-1 text-xs text-gray-400">
+        <span class="px-1.5 py-0.5 rounded text-[10px] font-medium"
+              style="background: {{ CATEGORY_COLORS.get(unit.category, '#6b7280') }}20;
+                     color: {{ CATEGORY_COLORS.get(unit.category, '#6b7280') }}">
+            {{ unit.category | replace("-", " ") | title }}
+        </span>
+
+        <span class="text-gray-600">|</span>
+
+        <span>M{{ unit.movement }}"</span>
+        <span class="text-gray-600">/</span>
+        <span>T{{ unit.toughness }}</span>
+        <span class="text-gray-600">/</span>
+        <span>SV{{ unit.save }}+</span>
+    </div>
+</div>

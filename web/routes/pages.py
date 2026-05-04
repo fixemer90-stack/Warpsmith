@@ -5,9 +5,14 @@ from pathlib import Path
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from backend.loader.icon_map import get_icon_html, get_card_style, CATEGORY_COLORS
 
 router = APIRouter()
 templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
+# Jinja2 globals для карточек юнитов
+templates.env.globals["unit_icon"] = get_icon_html
+templates.env.globals["card_style"] = get_card_style
+templates.env.globals["CATEGORY_COLORS"] = CATEGORY_COLORS
 
 
 @router.get("/faction-browser", response_class=HTMLResponse)

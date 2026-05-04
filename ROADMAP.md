@@ -110,7 +110,7 @@
 ## 🎨 Phase 4: Web UI Polish
 
 ```
-[████████████████████] 100% · 8/8 features
+[████████████████████] 100% · 9/9 features
 ```
 
 **Цель:** Полноценное веб-приложение, готовое к пользователям.
@@ -127,6 +127,7 @@
 | 4.6 | ✅ | Progressive Disclosure: Beginner / Intermediate / Expert | 4h |
 | 4.7 | ✅ | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h |
 || 4.8 | ✅ | SVG icons integration in unit cards | 2h |
+|| 4.9 | ✅ | Generate Random Opponent — `/api/rosters/generate` для AI-ростера | 2h |
 
 ---
 
