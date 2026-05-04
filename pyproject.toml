@@ -1,6 +1,6 @@
 [project]
 name = "warpsmith"
-version = "0.6.6"
+version = "0.7.0"
 description = "Warhammer 40,000 Battle Simulator"
 requires-python = ">=3.12"
 
@@ -17,6 +17,7 @@ dependencies = [
     "htmy",
     "pytest",
     "pytest-asyncio",
+    "pytest-cov",
     "httpx",
     "structlog",
     "sentry-sdk",
