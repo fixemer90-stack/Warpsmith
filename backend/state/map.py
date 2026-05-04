@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
@@ -51,9 +50,10 @@ class BattlefieldMap:
     def __post_init__(self):
         """Validate terrain array dimensions."""
         if self.terrain.shape != (self.height, self.width):
-            raise ValueError(
+            msg = (
                 f"Terrain array shape {self.terrain.shape} does not match map dimensions {self.height}x{self.width}"
             )
+            raise ValueError(msg)
 
     @classmethod
     def create_empty(
@@ -99,13 +99,15 @@ class BattlefieldMap:
     def set_terrain(self, x: int, y: int, terrain_type: TerrainType):
         """Set terrain type at a specific position."""
         if not self._is_valid_position(x, y):
-            raise ValueError(f"Position ({x}, {y}) is out of bounds")
+            msg = f"Position ({x}, {y}) is out of bounds"
+            raise ValueError(msg)
         self.terrain[y, x] = terrain_type
 
     def get_terrain(self, x: int, y: int) -> TerrainType:
         """Get terrain type at a specific position."""
         if not self._is_valid_position(x, y):
-            raise ValueError(f"Position ({x}, {y}) is out of bounds")
+            msg = f"Position ({x}, {y}) is out of bounds"
+            raise ValueError(msg)
         return self.terrain[y, x]
 
     def add_deployment_zone(
@@ -119,7 +121,8 @@ class BattlefieldMap:
         # Validate coordinates
         for x, y in coordinates:
             if not self._is_valid_position(x, y):
-                raise ValueError(f"Invalid coordinate ({x}, {y}) in deployment zone {name}")
+                msg = f"Invalid coordinate ({x}, {y}) in deployment zone {name}"
+                raise ValueError(msg)
 
         zone = DeploymentZone(
             name=name,
@@ -133,7 +136,8 @@ class BattlefieldMap:
         """Add an objective marker at a position."""
         x, y = position
         if not self._is_valid_position(x, y):
-            raise ValueError(f"Invalid objective position ({x}, {y})")
+            msg = f"Invalid objective position ({x}, {y})"
+            raise ValueError(msg)
         self.objectives[name] = position
 
     def get_deployment_zone_for_player(self, player_id: str) -> DeploymentZone | None:
@@ -289,10 +293,9 @@ class BattlefieldMap:
 
         while True:
             # Check terrain at current cell (skip start and end)
-            if (x, y) != (x1, y1) and (x, y) != (x2, y2):
-                if self._is_blocking_los(self.terrain[y, x]):
-                    blocked = True
-                    break
+            if (x, y) != (x1, y1) and (x, y) != (x2, y2) and self._is_blocking_los(self.terrain[y, x]):
+                blocked = True
+                break
 
             if (x, y) == (x2, y2):
                 break

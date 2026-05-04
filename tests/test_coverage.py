@@ -8,4 +8,3 @@ def test_coverage_threshold():
     Тест запускается как часть pytest-cov, порог задан в pyproject.toml
     или проверяется воркфлоу через --cov-fail-under=80
     """
-    pass

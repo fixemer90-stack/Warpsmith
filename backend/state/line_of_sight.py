@@ -1,7 +1,6 @@
 """Line of Sight (LoS) calculations using ray casting."""
 
 import math
-from typing import List, Optional, Tuple
 
 from backend.state.map import BattlefieldMap, TerrainType
 
@@ -230,7 +229,7 @@ class LineOfSightCalculator:
             Best firing position (x, y) or None if no valid position found
         """
         target_x, target_y = target_pos
-        current_x, current_y = current_pos
+        _current_x, _current_y = current_pos
 
         # Look for positions within range that have LoS
         best_pos = None

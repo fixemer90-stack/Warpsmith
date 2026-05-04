@@ -3,18 +3,19 @@ Tests for F3.5 — Auto-play: AI vs AI Full Scenario.
 """
 
 import pytest
+
 from backend.engine.ai.autoplay import (
-    run_auto_game,
     AutoPlayConfig,
     AutoPlayResult,
-    resolve_ai_for_faction,
     InvalidRosterError,
     TimeoutError,
+    resolve_ai_for_faction,
+    run_auto_game,
 )
-from backend.state.roster import RosterState
-from backend.state.mission import Mission, MissionConfig, MissionObjective
 from backend.engine.ai.deployment import DeploymentType
 from backend.model.unit import Unit, Weapon
+from backend.state.mission import Mission, MissionConfig, MissionObjective
+from backend.state.roster import RosterState
 
 
 def make_test_unit(name: str, faction: str = "test") -> Unit:
@@ -46,7 +47,7 @@ def make_test_unit(name: str, faction: str = "test") -> Unit:
 
 
 def make_test_roster(
-    units: list[Unit] = None, faction: str = "test", pts: int = 500
+    units: list[Unit] | None = None, faction: str = "test", pts: int = 500
 ) -> RosterState:
     """Create a test roster."""
     if units is None:

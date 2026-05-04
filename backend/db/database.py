@@ -1,9 +1,9 @@
 """SQLite wrapper — мини ORM без зависимостей."""
 
+import contextlib
 import os
 import sqlite3
 from pathlib import Path
-from typing import Optional
 
 
 class Database:
@@ -29,12 +29,10 @@ class Database:
                 db_dir = os.path.dirname(self.db_path) or "."
                 for f in os.listdir(db_dir):
                     if f.startswith(os.path.basename(self.db_path)) and (
-                        f.endswith("-shm") or f.endswith("-wal")
+                        f.endswith(("-shm", "-wal"))
                     ):
-                        try:
+                        with contextlib.suppress(OSError):
                             os.remove(os.path.join(db_dir, f))
-                        except OSError:
-                            pass
                 self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
                 self._conn.row_factory = sqlite3.Row
                 self._conn.execute("PRAGMA journal_mode=DELETE")
@@ -48,10 +46,8 @@ class Database:
         for suffix in ("-shm", "-wal"):
             p = os.path.join(db_dir, base + suffix)
             if os.path.exists(p):
-                try:
+                with contextlib.suppress(OSError):
                     os.remove(p)
-                except OSError:
-                    pass
 
     @property
     def conn(self) -> sqlite3.Connection:

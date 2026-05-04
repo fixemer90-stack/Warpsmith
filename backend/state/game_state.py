@@ -1,8 +1,10 @@
 """Game state management for Warhammer 40k battles."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING
 
 import numpy as np
 
@@ -72,18 +74,6 @@ class UnitState:
             return 0
         return self.current_wounds / self.models_remaining
 
-    @property
-    def is_alive(self) -> bool:
-        """Check if the unit is still alive."""
-        return self.models_remaining > 0 and self.current_wounds > 0
-
-    @property
-    def wounds_per_model(self) -> float:
-        """Calculate average wounds per remaining model."""
-        if self.models_remaining == 0:
-            return 0
-        return self.current_wounds / self.models_remaining
-
 
 @dataclass
 class PlayerState:
@@ -132,7 +122,7 @@ class GameState:
     previous_round_priority_player_id: str | None = None
     victory_conditions: dict[str, any] = field(default_factory=dict)
     game_log: list[str] = field(default_factory=list)
-    mission: Optional["Mission"] = None  # Current mission being played
+    mission: "Mission" | None = None  # Current mission being played
 
     def __post_init__(self):
         """Initialize terrain map and mission if not provided."""
@@ -155,11 +145,7 @@ class GameState:
             return True
 
         # Check victory conditions (simplified)
-        for player in self.players.values():
-            if player.victory_points >= 10:  # Example VP threshold
-                return True
-
-        return False
+        return any(player.victory_points >= 10 for player in self.players.values())
 
     @property
     def winner(self) -> str | None:
@@ -205,10 +191,7 @@ class GameState:
             return False
 
         # Check if position is occupied
-        if self.get_unit_at_position(x, y) is not None:
-            return False
-
-        return True
+        return self.get_unit_at_position(x, y) is None
 
     def deal_damage(self, unit_id: str, damage: int) -> bool:
         """Deal damage to a unit."""

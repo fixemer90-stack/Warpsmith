@@ -5,7 +5,8 @@ from pathlib import Path
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from backend.loader.icon_map import get_icon_html, get_card_style, CATEGORY_COLORS
+
+from backend.loader.icon_map import CATEGORY_COLORS, get_card_style, get_icon_html
 
 router = APIRouter()
 templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
@@ -55,7 +56,7 @@ async def team_builder(request: Request):
             try:
                 post = frontmatter.load(str(fp))
                 label = str(post.metadata.get("title", label))
-            except Exception:
+            except Exception:  # noqa: S110
                 pass
         factions.append({"id": f_id, "label": label})
 
@@ -90,10 +91,10 @@ async def scenario_setup(request: Request):
 
                     post = frontmatter.load(str(fp))
                     label = str(post.metadata.get("title", label))
-                except Exception:
+                except Exception:  # noqa: S110
                     pass
             factions.append({"id": f_id, "label": label})
-    except Exception:
+    except Exception:  # noqa: S110
         pass
 
     # Get user's rosters if authenticated
@@ -116,7 +117,7 @@ async def scenario_setup(request: Request):
                         "pts_limit": row["pts_limit"],
                     }
                 )
-    except Exception:
+    except Exception:  # noqa: S110
         pass
 
     import json

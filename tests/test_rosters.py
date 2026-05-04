@@ -1,5 +1,7 @@
 """Tests for roster CRUD endpoints (F2.10)."""
 
+from typing import ClassVar
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -46,7 +48,7 @@ def auth_headers(client):
 
 
 class TestRosterCRUD:
-    ROSTER_PAYLOAD = {
+    ROSTER_PAYLOAD: ClassVar[dict] = {
         "name": "My Ork Horde",
         "faction": "orks",
         "pts_limit": 2000,

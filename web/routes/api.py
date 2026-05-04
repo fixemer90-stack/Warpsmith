@@ -1,7 +1,7 @@
 """JSON API для симуляции."""
 
+import contextlib
 import json
-from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 from backend.auth import User, get_current_user
 from backend.billing.plans import UserFeatures
 from backend.db.database import db
-from backend.engine.ai.autoplay import run_auto_game, AutoPlayConfig
+from backend.engine.ai.autoplay import AutoPlayConfig, run_auto_game
 from backend.engine.combat import MultiAttackResult, simulate_unit_attack, simulate_weapon_attack
 from backend.engine.dice import DicePool
 from backend.loader.registry import registry as wiki
@@ -105,10 +105,8 @@ async def list_units(faction: str = ""):
 async def run_simulation(request: SimulationRequest):
     """Запуск симуляции сценария."""
     # Fetch units and weapon from the wiki registry
-    try:
+    with contextlib.suppress(Exception):
         wiki.load()
-    except Exception:
-        pass
 
     attacker_unit = wiki.get_unit(request.attacker_unit)
     defender_unit = wiki.get_unit(request.defender_unit)
@@ -180,10 +178,8 @@ async def run_simulation(request: SimulationRequest):
 async def simulate_unit(request: SimulationRequest):
     """Simulate attack from a unit with multiple weapons against a defender."""
     # Fetch units from the wiki registry
-    try:
+    with contextlib.suppress(Exception):
         wiki.load()
-    except Exception:
-        pass
 
     attacker_unit = wiki.get_unit(request.attacker_unit)
     defender_unit = wiki.get_unit(request.defender_unit)
@@ -368,10 +364,8 @@ async def browse_units(
 @router.get("/units/{unit_name}/detail")
 async def unit_detail(unit_name: str):
     """Полные данные юнита для модалки."""
-    try:
+    with contextlib.suppress(Exception):
         wiki.load()
-    except Exception:
-        pass
 
     unit = wiki.get_unit(unit_name)
     if not unit:
@@ -469,10 +463,8 @@ async def list_detachments(faction: str | None = None):
 @router.get("/detachments/{detachment_name}")
 async def detachment_detail(detachment_name: str):
     """Вернуть полные данные детачмента: правила, стратагемы, энхансменты."""
-    try:
+    with contextlib.suppress(Exception):
         wiki.load()
-    except Exception:
-        pass
 
     det = wiki.get_detachment(detachment_name)
     if not det:
@@ -540,13 +532,13 @@ async def get_map_tiles(
         DIFFICULT = 4
         DEPLOY_ZONE = 5
 
-    GRID_SIZE = 16
+    grid_size = 16
 
     # Generate a balanced map with central obstacles
     tiles = []
-    for y in range(GRID_SIZE):
+    for y in range(grid_size):
         row = []
-        for x in range(GRID_SIZE):
+        for x in range(grid_size):
             # Default to open ground
             tile_type = TileType.OPEN.value
 
@@ -560,9 +552,8 @@ async def get_map_tiles(
             elif (x <= 2 or x >= 13) and (y <= 2 or y >= 13):
                 tile_type = TileType.HEAVY_COVER.value
             # Difficult terrain near obstacles
-            elif 5 <= x <= 10 and 5 <= y <= 10 and tile_type == TileType.OPEN.value:
-                if (x + y) % 3 == 0:
-                    tile_type = TileType.DIFFICULT.value
+            elif 5 <= x <= 10 and 5 <= y <= 10 and tile_type == TileType.OPEN.value and (x + y) % 3 == 0:
+                tile_type = TileType.DIFFICULT.value
 
             row.append(tile_type)
         tiles.append(row)
@@ -574,11 +565,11 @@ async def get_map_tiles(
     }
 
     for x in range(4):  # player1: x 0-3
-        for y in range(GRID_SIZE):
+        for y in range(grid_size):
             deploy_zones["player1"].append([x, y])
 
-    for x in range(12, GRID_SIZE):  # player2: x 12-15
-        for y in range(GRID_SIZE):
+    for x in range(12, grid_size):  # player2: x 12-15
+        for y in range(grid_size):
             deploy_zones["player2"].append([x, y])
 
     # Mark deploy zone tiles
@@ -588,8 +579,8 @@ async def get_map_tiles(
             tiles[y][x] = TileType.DEPLOY_ZONE.value
 
     return {
-        "width": GRID_SIZE,
-        "height": GRID_SIZE,
+        "width": grid_size,
+        "height": grid_size,
         "tiles": tiles,
         "deploy_zones": deploy_zones,
         "units": [],  # Empty for now, can be populated from scenario
@@ -615,17 +606,18 @@ async def auto_play_simulation(
         # Load rosters from database
         roster_a_row = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_a_id,))
         roster_b_row = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_b_id,))
-        
+
         if not roster_a_row:
             raise HTTPException(status_code=404, detail=f"Roster A not found: {roster_a_id}")
         if not roster_b_row:
             raise HTTPException(status_code=404, detail=f"Roster B not found: {roster_b_id}")
-        
+
         # Convert database rows to RosterState objects
         import json
-        from backend.state.roster import RosterState
+
         from backend.model.unit import Unit, Weapon
-        
+        from backend.state.roster import RosterState
+
         def units_from_db(units_json):
             units_dict = {}
             units_data = json.loads(units_json)
@@ -645,48 +637,48 @@ async def auto_play_simulation(
                     )
                     units_dict[unit.name] = unit_copy
             return units_dict
-        
+
         roster_a = RosterState(
             name=roster_a_row["name"],
             faction=roster_a_row["faction"],
             total_pts=roster_a_row["pts_limit"],  # This should be total_pts, but we'll use pts_limit for now
             units=units_from_db(roster_a_row["units"])
         )
-        
+
         roster_b = RosterState(
             name=roster_b_row["name"],
             faction=roster_b_row["faction"],
             total_pts=roster_b_row["pts_limit"],
             units=units_from_db(roster_b_row["units"])
         )
-        
+
         # Get mission object
         mission_obj = Mission(
             name=mission,
             description=f"{mission} mission",
             objectives=[]
         )
-        
+
         # Run auto-play simulation
         config = AutoPlayConfig(
             max_rounds=max_rounds,
             deployment_type=deployment,
             seed=seed
         )
-        
+
         result = run_auto_game(roster_a, roster_b, mission_obj, config)
-        
+
         if result.error:
             raise HTTPException(status_code=400, detail=result.error)
-        
+
         return {
             "success": True,
             "result": result.to_dict(),
             "replay_log": result.round_logs  # This would be enhanced with actual replay data
         }
-        
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @router.get("/factions")
@@ -775,10 +767,8 @@ async def create_roster(data: RosterCreate, user: User = Depends(get_current_use
         raise HTTPException(403, detail="Max rosters limit reached. Upgrade to Premium.")
 
     # Load wiki and validate
-    try:
+    with contextlib.suppress(Exception):
         wiki.load()
-    except Exception:
-        pass
     units_list = [(u.unit_name, u.squad_size) for u in data.units]
     validation = validate_roster(units_list, wiki.units, pts_limit=data.pts_limit)
     if not validation.is_valid:
@@ -842,7 +832,7 @@ async def generate_roster(faction: str = "", pts_limit: int = 2000):
     try:
         wiki.load()
     except Exception:
-        raise HTTPException(500, detail="Wiki not loaded")
+        raise HTTPException(500, detail="Wiki not loaded") from None
 
     # Filter units by faction (or all factions)
     candidates = []
@@ -854,7 +844,7 @@ async def generate_roster(faction: str = "", pts_limit: int = 2000):
         if unit.is_epic_hero:
             candidates.append((name, unit, 1))
         else:
-            min_m, max_m = unit.model_count
+            min_m, _max_m = unit.model_count
             candidates.append((name, unit, min_m))
 
     if not candidates:
@@ -945,7 +935,6 @@ async def check_roster_synergies(data: dict):
         return {"checks": [], "score": 0}
 
     checks: list[dict] = []
-    faction = data.get("faction", "")
     units_data = data.get("units", [])
 
     # Get unit objects
@@ -967,14 +956,14 @@ async def check_roster_synergies(data: dict):
         if not (getattr(u, "is_leader", False) or getattr(u, "can_be_warlord", False))
     ]
 
-    for leader, leader_data in leaders:
+    for leader, _leader_data in leaders:
         compatible = []
         incompatible = []
 
         # Check leader_for compatibility
         leader_for = getattr(leader, "leader_for", [])
         if leader_for:
-            for unit, unit_data in non_leaders:
+            for unit, _unit_data in non_leaders:
                 if any(
                     lf.lower() in [kw.lower() for kw in getattr(unit, "keywords", [])]
                     or lf.lower() in unit.category.lower()
@@ -985,7 +974,7 @@ async def check_roster_synergies(data: dict):
                     incompatible.append(unit.name)
         else:
             # Default: assume leaders can lead infantry/battleline
-            for unit, unit_data in non_leaders:
+            for unit, _unit_data in non_leaders:
                 if unit.category.lower() in ["infantry", "battleline"]:
                     compatible.append(unit.name)
                 else:
@@ -1014,7 +1003,7 @@ async def check_roster_synergies(data: dict):
 
     # 2. Transport capacity
     transports = [(u, ud) for u, ud in unit_objs if getattr(u, "transport_capacity", None)]
-    for transport, transport_data in transports:
+    for transport, _transport_data in transports:
         capacity = transport.transport_capacity
         # Find units that can embark (infantry, battleline, etc.)
         embarked_count = 0
@@ -1060,7 +1049,7 @@ async def check_roster_synergies(data: dict):
             )
 
     # 3. Wiki synergy hints (from YAML frontmatter synergies field)
-    for unit, unit_data in unit_objs:
+    for unit, _unit_data in unit_objs:
         synergies = getattr(unit, "synergies", [])
         for syn in synergies:
             if isinstance(syn, dict):

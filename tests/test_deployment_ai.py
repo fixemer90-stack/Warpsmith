@@ -30,7 +30,7 @@ def _make_unit_state(
     wounds: int = 3,
     models: int = 5,
     is_warlord: bool = False,
-    keywords: list = None,
+    keywords: list | None = None,
 ) -> UnitState:
     us = UnitState(
         unit_id=unit_id,
@@ -53,8 +53,8 @@ def _make_unit_state(
 def _make_unit_model(
     name: str = "Unit",
     category: str = "Infantry",
-    ranged: list = None,
-    melee: list = None,
+    ranged: list | None = None,
+    melee: list | None = None,
 ) -> Unit:
     return Unit(
         name=name,

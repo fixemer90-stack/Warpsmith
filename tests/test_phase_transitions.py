@@ -99,8 +99,8 @@ def test_fight_phase_alternating_activations():
     # Store initial state
     initial_marine_wounds = unit1.current_wounds
     initial_ork_wounds = unit2.current_wounds
-    initial_marine_fought = unit1.is_fighting
-    initial_ork_fought = unit2.is_fighting
+    _initial_marine_fought = unit1.is_fighting
+    _initial_ork_fought = unit2.is_fighting
 
     # Execute fight phase
     scenario._fight_phase()

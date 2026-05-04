@@ -53,6 +53,21 @@ Railway — serverless платформа с интеграцией GitHub.
 
 Railway использует `deploy/railway.json` для конфигурации: Dockerfile build, healthcheck на `/`, restart on failure.
 
+### GitHub Actions автодеплой
+
+При пуше в main CI (lint → test → Docker build) запускается автоматически. После успешного CI workflow `deploy-railway` в `.github/workflows/deploy.yml` выполняет:
+
+```bash
+railway up --service warpsmith
+```
+
+Требуется `RAILWAY_TOKEN` в GitHub Secrets. Получить:
+
+```bash
+railway token
+# → Добавить в GitHub → Settings → Secrets → RAILWAY_TOKEN
+```
+
 ---
 
 ## 3. Self-host (bare-metal)

@@ -87,7 +87,8 @@ def get_provider(name: str) -> OAuthProvider:
     """Получить экземпляр провайдера по имени."""
     cls = PROVIDER_REGISTRY.get(name)
     if cls is None:
-        raise OAuthError(f"Unknown OAuth provider: {name}", name)
+        msg = f"Unknown OAuth provider: {name}"
+        raise OAuthError(msg, name)
     return cls()
 
 

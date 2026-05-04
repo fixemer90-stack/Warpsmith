@@ -12,7 +12,7 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 
 ## ✨ Возможности
 
-### ✅ Phase 1: Combat Engine
+### ✅ Phase 1: Combat Engine (100%)
 - Monte Carlo симуляция (Hit → Wound → Save → Damage → FNP)
 - Sustained Hits, Lethal, Devastating Wounds, Plasma, Anti-*, Blast
 - MultiAttack: несколько оружий и отряды
@@ -43,11 +43,13 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - SVG icons (18 categories, inline)
 - Generate Random Opponent: AI-ростер в 1 клик
 
-### 🟢 Phase 5: Production (43%)
+### 🟢 Phase 5: Production (71%)
 - Dockerfile + docker-compose + multi-stage build
 - Deployment: Railway (serverless)
 - Wiki monorepo: data included in Docker-образ автоматически
 - Logging: structlog (JSON в stdout) + Sentry error tracking
+- CI/CD: GitHub Actions (ruff, mypy, pytest, coverage, Docker build)
+- SQLite backup: scripts/backup_db.py (backup, restore, list, cleanup)
 
 ### 🌐 Веб-интерфейс
 - [Team Builder](https://warpsmith-production.up.railway.app/team-builder): faction/units/detachments selection
@@ -72,7 +74,7 @@ simulator/
 ├── wiki/                 ~490 .md (юниты, стратагемы, правила) — в репозитории
 ├── backend/              auth · billing · engine · loader · model · db
 ├── web/                  routes · templates · static
-├── tests/                29 файлов, ~340 тестов
+├── tests/                30 файлов, ~351 тест
 └── docs/                 architecture · requirements · features (50 specs)
 ```
 
@@ -91,12 +93,12 @@ simulator/
 
 ## 📊 Статистика
 
-- **Тестов:** ~340 (29 файлов)
+- **Тестов:** ~351 (30 файлов)
 - **Юнитов:** 160 (Orks 81, Tau 40, AdMech 39)
 - **Wiki:** ~490 .md файлов — в репозитории (simulator/wiki/)
 - **Стратагем:** 114 (Core 13, Orks 42, AdMech 42, Tau 19)
 - **Энхансментов:** 88
 - **Детачментов:** 23
 - **API эндпоинтов:** 20+
-- **Фаз:** 7, ~75 фич, ~270 часов
+- **Фаз:** 7, ~75 фич, ~280 часов
 - **SVG иконок:** 18 категорий

@@ -1,10 +1,10 @@
 """Stratagem framework for Warhammer 40k battles."""
 
 from collections.abc import Callable
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from dataclasses import dataclass
+from typing import Any
 
-from ..state.game_state import GameState, PlayerState, UnitState
+from ..state.game_state import GameState, UnitState
 
 
 @dataclass
@@ -51,7 +51,8 @@ class StratagemRegistry:
         """Execute a stratagem by name."""
         stratagem = self.get(name)
         if stratagem is None:
-            raise ValueError(f"Stratagem '{name}' not found")
+            msg = f"Stratagem '{name}' not found"
+            raise ValueError(msg)
 
         # Check if the stratagem is available in the current phase
         # Note: We don't have the current phase here, so we assume the caller knows.
@@ -83,16 +84,17 @@ class StratagemRegistry:
         # If active_player is None, we'll raise an error.
 
         if state.active_player is None:
-            raise ValueError("No active player set; cannot determine who is using the stratagem")
+            msg = "No active player set; cannot determine who is using the stratagem"
+            raise ValueError(msg)
 
         player = state.players.get(state.active_player)
         if player is None:
-            raise ValueError(f"Active player {state.active_player} not found")
+            msg = f"Active player {state.active_player} not found"
+            raise ValueError(msg)
 
         if player.command_points < stratagem.cp_cost:
-            raise ValueError(
-                f"Not enough CP: need {stratagem.cp_cost}, have {player.command_points}"
-            )
+            msg = f"Not enough CP: need {stratagem.cp_cost}, have {player.command_points}"
+            raise ValueError(msg)
 
         # Deduct CP
         player.command_points -= stratagem.cp_cost

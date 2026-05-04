@@ -120,8 +120,8 @@ def make_unit_model(
     name: str = "Unit",
     toughness: int = 4,
     save: int = 3,
-    ranged: list[Weapon] = None,
-    melee: list[Weapon] = None,
+    ranged: list[Weapon] | None = None,
+    melee: list[Weapon] | None = None,
     points: int = 20,
 ) -> Unit:
     return Unit(
@@ -143,11 +143,11 @@ def make_unit_model(
 def make_context(
     actor_state: UnitState = None,
     actor_model: Unit = None,
-    opponents: list[UnitState] = None,
-    opp_models: list[Unit] = None,
+    opponents: list[UnitState] | None = None,
+    opp_models: list[Unit] | None = None,
     phase: GamePhase = GamePhase.SHOOTING,
-    weights: dict = None,
-    opponent_units_map: dict = None,
+    weights: dict | None = None,
+    opponent_units_map: dict | None = None,
 ) -> EvaluationContext:
     if actor_state is None:
         actor_state = make_unit_state("Shooter", unit_id="me")

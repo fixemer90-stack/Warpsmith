@@ -25,7 +25,7 @@ from backend.auth import (
     validate_email,
     validate_password_strength,
 )
-from backend.loader.icon_map import get_icon_html, get_card_style, CATEGORY_COLORS
+from backend.loader.icon_map import CATEGORY_COLORS, get_card_style, get_icon_html
 
 router = APIRouter(tags=["auth"])
 templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))

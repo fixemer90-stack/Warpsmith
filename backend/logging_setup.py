@@ -1,15 +1,15 @@
 """Настройка структурированного логирования через structlog."""
 
-import os
 import logging
-import structlog
-import uuid
+import os
 import time
+import uuid
 from typing import Any
 
 import sentry_sdk
-from sentry_sdk.integrations.starlette import StarletteIntegration
+import structlog
 from sentry_sdk.integrations.fastapi import FastApiIntegration
+from sentry_sdk.integrations.starlette import StarletteIntegration
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 

@@ -52,15 +52,10 @@ def backup_database():
         with open(metadata_file, "w") as f:
             json.dump(metadata, f, indent=2)
 
-        print("Backup created successfully:")
-        print(f"  - Database: {backup_file}")
-        print(f"  - Compressed: {compressed_file}")
-        print(f"  - Metadata: {metadata_file}")
 
         return backup_file
 
-    except Exception as e:
-        print(f"Error during backup: {e}")
+    except Exception:
         return None
 
 
@@ -70,12 +65,10 @@ def restore_database(backup_path=None, compressed=False):
         # Find the most recent backup
         backups_dir = Path("backups")
         if not backups_dir.exists():
-            print("No backups directory found")
             return False
 
         backup_files = list(backups_dir.glob("simulator_backup_*.db"))
         if not backup_files:
-            print("No backup files found")
             return False
 
         # Sort by modification time (most recent first)
@@ -86,7 +79,6 @@ def restore_database(backup_path=None, compressed=False):
     backup_path = Path(backup_path)
 
     if not backup_path.exists():
-        print(f"Backup file not found: {backup_path}")
         return False
 
     try:
@@ -106,7 +98,6 @@ def restore_database(backup_path=None, compressed=False):
         current_backup = Path(db.db_path).with_suffix(".db.pre_restore")
         if Path(db.db_path).exists():
             shutil.copy2(db.db_path, current_backup)
-            print(f"Current database backed up to: {current_backup}")
 
         # Copy the backup to the database location
         shutil.copy2(db_path_to_use, db.db_path)
@@ -119,19 +110,15 @@ def restore_database(backup_path=None, compressed=False):
         conn = db.connect()
         cursor = conn.cursor()
         cursor.execute("SELECT COUNT(*) FROM users")
-        user_count = cursor.fetchone()[0]
+        _user_count = cursor.fetchone()[0]
         cursor.execute("SELECT COUNT(*) FROM rosters")
-        roster_count = cursor.fetchone()[0]
+        _roster_count = cursor.fetchone()[0]
         conn.close()
 
-        print(f"Database restored successfully from: {backup_path}")
-        print(f"  - Users: {user_count}")
-        print(f"  - Rosters: {roster_count}")
 
         return True
 
-    except Exception as e:
-        print(f"Error during restore: {e}")
+    except Exception:
         return False
 
 
@@ -139,7 +126,6 @@ def list_backups():
     """List all available backups."""
     backups_dir = Path("backups")
     if not backups_dir.exists():
-        print("No backups directory found")
         return
 
     # Find all backup files and metadata
@@ -148,16 +134,13 @@ def list_backups():
     )
 
     if not backup_files:
-        print("No backup files found")
         return
 
-    print("Available backups:")
-    print("-" * 80)
 
     for backup_file in sorted(backup_files, key=lambda x: x.stat().st_mtime, reverse=True):
         stat = backup_file.stat()
-        modified = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d %H:%M:%S")
-        size_mb = stat.st_size / (1024 * 1024)
+        _modified = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d %H:%M:%S")
+        _size_mb = stat.st_size / (1024 * 1024)
 
         # Check if there's metadata
         metadata_file = backups_dir / f"{backup_file.stem}_metadata.json"
@@ -165,26 +148,19 @@ def list_backups():
             try:
                 with open(metadata_file) as f:
                     metadata = json.load(f)
-                timestamp = metadata.get("timestamp", "unknown")
-            except:
-                timestamp = "unknown"
+                    _timestamp = metadata.get("timestamp", "unknown")
+            except Exception:
+                _timestamp = "unknown"
         else:
-            timestamp = "unknown"
+            _timestamp = "unknown"
 
-        backup_type = "Compressed" if backup_file.suffix == ".gz" else "Database"
-        print(f"{backup_file.name}")
-        print(f"  Type: {backup_type}")
-        print(f"  Timestamp: {timestamp}")
-        print(f"  Modified: {modified}")
-        print(f"  Size: {size_mb:.2f} MB")
-        print()
+        _backup_type = "Compressed" if backup_file.suffix == ".gz" else "Database"
 
 
 def cleanup_old_backups(keep_count=10):
     """Remove old backups, keeping only the most recent ones."""
     backups_dir = Path("backups")
     if not backups_dir.exists():
-        print("No backups directory found")
         return
 
     # Find all backup files and metadata
@@ -196,7 +172,6 @@ def cleanup_old_backups(keep_count=10):
     all_files = backup_files + metadata_files
 
     if len(all_files) <= keep_count * 3:  # Each backup has db, .gz, and metadata
-        print(f"Only {len(all_files)} files found, keeping all")
         return
 
     # Sort by modification time (oldest first)
@@ -210,22 +185,15 @@ def cleanup_old_backups(keep_count=10):
         try:
             file_path.unlink()
             removed_count += 1
-        except Exception as e:
-            print(f"Error removing {file_path}: {e}")
+        except Exception:  # noqa: S110 — cleanup failures are non-critical
+            pass
 
-    print(f"Cleaned up {removed_count} old backup files")
 
 
 if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 2:
-        print("Usage:")
-        print("  python scripts/backup_db.py backup     - Create a new backup")
-        print("  python scripts/backup_db.py restore    - Restore from most recent backup")
-        print("  python scripts/backup_db.py restore <backup_file> - Restore from specific backup")
-        print("  python scripts/backup_db.py list       - List all available backups")
-        print("  python scripts/backup_db.py cleanup    - Remove old backups (keep 10)")
         sys.exit(1)
 
     command = sys.argv[1].lower()
@@ -240,5 +208,4 @@ if __name__ == "__main__":
     elif command == "cleanup":
         cleanup_old_backups()
     else:
-        print(f"Unknown command: {command}")
         sys.exit(1)

@@ -18,8 +18,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from backend.db.database import db
-from backend.loader.icon_map import get_icon_html, get_card_style, CATEGORY_COLORS
-from backend.logging_setup import setup_logging, setup_sentry, RequestLoggingMiddleware
+from backend.loader.icon_map import CATEGORY_COLORS, get_card_style, get_icon_html
+from backend.logging_setup import RequestLoggingMiddleware, setup_logging, setup_sentry
 
 # ── Конфигурация ─────────────────────────────────────────────────
 
@@ -39,12 +39,12 @@ templates.env.globals["CATEGORY_COLORS"] = CATEGORY_COLORS
 def create_app() -> FastAPI:
     """Создать и настроить FastAPI приложение."""
     # Настройка логирования до создания app
-    IS_PRODUCTION = os.getenv("HOSTING", "").lower() in ("true", "1", "yes")
-    LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO" if IS_PRODUCTION else "DEBUG")
-    setup_logging(level=LOG_LEVEL)
+    is_production = os.getenv("HOSTING", "").lower() in ("true", "1", "yes")
+    log_level = os.getenv("LOG_LEVEL", "INFO" if is_production else "DEBUG")
+    setup_logging(level=log_level)
     setup_sentry(
         dsn=os.getenv("SENTRY_DSN"),
-        environment="production" if IS_PRODUCTION else "development",
+        environment="production" if is_production else "development",
     )
 
     app = FastAPI(

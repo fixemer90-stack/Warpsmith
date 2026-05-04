@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from typing import Optional
 
+from ..model.unit import Unit
 from ..state.game_state import GamePhase, GameState
+from ..state.map import BattlefieldMap
 from ..state.mission import Mission
 
 
@@ -14,8 +16,8 @@ class Scenario:
     def __init__(
         self,
         game_state: GameState,
-        unit_models: dict[str, "Unit"] | None = None,
-        battlefield: "BattlefieldMap" | None = None,
+        unit_models: dict[str, Unit] | None = None,
+        battlefield: BattlefieldMap | None = None,
     ):
         self.state = game_state
         self.log = []  # Additional scenario-specific log
@@ -139,12 +141,11 @@ class Scenario:
                     if dist > 12:
                         continue
                     # LoS check if battlefield is available
-                    if self.battlefield is not None:
-                        if not self.battlefield.has_los(
-                            unit.position[0], unit.position[1],
-                            target.position[0], target.position[1],
-                        ):
-                            continue
+                    if self.battlefield is not None and not self.battlefield.has_los(
+                        unit.position[0], unit.position[1],
+                        target.position[0], target.position[1],
+                    ):
+                        continue
                     targets.append(target)
                 if not targets:
                     continue
@@ -237,7 +238,7 @@ class Scenario:
                 order = player_ids
             else:
                 # The non-priority player goes first in Fight phase
-                non_priority_player_id = [pid for pid in player_ids if pid != priority_player_id][0]
+                non_priority_player_id = next(pid for pid in player_ids if pid != priority_player_id)
                 order = [non_priority_player_id, priority_player_id]
 
         # Continue alternating activations until no more units can fight
@@ -274,12 +275,9 @@ class Scenario:
         enemy_unit = None
         for player in self.state.players.values():
             for unit in player.units.values():
-                if unit.is_alive and unit != attacking_unit:
-                    # Simplified engagement check - same position or adjacent
-                    # In a real implementation, we'd use proper engagement rules
-                    if unit.position == attacking_unit.position:
-                        enemy_unit = unit
-                        break
+                if unit.is_alive and unit != attacking_unit and unit.position == attacking_unit.position:
+                    enemy_unit = unit
+                    break
             if enemy_unit:
                 break
 

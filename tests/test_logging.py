@@ -8,9 +8,11 @@ Tests for F5.5 — Logging (structlog) + Sentry error tracking.
 - setup_sentry gracefully выключается без DSN
 """
 
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
 from httpx import ASGITransport, AsyncClient
+
 from main import app
 
 
@@ -98,7 +100,7 @@ def test_setup_sentry_with_dsn_calls_init():
     with patch("sentry_sdk.init") as mock_init:
         setup_sentry(dsn="https://test@test.ingest.sentry.io/12345")
         mock_init.assert_called_once()
-        args, kwargs = mock_init.call_args
+        _args, kwargs = mock_init.call_args
         assert kwargs.get("dsn") == "https://test@test.ingest.sentry.io/12345"
         assert kwargs.get("environment") == "production"
         assert kwargs.get("traces_sample_rate") == 0.1

@@ -1,9 +1,11 @@
 """Mission system for Warhammer 40k battles."""
 
+from __future__ import annotations
+
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .game_state import GameState
@@ -136,8 +138,8 @@ def score_standard(mission: "Mission") -> dict[int, int]:
     """Standard scoring: VP = number of objectives controlled."""
     mission.update_objective_control()
 
-    vp = {player_id: 0 for player_id in mission.state.players.keys()}
-    for player_id in mission.state.players.keys():
+    vp = {player_id: 0 for player_id in mission.state.players}
+    for player_id in mission.state.players:
         for obj in mission.config.objectives:
             if obj.controlled_by == player_id and not obj.is_contested:
                 vp[player_id] += 1  # 1 VP per objective controlled
@@ -148,7 +150,7 @@ def score_progressive(mission: "Mission") -> dict[int, int]:
     """Progressive scoring: VP = objectives controlled + bonus for controlling more than opponent."""
     mission.update_objective_control()
 
-    vp = {player_id: 0 for player_id in mission.state.players.keys()}
+    vp = {player_id: 0 for player_id in mission.state.players}
     player_ids = list(mission.state.players.keys())
 
     if len(player_ids) >= 2:
@@ -177,7 +179,7 @@ def score_kill_points(mission: "Mission") -> dict[int, int]:
     """Kill points scoring: VP = percentage of opponent's army destroyed."""
     mission.update_objective_control()
 
-    vp = {player_id: 0 for player_id in mission.state.players.keys()}
+    vp = {player_id: 0 for player_id in mission.state.players}
     player_ids = list(mission.state.players.keys())
 
     if len(player_ids) >= 2:
@@ -235,7 +237,7 @@ def apply_scoring(state: "GameState", mission: "Mission", vp: VPTracker) -> VPTr
     """Подсчитать VP за текущий раунд, добавить в трекер."""
     scorer = SCORING_MAP.get(mission.config.scoring_rule, score_standard)
     round_vp = scorer(mission)
-    for player_id in state.players.keys():
+    for player_id in state.players:
         # Convert string player_id to int for VPTracker
         player_num = 1 if player_id == "p1" else 2
         vp.add(player_num, round_vp.get(player_id, 0))
@@ -332,11 +334,11 @@ class Mission:
         # Update objective control first
         self.update_objective_control()
 
-        vp = {player_id: 0 for player_id in self.state.players.keys()}
+        vp = {player_id: 0 for player_id in self.state.players}
 
         if self.config.scoring_rule == "standard":
             # VP = number of objectives controlled
-            for player_id in self.state.players.keys():
+            for player_id in self.state.players:
                 vp[player_id] = self.score_vp(player_id)
 
         elif self.config.scoring_rule == "progressive":
@@ -455,22 +457,21 @@ class Mission:
                     for y in range(max(0, map_height - zone_size), map_height)
                 ]
 
-        elif self.config.deployment == DeploymentType.CRUCIBLE_OF_BATTLE:
+        elif self.config.deployment == DeploymentType.CRUCIBLE_OF_BATTLE and len(player_ids) >= 2:
             # Players deploy in long table edges
-            if len(player_ids) >= 2:
-                # Player 1: bottom edge
-                zones[player_ids[0]] = [
-                    (x, y)
-                    for x in range(map_width)
-                    for y in range(min(zone_depth_units, map_height))
-                ]
+            # Player 1: bottom edge
+            zones[player_ids[0]] = [
+                (x, y)
+                for x in range(map_width)
+                for y in range(min(zone_depth_units, map_height))
+            ]
 
-                # Player 2: top edge
-                zones[player_ids[1]] = [
-                    (x, y)
-                    for x in range(map_width)
-                    for y in range(max(0, map_height - zone_depth_units), map_height)
-                ]
+            # Player 2: top edge
+            zones[player_ids[1]] = [
+                (x, y)
+                for x in range(map_width)
+                for y in range(max(0, map_height - zone_depth_units), map_height)
+            ]
 
         return zones
 
@@ -503,7 +504,7 @@ class Mission:
 
 
 # Factory functions for creating missions
-def create_mission(mission_name: str, game_state: "GameState") -> Optional["Mission"]:
+def create_mission(mission_name: str, game_state: "GameState") -> "Mission" | None:
     """Create a mission by name."""
     mission_func = MISSIONS.get(mission_name.lower().replace(" ", "_"))
     if mission_func:

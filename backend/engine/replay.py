@@ -7,15 +7,15 @@ F3.6 — Replay Recording: JSON Event Log per Round/Phase.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field, asdict
-from datetime import datetime
-from typing import Optional, List, Dict, Any
 import json
 import sqlite3
 import time
+from dataclasses import asdict, dataclass, field
+from datetime import datetime
+from typing import Any
 
-from backend.state.game_state import GameState, UnitState
 from backend.model.unit import Unit
+from backend.state.game_state import GameState, UnitState
 
 
 @dataclass
@@ -28,25 +28,25 @@ class ReplayEvent:
     event_type: str         # "shoot", "charge", "move", "kill", "damage", "cp_spend", etc.
     actor_id: str           # unit_id инициатора
     actor_name: str         # удобочитаемое имя
-    target_id: Optional[str] = None
-    target_name: Optional[str] = None
-    weapon_index: Optional[int] = None
-    weapon_name: Optional[str] = None
-    dice_rolled: Optional[List[int]] = None
-    result_value: Optional[float] = None  # урон, CP, VP
-    detail: Optional[str] = None          # дополнительный текст
-    position_before: Optional[Dict[str, int]] = None
-    position_after: Optional[Dict[str, int]] = None
+    target_id: str | None = None
+    target_name: str | None = None
+    weapon_index: int | None = None
+    weapon_name: str | None = None
+    dice_rolled: list[int] | None = None
+    result_value: float | None = None  # урон, CP, VP
+    detail: str | None = None          # дополнительный текст
+    position_before: dict[str, int] | None = None
+    position_after: dict[str, int] | None = None
 
 
 @dataclass
 class ReplayRound:
     """Один раунд реплея."""
     round: int
-    start_state: Dict[str, Any]       # снимок GameState в начале раунда
-    end_state: Dict[str, Any]         # снимок в конце
-    events: List[ReplayEvent] = field(default_factory=list)
-    phase_summary: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    start_state: dict[str, Any]       # снимок GameState в начале раунда
+    end_state: dict[str, Any]         # снимок в конце
+    events: list[ReplayEvent] = field(default_factory=list)
+    phase_summary: dict[str, dict[str, Any]] = field(default_factory=dict)
 
 
 @dataclass
@@ -54,19 +54,19 @@ class Replay:
     """Полный реплей игры."""
     game_id: str            # UUID
     created_at: str         # ISO timestamp
-    rosters: Dict[str, Any]           # roster_a, roster_b
+    rosters: dict[str, Any]           # roster_a, roster_b
     mission: str
     deployment: str
     seed: int
-    rounds: List[ReplayRound]
-    summary: Dict[str, Any]           # итоги (кто победил, счёт)
+    rounds: list[ReplayRound]
+    summary: dict[str, Any]           # итоги (кто победил, счёт)
     version: str = "1.0"
 
 
 class ReplayRecorder:
     """Записывает события игры в структурированный реплей."""
 
-    def __init__(self, game_id: str, rosters: Dict[str, Any],
+    def __init__(self, game_id: str, rosters: dict[str, Any],
                  mission: str, deployment: str, seed: int):
         self.replay = Replay(
             game_id=game_id,
@@ -78,8 +78,8 @@ class ReplayRecorder:
             rounds=[],
             summary={},
         )
-        self._start_time: Optional[float] = None
-        self._current_round: Optional[ReplayRound] = None
+        self._start_time: float | None = None
+        self._current_round: ReplayRound | None = None
 
     def start_game(self):
         """Запустить таймер реплея."""
@@ -111,7 +111,7 @@ class ReplayRecorder:
     def record_shoot(self, round_num: int, phase: str, turn: int,
                      actor: UnitState, target: UnitState,
                      weapon_name: str, damage: float,
-                     dice: List[int] = None):
+                     dice: list[int] | None = None):
         """Записать событие стрельбы."""
         self.record(ReplayEvent(
             round=round_num, phase=phase, turn=turn,
@@ -182,17 +182,17 @@ class ReplayRecorder:
             result_value=float(cp_amount),
         ))
 
-    def set_summary(self, summary: Dict[str, Any]):
+    def set_summary(self, summary: dict[str, Any]):
         self.replay.summary = summary
 
 
-def _snapshot_state(state: GameState) -> Dict[str, Any]:
+def _snapshot_state(state: GameState) -> dict[str, Any]:
     """Создать снимок GameState для реплея."""
     return {
         "round": getattr(state, 'current_round', 0),
         "phase": getattr(state, 'current_phase', '').value if hasattr(getattr(state, 'current_phase', None), 'value') else str(getattr(state, 'current_phase', '')),
         "turn": getattr(state, 'turn', 0),
-        "victory_points": {pid: getattr(player, 'victory_points', 0) 
+        "victory_points": {pid: getattr(player, 'victory_points', 0)
                           for pid, player in getattr(state, 'players', {}).items()},
         "units": {
             "roster_a": [_unit_snapshot(u) for u in getattr(getattr(state, 'roster_a', None), 'units', {}).values()] if hasattr(state, 'roster_a') else [],
@@ -201,7 +201,7 @@ def _snapshot_state(state: GameState) -> Dict[str, Any]:
     }
 
 
-def _unit_snapshot(unit: UnitState) -> Dict[str, Any]:
+def _unit_snapshot(unit: UnitState) -> dict[str, Any]:
     return {
         "id": getattr(unit, 'unit_id', ''),
         "name": getattr(unit, 'unit_name', str(unit)),
@@ -214,7 +214,7 @@ def _unit_snapshot(unit: UnitState) -> Dict[str, Any]:
     }
 
 
-def _pos_dict(pos) -> Dict[str, int]:
+def _pos_dict(pos) -> dict[str, int]:
     if hasattr(pos, 'x') and hasattr(pos, 'y'):
         return {"x": int(pos.x), "y": int(pos.y)}
     return {"x": 0, "y": 0}
@@ -242,8 +242,9 @@ def replay_to_json(replay: Replay) -> str:
     def _default(obj):
         if hasattr(obj, '__dataclass_fields__'):
             return asdict(obj)
-        raise TypeError(f"Object of type {type(obj).__name__} is not JSON serializable")
-    
+        msg = f"Object of type {type(obj).__name__} is not JSON serializable"
+        raise TypeError(msg)
+
     return json.dumps(asdict(replay), default=_default, indent=2)
 
 
@@ -253,7 +254,7 @@ def replay_from_json(data: str) -> Replay:
     return _replay_from_dict(raw)
 
 
-def _replay_from_dict(raw: Dict[str, Any]) -> Replay:
+def _replay_from_dict(raw: dict[str, Any]) -> Replay:
     """Рекурсивно восстановить Replay из словаря."""
     rounds = []
     for r in raw.get("rounds", []):
@@ -280,7 +281,7 @@ def _replay_from_dict(raw: Dict[str, Any]) -> Replay:
 
 
 def save_replay(db: sqlite3.Connection, replay: Replay,
-                user_id: Optional[int] = None):
+                user_id: int | None = None):
     """Сохранить реплей в SQLite."""
     db.execute(
         """INSERT OR REPLACE INTO replays
@@ -303,7 +304,7 @@ def save_replay(db: sqlite3.Connection, replay: Replay,
     db.commit()
 
 
-def load_replay(db: sqlite3.Connection, game_id: str) -> Optional[Replay]:
+def load_replay(db: sqlite3.Connection, game_id: str) -> Replay | None:
     """Загрузить реплей из SQLite по game_id."""
     row = db.execute(
         "SELECT replay_json FROM replays WHERE game_id = ?",
@@ -315,8 +316,8 @@ def load_replay(db: sqlite3.Connection, game_id: str) -> Optional[Replay]:
 
 
 def list_replays(db: sqlite3.Connection,
-                 user_id: Optional[int] = None,
-                 limit: int = 20) -> List[Dict[str, Any]]:
+                 user_id: int | None = None,
+                 limit: int = 20) -> list[dict[str, Any]]:
     """Список реплеев (метаданные без полного JSON)."""
     if user_id:
         rows = db.execute(

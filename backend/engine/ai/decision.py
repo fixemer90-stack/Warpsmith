@@ -13,11 +13,10 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Optional
 
 import numpy as np
 
-from backend.model.unit import Unit, Weapon, resolve_dice
+from backend.model.unit import Unit, Weapon
 from backend.state.game_state import GamePhase, GameState, UnitState
 
 # ── Data Model ─────────────────────────────────────────────────
@@ -103,9 +102,7 @@ def _in_weapon_range(actor: UnitState, target: UnitState, weapon: Weapon) -> boo
     dist = _distance(actor.position, target.position)
     if weapon.type == "melee":
         return dist <= 1.0
-    if weapon.range_max is not None and dist > weapon.range_max:
-        return False
-    return True
+    return not (weapon.range_max is not None and dist > weapon.range_max)
 
 
 def _has_valid_los(actor: UnitState, target: UnitState, state: GameState) -> bool:

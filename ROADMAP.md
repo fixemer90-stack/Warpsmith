@@ -136,13 +136,13 @@
 
 | # | Статус | Фича | Часы |
 |---|--------|------|------|
-| 5.1 | ✅ | Dockerfile + multi-stage build | 3h |
-| 5.2 | ✅ | Railway deployment + wiki monorepo | 4h |
-| 5.3 | ⚪ | Rate limiting (slowapi) | 1h |
-| 5.4 | 🟡 | CORS middleware + CSP security headers (CORS есть, CSP нет) | 1h |
-| 5.5 | 🟡 | Logging (structlog) + Sentry (импортировано, не настроено) | 2h |
-| 5.6 | ⚪ | CI/CD: GitHub Actions (lint + test + deploy) | 4h |
-| 5.7 | ⚪ | SQLite backup strategy + restore script | 1h |
+|| 5.1 | ✅ | Dockerfile + multi-stage build | 3h |
+|| 5.2 | ✅ | Railway deployment + wiki monorepo | 4h |
+|| 5.3 | ⚪ | Rate limiting (slowapi) | 1h |
+|| 5.4 | 🟡 | CORS middleware + CSP security headers (CORS есть, CSP нет) | 1h |
+|| 5.5 | ✅ | Logging (structlog) + Sentry error tracking | 2h |
+|| 5.6 | ✅ | CI/CD: GitHub Actions (lint + test + deploy) | 4h |
+|| 5.7 | ✅ | SQLite backup strategy + restore script | 1h |
 
 ---
 
@@ -193,7 +193,7 @@
 | **2. Game System** | 12 | ~40ч | ✅ 100% |
 | **3. AI & Automation** | 7 | ~35ч | 🟢 43% |
 | **4. Web UI Polish** | 9 | ~37ч | ✅ 100% |
-| **5. Production** | 7 | ~15ч | 🟢 43% |
+| **5. Production** | 7 | ~15ч | 🟢 71% |
 | **6. Monetization** | 6 | ~15ч | ⏳ 0% |
 | **7. Expansion** | 10 | ~40ч | ⏳ 0% |
 | **Итого** | **~75** | **~280ч** | |
