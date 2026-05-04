@@ -20,6 +20,7 @@ dependencies = [
     "httpx",
     "structlog",
     "sentry-sdk",
+    "slowapi",
 ]
 
 [project.optional-dependencies]

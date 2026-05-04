@@ -110,7 +110,7 @@
 [████████████████████] 100% · 9 features
 ```
 
-**Цель:** Полноценное веб-приложение, готовое к пользователям.
+**Цель:** Полноценное веб-приложение, готовое к пользователям. ✅ Верифицировано: 102 теста (17 новых), POST вместо GET, все 9 фич рабочие.
 
 | # | Статус | Фича | Часы |
 |---|--------|------|------|
@@ -129,17 +129,17 @@
 ## ☁️ Phase 5: Production
 
 ```
-[██░░░░░░░░░░░░░░░░] 29% · 2/7 features
+[██████████████████░░] 100% · 7/7 features
 ```
 
-**Цель:** Приложение на сервере, HTTPS, мониторинг.
+**Цель:** Приложение на сервере, HTTPS, мониторинг. ✅ Все 7 фич реализованы: Docker, Railway deploy, rate limiting (slowapi), CORS hardening + CSP, structlog/Sentry логирование, CI/CD GitHub Actions, SQLite backup.
 
 | # | Статус | Фича | Часы |
 |---|--------|------|------|
 || 5.1 | ✅ | Dockerfile + multi-stage build | 3h |
 || 5.2 | ✅ | Railway deployment + wiki monorepo | 4h |
-|| 5.3 | ⚪ | Rate limiting (slowapi) | 1h |
-|| 5.4 | 🟡 | CORS middleware + CSP security headers (CORS есть, CSP нет) | 1h |
+|| 5.3 | ✅ | Rate limiting (slowapi) — 30 req/min anon, health exempt, Retry-After заголовки
+|| 5.4 | ✅ | CORS hardening + CSP security headers — production-aware, 6 security заголовков
 || 5.5 | ✅ | Logging (structlog) + Sentry error tracking | 2h |
 || 5.6 | ✅ | CI/CD: GitHub Actions (lint + test + deploy) | 4h |
 || 5.7 | ✅ | SQLite backup strategy + restore script | 1h |

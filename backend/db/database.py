@@ -114,14 +114,18 @@ class Database:
             FOREIGN KEY (user_id) REFERENCES users(id)
         );
 
+        DROP TABLE IF EXISTS replays;
         CREATE TABLE IF NOT EXISTS replays (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            scenario_id INTEGER,
-            round       INTEGER,
-            phase       TEXT,
-            events      TEXT DEFAULT '[]',
-            created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (scenario_id) REFERENCES scenarios(id)
+            game_id TEXT PRIMARY KEY,
+            created_at TEXT NOT NULL,
+            roster_a TEXT NOT NULL,
+            roster_b TEXT NOT NULL,
+            mission TEXT NOT NULL,
+            deployment TEXT NOT NULL,
+            seed INTEGER NOT NULL,
+            replay_json TEXT NOT NULL,
+            summary TEXT,
+            user_id INTEGER
         );
 
         CREATE INDEX IF NOT EXISTS idx_rosters_user ON rosters(user_id);

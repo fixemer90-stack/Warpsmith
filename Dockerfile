@@ -1,17 +1,14 @@
-FROM python:3.12-slim
+FROM python:3.12-slim-bookworm
 
 WORKDIR /app
 
-# Pre-built manylinux wheels (numpy, bcrypt, pyyaml) — gcc не нужен
-COPY pyproject.toml ./
+# Копируем и устанавливаем зависимости (слой кешируется)
+COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -e .
+    pip install --no-cache-dir -r requirements.txt
 
+# Копируем код приложения
 COPY . .
 
-EXPOSE 8000
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Railway сам пробросит PORT
+CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
