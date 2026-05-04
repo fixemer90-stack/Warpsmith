@@ -122,7 +122,7 @@ class GameState:
     previous_round_priority_player_id: str | None = None
     victory_conditions: dict[str, any] = field(default_factory=dict)
     game_log: list[str] = field(default_factory=list)
-    mission: "Mission" | None = None  # Current mission being played
+    mission: Mission | None = None  # Current mission being played
 
     def __post_init__(self):
         """Initialize terrain map and mission if not provided."""

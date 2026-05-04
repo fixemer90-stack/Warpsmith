@@ -58,7 +58,7 @@ class GameResult:
 
 
 def check_end_game(
-    state: "GameState", mission: "Mission", vp: VPTracker, round_num: int
+    state: GameState, mission: Mission, vp: VPTracker, round_num: int
 ) -> GameResult | None:
     """Проверить условия окончания игры."""
 
@@ -105,7 +105,7 @@ def check_end_game(
     return None  # game continues
 
 
-def _resolve_tie(state: "GameState") -> int:
+def _resolve_tie(state: GameState) -> int:
     """Tie-break: больше убитых очков -> больше контролируемых точек -> random."""
     # Calculate killed points for each player
     killed_points = {}
@@ -134,7 +134,7 @@ def _resolve_tie(state: "GameState") -> int:
     return 1
 
 
-def score_standard(mission: "Mission") -> dict[int, int]:
+def score_standard(mission: Mission) -> dict[int, int]:
     """Standard scoring: VP = number of objectives controlled."""
     mission.update_objective_control()
 
@@ -146,7 +146,7 @@ def score_standard(mission: "Mission") -> dict[int, int]:
     return vp
 
 
-def score_progressive(mission: "Mission") -> dict[int, int]:
+def score_progressive(mission: Mission) -> dict[int, int]:
     """Progressive scoring: VP = objectives controlled + bonus for controlling more than opponent."""
     mission.update_objective_control()
 
@@ -175,7 +175,7 @@ def score_progressive(mission: "Mission") -> dict[int, int]:
     return vp
 
 
-def score_kill_points(mission: "Mission") -> dict[int, int]:
+def score_kill_points(mission: Mission) -> dict[int, int]:
     """Kill points scoring: VP = percentage of opponent's army destroyed."""
     mission.update_objective_control()
 
@@ -233,7 +233,7 @@ SCORING_MAP = {
 }
 
 
-def apply_scoring(state: "GameState", mission: "Mission", vp: VPTracker) -> VPTracker:
+def apply_scoring(state: GameState, mission: Mission, vp: VPTracker) -> VPTracker:
     """Подсчитать VP за текущий раунд, добавить в трекер."""
     scorer = SCORING_MAP.get(mission.config.scoring_rule, score_standard)
     round_vp = scorer(mission)
@@ -290,7 +290,7 @@ class Mission:
     """Mission in the game."""
 
     config: MissionConfig
-    state: "GameState"
+    state: GameState
 
     def score_vp(self, player_id: str) -> int:
         """Calculate VP for player at end of Command phase."""
@@ -504,7 +504,7 @@ class Mission:
 
 
 # Factory functions for creating missions
-def create_mission(mission_name: str, game_state: "GameState") -> "Mission" | None:
+def create_mission(mission_name: str, game_state: GameState) -> Mission | None:
     """Create a mission by name."""
     mission_func = MISSIONS.get(mission_name.lower().replace(" ", "_"))
     if mission_func:
