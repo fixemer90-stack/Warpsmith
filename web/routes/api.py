@@ -468,6 +468,11 @@ async def unit_detail(unit_name: str):
     nob_options = getattr(unit, "nob_options", [])
 
     squad_size = getattr(unit, "squad_size", {"min": 1, "max": 1, "step": 1})
+    # If squad_size is still default (1:1), derive from model_count
+    if squad_size.get("min") == 1 and squad_size.get("max") == 1:
+        min_m, max_m = unit.model_count
+        if min_m != 1 or max_m != 1:
+            squad_size = {"min": min_m, "max": max_m, "step": 1}
 
     # Abilities
 

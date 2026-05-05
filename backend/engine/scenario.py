@@ -7,7 +7,7 @@ from typing import Optional
 from ..model.unit import Unit
 from ..state.game_state import GamePhase, GameState
 from ..state.map import BattlefieldMap
-from ..state.mission import Mission
+from ..state.mission import Mission, VPTracker, apply_scoring, check_end_game
 
 
 class Scenario:
@@ -23,6 +23,7 @@ class Scenario:
         self.log = []  # Additional scenario-specific log
         self._unit_models = unit_models or {}  # unit_id → full Unit model (for combat engine)
         self.battlefield = battlefield  # for LoS checks
+        self.vp_tracker = VPTracker()  # Per-round VP history (F2.8)
 
     def run_game(self, max_rounds: int | None = None) -> None:
         """Run the game until completion or max_rounds reached."""
@@ -38,7 +39,6 @@ class Scenario:
         self.state.game_log.append(f"Starting round {self.state.current_round}")
 
         # Run through all phases using the game state's phase transition
-        # We'll go through all phases and let the game state handle transitions
         phases_completed = 0
         max_phases_per_round = 6  # COMMAND, MOVEMENT, SHOOTING, CHARGE, FIGHT, MORALE
 
@@ -50,6 +50,16 @@ class Scenario:
             # Move to next phase (this handles round advancement)
             if not self.state.is_game_over:
                 self.state.next_phase()
+
+        # Check end-game conditions after all phases
+        if self.state.mission:
+            result = check_end_game(self.state, self.state.mission, self.vp_tracker, self.state.current_round)
+            if result is not None:
+                self.state.game_log.append(
+                    f"Game over! Winner: {result.winner}, reason: {result.reason}"
+                )
+                # Override is_game_over if VP tracker says game should end
+                # (is_game_over already handles this via VP≥10 or round check)
 
     def _execute_phase(self, phase: GamePhase) -> None:
         """Execute logic for a specific phase."""
@@ -87,12 +97,16 @@ class Scenario:
 
         # Update mission scoring at end of Command phase
         if self.state.mission:
-            vp_awarded = self.state.mission.calculate_victory_points()
-            for player_id, vp in vp_awarded.items():
-                if player_id in self.state.players:
-                    self.state.players[player_id].victory_points += vp
+            apply_scoring(self.state, self.state.mission, self.vp_tracker)
+            # Also update PlayerState.victory_points for backwards compat
+            for i, player_id in enumerate(self.state.players):
+                pn = i + 1  # 1-indexed
+                vp_gained = self.vp_tracker.round_vp(pn, self.state.current_round)
+                if vp_gained:
+                    player = self.state.players[player_id]
+                    player.victory_points += vp_gained
                     self.state.game_log.append(
-                        f"{self.state.players[player_id].name} gained {vp} VP from mission (total: {self.state.players[player_id].victory_points})"
+                        f"{player.name} gained {vp_gained} VP (total: {player.victory_points})"
                     )
 
     def _movement_phase(self) -> None:

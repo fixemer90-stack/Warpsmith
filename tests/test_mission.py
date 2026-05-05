@@ -851,7 +851,7 @@ def test_check_end_game_vp_cap():
     result = check_end_game(game_state, mission, vp_tracker, 3)
 
     assert result is not None
-    assert result.winner == 1
+    assert result.winner == "1"
     assert result.reason == "vp_cap"
     assert result.total_rounds == 3
 
@@ -911,7 +911,7 @@ def test_check_end_game_army_wiped():
     result = check_end_game(game_state, mission, vp_tracker, 2)
 
     assert result is not None
-    assert result.winner == 1  # Player 1 wins because player 2's army is wiped
+    assert result.winner == "1"  # Player 1 wins because player 2's army is wiped
     assert result.reason == "army_wiped"
     assert result.total_rounds == 2
 
@@ -972,7 +972,7 @@ def test_check_end_game_max_rounds():
     result = check_end_game(game_state, mission, vp_tracker, 3)  # Round 3 = max_rounds
 
     assert result is not None
-    assert result.winner == 1  # Player 1 has more VP
+    assert result.winner == "1"  # Player 1 has more VP
     assert result.reason == "rounds_completed"
     assert result.total_rounds == 3
 

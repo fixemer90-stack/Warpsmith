@@ -3,7 +3,8 @@
 import os
 
 # Отключаем rate limiter для тестов — должен быть ДО импорта main
-os.environ.setdefault("RATE_LIMIT_ANON", "9999/minute")
+os.environ.setdefault("RATE_LIMIT_ANON", "999999/minute")
+os.environ.setdefault("RATE_LIMIT_STORAGE", "memory://")
 
 import pytest
 from fastapi.testclient import TestClient
