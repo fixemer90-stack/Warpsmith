@@ -725,6 +725,10 @@ async def auto_play_simulation(
     """Запуск полной AI vs AI симуляции."""
 
     try:
+        # Ensure wiki is loaded
+        with contextlib.suppress(Exception):
+            wiki.load()
+
         # Load rosters from database
 
         roster_a_row = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_a_id,))
@@ -809,7 +813,7 @@ async def auto_play_simulation(
             raise HTTPException(status_code=400, detail=f"Unknown deployment type: {deployment}")
 
         # Run auto-play simulation
-
+        # Run auto-play simulation
         config = AutoPlayConfig(max_rounds=max_rounds, deployment_type=deployment_type, seed=seed)
 
         result = run_auto_game(roster_a, roster_b, mission_name=mission, config=config)
@@ -817,10 +821,42 @@ async def auto_play_simulation(
         if result.error:
             raise HTTPException(status_code=400, detail=result.error)
 
+        # Save replay to DB so round-viewer can load it
+        from backend.engine.replay import Replay, ReplayRound, save_replay
+        from datetime import datetime
+
+        game_id = result.game_state.game_id if result.game_state else f"auto_{seed}"
+        replay_rounds = []
+        for rl in result.round_logs:
+            replay_rounds.append(ReplayRound(
+                round=rl.get("round", 0),
+                start_state={},
+                end_state={},
+                events=[],
+                phase_summary={"phase_logs": rl.get("phase_logs", [])},
+            ))
+
+        replay = Replay(
+            game_id=game_id,
+            created_at=datetime.utcnow().isoformat(),
+            rosters={
+                "roster_a": {"name": roster_a.name, "faction": roster_a.faction},
+                "roster_b": {"name": roster_b.name, "faction": roster_b.faction},
+            },
+            mission=mission,
+            deployment=deployment,
+            seed=seed,
+            rounds=replay_rounds,
+            summary=result.summary,
+        )
+        save_replay(db.conn, replay)
+
+        result_dict = result.to_dict()
         return {
             "success": True,
-            "result": result.to_dict(),
-            "replay_log": result.round_logs,  # This would be enhanced with actual replay data
+            "game_id": game_id,
+            "result": result_dict,
+            "replay_log": result.round_logs,
         }
 
     except Exception as e:

@@ -146,12 +146,12 @@ async def pmf_chart(request: Request):
 
 
 @router.get("/round-viewer/{scenario_id}", response_class=HTMLResponse)
-async def round_viewer(request: Request, scenario_id: int):
+async def round_viewer(request: Request, scenario_id: str):
     """Просмотр результатов симуляции."""
     return templates.TemplateResponse(
         request,
         "round_viewer.html",
-        {"request": request, "scenario_id": scenario_id},
+        {"request": request, "game_id": scenario_id},
     )
 
 

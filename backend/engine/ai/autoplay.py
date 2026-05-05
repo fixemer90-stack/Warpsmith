@@ -64,12 +64,17 @@ class AutoPlayResult:
 
     def to_dict(self) -> dict[str, Any]:
         """Сериализация результата для JSON."""
+        game_id = None
+        if self.game_state and hasattr(self.game_state, "game_id"):
+            game_id = self.game_state.game_id
+
         victory_points = {}
         if hasattr(self.game_state, "players"):
             for player_id, player in self.game_state.players.items():
                 victory_points[player_id] = getattr(player, "victory_points", 0)
 
         return {
+            "game_id": game_id,
             "rounds": len(self.round_logs),
             "victory_points": victory_points,
             "winner": self._determine_winner(),
@@ -328,6 +333,7 @@ def run_auto_game(
         )
 
         round_logs: list[dict[str, Any]] = []
+        last_log_len = 0
 
         # Run rounds through Scenario
         for r in range(config.max_rounds):
@@ -339,13 +345,14 @@ def run_auto_game(
             # Run one round via Scenario
             scenario.run_round()
 
-            # Collect round log
+            # Collect round log — capture ALL entries since last round start
             round_log = {
                 "round": r + 1,
                 "events": [],
-                "phase_logs": state.game_log[-20:],
+                "phase_logs": state.game_log[last_log_len:],
             }
             round_logs.append(round_log)
+            last_log_len = len(state.game_log)
 
             # Check end condition
             if _check_game_end(state):
