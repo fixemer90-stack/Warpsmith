@@ -247,7 +247,6 @@ def apply_scoring(state: GameState, mission: Mission, vp: VPTracker) -> VPTracke
 class DeploymentType(Enum):
     """Types of deployment zones."""
 
-    STANDARD = "dawn_of_war"  # standard = dawn of war layout
     DAWN_OF_WAR = "dawn_of_war"  # 24" deploy zone, 12" gap
     SEARCH_AND_DESTROY = "search_and_destroy"
     CRUCIBLE_OF_BATTLE = "crucible_of_battle"
@@ -504,26 +503,33 @@ class Mission:
 
 # Factory functions for creating missions
 def create_mission(mission_name: str, game_state: GameState) -> Mission | None:
-    """Create a mission by name."""
+    """Create a mission by name, scaling objectives to actual map size."""
     mission_func = MISSIONS.get(mission_name.lower().replace(" ", "_"))
     if mission_func:
         config = mission_func()
+        # Scale objectives to actual map size if empty (dynamic placement)
+        if not config.objectives and game_state:
+            w = game_state.map_width
+            h = game_state.map_height
+            cx, cy = w // 2, h // 2
+            if config.scoring_rule in ("standard", "progressive"):
+                config.objectives = [
+                    MissionObjective(cx, cy, "Center"),
+                    MissionObjective(cx // 2, cy, "Flank Left"),
+                    MissionObjective(cx + cx // 2, cy, "Flank Right"),
+                ]
         return Mission(config=config, state=game_state)
     return None
 
 
 def _only_war() -> MissionConfig:
-    """Only War: 3 objectives, hold more = VP, progressive scoring."""
+    """Only War: kill-focused mission, score by destroying enemy units."""
     return MissionConfig(
         name="Only War",
         deployment=DeploymentType.DAWN_OF_WAR,
-        description="Standard mission: hold more objectives to score.",
-        objectives=[
-            MissionObjective(2, 2, "Center"),  # Adjusted for 6x4 map
-            MissionObjective(1, 3, "Flank Left"),
-            MissionObjective(4, 3, "Flank Right"),
-        ],
-        scoring_rule="progressive",
+        description="Kill more pts than opponent each round.",
+        objectives=[],  # No objectives — VP from kills
+        scoring_rule="kill_points",
     )
 
 
@@ -533,7 +539,7 @@ def _purge_the_foe() -> MissionConfig:
         name="Purge the Foe",
         deployment=DeploymentType.SEARCH_AND_DESTROY,
         description="Kill more pts than opponent each round.",
-        objectives=[],  # no objectives
+        objectives=[],
         scoring_rule="kill_points",
     )
 

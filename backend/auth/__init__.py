@@ -102,7 +102,12 @@ class User:
         self.tier = tier
 
     def to_dict(self) -> dict:
-        return {"id": self.id, "email": self.email, "display_name": self.display_name, "tier": self.tier}
+        return {
+            "id": self.id,
+            "email": self.email,
+            "display_name": self.display_name,
+            "tier": self.tier,
+        }
 
     @classmethod
     def by_email(cls, email: str) -> Optional["User"]:

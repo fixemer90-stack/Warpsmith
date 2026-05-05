@@ -104,23 +104,52 @@ class Scenario:
                     continue
                 if unit.is_engaged:
                     # Fall Back — move away from engagement
-                    # Simplified: move 3 cells away from current position
                     new_x = min(unit.position[0] + 3, self.state.map_width - 1)
                     new_y = unit.position[1]
                     if self.state.move_unit(unit.unit_id, (new_x, new_y)):
                         self.state.game_log.append(f"{unit.name} falls back to ({new_x}, {new_y})")
                 else:
-                    # Normal Move — simplified: move 1 cell toward center
-                    center_x = self.state.map_width // 2
-                    dx = (
-                        1
-                        if unit.position[0] < center_x
-                        else (-1 if unit.position[0] > center_x else 0)
-                    )
-                    new_x = unit.position[0] + dx
-                    new_y = unit.position[1]
-                    if self.state.move_unit(unit.unit_id, (new_x, new_y)):
-                        self.state.game_log.append(f"{unit.name} moves to ({new_x}, {new_y})")
+                    # Normal Move — use unit's Movement stat, move toward nearest enemy
+                    model = self._unit_models.get(unit.unit_id)
+                    move_cells = max(1, model.movement) if model else 6  # fallback 6"
+
+                    # Find closest enemy
+                    closest_enemy = None
+                    closest_dist = float("inf")
+                    for op in self.state.players.values():
+                        if op.player_id == player.player_id:
+                            continue
+                        for eu in op.units.values():
+                            if eu.is_alive:
+                                d = (
+                                    (unit.position[0] - eu.position[0]) ** 2
+                                    + (unit.position[1] - eu.position[1]) ** 2
+                                ) ** 0.5
+                                if d < closest_dist:
+                                    closest_dist = d
+                                    closest_enemy = eu
+
+                    if closest_enemy is None:
+                        # No enemy found, move toward center
+                        target_x, target_y = self.state.map_width // 2, self.state.map_height // 2
+                    else:
+                        target_x, target_y = closest_enemy.position
+
+                    # Calculate direction vector to target
+                    dx = target_x - unit.position[0]
+                    dy = target_y - unit.position[1]
+                    dist = (dx**2 + dy**2) ** 0.5
+
+                    if dist > 0 and move_cells > 0:
+                        # Normalize and scale by move_cells
+                        step_x = round(dx / dist * min(move_cells, dist))
+                        step_y = round(dy / dist * min(move_cells, dist))
+                        new_x = max(0, min(unit.position[0] + step_x, self.state.map_width - 1))
+                        new_y = max(0, min(unit.position[1] + step_y, self.state.map_height - 1))
+                        if self.state.move_unit(unit.unit_id, (new_x, new_y)):
+                            self.state.game_log.append(
+                                f'{unit.name} moves {move_cells}" toward {closest_enemy.name if closest_enemy else "center"}'
+                            )
                 unit.has_moved = True
 
     def _shooting_phase(self) -> None:
@@ -139,6 +168,13 @@ class Scenario:
                 if opponent_pid is None:
                     continue
                 opponent = self.state.players[opponent_pid]
+                # Determine max range from unit's weapons
+                model = self._unit_models.get(unit.unit_id)
+                max_range = 12  # fallback
+                if model:
+                    for w in model.ranged_weapons:
+                        if w.range_max > max_range:
+                            max_range = w.range_max
                 targets = []
                 for target in opponent.units.values():
                     if not target.is_alive:
@@ -147,7 +183,7 @@ class Scenario:
                         (unit.position[0] - target.position[0]) ** 2
                         + (unit.position[1] - target.position[1]) ** 2
                     ) ** 0.5
-                    if dist > 12:
+                    if dist > max_range:
                         continue
                     # LoS check if battlefield is available
                     if self.battlefield is not None and not self.battlefield.has_los(
