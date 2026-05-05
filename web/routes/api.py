@@ -810,9 +810,10 @@ async def auto_play_simulation(
         try:
             deployment_type = DeploymentType(deployment.lower().strip())
         except ValueError:
-            raise HTTPException(status_code=400, detail=f"Unknown deployment type: {deployment}")
+            raise HTTPException(
+                status_code=400, detail=f"Unknown deployment type: {deployment}"
+            ) from None
 
-        # Run auto-play simulation
         # Run auto-play simulation
         config = AutoPlayConfig(max_rounds=max_rounds, deployment_type=deployment_type, seed=seed)
 
@@ -828,13 +829,15 @@ async def auto_play_simulation(
         game_id = result.game_state.game_id if result.game_state else f"auto_{seed}"
         replay_rounds = []
         for rl in result.round_logs:
-            replay_rounds.append(ReplayRound(
-                round=rl.get("round", 0),
-                start_state={},
-                end_state={},
-                events=[],
-                phase_summary={"phase_logs": rl.get("phase_logs", [])},
-            ))
+            replay_rounds.append(
+                ReplayRound(
+                    round=rl.get("round", 0),
+                    start_state={},
+                    end_state={},
+                    events=[],
+                    phase_summary={"phase_logs": rl.get("phase_logs", [])},
+                )
+            )
 
         replay = Replay(
             game_id=game_id,

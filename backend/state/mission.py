@@ -247,7 +247,6 @@ def apply_scoring(state: GameState, mission: Mission, vp: VPTracker) -> VPTracke
 class DeploymentType(Enum):
     """Types of deployment zones."""
 
-    STANDARD = "dawn_of_war"  # standard = dawn of war layout
     DAWN_OF_WAR = "dawn_of_war"  # 24" deploy zone, 12" gap
     SEARCH_AND_DESTROY = "search_and_destroy"
     CRUCIBLE_OF_BATTLE = "crucible_of_battle"

@@ -121,8 +121,10 @@ class Scenario:
                             continue
                         for eu in op.units.values():
                             if eu.is_alive:
-                                d = ((unit.position[0] - eu.position[0]) ** 2
-                                     + (unit.position[1] - eu.position[1]) ** 2) ** 0.5
+                                d = (
+                                    (unit.position[0] - eu.position[0]) ** 2
+                                    + (unit.position[1] - eu.position[1]) ** 2
+                                ) ** 0.5
                                 if d < closest_dist:
                                     closest_dist = d
                                     closest_enemy = eu
@@ -136,7 +138,7 @@ class Scenario:
                     # Calculate direction vector to target
                     dx = target_x - unit.position[0]
                     dy = target_y - unit.position[1]
-                    dist = (dx ** 2 + dy ** 2) ** 0.5
+                    dist = (dx**2 + dy**2) ** 0.5
 
                     if dist > 0 and move_cells > 0:
                         # Normalize and scale by move_cells
@@ -145,9 +147,11 @@ class Scenario:
                         new_x = max(0, min(unit.position[0] + step_x, self.state.map_width - 1))
                         new_y = max(0, min(unit.position[1] + step_y, self.state.map_height - 1))
                         if self.state.move_unit(unit.unit_id, (new_x, new_y)):
-                            moved = ((new_x - unit.position[0]) ** 2 + (new_y - unit.position[1]) ** 2) ** 0.5
+                            moved = (
+                                (new_x - unit.position[0]) ** 2 + (new_y - unit.position[1]) ** 2
+                            ) ** 0.5
                             self.state.game_log.append(
-                                f"{unit.name} moves {move_cells}\" toward {closest_enemy.name if closest_enemy else 'center'}"
+                                f'{unit.name} moves {move_cells}" toward {closest_enemy.name if closest_enemy else "center"}'
                             )
                 unit.has_moved = True
 
