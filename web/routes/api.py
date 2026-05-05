@@ -1049,15 +1049,21 @@ async def generate_roster(data: dict | None = None):
     except Exception:
         raise HTTPException(500, detail="Wiki not loaded") from None
 
-    # Filter units by faction (or all factions)
+    # If no faction specified, pick a random one
+    if not faction:
+        all_factions = wiki.list_factions()
+        if not all_factions:
+            raise HTTPException(404, detail="No factions available")
+        faction = random.choice(all_factions)
 
+    # Filter units by faction
     candidates = []
 
     for name, unit in wiki.units.items():
         if unit.points <= 0 or unit.points is None:
             continue
 
-        if faction and unit.faction != faction:
+        if unit.faction != faction:
             continue
 
         if unit.is_epic_hero:
@@ -1128,15 +1134,14 @@ async def generate_roster(data: dict | None = None):
 
             cost = u.points
 
-            if total + cost <= pts_limit or True:  # force even if over
+            if total + cost <= pts_limit:  # only if it fits
                 selected.insert(0, {"unit_name": n, "squad_size": 1})
-
                 total += cost
 
     return {
         "roster": {
             "name": f"AI {faction.title() if faction else 'Random'} Army",
-            "faction": faction or "mixed",
+            "faction": faction,
             "pts_limit": pts_limit,
             "total_pts": total,
             "units": selected,
