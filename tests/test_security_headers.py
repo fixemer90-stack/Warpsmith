@@ -13,7 +13,7 @@ async def test_security_headers_present():
 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        resp = await client.get("/")
+        resp = await client.get("/health")
         assert resp.status_code == 200
         assert resp.headers.get("x-content-type-options") == "nosniff"
         assert resp.headers.get("x-frame-options") == "DENY"
@@ -40,8 +40,8 @@ async def test_cors_production_restricted():
         mp.setenv("PRODUCTION_ORIGIN", "https://example.com")
 
         import web.routes.api  # noqa
-        import web.routes.pages  # noqa
-        from backend.security import headers  # noqa
+        import web.routes.pages
+        from backend.security import headers
 
         from main import create_app
 

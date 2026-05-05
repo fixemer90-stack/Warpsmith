@@ -19,6 +19,7 @@ from backend.engine.ai.deployment import (
     deploy_game,
 )
 from backend.engine.ai.faction_ai import load_profile
+from backend.engine.replay import ReplayRecorder
 from backend.engine.scenario import Scenario
 from backend.model.unit import Unit
 from backend.state.game_state import GamePhase, GameState, PlayerState, UnitState
@@ -61,6 +62,7 @@ class AutoPlayResult:
     error: str | None = None
     total_duration_ms: float = 0.0
     summary: dict[str, Any] = field(default_factory=dict)
+    replay: Any = None  # Replay object (F3.6), serialized in to_dict()
 
     def to_dict(self) -> dict[str, Any]:
         """Сериализация результата для JSON."""

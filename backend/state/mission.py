@@ -50,11 +50,16 @@ class VPTracker:
 
 @dataclass
 class GameResult:
-    winner: int | None  # None = tie
+    winner: str | None  # None = tie
     reason: str  # "rounds_completed", "army_wiped", "vp_cap"
     vp_tracker: VPTracker
     total_rounds: int
     summary: dict
+
+
+def _int_to_player(player_num: int) -> str:
+    """Convert VPTracker int (1, 2) to GameState player_id ("1", "2")."""
+    return str(player_num)
 
 
 def check_end_game(
@@ -63,10 +68,10 @@ def check_end_game(
     """Проверить условия окончания игры."""
 
     # 1. Victory Point cap (100 VP)
-    for player in [1, 2]:
-        if vp.total[player] >= 100:
+    for player_num in [1, 2]:
+        if vp.total[player_num] >= 100:
             return GameResult(
-                winner=player,
+                winner=_int_to_player(player_num),
                 reason="vp_cap",
                 vp_tracker=vp,
                 total_rounds=round_num,
@@ -74,9 +79,9 @@ def check_end_game(
             )
 
     # 2. Army wiped
-    for player_id, player_state in [(1, state.players.get("p1")), (2, state.players.get("p2"))]:
+    for player_id, player_state in state.players.items():
         if player_state and all(u.models_remaining <= 0 for u in player_state.units.values()):
-            winner = 2 if player_id == 1 else 1
+            winner = "2" if player_id in ("p1", "1") else "1"
             return GameResult(
                 winner=winner,
                 reason="army_wiped",
@@ -95,7 +100,7 @@ def check_end_game(
             # 3. Random
             leader = _resolve_tie(state)
         return GameResult(
-            winner=leader if not vp.is_tied() else None,
+            winner=_int_to_player(leader) if not vp.is_tied() else None,
             reason="rounds_completed",
             vp_tracker=vp,
             total_rounds=round_num,
@@ -238,8 +243,9 @@ def apply_scoring(state: GameState, mission: Mission, vp: VPTracker) -> VPTracke
     scorer = SCORING_MAP.get(mission.config.scoring_rule, score_standard)
     round_vp = scorer(mission)
     for player_id in state.players:
-        # Convert string player_id to int for VPTracker
-        player_num = 1 if player_id == "p1" else 2
+        # Convert string player_id to int for VPTracker:
+        #   "p1" / "1" → 1,  "p2" / "2" → 2
+        player_num = 1 if player_id in ("p1", "1") else 2
         vp.add(player_num, round_vp.get(player_id, 0))
     return vp
 
