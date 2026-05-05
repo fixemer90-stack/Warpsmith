@@ -169,31 +169,31 @@
 [░░░░░░░░░░░░░░░░░░] 0% · 10 features
 ```
 
-| # | Статус | Фича | Часы |
-|---|--------|------|------|
-| 7.1 | ⚪ | Fill remaining faction stubs (Chaos, Imperium) | — |
-| 7.2 | ⚪ | Export: CSV/JSON для ростереров и реплеев | 4h |
-| 7.3 | ⚪ | Import: Battlescribe / NewRecruit roster | 8h |
-| 7.4 | ⚪ | Community: публичные ростера, рейтинг, лайки | 6h |
-| 7.5 | ⚪ | Campaign mode: linked scenarios, persistent army | 10h |
-| 7.6 | ⚪ | Mobile responsive — адаптация под телефоны | 6h |
-| 7.7 | ⚪ | i18n: английская локаль | 8h |
-| 7.8 | ⚪ | Custom AI personalities (aggressive / cautious) | 6h |
-| 7.9 | ⚪ | Analytics: most used units, weapons, win rates | 4h |
-| 7.10 | ⚪ | Hot-seat mode: 2 players, same PC | 8h |
+| #    | Статус | Фича                                             | Часы |
+| ---- | ------ | ------------------------------------------------ | ---- |
+| 7.1  | ⚪      | Fill remaining faction stubs (Chaos, Imperium)   | —    |
+| 7.2  | ⚪      | Export: CSV/JSON для ростереров и реплеев        | 4h   |
+| 7.3  | ⚪      | Import: Battlescribe / NewRecruit roster         | 8h   |
+| 7.4  | ⚪      | Community: публичные ростера, рейтинг, лайки     | 6h   |
+| 7.5  | ⚪      | Campaign mode: linked scenarios, persistent army | 10h  |
+| 7.6  | ⚪      | Mobile responsive — адаптация под телефоны       | 6h   |
+| 7.7  | ⚪      | i18n: английская локализация                     | 8h   |
+| 7.8  | ⚪      | Custom AI personalities (aggressive / cautious)  | 6h   |
+| 7.9  | ⚪      | Analytics: most used units, weapons, win rates   | 4h   |
+| 7.10 | ⚪      | Hot-seat mode: 2 players, same PC                | 8h   |
 
 ---
 
 ## 📊 Сводка
 
-| Фаза | Features | Часы | Статус |
-|------|----------|------|--------|
-| **0. Foundation** | 12 | ~40ч | ✅ 100% |
-| **1. Combat Engine** | 12 | ~60ч | ✅ 100% |
-| **2. Game System** | 12 | ~40ч | ✅ 100% |
-|| **3. AI & Automation** | 7 | ~35ч | ✅ 100% |
-|| **4. Web UI Polish** | 9 | ~37ч | ✅ 100% |
-|| **5. Production** | 7 | ~15ч | ✅ 100% |
-| **6. Monetization** | 6 | ~15ч | ⏳ 0% |
-| **7. Expansion** | 10 | ~40ч | ⏳ 0% |
-| **Итого** | **~75** | **~280ч** | |
+| Фаза                   | Features | Часы      | Статус |
+| ---------------------- | -------- | --------- | ------ |
+| **0. Foundation**      | 12       | ~40ч      | ✅ 100% |
+| **1. Combat Engine**   | 12       | ~60ч      | ✅ 100% |
+| **2. Game System**     | 12       | ~40ч      | ✅ 100% |
+| **3. AI & Automation** | 7        | ~35ч      | ✅ 100% |
+| **4. Web UI Polish**   | 9        | ~37ч      | ✅ 100% |
+| **5. Production**      | 7        | ~15ч      | ✅ 100% |
+| **6. Monetization**    | 6        | ~15ч      | ⏳ 0%   |
+| **7. Expansion**       | 10       | ~40ч      | ⏳ 0%   |
+| **Итого**              | **~75**  | **~280ч** |        |
