@@ -1,5 +1,10 @@
 """Pytest configuration and fixtures."""
 
+import os
+
+# Отключаем rate limiter для тестов — должен быть ДО импорта main
+os.environ.setdefault("RATE_LIMIT_ANON", "9999/minute")
+
 import pytest
 from fastapi.testclient import TestClient
 

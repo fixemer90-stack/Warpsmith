@@ -149,7 +149,7 @@
 ## 💰 Phase 6: Monetization
 
 ```
-[░░░░░░░░░░░░░░░░░░] 0% · 6 features
+[░░░░░░░░░░░░░░░░░░] 0% · 7 features
 ```
 
 | # | Статус | Фича | Часы |
@@ -160,6 +160,7 @@
 | 6.4 | ⚪ | Upgrade banner + ad placeholder (Free tier) | 2h |
 | 6.5 | ⚪ | Ad network integration | 4h |
 | 6.6 | ⚪ | Usage limits — max simulations/day for Free | 2h |
+| 6.7 | ⚪ | 2-Week Premium Trial for new users | 2h |
 
 ---
 
@@ -180,7 +181,7 @@
 | 7.7  | ⚪      | i18n: английская локализация                     | 8h   |
 | 7.8  | ⚪      | Custom AI personalities (aggressive / cautious)  | 6h   |
 | 7.9  | ⚪      | Analytics: most used units, weapons, win rates   | 4h   |
-| 7.10 | ⚪      | Hot-seat mode: 2 players, same PC                | 8h   |
+
 
 ---
 
