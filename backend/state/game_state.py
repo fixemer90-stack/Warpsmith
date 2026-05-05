@@ -140,8 +140,10 @@ class GameState:
     @property
     def is_game_over(self) -> bool:
         """Check if the game has ended."""
-        # Game ends after max rounds
-        return self.current_round > self.max_rounds
+        # Game ends after max rounds or if any player reaches 10+ VP
+        return self.current_round > self.max_rounds or any(
+            player.victory_points >= 10 for player in self.players.values()
+        )
 
     @property
     def winner(self) -> str | None:

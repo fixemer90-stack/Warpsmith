@@ -523,13 +523,17 @@ def create_mission(mission_name: str, game_state: GameState) -> Mission | None:
 
 
 def _only_war() -> MissionConfig:
-    """Only War: kill-focused mission, score by destroying enemy units."""
+    """Only War: progressive-scoring mission with 3 objectives."""
     return MissionConfig(
         name="Only War",
         deployment=DeploymentType.DAWN_OF_WAR,
-        description="Kill more pts than opponent each round.",
-        objectives=[],  # No objectives — VP from kills
-        scoring_rule="kill_points",
+        description="Control objectives to score VP each round.",
+        objectives=[
+            MissionObjective(2, 2, "Center"),
+            MissionObjective(1, 3, "Mid Left"),
+            MissionObjective(4, 3, "Mid Right"),
+        ],
+        scoring_rule="progressive",
     )
 
 
