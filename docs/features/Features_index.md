@@ -112,6 +112,33 @@
 
 ---
 
+## Phase 2+3: Сквозной пайплайн AI vs AI
+
+```
+Team Builder (F2.11) → Roster CRUD (F2.10) → Roster Validation (F2.9)
+    │
+    ▼
+POST /api/auto-play
+    │
+    ├─ deploy_game()        F3.4 — AI расставляет юниты по MissionConfig
+    ├─ Scenario.run_game()   F2.5 — Game Loop (while not is_game_over)
+    │   ├─ _command_phase    VP scoring через mission.calculate_victory_points()  F2.4/F2.8
+    │   ├─ _movement_phase   AI movement                                            F3.1
+    │   ├─ _shooting_phase   AI target selection                                   F3.1
+    │   ├─ _charge_phase     AI charge decisions                                   F3.1
+    │   ├─ _fight_phase      Combat engine (Hit→Wound→Save→Damage→FNP)             F1.6
+    │   └─ _morale_phase     Battle-shock tests                                    F2.7
+    │
+    ├─ is_game_over?         rounds > max_rounds или VP ≥ 10                       F2.8
+    ├─ winner                player с наибольшим VP                                F2.8
+    └─ save_replay()         Replay → SQLite                                       F3.6
+        │
+        ▼
+    /replay/{game_id}        Round Viewer (F3.7) + Result Screen (F3.8)
+```
+
+---
+
 ## Сводка
 
 | Фаза | Features | Часы | Статус |
@@ -120,7 +147,7 @@
 | **Phase 2** — Game System | 12 | ~40h | ✅ 100% |
 | **Phase 3** — AI & Automation | 7 | ~35h | ✅ 100% |
 | **Phase 4** — Web UI Polish | 9 | ~37h | ✅ 100% |
-|| **Phase 5** — Production | 7 | ~16h | ✅ 100% |
-| **Phase 6** — Monetization | 6 | ~15h | ⏳ 0% |
+| **Phase 5** — Production | 7 | ~16h | ✅ 100% |
+| **Phase 6** — Monetization | 7 | ~17h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |
 | **Итого** | **~62** | **~216h** | |
