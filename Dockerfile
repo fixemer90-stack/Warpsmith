@@ -12,4 +12,4 @@ ENV PORT=8000
 EXPOSE 8000
 
 # JSON-форма с exec — сигналы доходят до uvicorn, ${PORT} раскрывается
-CMD ["sh", "-c", "exec uvicorn main:app --host 0.0.0.0 --port ${PORT} --log-level info --timeout-keep-alive 5"]
+CMD ["sh", "-c", "exec uvicorn main:app --host :: --port ${PORT} --log-level info --timeout-keep-alive 5"]
