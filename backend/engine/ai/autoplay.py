@@ -147,12 +147,29 @@ def _validate_rosters(roster_a: RosterState, roster_b: RosterState) -> list[str]
     return errors
 
 
-def _create_default_map(seed: int = 42) -> BattlefieldMap:
-    """Создать стандартную карту для симуляции."""
+def _create_default_map(seed: int = 42, pts_limit: int = 2000) -> BattlefieldMap:
+    """Создать карту подходящего размера в зависимости от PTS лимита.
+
+    Standard 40k table sizes:
+      500 pts → 44"×30"  (30 × 44 cells)
+     1000 pts → 44"×44"  (44 × 44 cells)
+     2000 pts → 44"×60"  (44 × 60 cells)
+     3000 pts → 44"×90"  (44 × 90 cells)
+    """
     np.random.seed(seed)
 
-    terrain = np.full((44, 60), TerrainType.OPEN_GROUND, dtype=object)
-    game_map = BattlefieldMap(width=60, height=44, terrain=terrain)
+    # Determine map size by PTS limit
+    if pts_limit <= 500:
+        height, width = (30, 44)
+    elif pts_limit <= 1000:
+        height, width = (44, 44)
+    elif pts_limit <= 2000:
+        height, width = (44, 60)
+    else:
+        height, width = (44, 90)
+
+    terrain = np.full((height, width), TerrainType.OPEN_GROUND, dtype=object)
+    game_map = BattlefieldMap(width=width, height=height, terrain=terrain)
 
     return game_map
 
@@ -290,8 +307,12 @@ def run_auto_game(
         )
 
     try:
-        # 2. Create map
-        game_map = _create_default_map(seed=config.seed)
+        # 2. Create map (size based on PTS limit)
+        pts_limit = max(
+            getattr(roster_a, "total_pts", 2000),
+            getattr(roster_b, "total_pts", 2000),
+        )
+        game_map = _create_default_map(seed=config.seed, pts_limit=pts_limit)
 
         # 3. Convert rosters to PlayerState
         player_a = _roster_to_player_state(roster_a, "1", config)

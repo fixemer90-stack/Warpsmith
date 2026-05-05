@@ -53,7 +53,9 @@ class Scenario:
 
         # Check end-game conditions after all phases
         if self.state.mission:
-            result = check_end_game(self.state, self.state.mission, self.vp_tracker, self.state.current_round)
+            result = check_end_game(
+                self.state, self.state.mission, self.vp_tracker, self.state.current_round
+            )
             if result is not None:
                 self.state.game_log.append(
                     f"Game over! Winner: {result.winner}, reason: {result.reason}"

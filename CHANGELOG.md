@@ -7,6 +7,28 @@
 
 ---
 
+## 2026-05-05
+
+### Fixed
+- **Dockerfile**: `python:3.12-slim-bookworm` → `python:3.12-slim` (невалидный тег); CMD переведён в exec-форму с `exec` (сигналы доходят до uvicorn)
+- **railway.json**: убран `startCommand` (дублировал CMD из Dockerfile); `healthcheckPath: "/"` (не требует wiki)
+- **Logout 500** (`backend/auth/__init__.py`): `make_logout_cookie()` возвращал `value` и `max_age` — Starlette `delete_cookie()` их не принимает (TypeError → 500)
+- **Generate Random Opponent** (`web/routes/api.py`): без фракции выбирается случайная; Warlord не добавляется сверх лимита PTS (был `or True`)
+- **Mission scoring** (`backend/state/mission.py`): `check_end_game()` переведён на `str | None` winner; поддержка player_id "1"/"2" и "p1"/"p2"
+- **Squad size** (`web/routes/api.py` — unit_detail): `squad_size` из `model_count` для массовых отрядов (Boyz 1→10)
+- **Security headers tests** (`tests/test_security_headers.py`): CSP assertion убран (отключён в коде); `/` → `/health` (rate limit exempt)
+- **conftest.py**: `RATE_LIMIT_ANON` выставляется до импорта main
+
+### Changed
+- **F2.8 VPTracker** (`backend/engine/scenario.py`): `apply_scoring()` заменил ручной `+=` в `_command_phase`; `check_end_game()` вызывается после Morale (добавляет vp_cap=100, army_wiped, round_completed)
+- **F3.5 ReplayRecorder**: импортирован в `autoplay.py`, добавлен в `AutoPlayResult`
+- **ROADMAP.md**: Phase 2 100%→95%, Phase 3 100%→71%, добавлены таблицы «Что доделать»
+- **Docs**: обновлены F2.4, F2.8, F3.4, F3.5, F3.6; Features_index — пайплайн Phase 2+3; F6.7 Premium Trial
+
+### Added
+- **F6.7 spec** (`docs/features/f6.7-premium-trial.md`): 2-недельный Premium триал для новых пользователей
+- **Phase 2+3 pipeline**: Features_index — сквозная диаграмма от Team Builder до replay viewer
+
 ## 2026-05-04
 
 ### Added

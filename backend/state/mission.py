@@ -529,16 +529,12 @@ def create_mission(mission_name: str, game_state: GameState) -> Mission | None:
 
 
 def _only_war() -> MissionConfig:
-    """Only War: progressive-scoring mission with 3 objectives."""
+    """Only War: progressive-scoring mission. Objectives placed dynamically by create_mission()."""
     return MissionConfig(
         name="Only War",
         deployment=DeploymentType.DAWN_OF_WAR,
         description="Control objectives to score VP each round.",
-        objectives=[
-            MissionObjective(2, 2, "Center"),
-            MissionObjective(1, 3, "Mid Left"),
-            MissionObjective(4, 3, "Mid Right"),
-        ],
+        objectives=[],  # placed dynamically based on map size
         scoring_rule="progressive",
     )
 
