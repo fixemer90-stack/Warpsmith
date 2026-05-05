@@ -142,14 +142,11 @@ class Scenario:
 
                     if dist > 0 and move_cells > 0:
                         # Normalize and scale by move_cells
-                        step_x = int(round(dx / dist * min(move_cells, dist)))
-                        step_y = int(round(dy / dist * min(move_cells, dist)))
+                        step_x = round(dx / dist * min(move_cells, dist))
+                        step_y = round(dy / dist * min(move_cells, dist))
                         new_x = max(0, min(unit.position[0] + step_x, self.state.map_width - 1))
                         new_y = max(0, min(unit.position[1] + step_y, self.state.map_height - 1))
                         if self.state.move_unit(unit.unit_id, (new_x, new_y)):
-                            moved = (
-                                (new_x - unit.position[0]) ** 2 + (new_y - unit.position[1]) ** 2
-                            ) ** 0.5
                             self.state.game_log.append(
                                 f'{unit.name} moves {move_cells}" toward {closest_enemy.name if closest_enemy else "center"}'
                             )

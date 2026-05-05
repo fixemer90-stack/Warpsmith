@@ -745,9 +745,9 @@ async def auto_play_simulation(
 
         import json
 
+        from backend.engine.ai.deployment import DeploymentType
         from backend.model.unit import Unit, Weapon
         from backend.state.roster import RosterState
-        from backend.engine.ai.deployment import DeploymentType
 
         def units_from_db(units_json):
 
@@ -823,8 +823,9 @@ async def auto_play_simulation(
             raise HTTPException(status_code=400, detail=result.error)
 
         # Save replay to DB so round-viewer can load it
-        from backend.engine.replay import Replay, ReplayRound, save_replay
         from datetime import datetime
+
+        from backend.engine.replay import Replay, ReplayRound, save_replay
 
         game_id = result.game_state.game_id if result.game_state else f"auto_{seed}"
         replay_rounds = []
