@@ -236,10 +236,8 @@ def make_logout_cookie() -> dict:
     """Параметры cookie для удаления токена."""
     return {
         "key": "token",
-        "value": "",
         "httponly": True,
         "secure": True,
         "samesite": "lax",
-        "max_age": 0,
         "path": "/",
     }
