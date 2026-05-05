@@ -11,5 +11,5 @@ COPY . .
 ENV PORT=8000
 EXPOSE 8000
 
-# Shell-форма — переменная раскроется
-CMD sh -c "uvicorn main:app --host 0.0.0.0 --port ${PORT}"
+# JSON-форма с exec — сигналы доходят до uvicorn, ${PORT} раскрывается
+CMD ["sh", "-c", "exec uvicorn main:app --host 0.0.0.0 --port ${PORT} --log-level info --timeout-keep-alive 5"]
