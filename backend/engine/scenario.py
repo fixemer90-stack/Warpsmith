@@ -86,6 +86,32 @@ class Scenario:
 
     def _command_phase(self) -> None:
         """Command phase logic: generate CP, check mission objectives, etc."""
+        # Clear battle-shock from previous round (per 10ed: effects end at start of Command phase)
+        for player in self.state.players.values():
+            for unit in player.units.values():
+                unit.is_battle_shocked = False
+
+        # Clear engagement for units no longer within 1" of any enemy
+        for player in self.state.players.values():
+            opponent_pid = next(
+                (pid for pid in self.state.players if pid != player.player_id), None
+            )
+            if opponent_pid is None:
+                continue
+            opponent = self.state.players[opponent_pid]
+            for unit in player.units.values():
+                if not unit.is_engaged:
+                    continue
+                still_engaged = any(
+                    (unit.position[0] - e.position[0]) ** 2
+                    + (unit.position[1] - e.position[1]) ** 2
+                    <= 1.5
+                    for e in opponent.units.values()
+                    if e.is_alive
+                )
+                if not still_engaged:
+                    unit.is_engaged = False
+
         # Generate command points for each player
         for player in self.state.players.values():
             # Base CP generation: 1 CP per turn
@@ -273,8 +299,9 @@ class Scenario:
         Rules (10ed):
           - Engaged units MUST Fall Back or Remain Stationary.
           - Units on objective may Remain Stationary to hold it.
-          - Far from target → bias toward Advance.
+          - Far from target → bias toward Advance (ranged) or Normal Move (melee).
           - Close to target → Normal Move or Remain Stationary.
+          - Melee units NEVER Advance (must preserve ability to charge).
         """
         import random
 
@@ -282,24 +309,56 @@ class Scenario:
         if unit.is_engaged:
             return "fall_back"
 
-        # Already on target → hold position (Remain Stationary)
+        # Already on target → hold position
         if target and unit.position == target:
-            # 50% hold, 50% move toward another objective
             return random.choice(["remain_stationary", "normal_move"])
+
+        # Determine if unit is melee-focused
+        model = self._unit_models.get(unit.unit_id)
+        is_melee = self._is_melee_focused(unit, model)
 
         # Distance-based weighting
         dist_to_target = self._distance(unit.position, target) if target else float("inf")
 
         if dist_to_target > move_stat:
-            # Far: Advance (60%) or Normal Move (40%)
+            if is_melee:
+                # Melee units: Normal Move (80%), Remain Stationary (20%) — never Advance
+                return random.choices(
+                    ["normal_move", "remain_stationary"],
+                    weights=[80, 20],
+                    k=1,
+                )[0]
+            # Ranged units: Advance (60%) or Normal Move (40%)
             return random.choices(["advance", "normal_move"], weights=[60, 40], k=1)[0]
         else:
-            # Close: Normal Move (70%), Remain Stationary (20%), Advance (10%)
+            # Close to target
+            if is_melee:
+                # Melee: Normal Move (80%), Remain Stationary (20%) — prefer positioning for charge
+                return random.choices(
+                    ["normal_move", "remain_stationary"],
+                    weights=[80, 20],
+                    k=1,
+                )[0]
+            # Ranged: Normal Move (70%), Remain Stationary (20%), Advance (10%)
             return random.choices(
                 ["normal_move", "remain_stationary", "advance"],
                 weights=[70, 20, 10],
                 k=1,
             )[0]
+
+    def _is_melee_focused(self, unit, model) -> bool:
+        """Check if unit is primarily a melee combatant."""
+        if model is None:
+            return False
+        # No ranged weapons → definitely melee
+        if not model.ranged_weapons:
+            return True
+        # More melee attacks than ranged → melee-focused
+        if model.melee_weapons:
+            melee_atks = sum(w.attacks_dice[0] for w in model.melee_weapons)
+            ranged_atks = sum(w.attacks_dice[0] for w in model.ranged_weapons)
+            return melee_atks > ranged_atks
+        return False
 
     def _move_toward(
         self, unit, target: tuple[int, int] | None, move_cells: int, own_player_id: str
@@ -449,7 +508,10 @@ class Scenario:
                     _profile = faction_profile
 
                     def _target_score(t, u=_actor_unit, fp=_profile):
-                        d = ((u.position[0] - t.position[0]) ** 2 + (u.position[1] - t.position[1]) ** 2) ** 0.5
+                        d = (
+                            (u.position[0] - t.position[0]) ** 2
+                            + (u.position[1] - t.position[1]) ** 2
+                        ) ** 0.5
                         t_model = self._unit_models.get(t.unit_id)
                         t_mult = 1.0
                         if t_model:

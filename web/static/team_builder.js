@@ -90,17 +90,12 @@ function teamBuilder() {
 
         get totalCost() {
             if (!this.unitDetail) return 0;
-            const basePts = this.unitDetail.points;
-            // Wargear option cost (per model)
+            const minSquad = this.unitDetail.squad_size?.min || 1;
+            const ptsPerModel = this.unitDetail.points / minSquad;
             const loadout = this.unitDetail.wargear_options
                 ?.find(o => o.name === this.selectedLoadout);
             const loadoutPts = loadout?.points || 0;
-            // Nob option cost (one-time)
-            const nobOpt = this.unitDetail.nob_options
-                ?.find(o => o.name === this.selectedNobOption);
-            const nobPts = nobOpt?.points || 0;
-
-            return (basePts + loadoutPts) * this.squadSize + nobPts;
+            return ptsPerModel + loadoutPts;
         },
 
         getQuickSizes() {

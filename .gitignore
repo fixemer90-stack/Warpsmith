@@ -23,6 +23,8 @@ venv/
 *.db-wal
 
 # Wiki vault (теперь часть репозитория — см. simulator/wiki/)
+# Но исходники PDF/txt не коммитим
+wiki/raw/papers/
 
 # Test credentials (локальная разработка)
 .test-credentials

@@ -209,6 +209,8 @@ class GameState:
                     unit.models_remaining = 0
 
                 self.game_log.append(f"{unit.name} took {damage} damage")
+                if unit.current_wounds == 0 and unit.models_remaining == 0:
+                    self.game_log.append(f"{unit.name} was destroyed")
                 return True
         return False
 
@@ -269,9 +271,9 @@ class GameState:
                     unit.has_charged = False
                     unit.has_fought = False
                     # Reset fight-related flags for new round
-                    unit.is_engaged = False
                     unit.is_fighting = False
-                    unit.is_battle_shocked = False
+                    # NOTE: is_engaged persists (only cleared by Fall Back or unit death)
+                    # NOTE: is_battle_shocked persists (lasts until NEXT Command phase per 10ed)
 
             # Determine command priority for the new round
             self._determine_command_priority()

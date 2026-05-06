@@ -229,34 +229,42 @@ def _generate_candidates(
         # ── Priority 1: Двигаться к objectives (capture points) ──
         objectives = _get_objectives(ctx)
         for obj_pos in objectives:
-            candidates.append(Action(
-                type=ActionType.MOVE,
-                target_position=obj_pos,
-                mode="objective",
-            ))
-            if not actor.is_engaged:
-                candidates.append(Action(
-                    type=ActionType.ADVANCE,
+            candidates.append(
+                Action(
+                    type=ActionType.MOVE,
                     target_position=obj_pos,
                     mode="objective",
-                ))
+                )
+            )
+            if not actor.is_engaged:
+                candidates.append(
+                    Action(
+                        type=ActionType.ADVANCE,
+                        target_position=obj_pos,
+                        mode="objective",
+                    )
+                )
 
         # ── Priority 2: Двигаться к врагам ──
         for target in ctx.opponent_units:
             if not target.is_alive:
                 continue
-            candidates.append(Action(
-                type=ActionType.MOVE,
-                target_id=target.unit_id,
-                target_position=target.position,
-                mode="engage",
-            ))
-            candidates.append(Action(
-                type=ActionType.ADVANCE,
-                target_id=target.unit_id,
-                target_position=target.position,
-                mode="engage",
-            ))
+            candidates.append(
+                Action(
+                    type=ActionType.MOVE,
+                    target_id=target.unit_id,
+                    target_position=target.position,
+                    mode="engage",
+                )
+            )
+            candidates.append(
+                Action(
+                    type=ActionType.ADVANCE,
+                    target_id=target.unit_id,
+                    target_position=target.position,
+                    mode="engage",
+                )
+            )
 
         # ── Fallback: нет ни objectives ни врагов → HOLD ──
         if not candidates:

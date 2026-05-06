@@ -309,31 +309,50 @@ class Mission:
                 vp += 1  # 1 VP per objective controlled
         return vp
 
-    def update_objective_control(self):
-        """Update which players control each objective."""
-        # Reset all objectives
+    def update_objective_control(self, control_range: float = 3.0):
+        """Update which players control each objective (within control_range cells).
+
+        Per 10ed: player with highest total OC within range controls.
+        Contested only when OC is equal.
+        """
         for obj in self.config.objectives:
             obj.controlled_by = None
             obj.is_contested = False
 
-        # For each objective, check which units control it
         for obj in self.config.objectives:
-            controlling_players = set()
+            # Sum OC per player within range
+            oc_by_player: dict[str, int] = {}
 
-            # Check all units from all players
             for player in self.state.players.values():
+                total_oc = 0
                 for unit in player.units.values():
-                    if unit.is_alive and unit.position == obj.position:
-                        controlling_players.add(player.player_id)
+                    if not unit.is_alive:
+                        continue
+                    dist = (
+                        (unit.position[0] - obj.position[0]) ** 2
+                        + (unit.position[1] - obj.position[1]) ** 2
+                    ) ** 0.5
+                    if dist <= control_range:
+                        total_oc += getattr(unit, "objective_control", 1)
+                if total_oc > 0:
+                    oc_by_player[player.player_id] = total_oc
 
-            # Update objective status
-            if len(controlling_players) == 1:
-                obj.controlled_by = next(iter(controlling_players))
+            if not oc_by_player:
+                continue  # No one controls
+
+            if len(oc_by_player) == 1:
+                obj.controlled_by = next(iter(oc_by_player))
                 obj.is_contested = False
-            elif len(controlling_players) > 1:
-                obj.controlled_by = None  # Contested
-                obj.is_contested = True
-            # else: no one controls it
+            else:
+                # Multiple players — highest OC wins
+                max_oc = max(oc_by_player.values())
+                top_players = [pid for pid, oc in oc_by_player.items() if oc == max_oc]
+                if len(top_players) == 1:
+                    obj.controlled_by = top_players[0]
+                    obj.is_contested = False
+                else:
+                    obj.controlled_by = None
+                    obj.is_contested = True
 
     def calculate_victory_points(self) -> dict[str, int]:
         """Calculate victory points for all players based on mission scoring rule."""
