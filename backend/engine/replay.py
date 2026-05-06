@@ -424,7 +424,7 @@ def list_replays(
     ]
 
 
-# TODO: Добавить API endpoints в web/routes/api.py
-# POST /api/replay/save - сохранить реплей
-# GET /api/replay/{game_id} - загрузить реплей
-# GET /api/replays - список реплеев
+# API endpoints: see web/routes/api.py
+# GET /api/replays/{game_id} — load replay by game_id
+# GET /api/replays — list all replays
+# POST /api/auto-play — runs simulation and saves replay
