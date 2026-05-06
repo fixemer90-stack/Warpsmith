@@ -328,8 +328,10 @@ class Mission:
                 for unit in player.units.values():
                     if not unit.is_alive:
                         continue
-                    dist = ((unit.position[0] - obj.position[0]) ** 2 +
-                            (unit.position[1] - obj.position[1]) ** 2) ** 0.5
+                    dist = (
+                        (unit.position[0] - obj.position[0]) ** 2
+                        + (unit.position[1] - obj.position[1]) ** 2
+                    ) ** 0.5
                     if dist <= control_range:
                         total_oc += getattr(unit, "objective_control", 1)
                 if total_oc > 0:
