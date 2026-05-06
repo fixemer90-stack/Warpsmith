@@ -112,61 +112,281 @@ class Scenario:
                     )
 
     def _movement_phase(self) -> None:
-        """Movement phase: normal move / advance / fall back for active player's units."""
+        """Movement phase: Normal Move / Advance / Fall Back / Remain Stationary.
+
+        Per 10ed rules (wiki/rules/10th/Movement Phase.md):
+          - Normal Move: up to M\" toward target; can shoot & charge.
+          - Advance: Normal Move + D6; cannot shoot or charge.
+          - Fall Back: if engaged, retreat toward deployment zone; cannot shoot or charge.
+          - Remain Stationary: hold position; can shoot/charge normally.
+
+        AI prioritisation: units distribute across all 3 objectives evenly.
+        Unassigned units move toward nearest enemy.
+        """
+        import random
+
         self.state.game_log.append("Movement phase: units may move")
+
         for player in self.state.players.values():
-            for unit in player.units.values():
+            # ── Objective distribution ──
+            # Collect objectives and alive units for this player
+            mission = self.state.mission
+            objectives = []
+            if mission and mission.config.objectives:
+                objectives = [(obj.x, obj.y) for obj in mission.config.objectives]
+
+            alive_units = [u for u in player.units.values() if u.is_alive and not u.has_moved]
+
+            # Assign each unit to a target (objective or enemy)
+            unit_targets: dict[str, tuple[int, int] | None] = {}
+            assigned_objs = set()
+
+            if objectives:
+                # For each objective, assign the closest available unit
+                obj_remaining = list(range(len(objectives)))
+                assigned_units = set()
+
+                for _ in range(len(alive_units)):
+                    best_unit = None
+                    best_obj = None
+                    best_dist = float("inf")
+
+                    for unit in alive_units:
+                        if unit.unit_id in assigned_units:
+                            continue
+                        for oi in obj_remaining:
+                            ox, oy = objectives[oi]
+                            d = (unit.position[0] - ox) ** 2 + (unit.position[1] - oy) ** 2
+                            if d < best_dist:
+                                best_dist = d
+                                best_unit = unit
+                                best_obj = oi
+
+                    if best_unit is not None and best_obj is not None:
+                        unit_targets[best_unit.unit_id] = objectives[best_obj]
+                        assigned_units.add(best_unit.unit_id)
+                        assigned_objs.add(best_obj)
+                        obj_remaining.remove(best_obj)
+                    else:
+                        break
+
+                # Remaining unassigned units → nearest enemy
+                for unit in alive_units:
+                    if unit.unit_id not in unit_targets:
+                        enemy = self._find_closest_enemy(unit, player.player_id)
+                        if enemy:
+                            unit_targets[unit.unit_id] = enemy.position
+                        else:
+                            unit_targets[unit.unit_id] = (
+                                self.state.map_width // 2,
+                                self.state.map_height // 2,
+                            )
+
+            # ── Execute movement ──
+            for unit in alive_units:
                 if not unit.is_alive or unit.has_moved:
                     continue
-                if unit.is_engaged:
-                    # Fall Back — move away from engagement
-                    new_x = min(unit.position[0] + 3, self.state.map_width - 1)
-                    new_y = unit.position[1]
-                    if self.state.move_unit(unit.unit_id, (new_x, new_y)):
-                        self.state.game_log.append(f"{unit.name} falls back to ({new_x}, {new_y})")
-                else:
-                    # Normal Move — use unit's Movement stat, move toward nearest enemy
-                    model = self._unit_models.get(unit.unit_id)
-                    move_cells = max(1, model.movement) if model else 6  # fallback 6"
 
-                    # Find closest enemy
-                    closest_enemy = None
-                    closest_dist = float("inf")
-                    for op in self.state.players.values():
-                        if op.player_id == player.player_id:
-                            continue
-                        for eu in op.units.values():
-                            if eu.is_alive:
-                                d = (
-                                    (unit.position[0] - eu.position[0]) ** 2
-                                    + (unit.position[1] - eu.position[1]) ** 2
-                                ) ** 0.5
-                                if d < closest_dist:
-                                    closest_dist = d
-                                    closest_enemy = eu
+                model = self._unit_models.get(unit.unit_id)
+                move_stat = max(1, model.movement) if model else 6
 
-                    if closest_enemy is None:
-                        # No enemy found, move toward center
-                        target_x, target_y = self.state.map_width // 2, self.state.map_height // 2
-                    else:
-                        target_x, target_y = closest_enemy.position
+                # Determine action
+                target = unit_targets.get(unit.unit_id)
+                action = self._pick_movement_action(unit, target, move_stat, player.player_id)
 
-                    # Calculate direction vector to target
-                    dx = target_x - unit.position[0]
-                    dy = target_y - unit.position[1]
-                    dist = (dx**2 + dy**2) ** 0.5
+                if action == "remain_stationary":
+                    self.state.game_log.append(f"{unit.name} remains stationary")
+                    unit.has_moved = True
+                    continue
 
-                    if dist > 0 and move_cells > 0:
-                        # Normalize and scale by move_cells
-                        step_x = round(dx / dist * min(move_cells, dist))
-                        step_y = round(dy / dist * min(move_cells, dist))
-                        new_x = max(0, min(unit.position[0] + step_x, self.state.map_width - 1))
-                        new_y = max(0, min(unit.position[1] + step_y, self.state.map_height - 1))
-                        if self.state.move_unit(unit.unit_id, (new_x, new_y)):
-                            self.state.game_log.append(
-                                f'{unit.name} moves {move_cells}" toward {closest_enemy.name if closest_enemy else "center"}'
-                            )
+                if action == "fall_back":
+                    self._fall_back(unit, player.player_id, move_stat)
+                    continue
+
+                # Normal Move or Advance
+                move_cells = move_stat
+                if action == "advance":
+                    d6 = random.randint(1, 6)
+                    move_cells += d6
+                    self.state.game_log.append(f"{unit.name} Advances (M+{d6}={move_cells}\")")
+
+                self._move_toward(unit, target, move_cells, player.player_id)
+
+                if action == "advance":
+                    unit.has_advanced = True
+
+            # Mark all alive units as moved (even those that couldn't move)
+            for unit in alive_units:
                 unit.has_moved = True
+
+    # ── Movement helpers ──
+
+    def _find_closest_enemy(self, unit, own_player_id: str):
+        """Return closest alive enemy unit or None."""
+        closest = None
+        closest_dist = float("inf")
+        for op in self.state.players.values():
+            if op.player_id == own_player_id:
+                continue
+            for eu in op.units.values():
+                if eu.is_alive:
+                    d = (unit.position[0] - eu.position[0]) ** 2 + (
+                        unit.position[1] - eu.position[1]
+                    ) ** 2
+                    if d < closest_dist:
+                        closest_dist = d
+                        closest = eu
+        return closest
+
+    def _distance(self, a: tuple[int, int], b: tuple[int, int]) -> float:
+        return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5
+
+    def _enemy_distance(self, pos: tuple[int, int], own_player_id: str) -> float:
+        """Distance to nearest enemy unit from position."""
+        best = float("inf")
+        for op in self.state.players.values():
+            if op.player_id == own_player_id:
+                continue
+            for eu in op.units.values():
+                if eu.is_alive:
+                    d = self._distance(pos, eu.position)
+                    if d < best:
+                        best = d
+        return best
+
+    def _pick_movement_action(self, unit, target, move_stat: int, own_player_id: str) -> str:
+        """Pick MovementAction for AI unit based on context.
+
+        Rules (10ed):
+          - Engaged units MUST Fall Back or Remain Stationary.
+          - Units on objective may Remain Stationary to hold it.
+          - Far from target → bias toward Advance.
+          - Close to target → Normal Move or Remain Stationary.
+        """
+        import random
+
+        # Mandatory: engaged units must fall back
+        if unit.is_engaged:
+            return "fall_back"
+
+        # Already on target → hold position (Remain Stationary)
+        if target and unit.position == target:
+            # 50% hold, 50% move toward another objective
+            return random.choice(["remain_stationary", "normal_move"])
+
+        # Distance-based weighting
+        dist_to_target = self._distance(unit.position, target) if target else float("inf")
+
+        if dist_to_target > move_stat:
+            # Far: Advance (60%) or Normal Move (40%)
+            return random.choices(
+                ["advance", "normal_move"], weights=[60, 40], k=1
+            )[0]
+        else:
+            # Close: Normal Move (70%), Remain Stationary (20%), Advance (10%)
+            return random.choices(
+                ["normal_move", "remain_stationary", "advance"],
+                weights=[70, 20, 10],
+                k=1,
+            )[0]
+
+    def _move_toward(
+        self, unit, target: tuple[int, int] | None, move_cells: int, own_player_id: str
+    ) -> None:
+        """Move unit toward target, up to move_cells cells.
+
+        Stops 1 cell before any enemy (cannot enter Engagement Range).
+        """
+        if target is None or move_cells <= 0:
+            unit.has_moved = True
+            return
+
+        # Direction vector
+        dx = target[0] - unit.position[0]
+        dy = target[1] - unit.position[1]
+        dist = (dx**2 + dy**2) ** 0.5
+
+        if dist <= 0:
+            # Already at target
+            self.state.game_log.append(f"{unit.name} is already at target {target}")
+            unit.has_moved = True
+            return
+
+        # Normalise
+        dir_x = dx / dist
+        dir_y = dy / dist
+
+        # Best position: as close to target as possible while staying 1 cell from enemies
+        best_x, best_y = unit.position
+        best_score = 0.0  # progress toward target
+
+        for step in range(1, move_cells + 1):
+            cx = round(unit.position[0] + dir_x * step)
+            cy = round(unit.position[1] + dir_y * step)
+
+            # Bounds check
+            if not (0 <= cx < self.state.map_width and 0 <= cy < self.state.map_height):
+                break
+
+            # Engagement Range check: stay ≥ 1 cell from any enemy
+            if self._enemy_distance((cx, cy), own_player_id) < 1.5:
+                break
+
+            # Occupied check
+            if self.state.get_unit_at_position(cx, cy) is not None:
+                break
+
+            # Progress toward target
+            new_dist = ((cx - target[0]) ** 2 + (cy - target[1]) ** 2) ** 0.5
+            score = dist - new_dist  # positive = getting closer
+
+            if score > best_score:
+                best_score = score
+                best_x, best_y = cx, cy
+
+        if (best_x, best_y) != unit.position:
+            # Directly update position (move_unit checks validation again)
+            if self.state.move_unit(unit.unit_id, (best_x, best_y)):
+                # move_unit logs, but we add context
+                pass
+            else:
+                self.state.game_log.append(
+                    f"{unit.name} could not move to ({best_x}, {best_y})"
+                )
+        else:
+            self.state.game_log.append(f"{unit.name} found no valid path toward {target}")
+
+    def _fall_back(self, unit, own_player_id: str, move_stat: int) -> None:
+        """Fall Back: retreat toward own deployment zone, away from enaging enemy.
+
+        Per 10ed: Normal Move away. Cannot shoot or charge this turn.
+        """
+        import random
+
+        # Determine "safe" direction: toward own deployment zone (bottom or top)
+        # Player IDs: "1"/"p1" = bottom, "2"/"p2" = top
+        own_zone_y = (
+            0 if own_player_id in ("1", "p1") else self.state.map_height - 1
+        )
+
+        target = (unit.position[0], own_zone_y)
+
+        # If there's a specific engaging enemy, move directly away from it
+        closest_enemy = self._find_closest_enemy(unit, own_player_id)
+        if closest_enemy:
+            # Move opposite direction from enemy
+            dx = unit.position[0] - closest_enemy.position[0]
+            dy = unit.position[1] - closest_enemy.position[1]
+            dist = max((dx**2 + dy**2) ** 0.5, 0.1)
+            runaway_x = round(unit.position[0] + (dx / dist) * move_stat)
+            runaway_y = round(unit.position[1] + (dy / dist) * move_stat)
+            runaway_x = max(0, min(runaway_x, self.state.map_width - 1))
+            runaway_y = max(0, min(runaway_y, self.state.map_height - 1))
+            target = (runaway_x, runaway_y)
+
+        self._move_toward(unit, target, move_stat, own_player_id)
+        unit.has_advanced = True  # Cannot shoot/charge after Fall Back
+        self.state.game_log.append(f"{unit.name} falls back")
 
     def _shooting_phase(self) -> None:
         """Shooting phase: find targets in range, resolve damage via combat engine."""
@@ -175,7 +395,7 @@ class Scenario:
 
         for player in self.state.players.values():
             for unit in player.units.values():
-                if not unit.is_alive or unit.has_shot or unit.is_engaged:
+                if not unit.is_alive or unit.has_shot or unit.is_engaged or unit.has_advanced:
                     continue
                 # Find opponent
                 opponent_pid = next(
@@ -251,7 +471,7 @@ class Scenario:
 
         for player in self.state.players.values():
             for unit in player.units.values():
-                if not unit.is_alive or unit.has_charged or unit.is_engaged:
+                if not unit.is_alive or unit.has_charged or unit.is_engaged or unit.has_advanced:
                     continue
                 # Find closest enemy
                 opponent_pid = next(

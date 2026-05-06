@@ -101,12 +101,20 @@
             </div>
 
             <div>
-                <label class="block text-xs text-gray-400 uppercase tracking-wide mb-1">Map Size</label>
-                <select x-model="mapSize" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
-                    <option value="combat-patrol">Combat Patrol (44×30")</option>
-                    <option value="strike-force" selected>Strike Force (44×60")</option>
-                    <option value="onslaught">Onslaught (44×90")</option>
+                <label class="block text-xs text-gray-400 uppercase tracking-wide mb-1">Game Format</label>
+                <select x-model="gameFormat" @change="updateFormat()"
+                        class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
+                    <option value="500">Combat Patrol (500 pts)</option>
+                    <option value="1000">Incursion (1000 pts)</option>
+                    <option value="2000" selected>Strike Force (2000 pts)</option>
+                    <option value="3000">Onslaught (3000 pts)</option>
                 </select>
+            </div>
+
+            <div>
+                <label class="block text-xs text-gray-400 uppercase tracking-wide mb-1">Map</label>
+                <div class="w-full bg-gray-700/50 border border-gray-600 rounded px-3 py-2 text-sm text-gray-300"
+                     x-text="mapLabel"></div>
             </div>
 
             <div>

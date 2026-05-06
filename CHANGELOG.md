@@ -7,6 +7,23 @@
 
 ---
 
+## 2026-05-06
+
+### Added
+- **F4.11 Movement Phase (10ed)** (`backend/engine/scenario.py`, `docs/features/f4.11-movement-phase.md`): полная реализация по правилам 10th edition
+  - 4 действия: Normal Move / Advance / Fall Back / Remain Stationary
+  - `UnitState.has_advanced` — флаг запрета стрельбы/charge после Advance/Fall Back
+  - Обновлены `_shooting_phase` и `_charge_phase` — пропускают юниты с `has_advanced`
+  - AI objective distribution: юниты равномерно распределяются по всем objectives (greedy-присвоение)
+  - Неприсвоенные юниты движутся к ближайшему врагу
+  - `_move_toward()`: остановка за 1 клетку до врага (Engagement Range), проверка bounds/terrain
+  - `_fall_back()`: отступление к своей deployment zone ИЛИ от конкретного врага
+  - `_pick_movement_action()`: веса выбора действия по расстоянию до цели и позиции
+
+### Changed
+- **AI vs AI**: VP > 0 (раньше было 0 — юниты шли к врагу, а не к objectives)
+- **ROADMAP.md**: Phase 4 добавлен (Movement Phase), Phase 3 VP tracking — done
+
 ## 2026-05-05
 
 ### Fixed

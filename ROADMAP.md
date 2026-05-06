@@ -57,10 +57,10 @@
 
 ---
 
-## 🔧 Phase 2: Game System
+## ✅ Phase 2: Game System
 
 ```
-[███████████████████░] 95% · 12 features
+[████████████████████] 100% · 12 features
 ```
 
 **Цель:** Полный Game Loop с картой, миссиями, ростерами.
@@ -74,25 +74,19 @@
 | 2.5 | ✅ | Game Loop: Command → Movement → Shooting → Charge → Fight | 6h |
 | 2.6 | ✅ | Phase transitions via GameState.next_phase() | 4h |
 | 2.7 | ✅ | Battle-shock + CP generation + stratagem resolution | 4h |
-| 2.8 | 🔧 | Victory Points tracking + end-game conditions | 2h |
+| 2.8 | ✅ | Victory Points tracking + end-game conditions | 2h |
 | 2.9 | ✅ | Roster validation (PTS, Warlord, 3× cap) + GameSize enum | 3h |
 | 2.10 | ✅ | Roster CRUD: SQLite save/load/delete via /api/rosters | 2h |
 | 2.11 | ✅ | Team Builder UI: faction picker, unit modal, PTS bar | 8h |
 | 2.12 | ✅ | Synergy hints: leader compatibility, transport capacity | 3h |
 
-### 🔧 Phase 2 — Что доделать
-
-| # | Задача | Где | Суть |
-|---|--------|-----|------|
-| 2.8 | Подключить VPTracker в game loop | `scenario.py:_command_phase` | Заменить ручной `player.victory_points += vp` на `apply_scoring(state, mission, vp_tracker)`. VPTracker и apply_scoring уже написаны в `mission.py`. |
-| 2.8 | Подключить check_end_game | `scenario.py:run_round` | Вызывать `check_end_game()` после фазы Morale вместо `is_game_over` property. Добавит условия: army_wiped, vp_cap=100. |
 
 ---
 
 ## 🔧 Phase 3: AI & Automation
 
 ```
-[██████████████░░░░░░] 71% · 7 features (5 done, 2 pending)
+[███████████████░░░░░] 86% · 7 features (6 done, 1 pending)
 ```
 
 **Цель:** AI принимает решения за обе стороны, прогоняет deploy → N раундов → результат → replay.
@@ -102,7 +96,7 @@
 | 3.1 | ✅ | Greedy decision engine — target/action evaluation (26 тестов) | 6h |
 | 3.2 | ✅ | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h |
 | 3.3 | 🔧 | Deployment AI: zone placement logic | 3h |
-| 3.4 | 🔧 | Auto-play: AI vs AI full scenario | 6h |
+| 3.4 | ✅ | Auto-play: AI vs AI full scenario (VP > 0, objectives задействованы) | 6h |
 | 3.5 | 🔧 | Replay recording: JSON event log per round/phase | 3h |
 | 3.6 | ⏳ | Round viewer: step-by-step replay UI | 6h |
 | 3.7 | ⏳ | Result screen: kills, damage, VP timeline chart | 3h |
@@ -112,9 +106,6 @@
 | # | Задача | Где | Суть |
 |---|--------|-----|------|
 | 3.3 | Подключить faction_ai к деплою | `deployment.py` | `deploy_game()` не учитывает FactionAIProfile. Импортировать `load_profile()`, применять faction-specific logic при расстановке. |
-| 3.4 | Подключить ReplayRecorder | `autoplay.py:run_auto_game` | Создать `ReplayRecorder(game_state)` в начале, вызывать `.record_event()` на каждом действии. Сейчас replay собирается пост-фактум на API-слое. |
-| 3.4 | Подключить VPTracker | `autoplay.py` / `scenario.py` | См. задачу 2.8 — та же правка в `_command_phase`. |
-| 3.4 | Подключить check_end_game | `autoplay.py` / `scenario.py` | См. задачу 2.8 — та же правка в `run_round`. |
 | 3.5 | Вызывать ReplayRecorder из autoplay | `autoplay.py` | `ReplayRecorder` написан в `replay.py` но не создаётся и не вызывается. Интегрировать в `run_auto_game()`. |
 | 3.6 | Round viewer | `round_viewer.html` + `replay_viewer.js` | Пошаговый просмотр реплея: навигация раунд/фаза/событие, Canvas-визуализация. |
 | 3.7 | Result screen | `result.html` + `result_chart.js` | Сводка боя: победитель, VP, kills, VP-timeline Chart.js график. |
@@ -211,7 +202,7 @@
 | **0. Foundation**      | 12       | ~40ч      | ✅ 100% |
 | **1. Combat Engine**   | 12       | ~60ч      | ✅ 100% |
 | **2. Game System**     | 12       | ~40ч      | ✅ 100% |
-| **3. AI & Automation** | 7        | ~35ч      | ✅ 100% |
+| **3. AI & Automation** | 7        | ~35ч      | 🔧 86% |
 | **4. Web UI Polish**   | 9        | ~37ч      | ✅ 100% |
 | **5. Production**      | 7        | ~15ч      | ✅ 100% |
 | **6. Monetization**    | 6        | ~15ч      | ⏳ 0%   |

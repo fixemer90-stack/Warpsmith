@@ -7,13 +7,22 @@ function scenarioSetup() {
         player2Faction: '',
         player2Generated: null,
         mission: 'only-war',
-        mapSize: 'strike-force',
+        gameFormat: '2000',
         firstTurn: 'roll-off',
         rosters: window._rosters || [],
         factions: [],
         generating: false,
         player1Units: [],
         player2Units: [],
+
+        // Computed
+        get mapLabel() {
+            const pts = parseInt(this.gameFormat) || 2000;
+            if (pts <= 500) return '44×30" — Combat Patrol';
+            if (pts <= 1000) return '44×44" — Incursion';
+            if (pts <= 2000) return '44×60" — Strike Force';
+            return '44×90" — Onslaught';
+        },
 
         // Lifecycle
         init() {
