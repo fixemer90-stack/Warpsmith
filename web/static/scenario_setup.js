@@ -253,7 +253,7 @@ function scenarioSetup() {
                     roster_b_id: rosterBId,
                     mission: this.mission,
                     max_rounds: '5',
-                    seed: '42',
+                    seed: String(Math.floor(Math.random() * 100000)),
                 });
                 const resp = await fetch(`/api/auto-play?${params}`, {method: 'POST'});
                 if (resp.ok) {

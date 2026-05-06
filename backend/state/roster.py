@@ -62,10 +62,10 @@ _GAME_SIZE_LIMITS: dict[GameSize, int] = {
 
 # Standard 40k table sizes (height × width in inches → rows × cols in cells)
 _GAME_SIZE_MAPS: dict[GameSize, tuple[int, int]] = {
-    GameSize.COMBAT_PATROL: (30, 44),   # 500 pts → 44"×30"
-    GameSize.INCURSION: (44, 44),       # 1000 pts → 44"×44"
-    GameSize.STRIKE_FORCE: (44, 60),    # 2000 pts → 44"×60"
-    GameSize.ONSLAUGHT: (44, 90),       # 3000 pts → 44"×90"
+    GameSize.COMBAT_PATROL: (30, 44),  # 500 pts → 44"×30"
+    GameSize.INCURSION: (44, 44),  # 1000 pts → 44"×44"
+    GameSize.STRIKE_FORCE: (44, 60),  # 2000 pts → 44"×60"
+    GameSize.ONSLAUGHT: (44, 90),  # 3000 pts → 44"×90"
 }
 
 _GAME_SIZE_LABELS: dict[GameSize, str] = {

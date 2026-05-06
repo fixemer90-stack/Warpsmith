@@ -20,7 +20,7 @@ dependencies = [
     "pytest-cov",
     "httpx",
     "structlog",
-    "sentry-sdk",
+    "sentry-sdk[fastapi]",
     "slowapi",
 ]
 

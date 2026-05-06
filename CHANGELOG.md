@@ -10,6 +10,21 @@
 ## 2026-05-06
 
 ### Added
+- **F1.13 Weapon Keywords Phase 2** (backend/engine/modifiers.py, backend/engine/combat.py, backend/model/unit.py, tests/test_weapon_keywords_phase2.py): полная реализация 9 дополнительных weapon keywords
+  - **Blast**: +1 attack per 5 models (max +4)
+  - **Heavy**: +1 hit when stationary
+  - **Torrent**: auto-hits (ignores hit rolls)
+  - **Melta**: +1 damage at half range
+  - **Rapid Fire**: +1 attack at half range
+  - **Lance**: +1 wound on charge
+  - **Pistol**: no movement penalty
+  - **Precision**: rerolls wound rolls
+  - **One Shot**: cannot fire after first shot
+- **F2.13 Cover & Terrain Effects** (backend/engine/combat.py, backend/state/game_state.py): механика укрытий и terrain effects
+  - **Cover**: INFANTRY +1 SV when terrain blocks LoS, or standing on woods/ruins
+  - **Ignores Cover**: cancels cover bonus
+  - **Indirect Fire**: -1 to hit without LoS, additional -1 if target has cover
+  - **Bresenham LoS**: accurate line-of-sight calculation for terrain blocking
 - **F4.11 Movement Phase (10ed)** (`backend/engine/scenario.py`, `docs/features/f4.11-movement-phase.md`): полная реализация по правилам 10th edition
   - 4 действия: Normal Move / Advance / Fall Back / Remain Stationary
   - `UnitState.has_advanced` — флаг запрета стрельбы/charge после Advance/Fall Back
@@ -21,6 +36,7 @@
   - `_pick_movement_action()`: веса выбора действия по расстоянию до цели и позиции
 
 ### Changed
+- **Phase 1 Combat Engine**: 100% complete (was 92%) — all 13 features implemented and tested
 - **AI vs AI**: VP > 0 (раньше было 0 — юниты шли к врагу, а не к objectives)
 - **ROADMAP.md**: Phase 4 добавлен (Movement Phase), Phase 3 VP tracking — done
 

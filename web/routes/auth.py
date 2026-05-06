@@ -141,9 +141,4 @@ async def api_me(request: Request, user=Depends(get_optional_user)):
     return JSONResponse(user.to_dict())
 
 
-# ── Health check ─────────────────────────────────────────────────
-
-
-@router.get("/api/health")
-async def health():
-    return JSONResponse({"status": "ok"})
+# ── Health check: в api.py (GET /api/health) ─────────────────────

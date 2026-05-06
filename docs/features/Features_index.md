@@ -23,8 +23,9 @@
 | [F1.10](f1.10-pmf-chart.md) | PMF Chart — Chart.js распределение урона | 4h | 5 |
 | [F1.11](f1.11-round-viewer-stub.md) | Round Viewer Stub — форма + JSON | 2h | 5 |
 | [F1.12](f1.12-multiattack.md) | MultiAttack — несколько оружий + отряды | 3h | 5 |
+| [F1.13](f1.13-weapon-keywords-phase2.md) | Weapon Keywords Phase 2 — Blast, Heavy, Torrent, Melta, Rapid Fire, Lance, Pistol, Precision, One Shot | 6h | 2 | ✅ |
 
-**Всего:** 12 features, ~30 часов. ✅ 100%
+**Всего:** 13 features, ~36 часов. ✅ 100%
 
 ---
 
@@ -46,8 +47,11 @@
 | [F2.10](f2.10-roster-crud.md) | Roster CRUD — SQLite save/load/delete | 2h | 4 |
 | [F2.11](f2.11-team-builder-ui.md) | Team Builder UI — Alpine.js, PTS bar | 8h | 5 |
 | [F2.12](f2.12-leader-compatibility.md) | Leader Compatibility Checker | 3h | 5 |
+| [F2.13](f2.13-cover-terrain.md) | Cover & Terrain Effects — +1 SV, Ignores Cover, Indirect Fire | 4h | 2 | ✅ |
+| [F2.14](f2.14-deep-strike.md) | Deep Strike & Reserves — deploy from off-map, >9" rule | 3h | 3 | ⏳ |
+| [F2.15](f2.15-shooting-refinements.md) | Shooting Refinements — BGNT, Look Out Sir, Pistol in engagement | 3h | 3 | ⏳ |
 
-**Всего:** 12 features, ~45 часов. ✅ 100%
+**Всего:** 15 features, ~55 часов. 🔧 80%
 
 ---
 
@@ -57,15 +61,17 @@
 
 | # | Фича | Часы | Приоритет | Статус |
 |---|------|------|-----------|--------|
-| [F3.1](f3.1-greedy-decision-engine.md) | Greedy decision engine — target/action evaluation | 6h | 1 | ✅ |
+| [F3.1](f3.1-greedy-decision-engine.md) | Greedy decision engine — target/action evaluation + objective movement 🔧 | 6h | 1 | 🔧 |
 | [F3.2](f3.2-faction-ai-profiles.md) | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h | 2 | ✅ |
 | [F3.4](f3.4-deployment-ai.md) | Deployment AI: zone placement logic | 3h | 3 | ✅ |
 || [F3.5](f3.5-autoplay.md) | Auto-play: AI vs AI full scenario — 16 тестов, Scenario.run_round(), deploy_game(), F3.2 AI | 6h | 3 | ✅ |
 || [F3.6](f3.6-replay-recording.md) | Replay recording: JSON event log per round/phase — 18 тестов, ReplayRecorder, SQLite persistence | 3h | 4 | ✅ |
 || [F3.7](f3.7-round-viewer.md) | Round viewer: step-by-step replay UI | 6h | 5 | ⏳ |
 || [F3.8](f3.8-result-screen.md) | Result screen: kills, damage, VP timeline chart | 3h | 5 | ⏳ |
+| [F3.10](f3.10-waaagh.md) | Waaagh! Army Rule — Orks: +1"M, 5+FNP, +1S melee раз за бой | 3h | 2 | ⏳ |
+| [F3.11](f3.11-ftgg-markerlight.md) | For The Greater Good + Markerlight — Tau: Spotter/Guided, +1BS, Sustained Hits 1 | 4h | 2 | ⏳ |
 
-**Всего:** 7 features, ~35 часов. 🟢 71%
+**Всего:** 9 features, ~42 часов. 🟢 55%
 
 **Deprecated files (заменены):**
 - [F3.2 — Ork AI](f3.2-ork-ai.md) (deprecated → superseded by F3.2 Faction AI Profiles)
@@ -90,8 +96,9 @@
 | [F4.7](f4.7-stat-tooltips.md) | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h | 4 | ✅ |
 | [F4.8](f4.8-svg-icons.md) | SVG icons integration in unit cards | 2h | 5 | ✅ |
 | [F4.9](f4.9-generate-opponent.md) | Generate Random Opponent — `/api/rosters/generate` для AI-ростера | 2h | 3 | ✅ |
+| [F4.12](f4.12-my-rosters.md) | My Rosters — управление ростером: delete, edit, duplicate | 4h | 2 | ⏳ |
 
-**Всего:** 10 features, ~43 часов. 🔧 89%
+**Всего:** 11 features, ~47 часов. 🔧 89%
 
 ---
 
@@ -144,11 +151,11 @@ POST /api/auto-play
 
 | Фаза | Features | Часы | Статус |
 |------|----------|------|--------|
-| **Phase 1** — Combat Engine | 12 | ~30h | ✅ 100% |
-| **Phase 2** — Game System | 12 | ~40h | ✅ 100% |
-| **Phase 3** — AI & Automation | 7 | ~35h | ✅ 100% |
-| **Phase 4** — Web UI Polish | 9 | ~37h | ✅ 100% |
+| **Phase 1** — Combat Engine | 13 | ~36h | 🔧 92% |
+| **Phase 2** — Game System | 15 | ~55h | 🔧 80% |
+| **Phase 3** — AI & Automation | 9 | ~42h | 🟢 55% |
+| **Phase 4** — Web UI Polish | 11 | ~47h | 🔧 89% |
 | **Phase 5** — Production | 7 | ~16h | ✅ 100% |
 | **Phase 6** — Monetization | 7 | ~17h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |
-| **Итого** | **~62** | **~216h** | |
+| **Итого** | **~72** | **~253h** | |

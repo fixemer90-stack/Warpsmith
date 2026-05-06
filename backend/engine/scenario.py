@@ -208,7 +208,7 @@ class Scenario:
                 if action == "advance":
                     d6 = random.randint(1, 6)
                     move_cells += d6
-                    self.state.game_log.append(f"{unit.name} Advances (M+{d6}={move_cells}\")")
+                    self.state.game_log.append(f'{unit.name} Advances (M+{d6}={move_cells}")')
 
                 self._move_toward(unit, target, move_cells, player.player_id)
 
@@ -279,9 +279,7 @@ class Scenario:
 
         if dist_to_target > move_stat:
             # Far: Advance (60%) or Normal Move (40%)
-            return random.choices(
-                ["advance", "normal_move"], weights=[60, 40], k=1
-            )[0]
+            return random.choices(["advance", "normal_move"], weights=[60, 40], k=1)[0]
         else:
             # Close: Normal Move (70%), Remain Stationary (20%), Advance (10%)
             return random.choices(
@@ -350,9 +348,7 @@ class Scenario:
                 # move_unit logs, but we add context
                 pass
             else:
-                self.state.game_log.append(
-                    f"{unit.name} could not move to ({best_x}, {best_y})"
-                )
+                self.state.game_log.append(f"{unit.name} could not move to ({best_x}, {best_y})")
         else:
             self.state.game_log.append(f"{unit.name} found no valid path toward {target}")
 
@@ -365,9 +361,7 @@ class Scenario:
 
         # Determine "safe" direction: toward own deployment zone (bottom or top)
         # Player IDs: "1"/"p1" = bottom, "2"/"p2" = top
-        own_zone_y = (
-            0 if own_player_id in ("1", "p1") else self.state.map_height - 1
-        )
+        own_zone_y = 0 if own_player_id in ("1", "p1") else self.state.map_height - 1
 
         target = (unit.position[0], own_zone_y)
 
@@ -444,7 +438,16 @@ class Scenario:
                 attacker_model = self._unit_models.get(unit.unit_id)
                 defender_model = self._unit_models.get(target.unit_id)
                 if attacker_model and defender_model and attacker_model.ranged_weapons:
-                    from backend.engine.combat import simulate_unit_attack
+                    from backend.engine.combat import _has_cover, simulate_unit_attack
+
+                    # Determine cover
+                    terrain = self.state.terrain_map if hasattr(self.state, "terrain_map") else None
+                    target_cat = getattr(defender_model, "category", "infantry")
+                    has_cover = (
+                        _has_cover(unit.position, target.position, terrain, target_cat)
+                        if terrain is not None
+                        else False
+                    )
 
                     result = simulate_unit_attack(
                         attacker=attacker_model,
@@ -452,6 +455,8 @@ class Scenario:
                         n_iterations=1000,
                         squad_size=unit.models_remaining,
                         distance=int(dist),
+                        has_cover=has_cover,
+                        ignores_cover=False,
                     )
                     damage = int(result.total_stats.mean)
                     self.state.game_log.append(
