@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 from typing import Optional
 
 from ..model.unit import Unit
@@ -106,15 +107,12 @@ class Scenario:
 
         # Activate faction AI behaviors for this round
         for player_id, profile in self._faction_profiles.items():
-            if player_id in ("1", "2") and player_id in self.state.players:
-                try:
+            if player_id in ("1", "2"):
+                with contextlib.suppress(Exception):
                     from backend.engine.ai.faction_ai import get_weights
 
-                    player = self.state.players[player_id]
                     weights = get_weights(profile, GamePhase.COMMAND, self.state.current_round)
-                    player._faction_weights = weights
-                except Exception:
-                    pass
+                    self._active_faction_weights[player_id] = weights
             # Also update PlayerState.victory_points for backwards compat
             for i, player_id in enumerate(self.state.players):
                 pn = i + 1  # 1-indexed
@@ -446,14 +444,18 @@ class Scenario:
                 if faction_profile is not None:
                     from backend.engine.ai.faction_ai import get_target_multiplier
 
-                    def _target_score(t):
-                        d = ((unit.position[0] - t.position[0]) ** 2 + (unit.position[1] - t.position[1]) ** 2) ** 0.5
+                    # Capture loop variables explicitly for closure
+                    _actor_unit = unit
+                    _profile = faction_profile
+
+                    def _target_score(t, u=_actor_unit, fp=_profile):
+                        d = ((u.position[0] - t.position[0]) ** 2 + (u.position[1] - t.position[1]) ** 2) ** 0.5
                         t_model = self._unit_models.get(t.unit_id)
                         t_mult = 1.0
                         if t_model:
                             t_kw = {kw.lower() for kw in (getattr(t_model, "keywords", []) or [])}
                             t_kw.add(getattr(t_model, "category", "infantry").lower())
-                            t_mult = get_target_multiplier(faction_profile, t_kw)
+                            t_mult = get_target_multiplier(fp, t_kw)
                         return d / max(t_mult, 0.01)  # lower = better
 
                     target = min(targets, key=_target_score)

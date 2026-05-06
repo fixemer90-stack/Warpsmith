@@ -248,9 +248,8 @@ def get_weights(
                 logger.warning("Behavior '%s' has negative weight overrides, skipping", b.id)
                 continue
             weights.update(b.effects.weights_override)
-            # Auto-mark as used so one-shot behaviors don't re-fire
-            if b.trigger.cooldown == 0:
-                mark_behavior_used(profile, b.id, turn)
+            # Auto-mark as used so one-shot/cooldown behaviors work correctly
+            mark_behavior_used(profile, b.id, turn)
 
     return weights
 

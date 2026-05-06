@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, feat/*, fix/*, feat/0.7.5-refactored-api]
+    branches: [master, feat/*, fix/*, 0.*]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 env:
   PYTHON_VERSION: "3.12"

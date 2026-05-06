@@ -8,6 +8,7 @@ F3.5 — Auto-play: AI vs AI Full Scenario.
 
 from __future__ import annotations
 
+import contextlib
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -350,13 +351,11 @@ def run_auto_game(
         # 6.5. Load faction AI profiles for target priority
         faction_ai_profiles: dict[str, object] = {}
         for roster, player_id in [(roster_a, "1"), (roster_b, "2")]:
-            try:
+            with contextlib.suppress(Exception):
                 profile = load_profile(roster.faction)
                 if profile:
                     faction_ai_profiles[player_id] = profile
                     faction_ai_profiles[roster.faction] = profile
-            except Exception:
-                pass
 
         # 7. Create Scenario and run game loop
         scenario = Scenario(
