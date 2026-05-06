@@ -169,7 +169,7 @@ class TestRosterCRUD:
         assert data["id"] != original_id
         assert data["name"] == "My Ork Horde (copy)"
         assert data["faction"] == "orks"
-        assert data["is_public"] == False  # Copies should be private
+        assert not data["is_public"]  # Copies should be private
 
     def test_post_duplicate_public_roster_becomes_private(self, client, auth_headers):
         """Duplicating a public roster creates private copy."""
@@ -183,7 +183,7 @@ class TestRosterCRUD:
         resp = client.post(f"/api/rosters/{original_id}/duplicate", headers=auth_headers)
         assert resp.status_code == 200
         data = resp.json()
-        assert data["is_public"] == False  # Should be private
+        assert not data["is_public"]  # Should be private
 
     def test_post_duplicate_roster_not_found(self, client, auth_headers):
         """Duplicate non-existent roster returns 404."""
