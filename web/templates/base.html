@@ -1,60 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        .card { @apply bg-gray-800 border border-gray-700 rounded-lg p-6; }
-        .btn { @apply bg-yellow-600 hover:bg-yellow-500 font-bold py-2 px-4 rounded transition; }
-        .input { @apply w-full bg-gray-700 border border-gray-600 rounded px-3 py-2; }
-        [x-cloak] { display: none !important; }
+        .card {
+            @apply bg-gray-800 border border-gray-700 rounded-lg p-6;
+        }
+
+        .btn {
+            @apply bg-yellow-600 hover:bg-yellow-500 font-bold py-2 px-4 rounded transition;
+        }
+
+        .input {
+            @apply w-full bg-gray-700 border border-gray-600 rounded px-3 py-2;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
 
         /* ── Progressive Disclosure ─────────────────────────── */
         /* Beginner: simplified view, hide complex stats */
-        .mode-beginner .stat-value { display: none; }
-        .mode-beginner .weapon-table { display: none; }
-        .mode-beginner .keyword-list { display: none; }
-        .mode-beginner .modifier-text { display: none; }
-        .mode-beginner .ability-rules { display: none; }
-        .mode-beginner .datasheet-detail { display: none; }
-        .mode-beginner .beginner-friendly { display: block; }
-        .mode-beginner .beginner-stats { display: flex; }
-        .mode-beginner .beginner-advice { display: block; }
+        .mode-beginner .stat-value {
+            display: none;
+        }
+
+        .mode-beginner .weapon-table {
+            display: none;
+        }
+
+        .mode-beginner .keyword-list {
+            display: none;
+        }
+
+        .mode-beginner .modifier-text {
+            display: none;
+        }
+
+        .mode-beginner .ability-rules {
+            display: none;
+        }
+
+        .mode-beginner .datasheet-detail {
+            display: none;
+        }
+
+        .mode-beginner .beginner-friendly {
+            display: block;
+        }
+
+        .mode-beginner .beginner-stats {
+            display: flex;
+        }
+
+        .mode-beginner .beginner-advice {
+            display: block;
+        }
 
         /* Intermediate (default): full datasheet, no expert details */
-        .mode-intermediate .expert-only { display: none; }
-        .mode-intermediate .beginner-friendly { display: none; }
-        .mode-intermediate .beginner-advice { display: none; }
-        .mode-intermediate .beginner-stats { display: none; }
-        .mode-intermediate .stat-value { display: flex; }
-        .mode-intermediate .weapon-table { display: table; }
-        .mode-intermediate .keyword-list { display: flex; }
-        .mode-intermediate .ability-rules { display: block; }
+        .mode-intermediate .expert-only {
+            display: none;
+        }
+
+        .mode-intermediate .beginner-friendly {
+            display: none;
+        }
+
+        .mode-intermediate .beginner-advice {
+            display: none;
+        }
+
+        .mode-intermediate .beginner-stats {
+            display: none;
+        }
+
+        .mode-intermediate .stat-value {
+            display: flex;
+        }
+
+        .mode-intermediate .weapon-table {
+            display: table;
+        }
+
+        .mode-intermediate .keyword-list {
+            display: flex;
+        }
+
+        .mode-intermediate .ability-rules {
+            display: block;
+        }
 
         /* Expert: show everything including modifiers */
-        .mode-expert .beginner-friendly { display: none; }
-        .mode-expert .beginner-advice { display: none; }
-        .mode-expert .beginner-stats { display: none; }
-        .mode-expert .expert-only { display: block; }
-        .mode-expert .stat-value { display: flex; }
-        .mode-expert .weapon-table { display: table; }
-        .mode-expert .keyword-list { display: flex; }
-        .mode-expert .ability-rules { display: block; }
-        .mode-expert .modifier-text { display: inline; }
+        .mode-expert .beginner-friendly {
+            display: none;
+        }
+
+        .mode-expert .beginner-advice {
+            display: none;
+        }
+
+        .mode-expert .beginner-stats {
+            display: none;
+        }
+
+        .mode-expert .expert-only {
+            display: block;
+        }
+
+        .mode-expert .stat-value {
+            display: flex;
+        }
+
+        .mode-expert .weapon-table {
+            display: table;
+        }
+
+        .mode-expert .keyword-list {
+            display: flex;
+        }
+
+        .mode-expert .ability-rules {
+            display: block;
+        }
+
+        .mode-expert .modifier-text {
+            display: inline;
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen"
-      x-data="{ user: null }"
-      x-init="fetch('/api/me').then(r => r.ok ? r.json().then(d => { user = d; user.features = d.features || {}; }) : null).catch(() => null)">
+
+<body class="bg-gray-900 text-gray-100 min-h-screen" x-data="{ user: null }"
+    x-init="fetch('/api/me').then(r => r.ok ? r.json().then(d => { user = d; user.features = d.features || {}; }) : null).catch(() => null)">
 
     <!-- Upgrade Banner — для Free -->
     <template x-if="user && !user.features?.ads_enabled === false">
-        <div class="bg-gradient-to-r from-yellow-900 to-yellow-700 px-6 py-3 text-center text-sm flex items-center justify-center gap-4">
+        <div
+            class="bg-gradient-to-r from-yellow-900 to-yellow-700 px-6 py-3 text-center text-sm flex items-center justify-center gap-4">
             <span>⚡ Upgrade to Premium — no ads, unlimited rosters, priority AI</span>
             <a href="/pricing" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-4 py-1 rounded text-sm">
                 🔥 Upgrade Now
@@ -76,30 +164,32 @@
     <nav class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex items-center gap-6">
         <a href="/" class="text-xl font-bold text-yellow-500">🔧 Warpsmith</a>
         <a href="/team-builder" class="hover:text-yellow-400">Team Builder</a>
-        <a href="/faction-browser" class="hover:text-yellow-400">Browser</a>
+        <a href="/my-rosters" class="hover:text-yellow-400">Rosters</a><a href="/my-rosters" class="flex items-center gap-2 text-gray-400 hover:text-white hover:bg-white/10 transition-colors duration-150 px-3 py-1.5 rounded-md text-sm font-medium
+          {% if request.path.startswith('/my-rosters') %}bg-white/10 text-white{% endif %}" {% if
+            request.path.startswith('/my-rosters') %}aria-current="page" {% endif %}>
+            <svg class="w-4 h-4"><!-- иконка --></svg>
+            Rosters
+        </a> <a href="/faction-browser" class="hover:text-yellow-400">Browser</a>
         <a href="/scenario-setup" class="hover:text-yellow-400">Scenario</a>
         <a href="/pricing" class="hover:text-yellow-400">Pricing</a>
 
         <!-- Progressive Disclosure Toggle -->
         <div x-data="progressiveDisclosure()" x-init="loadMode()"
-             class="flex items-center gap-0.5 bg-gray-900 rounded-lg p-0.5 border border-gray-700">
-            <button @click="setMode('beginner')"
-                    class="text-[10px] px-1.5 py-0.5 rounded transition-colors font-medium"
-                    :class="mode === 'beginner'
+            class="flex items-center gap-0.5 bg-gray-900 rounded-lg p-0.5 border border-gray-700">
+            <button @click="setMode('beginner')" class="text-[10px] px-1.5 py-0.5 rounded transition-colors font-medium"
+                :class="mode === 'beginner'
                         ? 'bg-blue-600 text-white'
                         : 'text-gray-500 hover:text-gray-200'">
                 B
             </button>
             <button @click="setMode('intermediate')"
-                    class="text-[10px] px-1.5 py-0.5 rounded transition-colors font-medium"
-                    :class="mode === 'intermediate'
+                class="text-[10px] px-1.5 py-0.5 rounded transition-colors font-medium" :class="mode === 'intermediate'
                         ? 'bg-blue-600 text-white'
                         : 'text-gray-500 hover:text-gray-200'">
                 I
             </button>
-            <button @click="setMode('expert')"
-                    class="text-[10px] px-1.5 py-0.5 rounded transition-colors font-medium"
-                    :class="mode === 'expert'
+            <button @click="setMode('expert')" class="text-[10px] px-1.5 py-0.5 rounded transition-colors font-medium"
+                :class="mode === 'expert'
                         ? 'bg-blue-600 text-white'
                         : 'text-gray-500 hover:text-gray-200'">
                 E
@@ -110,7 +200,7 @@
             <template x-if="user">
                 <div class="flex items-center gap-3">
                     <span class="text-sm text-yellow-400 border border-yellow-600 rounded px-2 py-0.5"
-                          x-text="user.tier === 'premium' ? '⭐ PREMIUM' : 'FREE'"></span>
+                        x-text="user.tier === 'premium' ? '⭐ PREMIUM' : 'FREE'"></span>
                     <span class="text-sm text-gray-300" x-text="user.display_name"></span>
                     <a href="/auth/logout" class="text-sm text-gray-400 hover:text-white">Logout</a>
                 </div>
@@ -138,4 +228,5 @@
         {% block content %}{% endblock %}
     </main>
 </body>
+
 </html>
