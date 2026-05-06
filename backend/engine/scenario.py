@@ -208,7 +208,7 @@ class Scenario:
                 if action == "advance":
                     d6 = random.randint(1, 6)
                     move_cells += d6
-                    self.state.game_log.append(f"{unit.name} Advances (M+{d6}={move_cells}\")")
+                    self.state.game_log.append(f'{unit.name} Advances (M+{d6}={move_cells}")')
 
                 self._move_toward(unit, target, move_cells, player.player_id)
 
@@ -279,9 +279,7 @@ class Scenario:
 
         if dist_to_target > move_stat:
             # Far: Advance (60%) or Normal Move (40%)
-            return random.choices(
-                ["advance", "normal_move"], weights=[60, 40], k=1
-            )[0]
+            return random.choices(["advance", "normal_move"], weights=[60, 40], k=1)[0]
         else:
             # Close: Normal Move (70%), Remain Stationary (20%), Advance (10%)
             return random.choices(
@@ -350,9 +348,7 @@ class Scenario:
                 # move_unit logs, but we add context
                 pass
             else:
-                self.state.game_log.append(
-                    f"{unit.name} could not move to ({best_x}, {best_y})"
-                )
+                self.state.game_log.append(f"{unit.name} could not move to ({best_x}, {best_y})")
         else:
             self.state.game_log.append(f"{unit.name} found no valid path toward {target}")
 
@@ -365,9 +361,7 @@ class Scenario:
 
         # Determine "safe" direction: toward own deployment zone (bottom or top)
         # Player IDs: "1"/"p1" = bottom, "2"/"p2" = top
-        own_zone_y = (
-            0 if own_player_id in ("1", "p1") else self.state.map_height - 1
-        )
+        own_zone_y = 0 if own_player_id in ("1", "p1") else self.state.map_height - 1
 
         target = (unit.position[0], own_zone_y)
 

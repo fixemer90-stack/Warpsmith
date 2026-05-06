@@ -23,6 +23,7 @@ Operation = Literal[
     "ignore_modifiers",
     "auto_hit",
     "auto_wound",
+    "blast_bonus",
 ]
 
 TargetStep = Literal[
@@ -107,14 +108,29 @@ TAG_TO_MODIFIERS: dict[str, list[Modifier]] = {
     "ignores_cover": [
         Modifier("save_roll", "ignore_cover", source="wargear"),
     ],
+    "lance": [
+        Modifier("wound_roll", "add", 1, source="wargear", condition={"has_charged": True}),
+    ],
+    "precision": [
+        Modifier("allocation", "precision", source="wargear"),
+    ],
     "blast": [
-        Modifier("attack_count", "add", 1, source="wargear", condition={"squad_size_min": 5}),
+        Modifier("attack_count", "blast_bonus", source="wargear"),
     ],
     "rapid_fire_1": [
         Modifier("attack_count", "add", 1, source="wargear", condition={"half_range": True}),
     ],
     "rapid_fire_2": [
         Modifier("attack_count", "add", 2, source="wargear", condition={"half_range": True}),
+    ],
+    "melta_1": [
+        Modifier("damage", "add", 1, source="wargear", condition={"half_range": True}),
+    ],
+    "melta_2": [
+        Modifier("damage", "add", 2, source="wargear", condition={"half_range": True}),
+    ],
+    "melta_3": [
+        Modifier("damage", "add", 3, source="wargear", condition={"half_range": True}),
     ],
 }
 
@@ -148,6 +164,9 @@ def apply_modifiers(
             total_delta -= int(modifier.value)
         elif modifier.operation == "sustained_hits":
             result.extra_rolls = max(result.extra_rolls, int(modifier.value))
+        elif modifier.operation == "blast_bonus":
+            blast_bonus = min(4, context.squad_size // 5)
+            total_delta += blast_bonus
         elif modifier.operation in {"lethal_hits", "auto_hit", "auto_wound"}:
             result.auto_success = True
         elif modifier.operation == "devastating_wounds":
@@ -189,6 +208,11 @@ def _check_condition(condition: dict[str, Any], context: ModifierContext) -> boo
 
     if condition.get("stationary") and not context.is_stationary:
         return False
+
+    if condition.get("has_charged"):
+        attacker_state = getattr(context.attacker, "unit_state", None)
+        if attacker_state is None or not getattr(attacker_state, "has_charged", False):
+            return False
 
     squad_size_min = condition.get("squad_size_min")
     return not (squad_size_min is not None and context.squad_size < squad_size_min)

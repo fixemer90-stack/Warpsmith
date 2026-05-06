@@ -53,10 +53,11 @@ class UnitState:
     has_fought: bool = False
     is_pinned: bool = False
     command_points: int = 0
-    is_engaged: bool = False  # Whether the unit is engaged with an enemy unit
-    is_fighting: bool = False  # Whether the unit has activated to fight in the current Fight phase
-    is_battle_shocked: bool = False  # Whether the unit is currently battle-shocked
-    has_advanced: bool = False  # Whether the unit Advanced/Fell Back (cannot shoot or charge)
+    is_engaged: bool = False
+    is_fighting: bool = False
+    is_battle_shocked: bool = False
+    has_advanced: bool = False
+    weapon_usage: dict[str, bool] = field(default_factory=dict)
 
     @property
     def is_above_half_strength(self) -> bool:
