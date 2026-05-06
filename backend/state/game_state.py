@@ -56,6 +56,7 @@ class UnitState:
     is_engaged: bool = False  # Whether the unit is engaged with an enemy unit
     is_fighting: bool = False  # Whether the unit has activated to fight in the current Fight phase
     is_battle_shocked: bool = False  # Whether the unit is currently battle-shocked
+    has_advanced: bool = False  # Whether the unit Advanced/Fell Back (cannot shoot or charge)
 
     @property
     def is_above_half_strength(self) -> bool:
@@ -258,6 +259,7 @@ class GameState:
             for player in self.players.values():
                 for unit in player.units.values():
                     unit.has_moved = False
+                    unit.has_advanced = False
                     unit.has_shot = False
                     unit.has_charged = False
                     unit.has_fought = False

@@ -171,6 +171,12 @@ def test_update_objective_control():
     game_state.players = {"p1": player1, "p2": player2}
 
     mission = Mission(config=_only_war(), state=game_state)
+    # Add objectives manually (now dynamic in create_mission, but test uses fixed positions)
+    mission.config.objectives = [
+        MissionObjective(2, 2, "Center"),
+        MissionObjective(1, 3, "Mid Left"),
+        MissionObjective(4, 3, "Mid Right"),
+    ]
 
     # Initially no objectives controlled
     mission.update_objective_control()
@@ -290,6 +296,12 @@ def test_progressive_scoring():
         config=_only_war(),  # Uses progressive scoring
         state=game_state,
     )
+    # Add objectives manually (now dynamic in create_mission, but test uses fixed positions)
+    mission.config.objectives = [
+        MissionObjective(2, 2, "Center"),
+        MissionObjective(1, 3, "Mid Left"),
+        MissionObjective(4, 3, "Mid Right"),
+    ]
 
     # Player 1 controls 2 objectives, Player 2 controls 1
     unit1 = UnitState(
@@ -452,6 +464,12 @@ def test_get_deployment_zones():
 
     # Test Dawn of War deployment
     mission = Mission(config=_only_war(), state=game_state)
+    # Add objectives manually (now dynamic in create_mission, but test uses fixed positions)
+    mission.config.objectives = [
+        MissionObjective(2, 2, "Center"),
+        MissionObjective(1, 3, "Mid Left"),
+        MissionObjective(4, 3, "Mid Right"),
+    ]
 
     zones = mission.get_deployment_zones()
     assert "p1" in zones

@@ -44,6 +44,11 @@ class GameSize(Enum):
         return _GAME_SIZE_LIMITS[self]
 
     @property
+    def map_size(self) -> tuple[int, int]:
+        """(height, width) in cells = table size in inches."""
+        return _GAME_SIZE_MAPS[self]
+
+    @property
     def label(self) -> str:
         return _GAME_SIZE_LABELS[self]
 
@@ -53,6 +58,14 @@ _GAME_SIZE_LIMITS: dict[GameSize, int] = {
     GameSize.INCURSION: 1000,
     GameSize.STRIKE_FORCE: 2000,
     GameSize.ONSLAUGHT: 3000,
+}
+
+# Standard 40k table sizes (height × width in inches → rows × cols in cells)
+_GAME_SIZE_MAPS: dict[GameSize, tuple[int, int]] = {
+    GameSize.COMBAT_PATROL: (30, 44),   # 500 pts → 44"×30"
+    GameSize.INCURSION: (44, 44),       # 1000 pts → 44"×44"
+    GameSize.STRIKE_FORCE: (44, 60),    # 2000 pts → 44"×60"
+    GameSize.ONSLAUGHT: (44, 90),       # 3000 pts → 44"×90"
 }
 
 _GAME_SIZE_LABELS: dict[GameSize, str] = {

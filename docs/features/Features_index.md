@@ -84,13 +84,14 @@
 | [F4.2](f4.2-unit-modal.md) | Unit modal: squad size, loadout, wargear selection | 6h | 1 | ✅ |
 | [F4.3](f4.3-detachment-picker.md) | Detachment picker with rule preview | 3h | 2 | ✅ |
 | [F4.4](f4.4-synergy-hints.md) | Synergy hints: leader compatibility, transport capacity | 4h | 2 | ✅ |
-| [F4.5](f4.5-canvas-map.md) | Canvas map: terrain tiles + deploy zones interactivity | 8h | 3 | ✅ |
+| [F4.5](f4.5-canvas-map.md) | ~~Canvas map~~ (deprecated → F4.10) | 8h | 3 | ❌ |
+| [F4.10](f4.10-leaflet-map.md) | Leaflet map: game format + mission visualization | 6h | 3 | ⚪ |
 | [F4.6](f4.6-progressive-disclosure.md) | Progressive Disclosure: Beginner/Intermediate/Expert | 4h | 4 | ✅ |
 | [F4.7](f4.7-stat-tooltips.md) | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h | 4 | ✅ |
 | [F4.8](f4.8-svg-icons.md) | SVG icons integration in unit cards | 2h | 5 | ✅ |
 | [F4.9](f4.9-generate-opponent.md) | Generate Random Opponent — `/api/rosters/generate` для AI-ростера | 2h | 3 | ✅ |
 
-**Всего:** 9 features, ~37 часов. ✅ 100%
+**Всего:** 10 features, ~43 часов. 🔧 89%
 
 ---
 
