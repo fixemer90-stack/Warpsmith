@@ -822,6 +822,7 @@ async def auto_play_simulation(
         # If no seed provided, generate a random one
         if seed is None:
             import random as _random
+
             seed = _random.randint(1, 99999)
 
         # Run auto-play simulation

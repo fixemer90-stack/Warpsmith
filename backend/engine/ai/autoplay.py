@@ -45,7 +45,7 @@ class AutoPlayConfig:
 
     max_rounds: int = 5
     deployment_type: DeploymentType = DeploymentType.STANDARD
-    seed: int = 42
+    seed: int | None = None  # None → random at runtime
     time_limit_seconds: int = 30
     use_sticky_objectives: bool = True
     enable_stratagems: bool = True
@@ -147,16 +147,10 @@ def _validate_rosters(roster_a: RosterState, roster_b: RosterState) -> list[str]
     return errors
 
 
-def _create_default_map(seed: int = 42, pts_limit: int = 2000) -> BattlefieldMap:
-    """Создать карту подходящего размера в зависимости от PTS лимита.
-
-    Standard 40k table sizes:
-      500 pts → 44"×30"  (30 × 44 cells)
-     1000 pts → 44"×44"  (44 × 44 cells)
-     2000 pts → 44"×60"  (44 × 60 cells)
-     3000 pts → 44"×90"  (44 × 90 cells)
-    """
-    np.random.seed(seed)
+def _create_default_map(seed: int | None = None, pts_limit: int = 2000) -> BattlefieldMap:
+    """Создать карту подходящего размера в зависимости от PTS лимита."""
+    if seed is not None:
+        np.random.seed(seed)
 
     # Determine map size by PTS limit
     if pts_limit <= 500:
@@ -296,6 +290,11 @@ def run_auto_game(
     start = time.time()
     config = config or AutoPlayConfig()
 
+    # Generate seed if not provided (logged for reproducibility)
+    actual_seed = (
+        config.seed if config.seed is not None else np.random.default_rng().integers(1, 99999)
+    )
+
     # 1. Validate
     errors = _validate_rosters(roster_a, roster_b)
     if errors:
@@ -312,7 +311,7 @@ def run_auto_game(
             getattr(roster_a, "total_pts", 2000),
             getattr(roster_b, "total_pts", 2000),
         )
-        game_map = _create_default_map(seed=config.seed, pts_limit=pts_limit)
+        game_map = _create_default_map(seed=actual_seed, pts_limit=pts_limit)
 
         # 3. Convert rosters to PlayerState
         player_a = _roster_to_player_state(roster_a, "1", config)
@@ -320,7 +319,7 @@ def run_auto_game(
 
         # 4. Create GameState — __post_init__ auto-creates Mission from mission_name
         state = GameState(
-            game_id=f"auto_{config.seed}",
+            game_id=f"auto_{actual_seed}",
             mission_name=mission_name,
             map_width=game_map.width,
             map_height=game_map.height,

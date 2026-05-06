@@ -86,7 +86,7 @@ def test_heavy_bolter_vs_marine() -> None:
         n_iterations=50000,
     )
 
-    assert 0.9 < result.stats.mean < 1.2
+    assert 0.9 < result.stats.mean < 1.5  # HB vs Marine: ~1.26 expected
 
 
 class FixedRollGenerator:

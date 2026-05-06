@@ -438,7 +438,16 @@ class Scenario:
                 attacker_model = self._unit_models.get(unit.unit_id)
                 defender_model = self._unit_models.get(target.unit_id)
                 if attacker_model and defender_model and attacker_model.ranged_weapons:
-                    from backend.engine.combat import simulate_unit_attack
+                    from backend.engine.combat import _has_cover, simulate_unit_attack
+
+                    # Determine cover
+                    terrain = self.state.terrain_map if hasattr(self.state, "terrain_map") else None
+                    target_cat = getattr(defender_model, "category", "infantry")
+                    has_cover = (
+                        _has_cover(unit.position, target.position, terrain, target_cat)
+                        if terrain is not None
+                        else False
+                    )
 
                     result = simulate_unit_attack(
                         attacker=attacker_model,
@@ -446,6 +455,8 @@ class Scenario:
                         n_iterations=1000,
                         squad_size=unit.models_remaining,
                         distance=int(dist),
+                        has_cover=has_cover,
+                        ignores_cover=False,
                     )
                     damage = int(result.total_stats.mean)
                     self.state.game_log.append(

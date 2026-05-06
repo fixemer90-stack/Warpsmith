@@ -186,7 +186,11 @@ def _resolve_wound_chain(
     wound_critical = handle_critical_hit(wound_result, "wound_roll", modifiers, context)
     ignore_save = wound_modifiers.ignore_save or wound_critical.ignore_save
     if not ignore_save:
+        # Save with Cover: +1 SV if has_cover and not ignores_cover
         save_target = defender.best_save(weapon.ap)
+        if context.has_cover and not context.ignores_cover:
+            save_target = max(2, save_target - 1)  # +1 save = lower target (SV3+ → SV2+)
+        save_target = max(1, min(6, save_target - weapon.ap))
         save_modifiers = apply_modifiers("save_roll", save_target, modifiers, context, rng)
         save_result = _roll_with_modifiers(rng, save_modifiers, modifiers, "save_roll")
         if save_result.success:
@@ -254,10 +258,12 @@ def _expected_steps(
     distance: int | None,
     is_stationary: bool,
     squad_size: int,
+    has_cover: bool = False,
+    ignores_cover: bool = False,
 ) -> tuple[float, float, float]:
     """Calculate expected values for hits, wounds, and unsaved wounds."""
     context = _build_modifier_context(
-        attacker, defender, weapon, distance, is_stationary, squad_size
+        attacker, defender, weapon, distance, is_stationary, squad_size, has_cover, ignores_cover
     )
 
     # Expected hits (simplified)
@@ -272,10 +278,9 @@ def _expected_steps(
     wound_prob = max(0, min(1, (7 - wound_target) / 6))
     avg_wounds = avg_hits * wound_prob
 
-    # Expected unsaved wounds
+    # Expected unsaved wounds — with Cover
     save_target = defender.best_save(weapon.ap)
-    apply_modifiers("save_roll", save_target, modifiers, context, None)
-    save_prob = max(0, min(1, (7 - save_target) / 6))
+    save_prob = compute_save(save_target, has_cover, ignores_cover)
     avg_unsaved = avg_wounds * (1 - save_prob)
 
     return avg_hits, avg_wounds, avg_unsaved
@@ -410,6 +415,8 @@ def simulate_unit_attack(
     n_iterations: int = 10000,
     distance: int | None = None,
     is_stationary: bool = False,
+    has_cover: bool = False,
+    ignores_cover: bool = False,
 ) -> MultiAttackResult:
     """Simulate attack from a unit with multiple weapons against a defender."""
     if pool is None:
@@ -457,6 +464,8 @@ def simulate_unit_attack(
             distance=distance,
             is_stationary=is_stationary,
             squad_size=squad_size,
+            has_cover=has_cover,
+            ignores_cover=ignores_cover,
         )
         weapon_results.append(weapon_result)
         total_damage_per_iter += weapon_result.damage_per_iter
@@ -536,9 +545,6 @@ def simulate_squad_attack(
 # ── Cover & Terrain Functions ─────────────────────────────────────────────────
 
 
-from backend.state.game_state import TerrainType
-
-
 def _bresenham_line(x0: int, y0: int, x1: int, y1: int) -> list[tuple[int, int]]:
     """All cells on the line between two points using Bresenham's algorithm."""
     cells = []
@@ -601,21 +607,21 @@ def _has_cover(
 
 
 def compute_save(
-    sv: int,
-    ap: int,
+    effective_sv: int,  # already adjusted for AP (from best_save)
     has_cover: bool,
     ignores_cover: bool,
 ) -> float:
     """Probability of successful save roll with Cover and Ignores Cover.
 
-    Cover: +1 SV (improves save by 1)
+    effective_sv is the post-AP save value (e.g., SV3+ with AP-1 = SV4+).
+    Cover: +1 SV (improves save by 1, e.g., SV4+ → SV3+)
     Ignores Cover: cancels Cover benefit
     """
     if has_cover and not ignores_cover:
-        sv = max(2, sv - 1)  # +1 save = -1 to required roll (SV3+ → SV2+)
+        effective_sv = max(2, effective_sv - 1)  # +1 save = lower target
 
-    effective_save = max(1, min(6, sv - ap))
-    return (7 - effective_save) / 6
+    effective = max(1, min(6, effective_sv))
+    return (7 - effective) / 6
 
 
 def apply_indirect_fire(
