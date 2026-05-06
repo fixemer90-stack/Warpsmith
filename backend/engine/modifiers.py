@@ -53,6 +53,8 @@ class ModifierContext:
     distance: int | None = None
     is_stationary: bool = False
     squad_size: int = 1
+    has_cover: bool = False
+    ignores_cover: bool = False
 
 
 @dataclass

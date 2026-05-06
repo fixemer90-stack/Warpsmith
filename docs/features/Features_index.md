@@ -23,9 +23,9 @@
 | [F1.10](f1.10-pmf-chart.md) | PMF Chart — Chart.js распределение урона | 4h | 5 |
 | [F1.11](f1.11-round-viewer-stub.md) | Round Viewer Stub — форма + JSON | 2h | 5 |
 | [F1.12](f1.12-multiattack.md) | MultiAttack — несколько оружий + отряды | 3h | 5 |
-| [F1.13](f1.13-weapon-keywords-phase2.md) | Weapon Keywords Phase 2 — Blast, Heavy, Torrent, Melta, Rapid Fire, Lance, Pistol, Precision, One Shot | 6h | 2 | ⏳ |
+| [F1.13](f1.13-weapon-keywords-phase2.md) | Weapon Keywords Phase 2 — Blast, Heavy, Torrent, Melta, Rapid Fire, Lance, Pistol, Precision, One Shot | 6h | 2 | ✅ |
 
-**Всего:** 13 features, ~36 часов. 🔧 92%
+**Всего:** 13 features, ~36 часов. ✅ 100%
 
 ---
 
@@ -47,7 +47,7 @@
 | [F2.10](f2.10-roster-crud.md) | Roster CRUD — SQLite save/load/delete | 2h | 4 |
 | [F2.11](f2.11-team-builder-ui.md) | Team Builder UI — Alpine.js, PTS bar | 8h | 5 |
 | [F2.12](f2.12-leader-compatibility.md) | Leader Compatibility Checker | 3h | 5 |
-| [F2.13](f2.13-cover-terrain.md) | Cover & Terrain Effects — +1 SV, Ignores Cover, Indirect Fire | 4h | 2 | ⏳ |
+| [F2.13](f2.13-cover-terrain.md) | Cover & Terrain Effects — +1 SV, Ignores Cover, Indirect Fire | 4h | 2 | ✅ |
 | [F2.14](f2.14-deep-strike.md) | Deep Strike & Reserves — deploy from off-map, >9" rule | 3h | 3 | ⏳ |
 | [F2.15](f2.15-shooting-refinements.md) | Shooting Refinements — BGNT, Look Out Sir, Pistol in engagement | 3h | 3 | ⏳ |
 

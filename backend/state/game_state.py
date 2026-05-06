@@ -19,6 +19,10 @@ class TerrainType(Enum):
     DIFFICULT_TERRAIN = "difficult_terrain"
     DANGEROUS_TERRAIN = "dangerous_terrain"
     IMPASSABLE = "impassable"
+    RUINS = "ruins"
+    WOODS = "woods"
+    CRATER = "crater"
+    BARRICADE = "barricade"
 
 
 class GamePhase(Enum):

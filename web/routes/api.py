@@ -725,7 +725,7 @@ async def auto_play_simulation(
     mission: str = "only_war",
     deployment: str = "standard",
     max_rounds: int = 5,
-    seed: int = 42,
+    seed: int | None = None,
 ):
     """Запуск полной AI vs AI симуляции."""
 
@@ -818,6 +818,11 @@ async def auto_play_simulation(
             raise HTTPException(
                 status_code=400, detail=f"Unknown deployment type: {deployment}"
             ) from None
+
+        # If no seed provided, generate a random one
+        if seed is None:
+            import random as _random
+            seed = _random.randint(1, 99999)
 
         # Run auto-play simulation
         config = AutoPlayConfig(max_rounds=max_rounds, deployment_type=deployment_type, seed=seed)

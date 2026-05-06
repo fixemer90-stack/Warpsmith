@@ -19,6 +19,7 @@ from backend.engine.modifiers import (
     should_reroll,
 )
 from backend.model.unit import Unit, Weapon, resolve_dice
+from backend.state.game_state import TerrainType
 
 
 @dataclass
@@ -66,6 +67,8 @@ def _single_attack_sequence(
     distance: int | None,
     is_stationary: bool,
     squad_size: int,
+    has_cover: bool = False,
+    ignores_cover: bool = False,
 ) -> int:
     """Simulate a single weapon attack and return damage dealt."""
     context = _build_modifier_context(
@@ -75,6 +78,8 @@ def _single_attack_sequence(
         distance=distance,
         is_stationary=is_stationary,
         squad_size=squad_size,
+        has_cover=has_cover,
+        ignores_cover=ignores_cover,
     )
 
     # Resolve number of attacks
@@ -283,6 +288,8 @@ def _build_modifier_context(
     distance: int | None,
     is_stationary: bool,
     squad_size: int,
+    has_cover: bool = False,
+    ignores_cover: bool = False,
 ) -> ModifierContext:
     """Build modifier context for this attack."""
     return ModifierContext(
@@ -292,6 +299,8 @@ def _build_modifier_context(
         distance=distance,
         is_stationary=is_stationary,
         squad_size=squad_size,
+        has_cover=has_cover,
+        ignores_cover=ignores_cover,
     )
 
 
@@ -322,10 +331,12 @@ def simulate_weapon_attack(
     distance: int | None = None,
     is_stationary: bool = False,
     squad_size: int = 1,
+    has_cover: bool = False,
+    ignores_cover: bool = False,
 ) -> CombatResult:
     """Run a Monte Carlo simulation for weapon against defender."""
     if pool is None:
-        pool = DicePool(seed=42)
+        pool = DicePool()  # random seed per call
 
     all_modifiers = list(modifiers or []) + build_weapon_modifiers(weapon)
     start = time.monotonic()
@@ -339,6 +350,8 @@ def simulate_weapon_attack(
             distance=distance,
             is_stationary=is_stationary,
             squad_size=squad_size,
+            has_cover=has_cover,
+            ignores_cover=ignores_cover,
         ),
         n=n_iterations,
     )
@@ -352,6 +365,8 @@ def simulate_weapon_attack(
         distance=distance,
         is_stationary=is_stationary,
         squad_size=squad_size,
+        has_cover=has_cover,
+        ignores_cover=ignores_cover,
     )
     avg_attacks = _resolve_attacks(
         weapon=weapon,
@@ -364,6 +379,8 @@ def simulate_weapon_attack(
             distance=distance,
             is_stationary=is_stationary,
             squad_size=squad_size,
+            has_cover=has_cover,
+            ignores_cover=ignores_cover,
         ),
         rng=None,
     )
@@ -396,7 +413,7 @@ def simulate_unit_attack(
 ) -> MultiAttackResult:
     """Simulate attack from a unit with multiple weapons against a defender."""
     if pool is None:
-        pool = DicePool(seed=42)
+        pool = DicePool()  # random seed per call
 
     start = time.monotonic()
 
@@ -472,7 +489,7 @@ def simulate_squad_attack(
 ) -> MultiAttackResult:
     """Simulate attack from multiple units (squad) against a defender."""
     if pool is None:
-        pool = DicePool(seed=42)
+        pool = DicePool()  # random seed per call
 
     start = time.monotonic()
 
@@ -514,3 +531,110 @@ def simulate_squad_attack(
         defender_name=defender.name,
         simulation_time_ms=(end - start) * 1000,
     )
+
+
+# ── Cover & Terrain Functions ─────────────────────────────────────────────────
+
+
+from backend.state.game_state import TerrainType
+
+
+def _bresenham_line(x0: int, y0: int, x1: int, y1: int) -> list[tuple[int, int]]:
+    """All cells on the line between two points using Bresenham's algorithm."""
+    cells = []
+    dx = abs(x1 - x0)
+    dy = abs(y1 - y0)
+    sx = 1 if x0 < x1 else -1
+    sy = 1 if y0 < y1 else -1
+    err = dx - dy
+
+    while True:
+        cells.append((x0, y0))
+        if x0 == x1 and y0 == y1:
+            break
+        e2 = 2 * err
+        if e2 > -dy:
+            err -= dy
+            x0 += sx
+        if e2 < dx:
+            err += dx
+            y0 += sy
+    return cells
+
+
+def _has_cover(
+    target_pos: tuple[int, int],
+    shooter_pos: tuple[int, int],
+    terrain_map: np.ndarray | None,
+    target_category: str,
+) -> bool:
+    """Check if target has Benefit of Cover.
+
+    Cover is granted if:
+    1. Target is INFANTRY and terrain exists between shooter and target
+    2. Target is in terrain that grants cover to all (woods)
+    3. Target is within 1" of barricade
+    """
+    if terrain_map is None:
+        return False
+
+    tx, ty = target_pos
+    sx, sy = shooter_pos
+
+    # Check: target is ON woods terrain (cover for all)
+    target_tile = terrain_map[ty, tx]
+    if target_tile in (TerrainType.WOODS, TerrainType.RUINS):
+        return True
+
+    # INFANTRY gets cover from ruins/woods/barricade on line of fire
+    if target_category.lower() not in ("infantry", "character", "epic hero"):
+        return False
+
+    # Check: is there terrain between shooter and target (Bresenham)
+    cells_between = _bresenham_line(sx, sy, tx, ty)
+    for cx, cy in cells_between[1:-1]:  # exclude start/end
+        tile = terrain_map[cy, cx]
+        if tile in (TerrainType.RUINS, TerrainType.WOODS, TerrainType.BARRICADE):
+            return True
+
+    return False
+
+
+def compute_save(
+    sv: int,
+    ap: int,
+    has_cover: bool,
+    ignores_cover: bool,
+) -> float:
+    """Probability of successful save roll with Cover and Ignores Cover.
+
+    Cover: +1 SV (improves save by 1)
+    Ignores Cover: cancels Cover benefit
+    """
+    if has_cover and not ignores_cover:
+        sv = max(2, sv - 1)  # +1 save = -1 to required roll (SV3+ → SV2+)
+
+    effective_save = max(1, min(6, sv - ap))
+    return (7 - effective_save) / 6
+
+
+def apply_indirect_fire(
+    hit_prob: float,
+    has_los: bool,
+    target_has_cover: bool,
+) -> float:
+    """Apply Indirect Fire modifier.
+
+    Indirect Fire: -1 to hit without LoS, additional -1 if target has Cover.
+    """
+    if has_los:
+        return hit_prob  # direct fire - no penalty
+
+    # Without LoS: -1 to hit
+    hit_prob = max(1 / 6, hit_prob - 1 / 6)
+
+    # If target also in Cover: additional -1 (within cap)
+    if target_has_cover:
+        hit_prob = max(1 / 6, hit_prob - 1 / 6)
+
+    return hit_prob
