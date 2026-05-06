@@ -10,7 +10,7 @@
 ## ✅ Phase 0: Foundation
 
 ```
-[██████████████████░░] 87% · 15 features (13 done, 2 pending)
+[████████████████████] 100% · 12 features
 ```
 
 ### Features
@@ -35,7 +35,7 @@
 ## ✅ Phase 1: Combat Engine
 
 ```
-[██████████████████░░] 87% · 15 features (13 done, 2 pending)
+[████████████████████] 100% · 13 features
 ```
 
 **Цель:** `curl /api/simulate` → JSON с распределением урона.
@@ -54,13 +54,14 @@
 | 1.10 | ✅ | PMF chart — damage distribution graph (Chart.js) | 4h |
 | 1.11 | ✅ | Round Viewer stub — отображение JSON результата | 2h |
 | 1.12 | ✅ | MultiAttack — несколько оружий + отряды | 3h |
+| 1.13 | ✅ | Weapon Keywords Phase 2: Blast, Heavy, Torrent, Melta, Rapid Fire, Lance, Pistol, Precision, One Shot (13 тестов) | 4h |
 
 ---
 
 ## 🔧 Phase 2: Game System
 
 ```
-[██████████████████░░] 87% · 15 features (13 done, 2 pending)
+[████████████████████] 100% · 13 features
 ```
 
 **Цель:** Полный Game Loop с картой, миссиями, ростерами.
@@ -79,6 +80,7 @@
 | 2.10 | ✅ | Roster CRUD: SQLite save/load/delete via /api/rosters | 2h |
 | 2.11 | ✅ | Team Builder UI: faction picker, unit modal, PTS bar | 8h |
 | 2.12 | ✅ | Synergy hints: leader compatibility, transport capacity | 3h |
+| 2.13 | ✅ | Cover & Terrain Effects: +1SV cover, Ignores Cover, Indirect Fire -1 to hit, Bresenham LoS | 4h |
 
 
 ---
@@ -86,7 +88,7 @@
 ## 🔧 Phase 3: AI & Automation
 
 ```
-[██████████████░░░░░░] 67% · 9 features (6 done, 3 pending)
+[█████████████░░░░░░░] 67% · 9 features (6 done, 1 in-progress, 2 pending)
 ```
 
 **Цель:** AI принимает решения за обе стороны, прогоняет deploy → N раундов → результат → replay.
@@ -95,20 +97,19 @@
 |---|--------|------|------|
 | 3.1 | ✅ | Greedy decision engine — target/action evaluation (26 тестов) | 6h |
 | 3.2 | ✅ | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h |
-| 3.3 | 🔧 | Deployment AI: zone placement logic | 3h |
+| 3.3 | 🔧 | Deployment AI: zone placement logic (faction_ai не интегрирован) | 3h |
 | 3.4 | ✅ | Auto-play: AI vs AI full scenario (VP > 0, objectives задействованы) | 6h |
-| 3.5 | 🔧 | Replay recording: JSON event log per round/phase | 3h |
-| 3.6 | ⏳ | Round viewer: step-by-step replay UI | 6h |
-| 3.7 | ⏳ | Result screen: kills, damage, VP timeline chart | 3h |
+| 3.5 | ✅ | Replay recording: JSON event log per round/phase (ReplayRecorder в autoplay, 22 теста) | 3h |
+| 3.6 | ✅ | Round viewer: step-by-step replay UI (round_viewer.html + replay_viewer.js, 6 тестов) | 6h |
+| 3.7 | ✅ | Result screen: kills, damage, VP timeline chart (result.html + result_chart.js, 6 тестов) | 3h |
+| 3.10 | ⚪ | Waaagh! — Orks Army Rule: +1" Move, 5+ FNP, +1S melee (spec: f3.10-waaagh.md) | 3h |
+| 3.11 | ⚪ | For The Greater Good + Markerlight — Tau Army Rule: Spotter/Guided, +1 BS, Sustained Hits (spec: f3.11-ftgg-markerlight.md) | 4h |
 
 ### 🔧 Phase 3 — Что доделать
 
-| # | Задача | Где | Суть |
-|---|--------|-----|------|
+| #   | Задача                         | Где             | Суть                                                                                                                             |
+| --- | ------------------------------ | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | 3.3 | Подключить faction_ai к деплою | `deployment.py` | `deploy_game()` не учитывает FactionAIProfile. Импортировать `load_profile()`, применять faction-specific logic при расстановке. |
-| 3.5 | Вызывать ReplayRecorder из autoplay | `autoplay.py` | `ReplayRecorder` написан в `replay.py` но не создаётся и не вызывается. Интегрировать в `run_auto_game()`. |
-| 3.6 | Round viewer | `round_viewer.html` + `replay_viewer.js` | Пошаговый просмотр реплея: навигация раунд/фаза/событие, Canvas-визуализация. |
-| 3.7 | Result screen | `result.html` + `result_chart.js` | Сводка боя: победитель, VP, kills, VP-timeline Chart.js график. |
 
 **Deprecated (заменены F3.2):** Ork AI, T'au AI, AdMech AI.
 
@@ -117,10 +118,10 @@
 ## ✅ Phase 4: Web UI Polish
 
 ```
-[████████████████████] 100% · 9 features
+[████████████████████] 100% · 10 features
 ```
 
-**Цель:** Полноценное веб-приложение, готовое к пользователям. ✅ Верифицировано: 102 теста (17 новых), POST вместо GET, все 9 фич рабочие.
+**Цель:** Полноценное веб-приложение, готовое к пользователям. ✅ Верифицировано: все фичи рабочие.
 
 | # | Статус | Фича | Часы |
 |---|--------|------|------|
@@ -133,33 +134,34 @@
 | 4.7 | ✅ | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h |
 | 4.8 | ✅ | SVG icons integration in unit cards | 2h |
 | 4.9 | ✅ | Generate Random Opponent | 2h |
+| 4.11 | ✅ | Movement Phase (10ed): Normal Move / Advance / Fall Back / Remain Stationary, AI objective distribution | 4h |
 
 ---
 
 ## ☁️ Phase 5: Production
 
 ```
-[██████████████████░░] 100% · 7/7 features
+[████████████████████] 100% · 7/7 features
 ```
 
 **Цель:** Приложение на сервере, HTTPS, мониторинг. ✅ Все 7 фич реализованы: Docker, Railway deploy, rate limiting (slowapi), CORS hardening + CSP, structlog/Sentry логирование, CI/CD GitHub Actions, SQLite backup.
 
 | # | Статус | Фича | Часы |
 |---|--------|------|------|
-|| 5.1 | ✅ | Dockerfile + multi-stage build | 3h |
-|| 5.2 | ✅ | Railway deployment + wiki monorepo | 4h |
-|| 5.3 | ✅ | Rate limiting (slowapi) — 30 req/min anon, health exempt, Retry-After заголовки
-|| 5.4 | ✅ | CORS hardening + CSP security headers — production-aware, 6 security заголовков
-|| 5.5 | ✅ | Logging (structlog) + Sentry error tracking | 2h |
-|| 5.6 | ✅ | CI/CD: GitHub Actions (lint + test + deploy) | 4h |
-|| 5.7 | ✅ | SQLite backup strategy + restore script | 1h |
+| 5.1 | ✅ | Dockerfile + single-stage build | 3h |
+| 5.2 | ✅ | Railway deployment + wiki monorepo | 4h |
+| 5.3 | ✅ | Rate limiting (slowapi) — 30 req/min anon, health exempt, Retry-After заголовки | 2h |
+| 5.4 | ✅ | CORS hardening + CSP security headers — production-aware, 6 security заголовков | 2h |
+| 5.5 | ✅ | Logging (structlog) + Sentry error tracking | 2h |
+| 5.6 | ✅ | CI/CD: GitHub Actions (lint + test + deploy) | 4h |
+| 5.7 | ✅ | SQLite backup strategy + restore script | 1h |
 
 ---
 
 ## 💰 Phase 6: Monetization
 
 ```
-[░░░░░░░░░░░░░░░░░░] 0% · 7 features
+[░░░░░░░░░░░░░░░░░░░░] 0% · 7 features
 ```
 
 | # | Статус | Фича | Часы |
@@ -177,7 +179,7 @@
 ## 🚀 Phase 7: Expansion
 
 ```
-[░░░░░░░░░░░░░░░░░░] 0% · 10 features
+[░░░░░░░░░░░░░░░░░░░░] 0% · 10 features
 ```
 
 | #    | Статус | Фича                                             | Часы |
@@ -200,11 +202,11 @@
 | Фаза                   | Features | Часы      | Статус |
 | ---------------------- | -------- | --------- | ------ |
 | **0. Foundation**      | 12       | ~40ч      | ✅ 100% |
-| **1. Combat Engine**   | 13       | ~66ч      | ✅ 100% |
-| **2. Game System**     | 15       | ~58ч      | 🔧 87%  |
-| **3. AI & Automation** | 9        | ~42ч      | 🔧 67%  |
-| **4. Web UI Polish**   | 9        | ~37ч      | ✅ 100% |
+| **1. Combat Engine**   | 13       | ~70ч      | ✅ 100% |
+| **2. Game System**     | 13       | ~62ч      | ✅ 100% |
+| **3. AI & Automation** | 9        | ~46ч      | 🔧 67%  |
+| **4. Web UI Polish**   | 10       | ~41ч      | ✅ 100% |
 | **5. Production**      | 7        | ~15ч      | ✅ 100% |
-| **6. Monetization**    | 6        | ~15ч      | ⏳ 0%   |
+| **6. Monetization**    | 7        | ~15ч      | ⏳ 0%   |
 | **7. Expansion**       | 10       | ~40ч      | ⏳ 0%   |
-| **Итого**              | **~81**  | **~303ч** |        |
+| **Итого**              | **~81**  | **~329ч** |        |

@@ -718,6 +718,129 @@ async def health():
     return {"status": "ok", "version": "0.3.0"}
 
 
+def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
+    """Parse game_log text entries into structured ReplayEvent dicts.
+
+    Converts plain-text log lines (e.g. "X hits Y for N damage") into
+    ReplayEvent objects so the round-viewer and result screen have data.
+    """
+    import re
+    from backend.engine.replay import ReplayEvent
+
+    events: list = []
+
+    PATTERNS = [
+        # "X shoots Y — expected N dmg"
+        (r"^(.+?)\s+shoots\s+(.+?)\s+[-—]\s+expected\s+([\d.]+)\s+dmg$",
+         lambda m, r: ReplayEvent(round=r, phase="shooting", turn=0,
+             event_type="shoot", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             target_id=m.group(2).strip(), target_name=m.group(2).strip(),
+             result_value=float(m.group(3)))),
+        # "X hits Y for N damage"
+        (r"^(.+?)\s+hits\s+(.+?)\s+for\s+([\d.]+)\s+damage$",
+         lambda m, r: ReplayEvent(round=r, phase="shooting", turn=0,
+             event_type="shoot", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             target_id=m.group(2).strip(), target_name=m.group(2).strip(),
+             result_value=float(m.group(3)))),
+        # 'X charges Y (rolled N ≥ D") – engaged!'
+        (r"^(.+?)\s+charges\s+(.+?)\s+\(rolled\s+(\d+)\s+[≥>=]\s+[\d.]+",
+         lambda m, r: ReplayEvent(round=r, phase="charge", turn=0,
+             event_type="charge", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             target_id=m.group(2).strip(), target_name=m.group(2).strip(),
+             result_value=1.0, dice_rolled=[int(m.group(3))], detail="success")),
+        # 'X fails charge (rolled N < D")'
+        (r"^(.+?)\s+fails\s+charge\s+\(rolled\s+(\d+)\s+<",
+         lambda m, r: ReplayEvent(round=r, phase="charge", turn=0,
+             event_type="charge", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             result_value=0.0, dice_rolled=[int(m.group(2))], detail="failed")),
+        # 'X Advances (M+N=D")'
+        (r'^(.+?)\s+Advances\s+\(M\+(\d+)=(\d+)"',
+         lambda m, r: ReplayEvent(round=r, phase="movement", turn=0,
+             event_type="move", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             detail=f"Advance M+{m.group(2)}={m.group(3)}\"")),
+        # "X remains stationary"
+        (r"^(.+?)\s+remains\s+stationary$",
+         lambda m, r: ReplayEvent(round=r, phase="movement", turn=0,
+             event_type="move", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             detail="Remain Stationary")),
+        # "X falls back"
+        (r"^(.+?)\s+falls\s+back$",
+         lambda m, r: ReplayEvent(round=r, phase="movement", turn=0,
+             event_type="move", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             detail="Fall Back")),
+        # "X is already at target Y"
+        (r"^(.+?)\s+is\s+already\s+at\s+target\s+(.+)$",
+         lambda m, r: ReplayEvent(round=r, phase="movement", turn=0,
+             event_type="move", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             target_id=m.group(2).strip(), target_name=m.group(2).strip(),
+             detail="Already at target")),
+        # "X fought in melee"
+        (r"^(.+?)\s+fought\s+in\s+melee$",
+         lambda m, r: ReplayEvent(round=r, phase="fight", turn=0,
+             event_type="fight", actor_id=m.group(1).strip(), actor_name=m.group(1).strip())),
+        # "X moved to (a, b)"
+        (r"^(.+?)\s+moved\s+to\s+\((\d+),\s*(\d+)\)",
+         lambda m, r: ReplayEvent(round=r, phase="movement", turn=0,
+             event_type="move", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             position_after={"x": int(m.group(2)), "y": int(m.group(3))})),
+        # "X took N damage"
+        (r"^(.+?)\s+took\s+([\d.]+)\s+damage$",
+         lambda m, r: ReplayEvent(round=r, phase="", turn=0,
+             event_type="damage", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             result_value=float(m.group(2)))),
+        # "PlayerName gained N VP"
+        (r"^(.+?)\s+gained\s+([\d.]+)\s+VP$",
+         lambda m, r: ReplayEvent(round=r, phase="command", turn=0,
+             event_type="vp", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             result_value=float(m.group(2)))),
+        # "X found no valid path toward Y"
+        (r"^(.+?)\s+found\s+no\s+valid\s+path\s+toward\s+(.+)$",
+         lambda m, r: ReplayEvent(round=r, phase="movement", turn=0,
+             event_type="move", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             target_id=m.group(2).strip(), target_name=m.group(2).strip(),
+             detail="No valid path")),
+        # "X could not move to (a, b)"
+        (r"^(.+?)\s+could\s+not\s+move\s+to\s+\((\d+),\s*(\d+)\)",
+         lambda m, r: ReplayEvent(round=r, phase="movement", turn=0,
+             event_type="move", actor_id=m.group(1).strip(), actor_name=m.group(1).strip(),
+             detail=f"Could not move to ({m.group(2)}, {m.group(3)})")),
+        # Phase banner: "Movement phase: units may move", "Shooting phase: ..."
+        (r"^([A-Z][a-z]+)\s+phase:\s*",
+         lambda m, r: ReplayEvent(round=r, phase=m.group(1).lower(), turn=0,
+             event_type="phase", actor_id="", actor_name="", detail=m.group(1))),
+        # "Phase: command" etc
+        (r"^Phase:\s*(.+)$",
+         lambda m, r: ReplayEvent(round=r, phase=m.group(1).strip().lower(), turn=0,
+             event_type="phase", actor_id="", actor_name="", detail=m.group(1).strip())),
+        # "Starting round N"
+        (r"^Starting\s+round\s+\d+$",
+         lambda m, r: ReplayEvent(round=r, phase="", turn=0,
+             event_type="round_start", actor_id="", actor_name="", detail=m.group(0))),
+        # Generic fallback — any non-empty line becomes an "info" event
+        (r"^(.+)$",
+         lambda m, r: ReplayEvent(round=r, phase="", turn=0,
+             event_type="info", actor_id="", actor_name="", detail=m.group(1)[:200])),
+    ]
+
+    for log_line in phase_logs:
+        if not isinstance(log_line, str) or not log_line.strip():
+            continue
+        line = log_line.strip()
+        # Strip trailing quotes/em-dashes
+        line = re.sub(r'[\"\'—–]+$', '', line).strip()
+
+        for pattern, factory in PATTERNS:
+            m = re.match(pattern, line)
+            if m:
+                try:
+                    events.append(factory(m, round_num))
+                except Exception:
+                    pass
+                break
+
+    return events
+
+
 @router.post("/auto-play")
 async def auto_play_simulation(
     roster_a_id: int,
@@ -841,13 +964,16 @@ async def auto_play_simulation(
         game_id = result.game_state.game_id if result.game_state else f"auto_{seed}"
         replay_rounds = []
         for rl in result.round_logs:
+            round_num = rl.get("round", 0)
+            phase_logs = rl.get("phase_logs", [])
+            parsed_events = _parse_log_events(phase_logs, round_num)
             replay_rounds.append(
                 ReplayRound(
-                    round=rl.get("round", 0),
+                    round=round_num,
                     start_state={},
                     end_state={},
-                    events=[],
-                    phase_summary={"phase_logs": rl.get("phase_logs", [])},
+                    events=parsed_events,
+                    phase_summary={"phase_logs": phase_logs},
                 )
             )
 
