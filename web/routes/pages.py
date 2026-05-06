@@ -145,6 +145,16 @@ async def pmf_chart(request: Request):
     )
 
 
+@router.get("/my-rosters", response_class=HTMLResponse)
+async def my_rosters(request: Request):
+    """Страница управления сохранёнными ростерами."""
+    return templates.TemplateResponse(
+        request,
+        "my_rosters.html",
+        {"request": request, "title": "My Rosters — Warpsmith"},
+    )
+
+
 @router.get("/round-viewer/{scenario_id}", response_class=HTMLResponse)
 async def round_viewer(request: Request, scenario_id: str):
     """Просмотр результатов симуляции."""

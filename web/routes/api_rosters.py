@@ -221,6 +221,71 @@ async def get_roster(roster_id: int, user: User = Depends(get_current_user)):
     return data
 
 
+@router.put("/rosters/{roster_id}")
+async def update_roster(roster_id: int, data: RosterCreate, user: User = Depends(get_current_user)):
+    """Обновить существующий ростер."""
+    # Проверить принадлежность
+    row = db.fetchone("SELECT id, user_id FROM rosters WHERE id = ?", (roster_id,))
+    if not row:
+        raise HTTPException(404, "Roster not found")
+    if row["user_id"] != user.id:
+        raise HTTPException(403, "Not your roster")
+    # Валидация как в create_roster
+    with contextlib.suppress(Exception):
+        wiki.load()
+
+    units_list = [(u.unit_name, u.squad_size) for u in data.units]
+    validation = validate_roster(units_list, wiki.units, pts_limit=data.pts_limit)
+
+    if not validation.is_valid:
+        raise HTTPException(
+            400,
+            detail={
+                "error": "roster_invalid",
+                "validation_errors": [e.__dict__ for e in validation.errors],
+            },
+        )
+
+    db.execute(
+        """UPDATE rosters SET name=?, faction=?, pts_limit=?, detachment=?,
+           units=?, updated_at=datetime('now') WHERE id=?""",
+        (
+            data.name,
+            data.faction,
+            data.pts_limit,
+            data.detachment or "",
+            json.dumps([u.model_dump() for u in data.units]),
+            roster_id,
+        ),
+    )
+    db.commit()
+
+    # Return updated roster
+    result = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_id,))
+    return dict(result)
+
+
+@router.post("/rosters/{roster_id}/duplicate")
+async def duplicate_roster(roster_id: int, user: User = Depends(get_current_user)):
+    """Копировать ростер."""
+
+    row = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_id,))
+    if not row or (row["user_id"] != user.id and not row["is_public"]):
+        raise HTTPException(404, "Roster not found")
+
+    new_name = row["name"] + " (copy)"
+    result = db.execute(
+        """INSERT INTO rosters (user_id, name, faction, pts_limit, detachment, units, is_public)
+           VALUES (?, ?, ?, ?, ?, ?, ?)""",
+        (user.id, new_name, row["faction"], row["pts_limit"], row["detachment"], row["units"], 0),
+    )
+    db.commit()
+    new_id = result.lastrowid
+
+    duplicated = db.fetchone("SELECT * FROM rosters WHERE id = ?", (new_id,))
+    return dict(duplicated)
+
+
 @router.delete("/rosters/{roster_id}")
 async def delete_roster(roster_id: int, user: User = Depends(get_current_user)):
     """Удалить ростер."""
