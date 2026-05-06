@@ -1,7 +1,7 @@
 # Agent Rules — Warpsmith
 
 Этот файл управляет поведением AI-агентов при работе над проектом.
-Обновлён: 2026-05-04 (соответствует v0.7.0).
+Обновлён: 2026-05-04 (соответствует v0.7.5).
 
 ## Языки и стек
 
@@ -77,8 +77,11 @@ simulator/
 ├── web/
 │   ├── routes/               ← FastAPI роуты
 │   │   ├── pages.py          ← HTML: /, /team-builder, /scenario-setup, /pricing, /faction-browser
-│   │   ├── api.py            ← JSON: /api/units, /api/rosters, /api/simulate, /api/detachments, /api/map/tiles, /api/rosters/synergies
-│   │   └── auth.py           ← /register, /login, /logout, /api/me
+│   │   ├── api.py                    ← core: /api/units, /api/simulate, /api/map, /api/health, /api/factions
+│   │   ├── api_detachments.py        ← /api/detachments
+│   │   ├── api_rosters.py            ← /api/rosters, /api/rosters/generate, /api/rosters/synergies
+│   │   ├── api_replays.py            ← /api/auto-play, /api/replays, /api/results
+│   │   └── auth.py                   ← /register, /login, /logout, /api/me
 │   │
 │   ├── templates/            ← Jinja2-шаблоны
 │   │   ├── base.html         ← Layout + auth header + B/I/E toggle + upgrade banner + ad

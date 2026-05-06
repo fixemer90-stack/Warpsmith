@@ -1,23 +1,20 @@
 # Developer Index — Warpsmith
 
 Центральный хаб проекта. Отсюда ведут все тропы.
-Обновлён: 2026-05-04 | v0.7.0
-
-**Навигация:** [INDEX.md](/mnt/d/Python/Balthier/INDEX.md) ← · → [WIKI_INDEX.md](/mnt/d/Python/Balthier/wiki/WIKI_INDEX.md) · → [Features Index](docs/features/Features_index.md)
+Обновлён: 2026-05-06 | v0.7.5
 
 ## 📋 Граф документации
 
 ```mermaid
 graph TD
     DEV["📌 DEV_INDEX.md<br/>← вы здесь"] --> ROAD["🛣️ ROADMAP.md<br/>дорожная карта"]
-    DEV --> INDEX["📋 INDEX.md<br/>индекс файлов"]
     DEV --> AGENTS["🤖 AGENTS.md<br/>правила для AI-агентов"]
     DEV --> FEAT["📝 Features Index<br/>50+ feature specs"]
     DEV --> C4["🏗 C4.md<br/>архитектура (Mermaid)"]
     DEV --> ADR["⚖️ ADR.md<br/>11 архитектурных решений"]
     DEV --> SRS["📖 SRS.md<br/>системные требования"]
     DEV --> UX["🎨 UX.md<br/>дизайн интерфейса"]
-    DEV --> DEPLOY["☁️ deployment.md<br/>деплой (Dokku/Railway/self)"]
+    DEV --> DEPLOY["☁️ deployment.md<br/>деплой (Railway/Dokku/self)"]
 
     AGENTS --> HTTP["HTMX + Alpine.js"]
     AGENTS --> FASTAPI["FastAPI"]
@@ -25,13 +22,15 @@ graph TD
     AGENTS --> UI["Jinja2 шаблоны"]
     AGENTS --> WIKI["Wiki-driven — YAML frontmatter"]
 
-        FEAT --> F3["Phase 3: AI (100%)"]
-    FEAT --> F4["Phase 4: UI (100%)"]
+    FEAT --> F1["Phase 1: Combat (100%)"]
+    FEAT --> F2["Phase 2: Game System (100%)"]
+    FEAT --> F3["Phase 3: AI (67%)"]
+    FEAT --> F4["Phase 4: UI (83%)"]
     FEAT --> F5["Phase 5: Production (100%)"]
 
     C4 --> C4L1["Уровень 1: Контекст"]
     C4 --> C4L2["Уровень 2: Auth, Billing, Feature Gate"]
-    C4 --> C4L3["Уровень 3: Компоненты (20+ блоков)"]
+    C4 --> C4L3["Уровень 3: Компоненты"]
 
     ADR --> ADR1["ADR-001: Python + FastAPI"]
     ADR --> ADR2["ADR-002: HTMX + Alpine.js"]
@@ -44,14 +43,6 @@ graph TD
     ADR --> ADR9["ADR-009: icon_map"]
     ADR --> ADR10["ADR-010: Free/Premium"]
     ADR --> ADR11["ADR-011: Social Login OAuth"]
-
-    SRS --> FR1["FR-1: Team Builder"]
-    SRS --> FR2["FR-2: Scenario Setup"]
-    SRS --> FR3["FR-3: Simulation Run"]
-    SRS --> FR4["FR-4: Game Engine"]
-    SRS --> FR5["FR-5: User Profiles + OAuth"]
-    SRS --> FR6["FR-6: Architecture"]
-    SRS --> FR7["FR-7: Subscription & Billing"]
 ```
 
 ## 🔗 Быстрые ссылки
@@ -59,66 +50,82 @@ graph TD
 | # | Документ | Назначение |
 |---|----------|------------|
 | 1 | **DEV_INDEX.md** | 📌 Хаб всех документов (этот файл) |
-| 2 | **/mnt/d/Python/Balthier/wiki/WIKI_INDEX.md** | 📋 Индекс всех вики-данных (481 файлов) |
-| 3 | **AGENTS.md** | 🤖 Правила разработки для AI-агентов |
-| 4 | **ROADMAP.md** | 🛣️ Дорожная карта: 7 фаз |
-| 5 | **CHANGELOG.md** | 📜 История изменений |
-| 6 | **docs/architecture/C4.md** | 🏗 C4-диаграммы (4 уровня) |
-| 7 | **docs/architecture/ADR.md** | ⚖️ 11 архитектурных решений |
-| 8 | **docs/requirements/SRS.md** | 📖 7 разделов требований |
-| 9 | **docs/requirements/UX.md** | 🎨 UX-дизайн |
-| 10 | **docs/deployment.md** | ☁️ Деплой: Dokku, Railway, self-host |
-| 11 | **docs/features/Features_index.md** | 📝 Индекс всех 50 feature specs |
-| 12 | **main.py** | 💻 Точка входа FastAPI |
-| 13 | **pyproject.toml** | 📦 Зависимости + ruff + mypy |
-| 14 | **RELEASE.md** | 📦 Политика релизов (ZeroVer, GitHub Flow) |
+| 2 | **AGENTS.md** | 🤖 Правила разработки для AI-агентов |
+| 3 | **ROADMAP.md** | 🛣️ Дорожная карта: 7 фаз, 81 фича |
+| 4 | **ROADMAP.html** | 🖥️ Визуальная дорожная карта |
+| 5 | **CHANGELOG.md** | 📜 История изменений (Keep a Changelog) |
+| 6 | **RELEASE.md** | 📦 Политика релизов (ZeroVer, GitHub Flow) |
+| 7 | **docs/architecture/C4.md** | 🏗 C4-диаграммы (4 уровня) |
+| 8 | **docs/architecture/ADR.md** | ⚖️ 11 архитектурных решений |
+| 9 | **docs/requirements/SRS.md** | 📖 7 разделов требований |
+| 10 | **docs/requirements/UX.md** | 🎨 UX-дизайн |
+| 11 | **docs/deployment.md** | ☁️ Деплой: Railway, Dokku, self-host |
+| 12 | **docs/features/Features_index.md** | 📝 Индекс feature-спек (71 фича) |
+| 13 | **main.py** | 💻 Точка входа FastAPI |
+| 14 | **pyproject.toml** | 📦 Зависимости + ruff + mypy + pytest |
 
 ## 🏗 Проект
 
 ```
 simulator/
-├── AGENTS.md          правила разработки
-├── DEV_INDEX.md       ← вы здесь
-├── INDEX.md           индекс файлов
-├── ROADMAP.md         дорожная карта
-├── RELEASE.md         политика релизов
-├── CHANGELOG.md       история изменений
-├── main.py            FastAPI (create_app)
-├── pyproject.toml     зависимости
-├── Procfile           Railway/Dokku web process
-├── app.json           Dokku metadata
+├── AGENTS.md              правила разработки
+├── DEV_INDEX.md           ← вы здесь
+├── ROADMAP.md             дорожная карта
+├── ROADMAP.html           визуальная дорожная карта
+├── RELEASE.md             политика релизов
+├── CHANGELOG.md           история изменений
+├── main.py                FastAPI (create_app)
+├── pyproject.toml         зависимости + конфиг ruff/mypy/pytest
+├── Dockerfile             production-образ
+├── Procfile               Railway process
 │
 ├── backend/
-│   ├── auth/          JWT + bcrypt + OAuth (Google, VK)
-│   ├── billing/       Stripe, Feature Gate, Free/Premium
-│   ├── loader/        Wiki парсер + registry (160+ units)
+│   ├── auth/              JWT + bcrypt + OAuth (Google, VK)
+│   ├── billing/           Stripe, Feature Gate, Free/Premium
+│   ├── loader/            Wiki парсер + registry (160 units, 23 detachments)
 │   │   └── icon_map.py    SVG иконки (18 категорий)
-│   ├── model/         Unit, Weapon dataclasses
+│   ├── model/             Unit, Weapon dataclasses
 │   ├── engine/
-│   │   ├── combat/    Combat Sequence: Hit→Wound→Save→FNP
-│   │   ├── dice/      Dice Pool (NumPy Monte Carlo)
-│   │   ├── game/      Game State, Map, LoS, Missions, Roster
-│   │   └── ai/        AI decision engine + deployment AI
-│   ├── db/            SQLite (users, rosters, scenarios, replays)
-│   └── reporter/      Rich-таблицы
+│   │   ├── combat.py      Combat Sequence: Hit→Wound→Save→FNP
+│   │   ├── dice.py        Dice Pool (NumPy Monte Carlo)
+│   │   ├── modifiers.py   ±1, Sustained, Lethal, Devastating, keywords
+│   │   ├── scenario.py    Game Loop (6 фаз) + Movement Phase (10ed)
+│   │   ├── replay.py      ReplayRecorder + SQLite persistence
+│   │   └── ai/
+│   │       ├── decision.py    Greedy decision engine (F3.1)
+│   │       ├── deployment.py  Zone placement AI (F3.4)
+│   │       ├── faction_ai.py  Wiki-driven FactionAIProfile (F3.2)
+│   │       └── autoplay.py    AI vs AI full scenario (F3.5)
+│   ├── state/             GameState, BattlefieldMap, Mission, Roster
+│   ├── db/                SQLite (users, rosters, replays)
+│   ├── security/          CORS + CSP headers
+│   └── logging_setup.py   structlog + Sentry
 │
 ├── web/
-│   ├── routes/        pages.py, api.py, auth.py
-│   ├── templates/     Jinja2 (base, team_builder, scenario_setup, auth, pricing)
-│   │   └── partials/  detachment_picker, synergy_panel, canvas_map
-│   └── static/        JS (Alpine), SVG icons (19)
+│   ├── routes/
+│   │   ├── api.py                core: /units, /simulate, /map, /health, /factions
+│   │   ├── api_detachments.py    /detachments
+│   │   ├── api_rosters.py        /rosters, /generate, /synergies
+│   │   ├── api_replays.py        /auto-play, /replays, /results
+│   │   ├── auth.py               /register, /login, /logout, /api/me
+│   │   └── pages.py              HTML: /, /team-builder, /scenario-setup, ...
+│   ├── templates/         Jinja2 (base, team_builder, scenario_setup, auth, pricing, ...)
+│   │   └── partials/      detachment_picker, synergy_panel, canvas_map, unit_card
+│   └── static/            JS (Alpine), SVG icons (18)
 │
-├── deploy/            dokku-setup.sh, railway.json, systemd.service
-│
-├── tests/             27 файлов, ~300 тестов
+├── tests/                 34 файла, 440 тестов
 │
 ├── docs/
-│   ├── architecture/  C4.md, ADR.md
-│   ├── requirements/  SRS.md, UX.md
-│   ├── features/      50 specs (F1.1–F5.7)
+│   ├── architecture/      C4.md, ADR.md
+│   ├── requirements/      SRS.md, UX.md
+│   ├── features/          50+ specs (F1.1–F6.7)
 │   └── deployment.md
 │
-└── wiki/ → /mnt/d/Python/Balthier/wiki   ~481 страниц данных
+└── wiki/                  ~490 .md — данные в репозитории (monorepo)
+    ├── factions/          orks, tau, adeptus-mechanicus
+    ├── units/             даташиты юнитов
+    ├── detachments/       правила детачментов
+    └── stratagems/        стратагемы
 ```
 
 ## 🧩 Типовые сценарии
@@ -134,40 +141,39 @@ simulator/
 | Добавить страницу | ADR-002 (HTMX) | `web/templates/` + `web/routes/pages.py` |
 | Поправить БД | ADR-003, SRS.md | `backend/db/database.py` |
 | Написать тест | AGENTS.md | `tests/test_*.py` |
-| Создать эндпоинт API | — | `web/routes/api.py` + Pydantic модель |
+| Создать эндпоинт API | C4.md | `web/routes/api.py` (core) или `api_rosters.py`/`api_replays.py`/`api_detachments.py` |
 
 ## 🚀 Запуск
 
 ```bash
 cd /mnt/d/Python/Balthier/simulator
-python main.py
+python3 -c "import uvicorn; uvicorn.run('main:app', host='127.0.0.1', port=8000, reload=False)"
 # → http://127.0.0.1:8000
 
-# Тесты (~300 шт.)
-python -m pytest tests/ -q
+# Тесты (440 шт.)
+uv run python -m pytest tests/ -q
 ```
 
 ## ⚙️ API (curl)
 
 ```bash
 curl http://127.0.0.1:8000/api/health
-# → {"status": "ok", "version": "0.7.0"}
+# → {"status": "ok", "version": "0.3.0"}
 
 curl http://127.0.0.1:8000/api/factions
-# → {"factions": [...3 factions]}
+# → {"factions": [3 factions]}
 
 curl 'http://127.0.0.1:8000/api/units?faction=orks'
-# → {"faction": "orks", "units": [81 юнит]}
+# → [81 units]
 
 curl http://127.0.0.1:8000/api/detachments?faction=orks
-# → [10 детачментов с правилами]
+# → [10 detachments with rules]
 
-curl http://127.0.0.1:8000/api/simulate -X POST \
-  -H 'Content-Type: application/json' \
-  -d '{"attacker_faction":"orks","attacker_unit":"Boyz",\
-       "defender_faction":"tau","defender_unit":"Strike Team",\
-       "weapon_name":"Shoota","n_iterations":1000}'
-# → {"weapon":"Shoota","stats":{"mean":0.264,...}}
+curl http://127.0.0.1:8000/api/units/Boyz/detail
+# → full datasheet with weapons, wargear, icons
+
+curl http://127.0.0.1:8000/api/map/tiles
+# → {"width": 44, "height": 44, "tiles": [...], "deploy_zones": {...}}
 ```
 
 ## 📊 Текущий прогресс
@@ -175,10 +181,10 @@ curl http://127.0.0.1:8000/api/simulate -X POST \
 | Фаза | Статус | Ключевое |
 |------|--------|----------|
 | Phase 0: Foundation | ✅ 100% | FastAPI, Auth, Wiki, Icons, Billing |
-| Phase 1: Combat Engine | ✅ 100% | Monte Carlo, Combat Sequence, /api/simulate |
-| Phase 2: Game System | ✅ 100% | Game State, Map, LoS, Missions, Roster CRUD |
-| Phase 3: AI & Automation | 🟢 29% | Greedy AI, Deployment AI |
-| Phase 4: Web UI Polish | ✅ 100% | Faction browser, Unit modal, Detachment picker, Synergy hints, Canvas map, SVG icons, Progressive Disclosure, Stat tooltips |
-| Phase 5: Production | 🟢 29% | Docker, Deployment docs (Dokku/Railway/self-host) |
-| Phase 6: Monetization | ⏳ 0% | Stripe, Ads |
-| Phase 7: Expansion | ⏳ 0% | i18n, Campaigns |
+| Phase 1: Combat Engine | ✅ 100% | Monte Carlo, 13 keywords, /api/simulate |
+| Phase 2: Game System | ✅ 100% | Game Loop, Map, LoS, Cover, Roster CRUD |
+| Phase 3: AI & Automation | 🔧 67% | Greedy AI, Faction Profiles, Autoplay, Replay, Viewer |
+| Phase 4: Web UI Polish | ✅ 83% | Faction browser, Unit modal, Detachments, Synergy, Map, Movement |
+| Phase 5: Production | ✅ 100% | Docker, Railway, Rate limit, CORS, structlog, CI/CD, Backup |
+| Phase 6: Monetization | ⏳ 0% | Stripe, Ads, Premium Trial |
+| Phase 7: Expansion | ⏳ 0% | Import/Export, i18n, Campaigns |

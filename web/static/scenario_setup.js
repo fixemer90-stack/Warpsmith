@@ -271,6 +271,8 @@ function scenarioSetup() {
             } catch (e) {
                 alert(`Network error: ${e.message}`);
             }
-        }
+        },
+        // no-op: mapLabel is computed from gameFormat via x-model
+        updateFormat() {}
     };
 }

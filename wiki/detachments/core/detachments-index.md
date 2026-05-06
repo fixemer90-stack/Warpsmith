@@ -1,7 +1,7 @@
 ---
 title: Detachments Index
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-06
 type: index
 tags: [index, detachments, orks, adeptus-mechanicus, tau]
 edition: 10e

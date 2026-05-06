@@ -1,7 +1,8 @@
 """Smoke tests for _parse_log_events."""
-import pytest
-from web.routes.api import _parse_log_events
 
+import pytest
+
+from web.routes.api_replays import _parse_log_events
 
 SAMPLE = [
     "Starting round 1",
@@ -71,7 +72,7 @@ def test_parses_move_events():
     details = {e.detail for e in moves if e.detail}
     assert "Remain Stationary" in details
     assert "Fall Back" in details
-    assert "Advance M+4=10\"" in details
+    assert 'Advance M+4=10"' in details
     assert "No valid path" in details
     assert "Already at target" in details
 
