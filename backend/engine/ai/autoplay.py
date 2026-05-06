@@ -347,11 +347,23 @@ def run_auto_game(
             f"{len(player_b.units)} units for Player 2"
         )
 
+        # 6.5. Load faction AI profiles for target priority
+        faction_ai_profiles: dict[str, object] = {}
+        for roster, player_id in [(roster_a, "1"), (roster_b, "2")]:
+            try:
+                profile = load_profile(roster.faction)
+                if profile:
+                    faction_ai_profiles[player_id] = profile
+                    faction_ai_profiles[roster.faction] = profile
+            except Exception:
+                pass
+
         # 7. Create Scenario and run game loop
         scenario = Scenario(
             game_state=state,
             unit_models=unit_models,
             battlefield=game_map,
+            faction_ai_profiles=faction_ai_profiles,
         )
 
         round_logs: list[dict[str, Any]] = []

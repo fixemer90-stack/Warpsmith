@@ -13,6 +13,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 import numpy as np
 
@@ -61,6 +62,7 @@ class EvaluationContext:
     opponent_units_map: dict[str, Unit] = field(default_factory=dict)
     rng: np.random.Generator = field(default_factory=lambda: np.random.default_rng())
     weights: dict[str, float] = field(default_factory=lambda: dict(DEFAULT_WEIGHTS))
+    faction_profile: Any | None = None  # FactionAIProfile (optional, avoids circular import)
 
 
 # ── Weights ────────────────────────────────────────────────────
@@ -224,27 +226,73 @@ def _generate_candidates(
                 candidates.append(Action(type=ActionType.CHARGE, target_id=target.unit_id))
 
     elif ctx.phase == GamePhase.MOVEMENT:
+        # ── Priority 1: Двигаться к objectives (capture points) ──
+        objectives = _get_objectives(ctx)
+        for obj_pos in objectives:
+            candidates.append(Action(
+                type=ActionType.MOVE,
+                target_position=obj_pos,
+                mode="objective",
+            ))
+            if not actor.is_engaged:
+                candidates.append(Action(
+                    type=ActionType.ADVANCE,
+                    target_position=obj_pos,
+                    mode="objective",
+                ))
+
+        # ── Priority 2: Двигаться к врагам ──
         for target in ctx.opponent_units:
             if not target.is_alive:
                 continue
-            candidates.append(
-                Action(
-                    type=ActionType.MOVE,
-                    target_id=target.unit_id,
-                    target_position=target.position,
-                )
-            )
-            candidates.append(
-                Action(
-                    type=ActionType.ADVANCE,
-                    target_id=target.unit_id,
-                    target_position=target.position,
-                )
-            )
+            candidates.append(Action(
+                type=ActionType.MOVE,
+                target_id=target.unit_id,
+                target_position=target.position,
+                mode="engage",
+            ))
+            candidates.append(Action(
+                type=ActionType.ADVANCE,
+                target_id=target.unit_id,
+                target_position=target.position,
+                mode="engage",
+            ))
+
+        # ── Fallback: нет ни objectives ни врагов → HOLD ──
+        if not candidates:
+            candidates.append(Action(type=ActionType.HOLD, rationale="no objectives or enemies"))
 
     if not candidates:
         candidates.append(Action(type=ActionType.HOLD, rationale="no valid actions"))
     return candidates
+
+
+def _get_objectives(ctx: EvaluationContext) -> list[tuple[int, int]]:
+    """Извлечь позиции objective markers из миссии."""
+    mission = ctx.state.mission
+    if mission and mission.config.objectives:
+        return [(obj.x, obj.y) for obj in mission.config.objectives]
+    return []
+
+
+def _get_allied_units(ctx: EvaluationContext) -> list[UnitState]:
+    """Все союзные юниты (из того же player_id что и actor)."""
+    actor_pid = getattr(ctx.actor, "player_id", None)
+    if actor_pid and actor_pid in ctx.state.players:
+        return [u for u in ctx.state.players[actor_pid].units.values() if u.is_alive]
+    return []
+
+
+def _count_allies_on_objective(obj_pos: tuple[int, int], ctx: EvaluationContext) -> int:
+    """Сколько союзных юнитов уже на objective (distance ≤ 2)."""
+    count = 0
+    for unit in _get_allied_units(ctx):
+        if not unit.is_alive:
+            continue
+        d = _distance(unit.position, obj_pos)
+        if d <= 2:
+            count += 1
+    return count
 
 
 # ── Evaluation ─────────────────────────────────────────────────
@@ -257,7 +305,7 @@ def score_shoot(
     weapon_idx: int,
     ctx: EvaluationContext,
 ) -> float:
-    """Оценка одного выстрела."""
+    """Оценка одного выстрела с учётом faction target_priority."""
     if weapon_idx < 0 or weapon_idx >= len(actor_unit.ranged_weapons):
         return 0.0
     weapon = actor_unit.ranged_weapons[weapon_idx]
@@ -268,7 +316,19 @@ def score_shoot(
     )
     if expected_dmg <= 0:
         return 0.0
-    return expected_dmg * 5.0 * ctx.weights.get("kill_efficiency", 1.0)
+
+    # Apply faction target_priority multiplier
+    target_mult = 1.0
+    if ctx.faction_profile is not None:
+        from backend.engine.ai.faction_ai import get_target_multiplier
+
+        opp_unit = _get_opponent_unit(target, ctx)
+        if opp_unit:
+            target_kw = {kw.lower() for kw in (getattr(opp_unit, "keywords", []) or [])}
+            target_kw.add(getattr(opp_unit, "category", "infantry").lower())
+            target_mult = get_target_multiplier(ctx.faction_profile, target_kw)
+
+    return expected_dmg * 5.0 * ctx.weights.get("kill_efficiency", 1.0) * target_mult
 
 
 def score_charge(
@@ -300,20 +360,50 @@ def score_charge(
         _get_opponent_toughness(target, ctx),
         _get_opponent_save(target, ctx),
     )
-    return success_prob * melee_dmg * ctx.weights.get("kill_efficiency", 1.0)
+
+    # Apply faction target_priority multiplier
+    target_mult = 1.0
+    if ctx.faction_profile is not None:
+        from backend.engine.ai.faction_ai import get_target_multiplier
+
+        opp_unit = _get_opponent_unit(target, ctx)
+        if opp_unit:
+            target_kw = {kw.lower() for kw in (getattr(opp_unit, "keywords", []) or [])}
+            target_kw.add(getattr(opp_unit, "category", "infantry").lower())
+            target_mult = get_target_multiplier(ctx.faction_profile, target_kw)
+
+    return success_prob * melee_dmg * ctx.weights.get("kill_efficiency", 1.0) * target_mult
 
 
 def score_move(
     actor: UnitState,
     target_pos: tuple[int, int],
     ctx: EvaluationContext,
+    mode: str = "engage",
 ) -> float:
-    """Оценка движения к цели."""
+    """Оценка движения к цели.
+
+    mode="objective" — высокий приоритет (×2.0), штраф за дублирование на точке
+    mode="engage" — низкий приоритет (×0.5), движение к врагу
+    """
     current_dist = _distance(actor.position, target_pos)
     if current_dist < 1:
-        return 0.0
-    move_range = 6
-    improvement = min(1.0, move_range / current_dist)
+        return 0.0  # уже на месте
+
+    move_range = getattr(ctx.actor_unit, "movement", 6)
+    improvement = min(1.0, move_range / max(current_dist, 1))
+
+    if mode == "objective":
+        base = improvement * ctx.weights.get("objective_value", 0.6) * 2.0
+        # Штраф если objective уже занята союзником
+        occupied = _count_allies_on_objective(target_pos, ctx)
+        if occupied >= 1:
+            base *= 0.3
+        return base
+
+    elif mode == "engage":
+        return improvement * ctx.weights.get("objective_value", 0.6) * 0.5
+
     return improvement * ctx.weights.get("objective_value", 0.6)
 
 
@@ -340,12 +430,12 @@ def evaluate_action(
             rationale = f"charge {target.name}"
 
     elif action.type in (ActionType.MOVE, ActionType.ADVANCE) and action.target_position:
-        score = score_move(actor, action.target_position, ctx)
+        score = score_move(actor, action.target_position, ctx, mode=action.mode or "engage")
         if action.type == ActionType.ADVANCE:
             score *= 0.8
-            rationale = "advance toward enemy"
+            rationale = f"advance toward {'objective' if action.mode == 'objective' else 'enemy'}"
         else:
-            rationale = "move toward enemy"
+            rationale = f"move toward {'objective' if action.mode == 'objective' else 'enemy'}"
 
     action.score = round(score, 4)
     action.rationale = rationale

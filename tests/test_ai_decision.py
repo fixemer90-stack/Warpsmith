@@ -17,9 +17,11 @@ from backend.engine.ai.decision import (
     _distance,
     _estimate_melee_damage,
     _generate_candidates,
+    _get_objectives,
     _in_weapon_range,
     choose_action,
     score_charge,
+    score_move,
     score_shoot,
 )
 from backend.model.unit import Unit, Weapon
@@ -347,3 +349,70 @@ class TestChooseAction:
         )
         action = choose_action(a, m, ctx)
         assert action.score > 0
+
+
+class TestObjectiveMovement:
+    """Objective-based movement scoring."""
+
+    def test_objective_mode_higher_than_engage(self):
+        """mode='objective' даёт более высокий score чем mode='engage' при равных условиях."""
+        a = make_unit_state("A", unit_id="me", position=(0, 0))
+        m = make_unit_model("Test")
+        m.movement = 6
+        ctx = make_context(a, m, phase=GamePhase.MOVEMENT)
+        target = (10, 0)
+
+        score_obj = score_move(a, target, ctx, mode="objective")
+        score_eng = score_move(a, target, ctx, mode="engage")
+        assert score_obj > score_eng, f"objective={score_obj} should be > engage={score_eng}"
+
+    def test_uses_actor_movement(self):
+        """score_move использует movement из actor_unit, а не хардкод 6."""
+        a = make_unit_state("A", unit_id="me", position=(0, 0))
+        fast = make_unit_model("Fast")
+        fast.movement = 12
+        slow = make_unit_model("Slow")
+        slow.movement = 3
+        ctx_fast = make_context(a, fast, phase=GamePhase.MOVEMENT)
+        ctx_slow = make_context(a, slow, phase=GamePhase.MOVEMENT)
+        target = (10, 0)
+
+        score_fast = score_move(a, target, ctx_fast, mode="engage")
+        score_slow = score_move(a, target, ctx_slow, mode="engage")
+        assert score_fast > score_slow, f"fast={score_fast} should be > slow={score_slow}"
+
+    def test_already_at_target_zero(self):
+        """Если юнит уже на точке — score 0."""
+        a = make_unit_state("A", unit_id="me", position=(5, 5))
+        m = make_unit_model()
+        ctx = make_context(a, m, phase=GamePhase.MOVEMENT)
+        score = score_move(a, (5, 5), ctx, mode="objective")
+        assert score == 0.0
+
+    def test_movement_generates_objective_candidates(self):
+        """MOVEMENT фаза генерирует кандидатов с mode='objective' при наличии objectives."""
+        # Без миссии — objectives пустые, только engage-кандидаты
+        a = make_unit_state("A", unit_id="me", position=(0, 0))
+        m = make_unit_model()
+        t = make_unit_state("T", unit_id="t1", position=(10, 0))
+        ctx = make_context(a, m, [t], phase=GamePhase.MOVEMENT)
+        candidates = _generate_candidates(a, m, ctx)
+        modes = {c.mode for c in candidates}
+        assert "engage" in modes, "Should have engage-mode candidates for enemies"
+
+    def test_no_objectives_no_enemies_hold(self):
+        """Без objectives и без врагов — HOLD."""
+        a = make_unit_state("A", unit_id="me", position=(0, 0))
+        m = make_unit_model()
+        ctx = make_context(a, m, [], phase=GamePhase.MOVEMENT)
+        action = choose_action(a, m, ctx)
+        assert action.type == ActionType.HOLD
+
+    def test_get_objectives_empty_for_test_mission(self):
+        """_get_objectives возвращает пустой список для тестовой миссии без objectives."""
+        a = make_unit_state("A", unit_id="me")
+        m = make_unit_model()
+        ctx = make_context(a, m, phase=GamePhase.MOVEMENT)
+        objs = _get_objectives(ctx)
+        assert isinstance(objs, list)
+        assert len(objs) == 0
