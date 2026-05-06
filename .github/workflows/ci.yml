@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, feat/*, fix/*]
+    branches: [main, feat/*, fix/*, feat/0.7.5-refactored-api]
   pull_request:
     branches: [main]
 
