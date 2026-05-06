@@ -334,21 +334,7 @@ def run_auto_game(
         # 5. Build unit_models dict for combat engine
         unit_models = _build_unit_models(roster_a, roster_b)
 
-        # 6. Deploy units
-        placements = deploy_game(
-            game_state=state,
-            unit_models=unit_models,
-            deployment_type=config.deployment_type,
-            battlefield=game_map,
-            objectives=[],
-        )
-
-        state.game_log.append(
-            f"Deployed {len(player_a.units)} units for Player 1, "
-            f"{len(player_b.units)} units for Player 2"
-        )
-
-        # 6.5. Load faction AI profiles for target priority
+        # 5.5. Load faction AI profiles (needed for deployment + scenario)
         faction_ai_profiles: dict[str, object] = {}
         for roster, player_id in [(roster_a, "1"), (roster_b, "2")]:
             with contextlib.suppress(Exception):
@@ -356,6 +342,21 @@ def run_auto_game(
                 if profile:
                     faction_ai_profiles[player_id] = profile
                     faction_ai_profiles[roster.faction] = profile
+
+        # 6. Deploy units
+        placements = deploy_game(
+            game_state=state,
+            unit_models=unit_models,
+            deployment_type=config.deployment_type,
+            battlefield=game_map,
+            objectives=[],
+            faction_ai_profiles=faction_ai_profiles,
+        )
+
+        state.game_log.append(
+            f"Deployed {len(player_a.units)} units for Player 1, "
+            f"{len(player_b.units)} units for Player 2"
+        )
 
         # 7. Create Scenario and run game loop
         scenario = Scenario(

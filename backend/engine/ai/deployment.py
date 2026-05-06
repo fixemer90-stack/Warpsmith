@@ -183,6 +183,54 @@ def _find_first_free(
     return None
 
 
+def _get_deploy_role(
+    unit: UnitState,
+    unit_model: Unit | None = None,
+    faction_profile: object | None = None,
+) -> str | None:
+    """Determine deployment role from faction profile or fallback.
+
+    Returns one of: 'front_line', 'mid_field', 'back_field', 'reserve', or None.
+    """
+    if faction_profile is None or not hasattr(faction_profile, "deployment"):
+        return None
+
+    deployment = getattr(faction_profile, "deployment", {})
+    if not deployment:
+        return None
+
+    # Collect unit keywords from model if available
+    unit_kw: set[str] = set()
+    if unit_model:
+        for kw in getattr(unit_model, "keywords", []) or []:
+            unit_kw.add(kw.lower())
+        unit_kw.add(getattr(unit_model, "category", "").lower())
+        for tag in getattr(unit_model, "tags", []) or []:
+            unit_kw.add(tag.lower())
+
+    # Check each deployment zone
+    for role, role_kw_list in deployment.items():
+        if not isinstance(role_kw_list, list):
+            continue
+        for rk in role_kw_list:
+            rk_low = rk.lower().replace(" ", "-")
+            if rk_low in unit_kw:
+                return role
+
+    return None
+
+
+def _find_first_free(
+    zone: DeploymentZone,
+    occupied: set[tuple[int, int]],
+) -> tuple[int, int] | None:
+    for x in range(zone.x_min, zone.x_max + 1):
+        for y in range(zone.y_min, zone.y_max + 1):
+            if (x, y) not in occupied:
+                return (x, y)
+    return None
+
+
 def _find_best_position(
     unit: UnitState,
     zone: DeploymentZone,
@@ -192,6 +240,7 @@ def _find_best_position(
     unit_model: Unit | None = None,
     warlord_id: str | None = None,
     is_p1: bool = True,
+    faction_profile: object | None = None,
 ) -> tuple[int, int] | None:
     best_score = -1.0
     best_pos: tuple[int, int] | None = None
@@ -211,10 +260,26 @@ def _find_best_position(
 
             score = 0.0
 
+            # Determine unit's deployment role from faction profile or fallback
+            deploy_role = _get_deploy_role(unit, unit_model, faction_profile)
+            if deploy_role == "front_line":
+                dist_to_front = abs(x - front_edge_x)
+                max_depth = abs(zone.x_max - zone.x_min) or 1
+                score += 0.8 * (1.0 - dist_to_front / max_depth)
+            elif deploy_role == "back_field":
+                dist_to_back = abs(x - (zone.x_min if is_p1 else zone.x_max))
+                max_depth = abs(zone.x_max - zone.x_min) or 1
+                score += 0.8 * (1.0 - dist_to_back / max_depth)
+            elif deploy_role == "mid_field":
+                dist_center = _distance((x, y), center)
+                score += 0.5 * max(0.0, 1.0 - dist_center / (max_depth / 2))
+
+            # Cover bonus for ranged units
             if _is_ranged_unit(unit, unit_model) and _has_cover_at(battlefield, x, y):
                 score += 0.5
 
-            if _is_melee_unit(unit, unit_model):
+            # Melee units prefer front (fallback if no faction profile)
+            if deploy_role is None and _is_melee_unit(unit, unit_model):
                 dist_to_front = abs(x - front_edge_x)
                 max_depth = abs(zone.x_max - zone.x_min) or 1
                 score += 0.8 * (1.0 - dist_to_front / max_depth)
@@ -241,6 +306,7 @@ def place_units(
     battlefield: BattlefieldMap | None = None,
     objectives: list[MissionObjective] | None = None,
     warlord_id: str | None = None,
+    faction_profile: object | None = None,
 ) -> list[Placement]:
     zone = get_deployment_zone(deployment_type, player, map_size)
     sorted_units = _sort_units_by_role(player_units, unit_models, warlord_id)
@@ -259,6 +325,7 @@ def place_units(
             model,
             warlord_id,
             is_p1,
+            faction_profile,
         )
         if pos is not None:
             placements.append(
@@ -281,6 +348,7 @@ def deploy_game(
     deployment_type: DeploymentType = DeploymentType.STANDARD,
     battlefield: BattlefieldMap | None = None,
     objectives: list[MissionObjective] | None = None,
+    faction_ai_profiles: dict[str, object] | None = None,
 ) -> dict[str, list[Placement]]:
     map_size = (game_state.map_width, game_state.map_height)
     result: dict[str, list[Placement]] = {}
@@ -293,6 +361,13 @@ def deploy_game(
         warlord = player.warlord_unit
         warlord_id = warlord.unit_id if warlord else None
 
+        # Look up faction AI profile for this player
+        faction_profile = None
+        if faction_ai_profiles:
+            faction_profile = faction_ai_profiles.get(str(idx)) or faction_ai_profiles.get(
+                player.faction
+            )
+
         placements = place_units(
             player_units=units,
             unit_models=unit_models,
@@ -302,6 +377,7 @@ def deploy_game(
             battlefield=battlefield,
             objectives=objectives,
             warlord_id=warlord_id,
+            faction_profile=faction_profile,
         )
         result[player.player_id] = placements
 

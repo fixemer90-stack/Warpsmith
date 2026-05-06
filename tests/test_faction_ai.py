@@ -8,6 +8,7 @@ import pytest
 
 from backend.engine.ai.faction_ai import (
     DEFAULT_WEIGHTS,
+    PROFILE_CACHE,
     FactionAIProfile,
     _is_behavior_active,
     _parse_profile,
@@ -18,6 +19,15 @@ from backend.engine.ai.faction_ai import (
     mark_behavior_used,
 )
 from backend.state.game_state import GamePhase
+
+
+@pytest.fixture(autouse=True)
+def _clear_profile_cache():
+    """Prevent cross-test cache pollution from mark_behavior_used."""
+    clear_cache()
+    yield
+    clear_cache()
+
 
 # ── Helpers ─────────────────────────────────────────────────────
 
