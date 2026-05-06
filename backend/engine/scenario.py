@@ -449,7 +449,10 @@ class Scenario:
                     _profile = faction_profile
 
                     def _target_score(t, u=_actor_unit, fp=_profile):
-                        d = ((u.position[0] - t.position[0]) ** 2 + (u.position[1] - t.position[1]) ** 2) ** 0.5
+                        d = (
+                            (u.position[0] - t.position[0]) ** 2
+                            + (u.position[1] - t.position[1]) ** 2
+                        ) ** 0.5
                         t_model = self._unit_models.get(t.unit_id)
                         t_mult = 1.0
                         if t_model:
