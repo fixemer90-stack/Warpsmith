@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 from typing import Optional
 
 from ..model.unit import Unit
@@ -18,12 +19,15 @@ class Scenario:
         game_state: GameState,
         unit_models: dict[str, Unit] | None = None,
         battlefield: BattlefieldMap | None = None,
+        faction_ai_profiles: dict[str, object] | None = None,
     ):
         self.state = game_state
         self.log = []  # Additional scenario-specific log
         self._unit_models = unit_models or {}  # unit_id → full Unit model (for combat engine)
         self.battlefield = battlefield  # for LoS checks
         self.vp_tracker = VPTracker()  # Per-round VP history (F2.8)
+        self._faction_profiles = faction_ai_profiles or {}  # faction_id → FactionAIProfile
+        self._active_faction_weights: dict[str, dict] = {}  # player_id → active weights per round
 
     def run_game(self, max_rounds: int | None = None) -> None:
         """Run the game until completion or max_rounds reached."""
@@ -100,6 +104,15 @@ class Scenario:
         # Update mission scoring at end of Command phase
         if self.state.mission:
             apply_scoring(self.state, self.state.mission, self.vp_tracker)
+
+        # Activate faction AI behaviors for this round
+        for player_id, profile in self._faction_profiles.items():
+            if player_id in ("1", "2"):
+                with contextlib.suppress(Exception):
+                    from backend.engine.ai.faction_ai import get_weights
+
+                    weights = get_weights(profile, GamePhase.COMMAND, self.state.current_round)
+                    self._active_faction_weights[player_id] = weights
             # Also update PlayerState.victory_points for backwards compat
             for i, player_id in enumerate(self.state.players):
                 pn = i + 1  # 1-indexed
@@ -426,14 +439,35 @@ class Scenario:
                     targets.append(target)
                 if not targets:
                     continue
-                # Target closest enemy
-                target = min(
-                    targets,
-                    key=lambda t: (
-                        (unit.position[0] - t.position[0]) ** 2
-                        + (unit.position[1] - t.position[1]) ** 2
-                    ),
-                )
+                # Target selection: closest enemy, biased by faction target_priority
+                faction_profile = self._faction_profiles.get(player.faction)
+                if faction_profile is not None:
+                    from backend.engine.ai.faction_ai import get_target_multiplier
+
+                    # Capture loop variables explicitly for closure
+                    _actor_unit = unit
+                    _profile = faction_profile
+
+                    def _target_score(t, u=_actor_unit, fp=_profile):
+                        d = ((u.position[0] - t.position[0]) ** 2 + (u.position[1] - t.position[1]) ** 2) ** 0.5
+                        t_model = self._unit_models.get(t.unit_id)
+                        t_mult = 1.0
+                        if t_model:
+                            t_kw = {kw.lower() for kw in (getattr(t_model, "keywords", []) or [])}
+                            t_kw.add(getattr(t_model, "category", "infantry").lower())
+                            t_mult = get_target_multiplier(fp, t_kw)
+                        return d / max(t_mult, 0.01)  # lower = better
+
+                    target = min(targets, key=_target_score)
+                else:
+                    # No faction profile — use closest enemy
+                    target = min(
+                        targets,
+                        key=lambda t: (
+                            (unit.position[0] - t.position[0]) ** 2
+                            + (unit.position[1] - t.position[1]) ** 2
+                        ),
+                    )
                 # Resolve damage using combat engine if models available
                 attacker_model = self._unit_models.get(unit.unit_id)
                 defender_model = self._unit_models.get(target.unit_id)

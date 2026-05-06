@@ -243,12 +243,13 @@ def get_weights(
 
     for b in profile.behaviors:
         if _is_behavior_active(b, phase, turn):
-            # Проверка на отрицательные веса
             has_negative = any(v < 0 for v in b.effects.weights_override.values())
             if has_negative:
                 logger.warning("Behavior '%s' has negative weight overrides, skipping", b.id)
                 continue
             weights.update(b.effects.weights_override)
+            # Auto-mark as used so one-shot/cooldown behaviors work correctly
+            mark_behavior_used(profile, b.id, turn)
 
     return weights
 
