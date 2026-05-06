@@ -4,7 +4,7 @@ type: index
 tags: [stratagems, index, core, orks, adeptus-mechanicus, tau]
 edition: 10e
 created: 2026-05-02
-updated: 2026-05-02
+updated: 2026-05-06
 ---
 
 # Stratagem Index

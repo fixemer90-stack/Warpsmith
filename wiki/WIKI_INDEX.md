@@ -1,10 +1,10 @@
 # Warpsmith — Wiki Index
 
-**Версия:** 10th Edition | **Всего файлов:** ~478 `.md` | **Обновлён:** 2026-05-02
+**Версия:** 10th Edition | **Всего файлов:** ~490 `.md` | **Обновлён:** 2026-05-06
 
 ---
 
-**Навигация:** [INDEX.md](/mnt/d/Python/Balthier/INDEX.md) ← · → [DEV_INDEX.md](../simulator/DEV_INDEX.md)
+**Навигация:** [INDEX.md](/mnt/d/Python/Balthier/INDEX.md) ← · → [DEV_INDEX.md](/mnt/d/Python/Balthier/simulator/DEV_INDEX.md)
 
 ## 📂 Структура вики
 
