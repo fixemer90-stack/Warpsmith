@@ -122,11 +122,14 @@ def create_app() -> FastAPI:
     # Импортируем роуты (lazy, чтобы избежать циклических импортов)
     from backend.auth.providers.routes import router as oauth_router
     from backend.billing.webhooks import router as billing_router
-    from web.routes import api, pages
+    from web.routes import api, api_detachments, api_replays, api_rosters, pages
     from web.routes import auth as auth_routes
 
     app.include_router(pages.router)
     app.include_router(api.router, prefix="/api")
+    app.include_router(api_detachments.router, prefix="/api")
+    app.include_router(api_replays.router, prefix="/api")
+    app.include_router(api_rosters.router, prefix="/api")
     app.include_router(auth_routes.router)
     app.include_router(billing_router)
     app.include_router(oauth_router)
