@@ -132,6 +132,9 @@ TAG_TO_MODIFIERS: dict[str, list[Modifier]] = {
     "melta_3": [
         Modifier("damage", "add", 3, source="wargear", condition={"half_range": True}),
     ],
+    "pistol": [
+        Modifier("eligibility", "pistol", source="wargear"),
+    ],
 }
 
 

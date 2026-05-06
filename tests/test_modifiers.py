@@ -228,4 +228,4 @@ def test_build_weapon_modifiers_supports_blast() -> None:
     weapon = make_weapon(tags=["blast"])
     modifiers = build_weapon_modifiers(weapon)
 
-    assert any(mod.target == "attack_count" and mod.operation == "add" for mod in modifiers)
+    assert any(mod.target == "attack_count" and mod.operation == "blast_bonus" for mod in modifiers)

@@ -110,6 +110,9 @@ def _resolve_attacks(
             attacks += int(modifier.value)
         elif modifier.operation == "subtract":
             attacks -= int(modifier.value)
+        elif modifier.operation == "blast_bonus":
+            blast_bonus = min(4, context.squad_size // 5)
+            attacks += blast_bonus
 
     # Rapid fire modifier
     rapid_fire_modifiers = [
@@ -184,7 +187,14 @@ def _resolve_wound_chain(
         if save_result.success:
             return 0
 
-    damage_dealt = min(resolve_dice(weapon.damage_dice, rng), defender.wounds)
+    damage = resolve_dice(weapon.damage_dice, rng)
+    damage_modifiers = [m for m in modifiers if m.target == "damage"]
+    for modifier in damage_modifiers:
+        if modifier.condition and not _check_condition(modifier.condition, context):
+            continue
+        if modifier.operation == "add":
+            damage += int(modifier.value)
+    damage_dealt = min(damage, defender.wounds)
     if defender.feel_no_pain:
         fnp_rolls = rng.integers(1, 7, size=damage_dealt)
         fnp_saves = int(np.sum(fnp_rolls >= defender.feel_no_pain))

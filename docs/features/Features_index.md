@@ -151,11 +151,11 @@ POST /api/auto-play
 
 | Фаза | Features | Часы | Статус |
 |------|----------|------|--------|
-| **Phase 1** — Combat Engine | 12 | ~30h | ✅ 100% |
-| **Phase 2** — Game System | 12 | ~40h | ✅ 100% |
-| **Phase 3** — AI & Automation | 7 | ~35h | ✅ 100% |
-| **Phase 4** — Web UI Polish | 9 | ~37h | ✅ 100% |
+| **Phase 1** — Combat Engine | 13 | ~36h | 🔧 92% |
+| **Phase 2** — Game System | 15 | ~55h | 🔧 80% |
+| **Phase 3** — AI & Automation | 9 | ~42h | 🟢 55% |
+| **Phase 4** — Web UI Polish | 11 | ~47h | 🔧 89% |
 | **Phase 5** — Production | 7 | ~16h | ✅ 100% |
 | **Phase 6** — Monetization | 7 | ~17h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |
-| **Итого** | **~62** | **~216h** | |
+| **Итого** | **~72** | **~253h** | |
