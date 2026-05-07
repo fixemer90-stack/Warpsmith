@@ -486,7 +486,9 @@ def run_auto_game(
         # 8. Battle Ready points — 10 VP each (painted army bonus, 10ed)
         for player in state.players.values():
             player.victory_points += 10
-            state.game_log.append(f"{player.name} gains 10 Battle Ready VP (total: {player.victory_points})")
+            state.game_log.append(
+                f"{player.name} gains 10 Battle Ready VP (total: {player.victory_points})"
+            )
 
         # 9. Summary
         summary = _build_summary(state, round_logs, placements)

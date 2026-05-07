@@ -497,5 +497,7 @@ async def get_result(game_id: str):
         if vp:
             pids = sorted(vp.keys())
             if len(pids) >= 2 and (vp[pids[0]] != vp[pids[1]]):
-                data["summary"]["winner"] = int(pids[0]) if vp[pids[0]] > vp[pids[1]] else int(pids[1])
+                data["summary"]["winner"] = (
+                    int(pids[0]) if vp[pids[0]] > vp[pids[1]] else int(pids[1])
+                )
     return data
