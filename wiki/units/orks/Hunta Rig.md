@@ -16,7 +16,6 @@ tags:
 - vehicle
 - transport
 - beast-snagga
-squad_size: {'min': 6, 'max': 9, 'step': 3}
 title: Hunta Rig
 type: entity
 updated: 2026-04-30
