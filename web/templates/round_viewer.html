@@ -176,7 +176,7 @@
                      :class="idx === eventIndex ? 'bg-gray-700 border border-gray-600' : 'hover:bg-gray-800'">
                     <span :class="'px-2 py-0.5 rounded text-xs font-mono ' + eventTypeClass(evt.event_type)"
                           x-text="evt.event_type"></span>
-                    <span class="text-gray-300 truncate flex-1" x-text="evt.actor_name + (evt.target_name ? ' → ' + evt.target_name : '')"></span>
+                    <span class="text-gray-300 truncate flex-1" x-text="evt.actor_name ? evt.actor_name + (evt.target_name ? ' → ' + evt.target_name : '') : (evt.detail || evt.event_type)"></span>
                     <span class="text-gray-500 text-xs font-mono" x-show="evt.result_value !== null" x-text="evt.result_value"></span>
                 </div>
             </template>

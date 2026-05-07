@@ -529,7 +529,7 @@ class Mission:
 # Factory functions for creating missions
 def create_mission(mission_name: str, game_state: GameState) -> Mission | None:
     """Create a mission by name, scaling objectives to actual map size."""
-    mission_func = MISSIONS.get(mission_name.lower().replace(" ", "_"))
+    mission_func = MISSIONS.get(mission_name.lower().replace(" ", "_").replace("-", "_"))
     if mission_func:
         config = mission_func()
         # Scale objectives to actual map size if empty (dynamic placement)
@@ -538,11 +538,21 @@ def create_mission(mission_name: str, game_state: GameState) -> Mission | None:
             h = game_state.map_height
             cx, cy = w // 2, h // 2
             if config.scoring_rule in ("standard", "progressive"):
-                config.objectives = [
-                    MissionObjective(cx, cy, "Center"),
-                    MissionObjective(cx // 2, cy, "Flank Left"),
-                    MissionObjective(cx + cx // 2, cy, "Flank Right"),
-                ]
+                # 5 objectives for standard (Take and Hold), 3 for progressive (Only War)
+                if config.scoring_rule == "standard":
+                    config.objectives = [
+                        MissionObjective(cx, cy, "Center"),
+                        MissionObjective(cx // 2, cy, "Flank Left"),
+                        MissionObjective(cx + cx // 2, cy, "Flank Right"),
+                        MissionObjective(cx, cy // 2, "Home A"),
+                        MissionObjective(cx, cy + cy // 2, "Home B"),
+                    ]
+                else:
+                    config.objectives = [
+                        MissionObjective(cx, cy, "Center"),
+                        MissionObjective(cx // 2, cy, "Flank Left"),
+                        MissionObjective(cx + cx // 2, cy, "Flank Right"),
+                    ]
         return Mission(config=config, state=game_state)
     return None
 
@@ -575,13 +585,7 @@ def _take_and_hold() -> MissionConfig:
         name="Take and Hold",
         deployment=DeploymentType.CRUCIBLE_OF_BATTLE,
         description="Control objectives to score at end of Command phase.",
-        objectives=[
-            MissionObjective(2, 1, "Home A"),  # Adjusted for 6x4 map
-            MissionObjective(1, 3, "Mid Left"),
-            MissionObjective(4, 3, "Mid Right"),
-            MissionObjective(2, 3, "Center"),
-            MissionObjective(2, 2, "Home B"),
-        ],
+        objectives=[],  # placed dynamically based on map size (5 objectives)
         scoring_rule="standard",
     )
 

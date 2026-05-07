@@ -153,7 +153,7 @@ function resultScreen() {
                 const phaseGroups = {};
 
                 events.forEach((evt) => {
-                    const key = `${round.round || '?'}-${evt.phase || 'unknown'}`;
+                    const key = `${round.round || '?'}-${evt.phase || 'general'}`;
                     if (!phaseGroups[key]) {
                         phaseGroups[key] = {
                             round: round.round || '?',
