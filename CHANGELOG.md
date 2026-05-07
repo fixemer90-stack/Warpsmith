@@ -33,6 +33,28 @@
 - **README.md**: исправлено «5 миссий: ..., Supply Drop, Area Denial» → «3 миссии: Only War, Purge the Foe, Take and Hold». Supply Drop и Area Denial не реализованы в коде.
 - **scenario_setup.html**: дропдаун миссий показывал Only War, Supply Drop, Area Denial — заменён на три реальные миссии из реестра `MISSIONS`
 - **F2.4 Missions spec** (`docs/features/f2.4-missions.md`): полностью переписан под реальный код `mission.py` (~595 строк). Старый spec не описывал `VPTracker`, `GameResult`, `check_end_game()`, `_resolve_tie()`, `SCORING_MAP`, `DeploymentType` enum, `get_deployment_zones()`, OC-базированный `update_objective_control()`.
+- **team_builder.js — 3 syntax errors** (строки 8, 247, 254): битый `svg.replace()` с голым `<svg width=`, битые template literals `Total points(\)`, битый URL `/api/rosters /\`. Весь файл не парсился → `teamBuilder is not defined`. Исправлено на корректный JS.
+- **tooltip_definitions.html — краш Alpine**: `tooltip.examples` / `tooltip.related_stats` вызывались при `tooltip === null`. `x-show` скрывает через CSS, но Alpine всё равно вычисляет `x-for`. Обёрнуто в `<template x-if="tooltip">`.
+- **Game Loop — 6 фаз → 5**: фаза MORALE удалена из `GamePhase` enum. Battle-shock тесты перенесены в Command Phase (как в 10th edition). `max_phases_per_round = 5`.
+- **CP rules — 10th edition**: стартовые CP = 0 (было 6). Генерация: строго 1 CP за Command Phase, без бонуса за Warlord. Кап: 10 CP (Leviathan).
+- **Battle Ready +10 VP**: в конце игры каждый игрок получает +10 VP (painted army bonus, 10ed).
+- **VP cap fix**: `is_game_over` проверял `victory_points >= 10` и обрывал игру на 2-3 раунде. Убрано — теперь только `current_round > max_rounds`.
+- **Off-by-one max_rounds**: `_check_game_end` использовал `>=` вместо `>` — игра обрывалась на раунд раньше. С `max_rounds=3` играло 2 раунда вместо 3.
+- **Mission name hyphens**: `create_mission` не находил `purge-the-foe` (дефис vs подчёркивание). Добавлен `.replace("-", "_")`.
+- **Take and Hold objectives**: захардкожены для карты 6×4 (2,1)... на 44×30 недостижимы. Сделаны динамическими (5 objectives как у Only War, 3 для progressive).
+- **`_build_summary` — kills/damage/charges**: summary было пустым потому что искало в `round_log["events"]` (всегда `[]`). Переписан на regex-парсинг `game_log` текстов: `"X was destroyed"`, `"X hits Y for N damage"`, `"X charges ... engaged!"`.
+- **Result page kills/losses fix**: `_actorPlayerId` искал юнитов только по `u.id`, а `actor_id` в kill-событиях содержит имя. Добавлен `u.name === actorId`. Плюс поиск по всем раундам, не только первому.
+- **Phase breakdown table**: события без фазы (deployment, "Starting round", "Phase changed") показывались как "Unknown"/"Setup". Теперь фильтруются — таблица показывает только 5 фаз: Command, Movement, Shooting, Charge, Fight.
+- **Favicon**: создан `web/static/favicon.svg`, добавлен `<link>` в `base.html`, роут `/favicon.ico` → редирект.
+- **Progressive Disclosure — рефакторинг** (`docs/features/f4.6-progressive-disclosure.md`): 3 режима → 2 (Beginner/Expert, Intermediate удалён). Beginner показывает все 6 статов (Movement, Toughness, Save, Wounds, Leadership, Objective Control) полными словами с пояснениями.
+- **List API — leadership, oc, squad_size**: `GET /api/units` теперь отдаёт `leadership`, `oc`, `squad_size` (выводится из `model_count`).
+- **Unit modal — category tags**: в модалке юнита показываются все теги из `_unit_icons()` (Vehicle + Fly, Character + Infantry). Основная категория не дублируется.
+- **Round-viewer — state snapshots** (`_snapshot_state`): `start_state` и `end_state` были `{}` → канвас не рисовал юнитов. Добавлена сериализация `GameState` (юниты, позиции, VP, размеры карты). Снепшоты снимаются до и после каждого раунда.
+- **Round-viewer — dynamic grid**: `GRID_COLS=19`, `GRID_ROWS=14` (хардкод) → `mapWidth`/`mapHeight` из данных (44×30).
+- **Result page — winner**: summary всегда имел `winner: null`. `_build_summary` теперь вычисляет победителя из VP. API fallback: если `summary.winner is None`, вычисляет из последнего раунда.
+- **Simulation redirect**: после симуляции → `/result/` (было `/round-viewer/`). На Replay добавлена кнопка `📊 View Result`.
+- **F2.14 Primary Missions spec** (`docs/features/f2.14-primary-missions.md`): документация для The Ritual, Supply Drop, Scorched Earth (12h, pending).
+- **Version bump**: 0.7.5 → 0.7.7 во всех файлах (`main.py`, `pyproject.toml`, `README.md`, `AGENTS.md`, `DEV_INDEX.md`, `ROADMAP.md`, `ROADMAP.html`, `api.py`).
 
 ## 2026-05-06
 
