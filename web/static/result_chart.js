@@ -218,10 +218,10 @@ function resultScreen() {
                         const victimPid = this._victimPlayerId(deadId || deadName);
                         if (victimPid === 0 && !killedIds.has(deadId || deadName)) {
                             killedIds.add(deadId || deadName);
-                            result.player2.push(deadName);
+                            result.player1.push(deadName);
                         } else if (victimPid === 1 && !killedIds.has(deadId || deadName)) {
                             killedIds.add(deadId || deadName);
-                            result.player1.push(deadName);
+                            result.player2.push(deadName);
                         }
                     }
                 });

@@ -32,13 +32,13 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
             r"^(.+?)\s+was\s+destroyed$",
             lambda m, r: ReplayEvent(
                 round=r,
-                phase="",
                 turn=0,
                 event_type="kill",
                 actor_id=m.group(1).strip(),
                 actor_name=m.group(1).strip(),
                 result_value=1.0,
                 detail="destroyed",
+                phase="shooting",
             ),
         ),
         # "X shoots Y — expected N dmg"

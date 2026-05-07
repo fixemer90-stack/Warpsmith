@@ -14,9 +14,8 @@ class TestProgressiveDisclosureToggle:
         resp = client.get("/")
         assert resp.status_code == 200
         assert "progressiveDisclosure" in resp.text
-        assert "Beginner" in resp.text or "B</button>" in resp.text
-        assert "Intermediate" in resp.text or "I</button>" in resp.text
-        assert "Expert" in resp.text or "E</button>" in resp.text
+        assert "Beginner" in resp.text
+        assert "Expert" in resp.text
 
     def test_toggle_on_team_builder(self):
         resp = client.get("/team-builder")
@@ -32,7 +31,6 @@ class TestProgressiveDisclosureToggle:
         resp = client.get("/")
         # Mode CSS classes
         assert "mode-beginner" in resp.text
-        assert "mode-intermediate" in resp.text
         assert "mode-expert" in resp.text
 
 

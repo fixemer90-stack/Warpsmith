@@ -3,7 +3,7 @@
 Полный индекс всех feature-спецификаций по фазам разработки.
 Каждый файл содержит: SMART-цель, data model, implementation details, тесты.
 
-Актуально на: 2026-05-06 | v0.7.5
+Актуально на: 2026-05-07 | v0.7.7
 
 ---
 
@@ -41,18 +41,21 @@
 | [F2.2](f2.2-2d-map.md) | 2D Map — NumPy grid, terrain, deploy zones | 6h | ✅ |
 | [F2.3](f2.3-line-of-sight.md) | Line of Sight — Bresenham ray casting | 4h | ✅ |
 | [F2.4](f2.4-missions.md) | Missions — objectives, scoring, deployment | 3h | ✅ |
-| [F2.5](f2.5-game-loop.md) | Game Loop — 6 фаз, run_round() | 6h | ✅ |
+| [F2.5](f2.5-game-loop.md) | Game Loop — 5 фаз (Command, Movement, Shooting, Charge, Fight) | 6h | ✅ |
 | [F2.6](f2.6-phase-transitions.md) | Phase Transitions — priority, alternating activations | 4h | ✅ |
-| [F2.7](f2.7-battle-shock-cp-stratagems.md) | Battle-shock, CP, Stratagems | 4h | ✅ |
-| [F2.8](f2.8-victory-points.md) | Victory Points — tracking, end-game | 2h | ✅ |
+| [F2.7](f2.7-battle-shock-cp-stratagems.md) | Battle-shock (в Command Phase), CP, Stratagems | 4h | ✅ |
+| [F2.8](f2.8-victory-points.md) | Victory Points — tracking, end-game, Battle Ready | 2h | ✅ |
 | [F2.9](f2.9-roster-validation.md) | Roster Validation — PTS, Warlord, caps | 3h | ✅ |
 | [F2.10](f2.10-roster-crud.md) | Roster CRUD — SQLite save/load/delete | 2h | ✅ |
 | [F2.11](f2.11-team-builder-ui.md) | Team Builder UI — Alpine.js, PTS bar | 8h | ✅ |
 | [F2.12](f2.12-leader-compatibility.md) | Leader Compatibility Checker | 3h | ✅ |
 | [F2.13](f2.13-cover-terrain.md) | Cover & Terrain Effects — +1 SV, Ignores Cover, Indirect Fire, Bresenham LoS | 4h | ✅ |
-| [F2.14](f2.14-primary-missions.md) | Primary Missions — The Ritual, Supply Drop, Scorched Earth | 12h | ⚪ |
+| [F2.14](f2.14-deep-strike.md) | Deep Strike — reserve deployment | 3h | ⚪ |
+| [F2.15](f2.15-primary-missions.md) | Primary Missions — The Ritual, Supply Drop, Scorched Earth | 12h | ⚪ |
+| [F2.16](f2.16-shooting-refinements.md) | Shooting Refinements — rapid fire range, cover modifiers | 4h | ⚪ |
+| [F2.17](f2.17-secondary-missions.md) | Secondary Missions — Fixed & Tactical (Pariah Nexus, 18 миссий) | 16h | ⚪ |
 
-**Всего:** 14 features, ~74 часов. ✅ 93%
+**Всего:** 18 features, ~113 часов. ✅ 72%
 
 ---
 
@@ -87,7 +90,7 @@
 | [F4.3](f4.3-detachment-picker.md) | Detachment picker with rule preview | 3h | ✅ |
 | [F4.4](f4.4-synergy-hints.md) | Synergy hints: leader compatibility, transport capacity | 4h | ✅ |
 | [F4.5](f4.5-canvas-map.md) | Canvas map: terrain tiles + deploy zones | 8h | ✅ |
-| [F4.6](f4.6-progressive-disclosure.md) | Progressive Disclosure: Beginner/Intermediate/Expert | 4h | ✅ |
+| [F4.6](f4.6-progressive-disclosure.md) | Progressive Disclosure: Beginner/Expert modes | 4h | ✅ |
 | [F4.7](f4.7-stat-tooltips.md) | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h | ✅ |
 | [F4.8](f4.8-svg-icons.md) | SVG icons integration in unit cards | 2h | ✅ |
 | [F4.9](f4.9-generate-opponent.md) | Generate Random Opponent | 2h | ✅ |
@@ -143,15 +146,14 @@ Team Builder (F2.11) → Roster CRUD (F2.10) → Roster Validation (F2.9)
 POST /api/auto-play  (api_replays.py)
     │
     ├─ deploy_game()        F3.4 — AI расставляет юниты
-    ├─ Scenario.run_round() × N  F2.5 — Game Loop (6 фаз)
-    │   ├─ Command phase     VP scoring (F2.4/F2.8)
+    ├─ Scenario.run_round() × N  F2.5 — Game Loop (5 фаз)
+    │   ├─ Command phase     VP scoring (F2.4/F2.8) + Battle-shock (F2.7)
     │   ├─ Movement phase    F4.11 — Normal/Advance/Fall Back
     │   ├─ Shooting phase    Combat engine (F1.6) + Cover (F2.13)
     │   ├─ Charge phase      2D6 roll → engagement
     │   ├─ Fight phase       Melee resolution
-    │   └─ Morale phase      Battle-shock (F2.7)
     │
-    ├─ is_game_over?         rounds > max_rounds или VP cap (F2.8)
+    ├─ is_game_over?         rounds > max_rounds (F2.8)
     ├─ winner                max VP (F2.8)
     └─ save_replay()         Replay → SQLite (F3.6)
         │
@@ -166,10 +168,10 @@ POST /api/auto-play  (api_replays.py)
 | Фаза | Features | Часы | Статус |
 |------|----------|------|--------|
 | **Phase 1** — Combat Engine | 13 | ~36h | ✅ 100% |
-| **Phase 2** — Game System | 14 | ~74h | ✅ 93% |
+| **Phase 2** — Game System | 18 | ~113h | ✅ 72% |
 | **Phase 3** — AI & Automation | 9 | ~46h | 🔧 78% |
 | **Phase 4** — Web UI Polish | 13 | ~51h | ✅ 92% |
 | **Phase 5** — Production | 7 | ~16h | ✅ 100% |
 | **Phase 6** — Monetization | 7 | ~17h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |
-| **Итого** | **~73** | **~280h** | |
+| **Итого** | **~77** | **~319h** | |

@@ -99,8 +99,8 @@ def test_mission_creation():
     player1.units = {"marine1": unit1}
     player2.units = {"ork1": unit2}
 
-    # Create mission
-    mission = Mission(config=_take_and_hold(), state=game_state)
+    # Create mission via factory (generates 5 objectives dynamically)
+    mission = create_mission("Take and Hold", game_state)
 
     assert mission.config.name == "Take and Hold"
     assert mission.config.deployment == DeploymentType.CRUCIBLE_OF_BATTLE
@@ -116,7 +116,7 @@ def test_mission_score_vp():
     player2 = PlayerState("p2", "Player 2", "Orks")
     game_state.players = {"p1": player1, "p2": player2}
 
-    mission = Mission(config=_take_and_hold(), state=game_state)
+    mission = create_mission("Take and Hold", game_state)
 
     # No units on objectives - should score 0
     assert mission.score_vp("p1") == 0
@@ -239,7 +239,7 @@ def test_calculate_victory_points():
     game_state.players = {"p1": player1, "p2": player2}
 
     # Test standard scoring
-    mission = Mission(config=_take_and_hold(), state=game_state)
+    mission = create_mission("Take and Hold", game_state)
 
     # No units on objectives
     vp = mission.calculate_victory_points()
@@ -506,7 +506,7 @@ def test_get_mission_summary():
     player2 = PlayerState("p2", "Player 2", "Orks")
     game_state.players = {"p1": player1, "p2": player2}
 
-    mission = Mission(config=_take_and_hold(), state=game_state)
+    mission = create_mission("Take and Hold", game_state)
 
     summary = mission.get_mission_summary()
 

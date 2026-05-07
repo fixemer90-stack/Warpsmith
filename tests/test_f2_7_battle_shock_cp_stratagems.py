@@ -35,11 +35,11 @@ def test_battle_shock_above_half_strength():
 
     scenario = Scenario(game_state)
 
-    # Before morale phase
+    # Before battle-shock
     assert not unit_full.is_battle_shocked
 
-    # Execute morale phase
-    scenario._morale_phase()
+    # Execute battle-shock tests (now in Command phase)
+    scenario._battle_shock_tests()
 
     # Unit should not have taken battle-shock test and should remain unshocked
     assert not unit_full.is_battle_shocked
@@ -79,8 +79,8 @@ def test_battle_shock_below_half_snake_eyes():
     random.randint = lambda a, b: 1  # Always return 1 (so 1+1=2)
 
     try:
-        # Execute morale phase
-        scenario._morale_phase()
+        # Execute battle-shock tests
+        scenario._battle_shock_tests()
 
         # Unit should have failed battle-shock
         assert unit.is_battle_shocked
@@ -123,8 +123,8 @@ def test_battle_shock_below_half_boxcars():
     random.randint = lambda a, b: 6  # Always return 6 (so 6+6=12)
 
     try:
-        # Execute morale phase
-        scenario._morale_phase()
+        # Execute battle-shock tests
+        scenario._battle_shock_tests()
 
         # Unit should have passed battle-shock
         assert not unit.is_battle_shocked
@@ -177,8 +177,8 @@ def test_battle_shock_normal_roll():
     random.randint = mock_randint
 
     try:
-        # Execute morale phase
-        scenario._morale_phase()
+        # Execute battle-shock tests
+        scenario._battle_shock_tests()
 
         # Roll is 7, leadership is 7, so roll >= LD -> pass (not shocked)
         assert not unit.is_battle_shocked
@@ -187,50 +187,17 @@ def test_battle_shock_normal_roll():
         random.randint = original_randint
 
 
-def test_cp_generation_with_warlord():
-    """Test that players with warlords generate 2 CP, others 1."""
+def test_cp_generation_both_players():
+    """Test that both players generate 1 CP per Command Phase (10ed)."""
     game_state = create_empty_game("test_game")
 
-    # Player with warlord
     player1 = PlayerState("p1", "Player 1", "Space Marines")
-    warlord_unit = UnitState(
-        unit_id="warlord1",
-        name="Captain",
-        faction="Space Marines",
-        position=(0, 0),
-        current_wounds=5,
-        max_wounds=5,
-        models_remaining=1,
-        models_total=1,
-        leadership=9,
-        objective_control=0,
-        is_engaged=False,
-        is_fighting=False,
-        is_battle_shocked=False,
-        is_warlord=True,  # This is a warlord
-    )
-    player1.units = {"warlord1": warlord_unit}
     player1.command_points = 0
+    player1.units = {}
 
-    # Player without warlord
     player2 = PlayerState("p2", "Player 2", "Orks")
-    regular_unit = UnitState(
-        unit_id="ork1",
-        name="Ork Boy",
-        faction="Orks",
-        position=(5, 5),
-        current_wounds=3,
-        max_wounds=3,
-        models_remaining=1,
-        models_total=1,
-        leadership=5,
-        objective_control=0,
-        is_engaged=False,
-        is_fighting=False,
-        is_battle_shocked=False,
-    )
-    player2.units = {"ork1": regular_unit}
     player2.command_points = 0
+    player2.units = {}
 
     game_state.players = {"p1": player1, "p2": player2}
 
@@ -239,9 +206,8 @@ def test_cp_generation_with_warlord():
     # Execute command phase
     scenario._command_phase()
 
-    # Player with warlord should have 2 CP (1 base + 1 warlord)
-    assert player1.command_points == 2
-    # Player without warlord should have 1 CP (1 base)
+    # Both players get 1 CP (10ed: no warlord bonus)
+    assert player1.command_points == 1
     assert player2.command_points == 1
 
 
@@ -295,9 +261,7 @@ def test_cp_generation_with_leviant_cap():
     # Execute command phase
     scenario._command_phase()
 
-    # Both should be capped at 10
-    # Player 1: 9 + min(2, 10-9) = 9 + 1 = 10
-    # Player 2: 9 + min(1, 10-9) = 9 + 1 = 10
+    # Both should be capped at 10 (1 CP each, 9+1=10)
     assert player1.command_points == 10
     assert player2.command_points == 10
 
@@ -325,7 +289,7 @@ def test_insane_bravery_stratagem():
     assert stratagem is not None
     assert stratagem.name == "Insane Bravery"
     assert stratagem.cp_cost == 1
-    assert stratagem.phase == "morale"
+    assert stratagem.phase == "command"
 
 
 def test_counter_offensive_stratagem():
@@ -379,10 +343,10 @@ def test_stratagem_insufficient_cp():
 
 def test_stratagem_wrong_phase():
     """Test that stratagems have correct phase restrictions."""
-    # Insane Bravery should only be usable in morale phase
+    # Insane Bravery should be usable in Command phase (battle-shock)
     insane_bravery = stratagem_registry.get("Insane Bravery")
     assert insane_bravery is not None
-    assert insane_bravery.phase == "morale"
+    assert insane_bravery.phase == "command"
 
     # It should NOT be available in shooting phase
     # We don't have a direct method to check this, but we can verify the phase property
