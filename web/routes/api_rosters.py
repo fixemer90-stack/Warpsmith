@@ -91,6 +91,14 @@ async def create_roster(data: RosterCreate, user: User = Depends(get_current_use
     return {"id": cur.lastrowid, **data.model_dump()}
 
 
+def _parse_roster_row(row: dict) -> dict:
+    """Parse units from JSON string to list for API response."""
+    data = dict(row)
+    if isinstance(data.get("units"), str):
+        data["units"] = json.loads(data["units"])
+    return data
+
+
 @router.get("/rosters")
 async def list_rosters(user: User = Depends(get_current_user), public_only: bool = False):
     """Список ростереров текущего пользователя."""
@@ -103,7 +111,7 @@ async def list_rosters(user: User = Depends(get_current_user), public_only: bool
             (user.id,),
         )
 
-    return {"rosters": [dict(r) for r in rows]}
+    return {"rosters": [_parse_roster_row(r) for r in rows]}
 
 
 @router.post("/rosters/generate")
@@ -262,7 +270,7 @@ async def update_roster(roster_id: int, data: RosterCreate, user: User = Depends
 
     # Return updated roster
     result = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_id,))
-    return dict(result)
+    return _parse_roster_row(result)
 
 
 @router.post("/rosters/{roster_id}/duplicate")
@@ -283,7 +291,7 @@ async def duplicate_roster(roster_id: int, user: User = Depends(get_current_user
     new_id = result.lastrowid
 
     duplicated = db.fetchone("SELECT * FROM rosters WHERE id = ?", (new_id,))
-    return dict(duplicated)
+    return _parse_roster_row(duplicated)
 
 
 @router.delete("/rosters/{roster_id}")

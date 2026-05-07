@@ -1,7 +1,8 @@
 """JSON API для симуляции."""
 
+import contextlib
 import json
-from typing import List, Optional
+from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
@@ -123,10 +124,8 @@ async def list_units(faction: str = ""):
 async def run_simulation(request: SimulationRequest):
     """Запуск симуляции сценария."""
     # Fetch units and weapon from the wiki registry
-    try:
+    with contextlib.suppress(Exception):
         wiki.load()
-    except Exception:
-        pass
 
     attacker_unit = wiki.get_unit(request.attacker_unit)
     defender_unit = wiki.get_unit(request.defender_unit)
@@ -198,10 +197,8 @@ async def run_simulation(request: SimulationRequest):
 async def simulate_unit(request: SimulationRequest):
     """Simulate attack from a unit with multiple weapons against a defender."""
     # Fetch units from the wiki registry
-    try:
+    with contextlib.suppress(Exception):
         wiki.load()
-    except Exception:
-        pass
 
     attacker_unit = wiki.get_unit(request.attacker_unit)
     defender_unit = wiki.get_unit(request.defender_unit)
@@ -386,10 +383,8 @@ async def browse_units(
 @router.get("/units/{unit_name}/detail")
 async def unit_detail(unit_name: str):
     """Полные данные юнита для модалки."""
-    try:
+    with contextlib.suppress(Exception):
         wiki.load()
-    except Exception:
-        pass
 
     unit = wiki.get_unit(unit_name)
     if not unit:
@@ -487,10 +482,8 @@ async def list_detachments(faction: str | None = None):
 @router.get("/detachments/{detachment_name}")
 async def detachment_detail(detachment_name: str):
     """Вернуть полные данные детачмента: правила, стратагемы, энхансменты."""
-    try:
+    with contextlib.suppress(Exception):
         wiki.load()
-    except Exception:
-        pass
 
     det = wiki.get_detachment(detachment_name)
     if not det:
@@ -558,13 +551,13 @@ async def get_map_tiles(
         DIFFICULT = 4
         DEPLOY_ZONE = 5
 
-    GRID_SIZE = 16
+    grid_size = 16
 
     # Generate a balanced map with central obstacles
     tiles = []
-    for y in range(GRID_SIZE):
+    for y in range(grid_size):
         row = []
-        for x in range(GRID_SIZE):
+        for x in range(grid_size):
             # Default to open ground
             tile_type = TileType.OPEN.value
 
@@ -578,9 +571,8 @@ async def get_map_tiles(
             elif (x <= 2 or x >= 13) and (y <= 2 or y >= 13):
                 tile_type = TileType.HEAVY_COVER.value
             # Difficult terrain near obstacles
-            elif 5 <= x <= 10 and 5 <= y <= 10 and tile_type == TileType.OPEN.value:
-                if (x + y) % 3 == 0:
-                    tile_type = TileType.DIFFICULT.value
+            elif 5 <= x <= 10 and 5 <= y <= 10 and tile_type == TileType.OPEN.value and (x + y) % 3 == 0:
+                tile_type = TileType.DIFFICULT.value
 
             row.append(tile_type)
         tiles.append(row)
@@ -592,11 +584,11 @@ async def get_map_tiles(
     }
 
     for x in range(4):  # player1: x 0-3
-        for y in range(GRID_SIZE):
+        for y in range(grid_size):
             deploy_zones["player1"].append([x, y])
 
-    for x in range(12, GRID_SIZE):  # player2: x 12-15
-        for y in range(GRID_SIZE):
+    for x in range(12, grid_size):  # player2: x 12-15
+        for y in range(grid_size):
             deploy_zones["player2"].append([x, y])
 
     # Mark deploy zone tiles
@@ -606,8 +598,8 @@ async def get_map_tiles(
             tiles[y][x] = TileType.DEPLOY_ZONE.value
 
     return {
-        "width": GRID_SIZE,
-        "height": GRID_SIZE,
+        "width": grid_size,
+        "height": grid_size,
         "tiles": tiles,
         "deploy_zones": deploy_zones,
         "units": [],  # Empty for now, can be populated from scenario
@@ -705,10 +697,8 @@ async def create_roster(data: RosterCreate, user: User = Depends(get_current_use
         raise HTTPException(403, detail="Max rosters limit reached. Upgrade to Premium.")
 
     # Load wiki and validate
-    try:
+    with contextlib.suppress(Exception):
         wiki.load()
-    except Exception:
-        pass
     units_list = [(u.unit_name, u.squad_size) for u in data.units]
     validation = validate_roster(units_list, wiki.units, pts_limit=data.pts_limit)
     if not validation.is_valid:
