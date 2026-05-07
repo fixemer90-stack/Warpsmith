@@ -59,7 +59,7 @@ simulator/
 │   │   └── ai/               ← AI-поведение
 │   │       ├── decision.py   ← Greedy Decision Engine (F3.1)
 │   │       ├── deployment.py ← Zone placement AI (F3.4)
-│   │       ├── faction_ai.py ← Wiki-driven FactionAIProfile (F3.2 — deprecates ork/tau/admech AI)
+│   │       ├── faction_ai.py ← Wiki-driven FactionAIProfile g
 │   │       └── autoplay.py   ← AI vs AI full scenario (F3.5)
 │   │
 │   ├── state/                ← Игровое состояние

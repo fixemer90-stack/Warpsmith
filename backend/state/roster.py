@@ -136,17 +136,29 @@ def validate_roster(
             )
             continue
 
-        # Squad size validation
-        squad_err = validate_squad_size(unit_name, squad_size, unit)
-        if squad_err:
-            result.errors.append(squad_err)
-            result.is_valid = False
+        # Squad size validation — use squad_size from frontmatter if available
+        sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
+        min_sq, max_sq = sq["min"], sq["max"]
+        if squad_size < min_sq:
+            result.add_error(
+                "squad_too_small",
+                f"{unit_name}: min {min_sq} models, got {squad_size}",
+                detail=dict(min_size=min_sq, current_size=squad_size),
+            )
+        if squad_size > max_sq:
+            result.add_error(
+                "squad_too_large",
+                f"{unit_name}: max {max_sq} models, got {squad_size}",
+                detail=dict(max_size=max_sq, current_size=squad_size),
+            )
 
         # Count copies of this unit
         counts[unit_name] = counts.get(unit_name, 0) + 1
 
-        # 3x cap (6x for Battleline)
-        is_battleline = "BATTLELINE" in [kw.upper() for kw in unit.keywords]
+        # 3x cap (6x for Battleline) — use tags then keywords as fallback
+        tag_set = {str(t).lower() for t in (getattr(unit, "tags", []) or [])}
+        kw_set = {kw.lower() for kw in (getattr(unit, "keywords", []) or [])}
+        is_battleline = "battleline" in tag_set or "battleline" in kw_set
         max_copies = 6 if is_battleline else 3
         if counts[unit_name] > max_copies:
             label = "Battleline" if is_battleline else "non-Battleline"
@@ -172,8 +184,11 @@ def validate_roster(
         if unit.can_be_warlord:
             has_warlord = True
 
-        # Points
-        unit_pts = unit.points * squad_size
+        # Points — use squad_size from frontmatter for ptsPerModel
+        sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
+        min_sq = sq["min"]
+        pts_per_model = unit.points / max(min_sq, 1)
+        unit_pts = round(pts_per_model * squad_size)
         total_pts += unit_pts
         total_models += squad_size * unit.model_count[1]
 
