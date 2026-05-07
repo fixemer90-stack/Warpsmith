@@ -8,6 +8,7 @@ sources:
 tags:
 - orks
 - mount
+squad_size: {'min': 3, 'max': 6, 'step': 3}
 title: Squighog Boyz
 type: entity
 updated: 2026-04-30

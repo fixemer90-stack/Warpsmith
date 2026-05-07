@@ -9,6 +9,7 @@ tags:
 - infantry
 - kroot
 - auxiliary
+squad_size: {'min': 10, 'max': 20, 'step': 10}
 title: Kroot Farstalkers
 type: entity
 updated: 2026-04-30

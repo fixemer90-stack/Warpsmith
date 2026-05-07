@@ -7,6 +7,7 @@ sources: []
 tags:
 - tau
 - infantry
+squad_size: {'min': 10, 'max': 10, 'step': 10}
 title: Pathfinder Team
 type: entity
 updated: 2026-04-30

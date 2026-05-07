@@ -3,16 +3,16 @@ confidence: medium
 created: 2026-05-01
 edition: 10e
 faction: adeptus-mechanicus
-icon: infantry
+icon: vehicle
 points: 175
-role: other
+role: vehicle
 slug: skorpius-disintegrator
 sources:
-- Faction Pack v1.1 (April 2026)
+  - Faction Pack v1.1 (April 2026)
 subtype: unit
 tags:
-- adeptus-mechanicus
-- stub
+  - adeptus-mechanicus
+  - vehicle
 title: Skorpius Disintegrator
 type: entity
 updated: 2026-05-01

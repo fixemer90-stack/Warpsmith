@@ -12,7 +12,9 @@ sources:
 subtype: unit
 tags:
 - adeptus-mechanicus
-- stub
+- infantry
+- battleline
+squad_size: {'min': 10, 'max': 10, 'step': 10}
 title: Skitarii Vanguard
 type: entity
 updated: 2026-05-01

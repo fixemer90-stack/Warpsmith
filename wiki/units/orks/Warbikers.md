@@ -8,6 +8,7 @@ sources:
 tags:
 - orks
 - vehicle
+squad_size: {'min': 3, 'max': 6, 'step': 3}
 title: Warbikers
 type: entity
 updated: 2026-04-30

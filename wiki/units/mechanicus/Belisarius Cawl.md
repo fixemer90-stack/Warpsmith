@@ -12,7 +12,9 @@ sources:
 subtype: unit
 tags:
 - adeptus-mechanicus
-- stub
+- epic-hero
+- character
+- infantry
 title: Belisarius Cawl
 type: entity
 updated: 2026-05-01

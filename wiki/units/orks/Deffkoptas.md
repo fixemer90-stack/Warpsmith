@@ -9,6 +9,7 @@ tags:
 - orks
 - vehicle
 - fly
+squad_size: {'min': 3, 'max': 6, 'step': 3}
 title: Deffkoptas
 type: entity
 updated: 2026-04-30

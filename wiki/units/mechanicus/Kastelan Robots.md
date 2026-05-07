@@ -3,16 +3,16 @@ confidence: medium
 created: 2026-05-01
 edition: 10e
 faction: adeptus-mechanicus
-icon: infantry
+icon: vehicle
 points: 200
-role: other
+role: vehicle
 slug: kastelan-robots
 sources:
-- Faction Pack v1.1 (April 2026)
+  - Faction Pack v1.1 (April 2026)
 subtype: unit
 tags:
-- adeptus-mechanicus
-- stub
+  - adeptus-mechanicus
+  - vehicle
 title: Kastelan Robots
 type: entity
 updated: 2026-05-01

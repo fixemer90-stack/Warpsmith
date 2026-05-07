@@ -9,6 +9,7 @@ tags:
 - orks
 - infantry
 - elite
+squad_size: {'min': 2, 'max': 10, 'step': 2}
 title: Nobz
 type: entity
 updated: 2026-04-30

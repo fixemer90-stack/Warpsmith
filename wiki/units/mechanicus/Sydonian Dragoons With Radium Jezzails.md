@@ -3,16 +3,17 @@ confidence: medium
 created: 2026-05-01
 edition: 10e
 faction: adeptus-mechanicus
-icon: infantry
+icon: vehicle
 points: 70
 role: other
 slug: sydonian-dragoons-with-radium-jezzails
 sources:
-- Faction Pack v1.1 (April 2026)
+  - Faction Pack v1.1 (April 2026)
 subtype: unit
 tags:
-- adeptus-mechanicus
-- stub
+  - adeptus-mechanicus
+  - vehicle
+squad_size: {'min': 1, 'max': 3, 'step': 1}
 title: Sydonian Dragoons With Radium Jezzails
 type: entity
 updated: 2026-05-01

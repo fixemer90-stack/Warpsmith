@@ -8,6 +8,7 @@ sources:
 tags:
 - orks
 - infantry
+squad_size: {'min': 5, 'max': 10, 'step': 5}
 title: Kommandos
 type: entity
 updated: 2026-04-30

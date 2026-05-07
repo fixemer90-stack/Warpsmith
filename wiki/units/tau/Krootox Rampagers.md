@@ -2,6 +2,7 @@
 title: Krootox Rampagers
 type: entity
 tags: [tau, fast-attack, kroot, cavalry]
+squad_size: {'min': 3, 'max': 6, 'step': 3}
 created: 2026-05-01
 edition: 10e
 icon: monster

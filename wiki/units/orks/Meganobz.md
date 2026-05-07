@@ -8,6 +8,7 @@ sources:
 tags:
 - orks
 - infantry
+squad_size: {'min': 3, 'max': 6, 'step': 3}
 title: Meganobz
 type: entity
 updated: 2026-04-30

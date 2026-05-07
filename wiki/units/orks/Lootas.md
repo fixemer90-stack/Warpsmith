@@ -4,6 +4,7 @@ created: 2026-04-30
 updated: 2026-04-30
 type: entity
 tags: [orks, infantry]
+squad_size: {'min': 5, 'max': 10, 'step': 5}
 sources: [https://wahapedia.ru/wh40k10ed/factions/orks/]
 edition: 10e
 confidence: medium

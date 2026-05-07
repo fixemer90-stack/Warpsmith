@@ -8,6 +8,7 @@ sources:
 tags:
 - orks
 - infantry
+squad_size: {'min': 10, 'max': 20, 'step': 10}
 title: Gretchin
 type: entity
 updated: 2026-04-30

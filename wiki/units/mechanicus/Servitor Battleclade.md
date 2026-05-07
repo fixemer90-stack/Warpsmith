@@ -16,6 +16,7 @@ tags:
 - cult-mechanicus
 - servitor
 - battleclade
+squad_size: {'min': 2, 'max': 4, 'step': 1}
 title: Servitor Battleclade
 type: entity
 updated: 2026-05-01

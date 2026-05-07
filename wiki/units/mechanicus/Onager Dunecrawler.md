@@ -8,11 +8,11 @@ points: 155
 role: other
 slug: onager-dunecrawler
 sources:
-- Faction Pack v1.1 (April 2026)
+  - Faction Pack v1.1 (April 2026)
 subtype: unit
 tags:
-- adeptus-mechanicus
-- stub
+  - adeptus-mechanicus
+  - vehicle
 title: Onager Dunecrawler
 type: entity
 updated: 2026-05-01
@@ -32,11 +32,11 @@ updated: 2026-05-01
 
 - TODO
 
-## Keywords
+## Keywords 
 
 **FACTION KEYWORDS:** Adeptus Mechanicus
 
-**KEYWORDS:** Imperial, Adeptus Mechanicus
+**KEYWORDS:** VEHICLE, WALKER, IMPERIUM, SKITARII, SMOKE
 
 ## Abilities
 

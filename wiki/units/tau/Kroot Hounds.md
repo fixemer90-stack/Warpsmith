@@ -2,6 +2,7 @@
 title: Kroot Hounds
 type: attached-model
 tags: [tau, unit, auxiliary, kroot]
+squad_size: {'min': 4, 'max': 10, 'step': 3}
 edition: 10e
 created: 2026-05-01
 points: 40

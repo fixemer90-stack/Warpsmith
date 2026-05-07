@@ -12,7 +12,8 @@ sources:
 subtype: unit
 tags:
 - adeptus-mechanicus
-- stub
+- character
+- infantry
 title: Cybernetica Datasmith
 type: entity
 updated: 2026-05-01
