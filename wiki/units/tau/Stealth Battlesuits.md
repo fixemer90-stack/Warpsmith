@@ -4,6 +4,7 @@ created: 2026-04-30
 updated: 2026-04-30
 type: entity
 tags: [tau, infantry, battlesuit]
+squad_size: {'min': 3, 'max': 6, 'step': 3}
 sources: []
 edition: 10e
 confidence: medium

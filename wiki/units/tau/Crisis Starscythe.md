@@ -11,6 +11,7 @@ tags:
   - battlesuit
   - infantry
   - tau
+squad_size: {'min': 3, 'max': 6, 'step': 3}
 ---
 
 # Crisis Starscythe

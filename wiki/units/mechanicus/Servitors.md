@@ -18,6 +18,7 @@ tags:
 - infantry
 - cult-mechanicus
 - servitor
+squad_size: {'min': 1, 'max': 4, 'step': 1}
 title: Servitors
 type: entity
 updated: 2026-05-01

@@ -4,6 +4,7 @@ created: 2026-05-01
 updated: 2026-05-01
 type: entity
 tags: [orks, vehicle, artillery, legends, grots]
+squad_size: {'min': 1, 'max': 3, 'step': 1}
 sources: [Orks Faction Pack v1.3]
 edition: 10e
 confidence: high

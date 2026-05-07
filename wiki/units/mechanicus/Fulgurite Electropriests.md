@@ -12,7 +12,9 @@ sources:
 subtype: unit
 tags:
 - adeptus-mechanicus
-- stub
+- infantry
+- cult-mechanicus
+squad_size: {'min': 5, 'max': 10, 'step': 5}
 title: Fulgurite Electro-priests
 type: entity
 updated: 2026-05-01

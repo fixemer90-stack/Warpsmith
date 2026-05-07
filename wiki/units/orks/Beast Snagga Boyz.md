@@ -10,6 +10,7 @@ tags:
 - infantry
 - battleline
 - beast-snagga
+squad_size: {'min': 10, 'max': 20, 'step': 10}
 title: Beast Snagga Boyz
 type: entity
 updated: 2026-04-30

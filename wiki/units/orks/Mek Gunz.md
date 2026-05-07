@@ -9,6 +9,7 @@ tags:
 - orks
 - vehicle
 - artillery
+squad_size: {'min': 1, 'max': 3, 'step': 2}
 title: Mek Gunz
 type: entity
 updated: 2026-04-30

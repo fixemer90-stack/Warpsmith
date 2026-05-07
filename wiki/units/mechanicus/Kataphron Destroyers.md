@@ -12,7 +12,8 @@ sources:
 subtype: unit
 tags:
 - adeptus-mechanicus
-- stub
+- infantry
+squad_size: {'min': 3, 'max': 6, 'step': 3}
 title: Kataphron Destroyers
 type: entity
 updated: 2026-05-01

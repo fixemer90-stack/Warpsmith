@@ -4,6 +4,7 @@ created: 2026-04-30
 updated: 2026-04-30
 type: entity
 tags: [tau, infantry, auxiliary, vespid]
+squad_size: {'min': 5, 'max': 10, 'step': 5}
 sources: []
 edition: 10e
 confidence: medium

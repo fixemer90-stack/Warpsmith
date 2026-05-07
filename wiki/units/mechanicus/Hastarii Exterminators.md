@@ -16,6 +16,7 @@ tags:
 - hastarii
 - infantry
 - battleline
+squad_size: {'min': 5, 'max': 10, 'step': 5}
 title: Hastarii Exterminators
 type: entity
 updated: 2026-05-01

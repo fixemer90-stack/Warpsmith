@@ -12,7 +12,9 @@ sources:
 subtype: unit
 tags:
 - adeptus-mechanicus
-- stub
+- infantry
+- battleline
+squad_size: {'min': 3, 'max': 6, 'step': 3}
 title: Kataphron Breachers
 type: entity
 updated: 2026-05-01
@@ -36,7 +38,7 @@ updated: 2026-05-01
 
 **FACTION KEYWORDS:** Adeptus Mechanicus
 
-**KEYWORDS:** Imperial, Adeptus Mechanicus
+**KEYWORDS:** INFANTRY, IMPERIUM, CULT MECHANICUS, KATAPHRON, BREACHERS
 
 ## Abilities
 

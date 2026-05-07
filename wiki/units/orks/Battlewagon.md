@@ -14,6 +14,7 @@ tags:
 - orks
 - vehicle
 - transport
+squad_size: {'min': 2, 'max': 22, 'step': 10}
 title: Battlewagon
 type: entity
 updated: 2026-04-30

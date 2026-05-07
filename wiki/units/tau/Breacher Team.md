@@ -8,6 +8,7 @@ tags:
 - tau
 - infantry
 - battleline
+squad_size: {'min': 10, 'max': 10, 'step': 10}
 title: Breacher Team
 type: entity
 updated: 2026-04-30

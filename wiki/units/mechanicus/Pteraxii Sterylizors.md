@@ -12,7 +12,9 @@ sources:
 subtype: unit
 tags:
 - adeptus-mechanicus
-- stub
+- infantry
+- fly
+squad_size: {'min': 5, 'max': 10, 'step': 5}
 title: Pteraxii Sterylizors
 type: entity
 updated: 2026-05-01

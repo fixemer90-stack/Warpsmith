@@ -11,8 +11,10 @@ sources:
 - Faction Pack v1.1 (April 2026)
 subtype: unit
 tags:
-- adeptus-mechanicus
-- stub
+  - adeptus-mechanicus
+  - infantry
+  - mount
+squad_size: {'min': 3, 'max': 6, 'step': 3}
 title: Serberys Sulphurhounds
 type: entity
 updated: 2026-05-01

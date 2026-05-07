@@ -12,7 +12,8 @@ sources:
 subtype: unit
 tags:
 - adeptus-mechanicus
-- stub
+- infantry
+squad_size: {'min': 5, 'max': 10, 'step': 5}
 title: Sicarian Infiltrators
 type: entity
 updated: 2026-05-01
