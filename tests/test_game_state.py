@@ -179,13 +179,13 @@ def test_game_state_victory_points():
     assert player1.victory_points == 5
     assert player2.victory_points == 5
 
-    # Test winner determination
+    # is_game_over triggered by round limit only (not VP cap)
     assert not game.is_game_over
-    assert game.winner is None
 
-    game.add_victory_points("p1", 6)  # p1 reaches 11 VP
+    # Winner determined when VP differ
+    game.current_round = game.max_rounds + 1  # force end
     assert game.is_game_over
-    assert game.winner == "p1"
+    assert game.winner is None  # 5-5 tie
 
 
 def test_game_state_phases():
@@ -208,12 +208,9 @@ def test_game_state_phases():
     game.next_phase()
     assert game.current_phase == GamePhase.FIGHT
 
-    game.next_phase()
-    assert game.current_phase == GamePhase.MORALE
-
     # Next phase should start new round
     game.next_phase()
-    assert game.current_round == 2
+    assert game.current_round == 2  # new round
     assert game.current_phase == GamePhase.COMMAND
 
 

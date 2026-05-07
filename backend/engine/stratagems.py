@@ -141,7 +141,7 @@ def _init_core_stratagems():
         Stratagem(
             name="Insane Bravery",
             cp_cost=1,
-            phase="morale",
+            phase="command",
             description="Auto-pass Battle-shock test.",
             effect_fn=insane_bravery_effect,
         )
