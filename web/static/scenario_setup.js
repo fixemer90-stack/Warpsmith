@@ -260,7 +260,7 @@ function scenarioSetup() {
                     const data = await resp.json();
                     // Navigate to round viewer with the game result
                     if (data.result && data.result.game_id) {
-                        window.location.href = `/round-viewer/${data.result.game_id}`;
+                        window.location.href = `/result/${data.result.game_id}`;
                     } else {
                         alert('Simulation completed, but no game_id returned');
                     }

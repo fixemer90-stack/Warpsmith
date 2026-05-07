@@ -274,8 +274,21 @@ def _build_summary(
             "faction": player.faction,
         }
 
+    # Determine winner from VP
+    winner = None
+    vp_by_player = {
+        pid: getattr(player, "victory_points", 0) for pid, player in state.players.items()
+    }
+    if len(vp_by_player) >= 2:
+        pids = list(vp_by_player.keys())
+        vp1, vp2 = vp_by_player[pids[0]], vp_by_player[pids[1]]
+        if vp1 > vp2:
+            winner = int(pids[0]) if pids[0].isdigit() else 1
+        elif vp2 > vp1:
+            winner = int(pids[1]) if pids[1].isdigit() else 2
+
     return {
-        "winner": None,  # Будет заполнено в to_dict()
+        "winner": winner,
         "total_kills": total_kills,
         "total_damage": total_damage,
         "charge_count": charge_count,
@@ -310,22 +323,25 @@ def _snapshot_state(state: GameState) -> dict[str, Any]:
     for player_id, player in state.players.items():
         player_units: list[dict[str, Any]] = []
         for unit in player.units.values():
-            player_units.append({
-                "id": getattr(unit, "unit_id", unit.name),
-                "name": unit.name,
-                "position": {"x": unit.position[0], "y": unit.position[1]},
-                "is_alive": getattr(unit, "is_alive", True),
-                "is_engaged": getattr(unit, "is_engaged", False),
-                "is_battle_shocked": getattr(unit, "is_battle_shocked", False),
-                "models_remaining": getattr(unit, "models_remaining", getattr(unit, "current_wounds", 1)),
-                "models_total": getattr(unit, "max_wounds", 1),
-                "victory_points": getattr(player, "victory_points", 0),
-            })
+            player_units.append(
+                {
+                    "id": getattr(unit, "unit_id", unit.name),
+                    "name": unit.name,
+                    "position": {"x": unit.position[0], "y": unit.position[1]},
+                    "is_alive": getattr(unit, "is_alive", True),
+                    "is_engaged": getattr(unit, "is_engaged", False),
+                    "is_battle_shocked": getattr(unit, "is_battle_shocked", False),
+                    "models_remaining": getattr(
+                        unit, "models_remaining", getattr(unit, "current_wounds", 1)
+                    ),
+                    "models_total": getattr(unit, "max_wounds", 1),
+                    "victory_points": getattr(player, "victory_points", 0),
+                }
+            )
         units[player_id] = player_units
 
     victory_points = {
-        pid: getattr(player, "victory_points", 0)
-        for pid, player in state.players.items()
+        pid: getattr(player, "victory_points", 0) for pid, player in state.players.items()
     }
 
     return {
@@ -467,7 +483,14 @@ def run_auto_game(
             if _check_game_end(state):
                 break
 
-        # 8. Summary
+        # 8. Battle Ready points — 10 VP each (painted army bonus, 10ed)
+        for player in state.players.values():
+            player.victory_points += 10
+            state.game_log.append(
+                f"{player.name} gains 10 Battle Ready VP (total: {player.victory_points})"
+            )
+
+        # 9. Summary
         summary = _build_summary(state, round_logs, placements)
 
         return AutoPlayResult(

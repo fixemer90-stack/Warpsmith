@@ -488,4 +488,16 @@ async def get_result(game_id: str):
     replay = load_replay(db.conn, game_id)
     if replay is None:
         raise HTTPException(status_code=404, detail=f"Result {game_id} not found")
-    return json.loads(json.dumps(asdict(replay), default=str))
+    data = json.loads(json.dumps(asdict(replay), default=str))
+    # Compute winner from VP if summary.winner is None
+    if data.get("summary", {}).get("winner") is None and data.get("rounds"):
+        last_round = data["rounds"][-1]
+        end_state = last_round.get("end_state") or last_round.get("start_state") or {}
+        vp = end_state.get("victory_points", {})
+        if vp:
+            pids = sorted(vp.keys())
+            if len(pids) >= 2 and (vp[pids[0]] != vp[pids[1]]):
+                data["summary"]["winner"] = (
+                    int(pids[0]) if vp[pids[0]] > vp[pids[1]] else int(pids[1])
+                )
+    return data

@@ -44,7 +44,7 @@ class Scenario:
 
         # Run through all phases using the game state's phase transition
         phases_completed = 0
-        max_phases_per_round = 6  # COMMAND, MOVEMENT, SHOOTING, CHARGE, FIGHT, MORALE
+        max_phases_per_round = 5  # COMMAND, MOVEMENT, SHOOTING, CHARGE, FIGHT
 
         while phases_completed < max_phases_per_round and not self.state.is_game_over:
             # Execute current phase
@@ -81,8 +81,6 @@ class Scenario:
             self._charge_phase()
         elif phase == GamePhase.FIGHT:
             self._fight_phase()
-        elif phase == GamePhase.MORALE:
-            self._morale_phase()
 
     def _command_phase(self) -> None:
         """Command phase logic: generate CP, check mission objectives, etc."""
@@ -112,14 +110,10 @@ class Scenario:
                 if not still_engaged:
                     unit.is_engaged = False
 
-        # Generate command points for each player
+        # Generate command points for each player (10ed: 1 CP per Command Phase, no warlord bonus)
         for player in self.state.players.values():
-            # Base CP generation: 1 CP per turn
             cp_gain = 1
-            # Additional CP if player has a warlord
-            if player.warlord_unit is not None:
-                cp_gain += 1
-            # Apply Leviathan cap: max 10 CP per player
+            # Apply cap: max 10 CP per player
             if player.command_points + cp_gain > 10:
                 cp_gain = 10 - player.command_points
             player.command_points += cp_gain
@@ -127,9 +121,12 @@ class Scenario:
                 f"{player.name} gained {cp_gain} CP (total: {player.command_points})"
             )
 
-        # Update mission scoring at end of Command phase
+            # Update mission scoring at end of Command phase
         if self.state.mission:
             apply_scoring(self.state, self.state.mission, self.vp_tracker)
+
+        # Battle-shock tests (10ed: tested during Command phase for units below half-strength)
+        self._battle_shock_tests()
 
         # Activate faction AI behaviors for this round
         for player_id, profile in self._faction_profiles.items():
@@ -704,48 +701,37 @@ class Scenario:
                 f"{enemy_unit.name} hit {attacking_unit.name} for {damage_to_attacker} damage"
             )
 
-    def _morale_phase(self) -> None:
-        """Morale phase logic: check for morale failures (Battle-shock)."""
-        self.state.game_log.append("Morale phase: check for battle-shock")
+    def _battle_shock_tests(self) -> None:
+        """Battle-shock tests during Command phase (10ed)."""
         import random
 
         for player in self.state.players.values():
             for unit in player.units.values():
                 if unit.is_alive and not unit.is_above_half_strength:
-                    # Take battle-shock test
                     die1 = random.randint(1, 6)
                     die2 = random.randint(1, 6)
                     roll = die1 + die2
 
-                    # Natural 1 on either die? Actually, spec says:
-                    #   Natural 1 on either die = auto-fail
-                    #   Natural 6 on both = auto-pass
-                    # But the code in the spec uses:
-                    #   if roll <= 2:  # snake eyes -> auto-fail
-                    #   if roll >= 12:  # boxcars -> auto-pass
-                    # We'll follow the code in the spec.
-                    if roll == 2:  # snake eyes
+                    if roll == 2:  # snake eyes — auto-fail
                         unit.is_battle_shocked = True
                         self.state.game_log.append(
                             f"{unit.name} rolls {roll} (snake eyes) and fails Battle-shock"
                         )
-                    elif roll == 12:  # boxcars
+                    elif roll == 12:  # boxcars — auto-pass
                         unit.is_battle_shocked = False
                         self.state.game_log.append(
                             f"{unit.name} rolls {roll} (boxcars) and passes Battle-shock"
                         )
+                    elif roll < unit.leadership:
+                        unit.is_battle_shocked = True
+                        self.state.game_log.append(
+                            f"{unit.name} rolls {roll} < LD {unit.leadership} and fails Battle-shock"
+                        )
                     else:
-                        # Compare to leadership
-                        if roll < unit.leadership:
-                            unit.is_battle_shocked = True
-                            self.state.game_log.append(
-                                f"{unit.name} rolls {roll} < LD {unit.leadership} and fails Battle-shock"
-                            )
-                        else:
-                            unit.is_battle_shocked = False
-                            self.state.game_log.append(
-                                f"{unit.name} rolls {roll} >= LD {unit.leadership} and passes Battle-shock"
-                            )
+                        unit.is_battle_shocked = False
+                        self.state.game_log.append(
+                            f"{unit.name} rolls {roll} >= LD {unit.leadership} and passes Battle-shock"
+                        )
 
     def get_state_summary(self) -> dict:
         """Get a summary of the current game state."""
