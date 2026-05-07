@@ -534,7 +534,7 @@ async def get_map_tiles(
 
 @router.get("/health")
 async def health():
-    return {"status": "ok", "version": "0.3.0"}
+    return {"status": "ok", "version": "0.7.7"}
 
 
 @router.get("/factions")
