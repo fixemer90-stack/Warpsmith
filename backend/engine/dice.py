@@ -75,6 +75,9 @@ def compute_stats(results: np.ndarray, target_wounds: int = 1) -> SimulationStat
         min_val=int(np.min(results)),
         max_val=int(np.max(results)),
         percentiles={p: float(np.percentile(results, p)) for p in [5, 25, 50, 75, 95]},
-        pmf=[(int(damage), float(probability)) for damage, probability in zip(unique, probabilities, strict=False)],
+        pmf=[
+            (int(damage), float(probability))
+            for damage, probability in zip(unique, probabilities, strict=False)
+        ],
         kill_probability=float(np.mean(results >= target_wounds)),
     )

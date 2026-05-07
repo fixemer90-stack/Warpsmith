@@ -1,6 +1,5 @@
 """Line of Sight (LoS) calculations using ray casting."""
 
-from typing import Tuple, List, Optional
 import math
 
 from backend.state.map import BattlefieldMap, TerrainType
@@ -12,8 +11,9 @@ class LineOfSightCalculator:
     def __init__(self, battlefield: BattlefieldMap):
         self.battlefield = battlefield
 
-    def has_line_of_sight(self, start: Tuple[int, int], end: Tuple[int, int],
-                         ignore_units: bool = True) -> bool:
+    def has_line_of_sight(
+        self, start: tuple[int, int], end: tuple[int, int], ignore_units: bool = True
+    ) -> bool:
         """
         Check if there's a clear line of sight between two positions.
 
@@ -51,7 +51,9 @@ class LineOfSightCalculator:
 
         return True
 
-    def get_visibility_distance(self, position: Tuple[int, int], max_distance: int = 12) -> List[Tuple[int, int]]:
+    def get_visibility_distance(
+        self, position: tuple[int, int], max_distance: int = 12
+    ) -> list[tuple[int, int]]:
         """
         Get all positions visible from the given position within max_distance.
 
@@ -67,8 +69,13 @@ class LineOfSightCalculator:
         start_x, start_y = position
 
         # Check all positions within max_distance
-        for x in range(max(start_x - max_distance, 0), min(start_x + max_distance + 1, self.battlefield.width)):
-            for y in range(max(start_y - max_distance, 0), min(start_y + max_distance + 1, self.battlefield.height)):
+        for x in range(
+            max(start_x - max_distance, 0), min(start_x + max_distance + 1, self.battlefield.width)
+        ):
+            for y in range(
+                max(start_y - max_distance, 0),
+                min(start_y + max_distance + 1, self.battlefield.height),
+            ):
                 if (x, y) == position:
                     continue
 
@@ -79,8 +86,9 @@ class LineOfSightCalculator:
 
         return visible_positions
 
-    def can_shoot_at(self, shooter_pos: Tuple[int, int], target_pos: Tuple[int, int],
-                    weapon_range: int) -> bool:
+    def can_shoot_at(
+        self, shooter_pos: tuple[int, int], target_pos: tuple[int, int], weapon_range: int
+    ) -> bool:
         """
         Check if a shooter can shoot at a target position.
 
@@ -99,8 +107,12 @@ class LineOfSightCalculator:
 
         return self.has_line_of_sight(shooter_pos, target_pos)
 
-    def can_charge_at(self, charger_pos: Tuple[int, int], target_pos: Tuple[int, int],
-                     max_charge_distance: int = 12) -> bool:
+    def can_charge_at(
+        self,
+        charger_pos: tuple[int, int],
+        target_pos: tuple[int, int],
+        max_charge_distance: int = 12,
+    ) -> bool:
         """
         Check if a unit can charge to a target position.
 
@@ -121,7 +133,9 @@ class LineOfSightCalculator:
         # but units can be charged through (unlike shooting)
         return self.has_line_of_sight(charger_pos, target_pos, ignore_units=True)
 
-    def _get_cells_along_line(self, start: Tuple[int, int], end: Tuple[int, int]) -> List[Tuple[int, int]]:
+    def _get_cells_along_line(
+        self, start: tuple[int, int], end: tuple[int, int]
+    ) -> list[tuple[int, int]]:
         """
         Get all grid cells that a line between two points passes through.
         Uses Bresenham's line algorithm adapted for grid-based LoS.
@@ -164,7 +178,7 @@ class LineOfSightCalculator:
 
         return cells
 
-    def get_cover_status(self, unit_pos: Tuple[int, int], enemy_pos: Tuple[int, int]) -> str:
+    def get_cover_status(self, unit_pos: tuple[int, int], enemy_pos: tuple[int, int]) -> str:
         """
         Determine cover status for shooting from unit_pos to enemy_pos.
 
@@ -200,8 +214,9 @@ class LineOfSightCalculator:
         else:
             return "none"
 
-    def get_optimal_firing_position(self, target_pos: Tuple[int, int], weapon_range: int,
-                                   current_pos: Tuple[int, int]) -> Optional[Tuple[int, int]]:
+    def get_optimal_firing_position(
+        self, target_pos: tuple[int, int], weapon_range: int, current_pos: tuple[int, int]
+    ) -> tuple[int, int] | None:
         """
         Find the optimal firing position within weapon range of target.
 
@@ -214,11 +229,11 @@ class LineOfSightCalculator:
             Best firing position (x, y) or None if no valid position found
         """
         target_x, target_y = target_pos
-        current_x, current_y = current_pos
+        _current_x, _current_y = current_pos
 
         # Look for positions within range that have LoS
         best_pos = None
-        best_distance = float('inf')
+        best_distance = float("inf")
 
         for dx in range(-weapon_range, weapon_range + 1):
             for dy in range(-weapon_range, weapon_range + 1):
@@ -236,7 +251,9 @@ class LineOfSightCalculator:
                     continue
 
                 if self.has_line_of_sight((pos_x, pos_y), target_pos):
-                    distance_from_current = self.battlefield.calculate_distance((pos_x, pos_y), current_pos)
+                    distance_from_current = self.battlefield.calculate_distance(
+                        (pos_x, pos_y), current_pos
+                    )
                     if distance_from_current < best_distance:
                         best_distance = distance_from_current
                         best_pos = (pos_x, pos_y)
@@ -245,15 +262,16 @@ class LineOfSightCalculator:
 
 
 # Utility functions
-def calculate_angle(start: Tuple[int, int], end: Tuple[int, int]) -> float:
+def calculate_angle(start: tuple[int, int], end: tuple[int, int]) -> float:
     """Calculate angle in degrees between two positions."""
     x1, y1 = start
     x2, y2 = end
     return math.degrees(math.atan2(y2 - y1, x2 - x1))
 
 
-def get_positions_in_arc(center: Tuple[int, int], radius: int, start_angle: float,
-                        arc_angle: float) -> List[Tuple[int, int]]:
+def get_positions_in_arc(
+    center: tuple[int, int], radius: int, start_angle: float, arc_angle: float
+) -> list[tuple[int, int]]:
     """
     Get all positions within an arc from center position.
 

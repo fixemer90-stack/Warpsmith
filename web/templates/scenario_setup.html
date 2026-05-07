@@ -90,23 +90,65 @@
     <div class="bg-gray-800 rounded-lg p-5 border border-gray-700 mb-4">
         <h2 class="text-lg font-bold text-white mb-4">🎯 Mission & Map</h2>
 
+        <!-- Mission selection: three large buttons -->
+        <div class="mb-5">
+            <label class="block text-xs text-gray-400 uppercase tracking-wide mb-3">Select Mission</label>
+            <div class="grid grid-cols-3 gap-3">
+                <!-- Only War -->
+                <button @click="mission='only-war'"
+                    :class="mission === 'only-war' ? 'border-yellow-500 bg-gray-700 ring-1 ring-yellow-500/50' : 'border-gray-600 bg-gray-750 hover:border-gray-500'"
+                    class="border rounded-lg p-4 text-left transition-all w-full">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-base">⚔️</span>
+                        <span class="text-sm font-bold text-white">Only War</span>
+                        <span x-show="mission === 'only-war'" class="ml-auto w-3 h-3 rounded-full bg-yellow-500"></span>
+                    </div>
+                    <div class="text-xs text-gray-400 leading-relaxed">Control 3 objectives. Progressive scoring — hold more than opponent for +2 bonus VP each round. Dawn of War deployment.</div>
+                </button>
+
+                <!-- Purge the Foe -->
+                <button @click="mission='purge-the-foe'"
+                    :class="mission === 'purge-the-foe' ? 'border-red-500 bg-gray-700 ring-1 ring-red-500/50' : 'border-gray-600 bg-gray-750 hover:border-gray-500'"
+                    class="border rounded-lg p-4 text-left transition-all w-full">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-base">💀</span>
+                        <span class="text-sm font-bold text-white">Purge the Foe</span>
+                        <span x-show="mission === 'purge-the-foe'" class="ml-auto w-3 h-3 rounded-full bg-red-500"></span>
+                    </div>
+                    <div class="text-xs text-gray-400 leading-relaxed">No objectives — pure carnage. VP = % of enemy army destroyed. Search & Destroy deployment.</div>
+                </button>
+
+                <!-- Take and Hold -->
+                <button @click="mission='take-and-hold'"
+                    :class="mission === 'take-and-hold' ? 'border-blue-500 bg-gray-700 ring-1 ring-blue-500/50' : 'border-gray-600 bg-gray-750 hover:border-gray-500'"
+                    class="border rounded-lg p-4 text-left transition-all w-full">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-base">🎯</span>
+                        <span class="text-sm font-bold text-white">Take and Hold</span>
+                        <span x-show="mission === 'take-and-hold'" class="ml-auto w-3 h-3 rounded-full bg-blue-500"></span>
+                    </div>
+                    <div class="text-xs text-gray-400 leading-relaxed">Control 5 fixed objectives. Standard scoring — 1 VP per objective each Command phase. Crucible of Battle deployment.</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Format / Map / First Turn -->
         <div class="grid grid-cols-3 gap-4">
             <div>
-                <label class="block text-xs text-gray-400 uppercase tracking-wide mb-1">Mission</label>
-                <select x-model="mission" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
-                    <option value="only-war">Only War</option>
-                    <option value="supply-drop">Supply Drop</option>
-                    <option value="area-denial">Area Denial</option>
+                <label class="block text-xs text-gray-400 uppercase tracking-wide mb-1">Game Format</label>
+                <select x-model="gameFormat" @change="updateFormat()"
+                        class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
+                    <option value="500">Combat Patrol (500 pts)</option>
+                    <option value="1000">Incursion (1000 pts)</option>
+                    <option value="2000" selected>Strike Force (2000 pts)</option>
+                    <option value="3000">Onslaught (3000 pts)</option>
                 </select>
             </div>
 
             <div>
-                <label class="block text-xs text-gray-400 uppercase tracking-wide mb-1">Map Size</label>
-                <select x-model="mapSize" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm">
-                    <option value="combat-patrol">Combat Patrol (44×30")</option>
-                    <option value="strike-force" selected>Strike Force (44×60")</option>
-                    <option value="onslaught">Onslaught (44×90")</option>
-                </select>
+                <label class="block text-xs text-gray-400 uppercase tracking-wide mb-1">Map</label>
+                <div class="w-full bg-gray-700/50 border border-gray-600 rounded px-3 py-2 text-sm text-gray-300"
+                     x-text="mapLabel"></div>
             </div>
 
             <div>

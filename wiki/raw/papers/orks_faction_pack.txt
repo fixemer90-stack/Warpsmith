@@ -1,0 +1,4538 @@
+--- PAGE 1 ---
+ORKS
+FACTION PACK: VERSION 1.3
+Legal for matched play from 22nd April 2026
+On the following pages you will find additional rules and clarifications that supplement your Codex, from extra
+Detachments and datasheets to FAQs and errata.
+The FAQs and Errata section logs changes to printed products. New or revised text is presented in red, with a
+text highlight applied to revisions made previously (excluding passages that were added or replaced in full).
+Points values for your faction are presented in the Munitorum Field Manual, and wider improvements to the
+balance of Warhammer 40,000 (which may include changes to your faction’s rules) are presented in the Balance
+Dataslate. All such points values and rules changes are also updated live in the Warhammer 40,000 app.
+CONTENTS
+Detachments������������������������������������������������������������2
+Speedwaaagh!�������������������������������������������������������������������2
+Blitz Brigade������������������������������������������������������������������������4
+Taktikal Brigade������������������������������������������������������������������6
+More Dakka�������������������������������������������������������������������������8
+Freebooter Krew�������������������������������������������������������������10
+Datasheets�������������������������������������������������������������12
+Wazdakka Gutsmek�������������������������������������������������������12
+Breaka Boyz���������������������������������������������������������������������14
+Tankbustas�����������������������������������������������������������������������16
+Imperial Armour Datasheets����������������������������������18
+FAQs and Errata������������������������������������������������������20
+Legends Datasheets���������������������������������������������22
+WHAT’S NEW?
+	■Wazdakka Gutsmek datasheet.
+	■Speedwaaagh! and Blitz Brigade
+Detachments.
+
+
+--- PAGE 2 ---
+SPEEDWAAAGH!
+When a Speedwaaagh! is unleashed, entire planets become Ork speedways. The aliens tear
+across battlefields and weave through no man’s land at breakneck pace, blazing away at
+anything in their path. So fast‑moving are these Orkoid formations that they often punch
+clean through the enemy lines before their foes truly realise they are in battle. The Orks then
+haul their jostling vehicles and turbo‑boosted Trukks around, charging back for another pass
+and then another. As they roar, they fill the air with deafening hails of firepower and choking
+clouds of dust and fume. Half‑blinded, deafened by engines and bellowing, the enemy reels
+as swarms of light vehicles hit them from every direction. Ordered battle descends into
+high‑octane anarchy as the Orks compete in contests of speed and violence in which their
+enemies are an unwilling audience and participants. Soon enough, the once‑proud ranks of
+the foe are reduced to mangled ruin and the Orks race onward towards the next battle.
+DETACHMENT RULE
+TURBO BOOSTAS
+No self‑respecting Speed Freek goes to
+war without highly tuned, Mek‑approved
+turbo boostas to power them to battle.
+These devices come in all shapes and sizes,
+but all give their operators a violent burst
+of speed, allowing them to close with the
+enemy at breakneck speed and get stuck in.
+Each time a Speed Freeks or Trukk
+unit (excluding Aircraft) from your
+army Advances, it can use its turbo.
+If it does, do not make an Advance
+roll for it; instead, until the end of the
+phase, models in that unit have a Move
+characteristic of 24" but can only move in
+one straight line, and until the end of the
+turn, ranged weapons equipped by those
+models have the [ASSAULT] ability and that
+unit cannot declare a charge.
+Designer’s Note: When a unit uses its
+turbo, the models in that unit cannot pivot,
+and they cannot make a move of two or
+more straight lines (e.g. to navigate around
+obstacles). That unit also cannot declare
+a charge, even if another rule would let
+it declare a charge in a turn in which
+it Advanced.
+ENHANCEMENTS
+KUSTOM SHOKK BOX
+Obtained from a Big Mek for a veritable fortune of teef,
+this device incorporates a shokk‑boosta that enables
+a Warboss and their steed to take potentially deadly
+shortcuts through the Warp.
+Deffkilla Wartrike model only. Each time the bearer
+uses its turbo, its unit can move horizontally through
+terrain features.
+DAKKAMEK
+Mekboyz with a penchant for overwhelming firepower
+can always get some more dakka out of a vehicle’s guns.
+Mek model only. Each time the bearer uses its
+Mekaniak ability, until the start of your next
+Command phase, ranged weapons equipped by the
+selected Vehicle model have the [RAPID FIRE 1] ability.
+SUPA‑BURNY FUEL
+The highly volatile, Mek‑brewed fuel that powers this
+Wartrike emits particularly large and exceptionally
+deadly gouts of flame.
+Deffkilla Wartrike model only. Change the Attacks
+characteristic of the bearer’s killa jet – burna weapon
+to 3D6, and change the Attacks characteristic of the
+bearer’s killa jet – cutta weapon to 3.
+MASTER MEKNOLOGIST
+A talented gunsmith, even by the standards of his Big
+Mek rivals, this Ork reserves the finest of his creations
+for personal use.
+Big Mek model only. Improve the Ballistic Skill
+characteristic of the bearer’s ranged weapons by 1.
+2
+
+
+--- PAGE 3 ---
+ON DA MOVE
+SPEEDWAAAGH! – STRATEGIC PLOY STRATAGEM
+Speed Freeks live for the thrill of high‑octane warfare,
+rarely letting their feet off the accelerator, even in the
+most furious fighting.
+WHEN: Your Movement phase.
+TARGET: One Orks unit from your army that has not
+been selected to move this phase.
+EFFECT: Until the end of the turn, your unit is eligible
+to shoot and declare a charge in a turn in which it Fell
+Back or Advanced (unless it used its turbo this turn).
+MOBILE DAKKASTORM
+SPEEDWAAAGH! – STRATEGIC PLOY STRATAGEM
+No self‑respecting Speed Freek stops to aim. Instead,
+they fire on the move, concentrating hails of dakka
+on their chosen targets.
+WHEN: Your Shooting phase, just after a Speed
+Freeks or Trukk unit from your army has shot.
+TARGET: That Speed Freeks or Trukk unit.
+EFFECT: Select one enemy unit hit by one or more of
+those attacks (excluding attacks made with Indirect
+Fire weapons). Until the end of the phase, each time
+a model in a Speed Freeks or Trukk unit from your
+army makes an attack that targets that unit, improve
+the Strength characteristic of that attack by 2.
+SPESHUL AMMO
+SPEEDWAAAGH! – WARGEAR STRATAGEM
+Though the cost in teef is high, Mek‑crafted speshul
+ammunition always comes in handy when taking on
+big targets.
+WHEN: Your Shooting phase.
+TARGET: One Orks unit from your army that has not
+been selected to shoot this phase.
+EFFECT: Until the end of the phase, ranged weapons
+equipped by models in your unit (excluding
+Torrent weapons) have the [ANTI‑MONSTER 4+] and
+[ANTI‑VEHICLE 4+] abilities.
+DED KILLY CONSTRUCTION
+SPEEDWAAAGH! – STRATEGIC PLOY STRATAGEM
+Fitted with jagged ploughs, spiked tyres and steel
+bars, Ork vehicles are potent weapons in their
+own right.
+WHEN: Your Fight phase.
+TARGET: One Speed Freeks or Trukk unit from your
+army that has not been selected to fight this phase.
+EFFECT: Until the end of the phase, melee weapons
+equipped by models in your unit have the [LANCE]
+ability and, if your unit made a Charge move this
+turn, until the end of the phase, add 1 to the Damage
+characteristic of those weapons.
+DUST TRAILS
+SPEEDWAAAGH! – STRATEGIC PLOY STRATAGEM
+Large formations of Ork vehicles throw up columns
+of dust and clouds of smoke. These combine to
+shroud and obscure them as they thunder across
+the battlefield.
+WHEN: Your opponent’s Shooting phase, just after an
+enemy unit has selected its targets.
+TARGET: One Orks unit from your army that was
+selected as the target of one or more of the attacking
+unit’s attacks.
+EFFECT: Until the end of the phase, your unit has the
+Benefit of Cover.
+EVASIVE MANOOVA
+SPEEDWAAAGH! – STRATEGIC PLOY STRATAGEM
+The wiliest Speed Freeks see no shame in running
+away, especially when they can always come back
+and have ’annuva go.
+WHEN: End of your opponent’s Fight phase.
+TARGET: One Speed Freeks or Trukk unit from your
+army that is not within Engagement Range of one or
+more enemy units.
+EFFECT: Remove your unit from the battlefield and
+place it into Strategic Reserves.
+1CP
+1CP
+1CP
+1CP
+1CP
+1CP
+3
+
+
+--- PAGE 4 ---
+BLITZ BRIGADE
+Blitz Brigades consist of as many Battlewagons, Trukks and other wheeled and tracked
+monstrosities as a Tankboss can cobble together. Hulking constructions festooned with
+barbaric trophies and vomiting acrid clouds of choking exhaust fumes, these ramshackle
+vehicles bristle with rokkit batteries, pintle‑mounted shootas and massive cannons as
+crude as they are destructive. Varying widely in size and shape, all drive to war laden with
+battle‑hungry Orks. Thundering forward in a roaring avalanche of jagged scrap metal and
+burning rubber, Blitz Brigades plough directly into the enemy, tracks, wheels and pulverising
+rollers throwing up clots of mud and gore. Crude speakers spit out discordant Goffik roars
+and booming war cries that are in turn drowned out by the thunderous reports of oversized
+cannons and the jubilant bellows of Boyz as they leap from their transports and hurl
+themselves into the thick of the fight.
+DETACHMENT RULE
+EAGER FOR THE FIGHT
+Blitz Brigades thunder into battle
+laden with eager, belligerent Orks, all
+desperate to get stuck into the enemy.
+Clambering from transport compartments
+or leaping from armoured hulls, these
+wild‑eyed killers descend on the enemy in
+roaring savagery.
+Each time an Orks unit from your army
+disembarks from a Transport, until the
+end of the turn, you can re‑roll Advance
+and Charge rolls made for that Orks unit.
+ENHANCEMENTS
+RUNNIN’ BOOTS
+These squighide boots were looted from the corpse of a
+particularly nippy Speed Freek. The wearer is utterly
+convinced that they make him faster.
+Orks Infantry Character model only. Each time you
+make a Charge roll for the bearer’s unit, if that unit
+disembarked from a Transport this turn, add 1 to
+the result.
+BLITZKAPTIN
+Keeping a Blitz Brigade going in one direction is hard
+enough for most Orks. This particular commander,
+however, is a master of armoured taktiks.
+Orks Character model only. After both players have
+deployed their armies, if the bearer’s unit (or any
+Transport it is embarked within) is on the battlefield,
+select up to three Orks Vehicle units from your army
+and redeploy them. When doing so, you can set those
+units up in Strategic Reserves, regardless of how many
+units are already in Strategic Reserves.
+SUPERCHARGED SQUIG OIL
+A few drops of this volatile admixture of Squig
+oil, rokkit fuel and various other noxious
+chemicals is enough to provide any engine with
+increased performance.
+Mek model only. Each time the bearer uses its
+Mekaniak ability, until the end of the turn, you
+can re‑roll Charge rolls for the selected Vehicle
+model’s unit.
+TUFF GIT
+Big, brash and belligerent, this Ork is resilient in both
+mind and body. Even the explosion of his transport isn’t
+enough to shake him.
+Orks Infantry Character model only. At the end of
+a phase in which the bearer’s unit disembarked from
+a Transport, if that unit is Battle‑shocked, it is no
+longer Battle‑shocked.
+4
+
+
+--- PAGE 5 ---
+MOUNT UP, LADZ
+BLITZ BRIGADE – STRATEGIC PLOY STRATAGEM
+With nothing left to blast or krump, these Orks
+scramble aboard their transport and thunder towards
+the next engagement.
+WHEN: End of the Fight phase.
+TARGET: One Orks Infantry unit from your army
+that is not within Engagement Range of one or more
+enemy units, and one friendly Transport it is able to
+embark within.
+EFFECT: If your Orks Infantry unit is wholly within
+6" of that Transport, it can embark within it.
+MEKANISED BRUTALITY
+BLITZ BRIGADE – STRATEGIC PLOY STRATAGEM
+As Orkoid vehicles thunder into battle at high speed,
+hatches and ramps swing open, unleashing eager
+mobs into the thick of the fight.
+WHEN: Your Movement phase.
+TARGET: One Battlewagon, Kill Rig or Hunta Rig
+unit from your army that has not been selected to
+move this phase.
+EFFECT: Until the end of the turn, each time a unit
+disembarks from your unit after your unit makes a
+Normal move, that disembarked unit is still eligible to
+declare a charge this turn.
+RUN ’EM DOWN
+BLITZ BRIGADE – STRATEGIC PLOY STRATAGEM
+Driving forward in loose formation, Ork vehicles
+smash into the foe, crushing fleeing enemies
+beneath tyres, steel tracks and Squig trotters.
+WHEN: Your Movement phase.
+TARGET: One Battlewagon, Kill Rig or Hunta Rig
+unit from your army that has not been selected to
+move this phase.
+EFFECT: Select up to two other friendly Orks Vehicle
+or Orks Monster units within 6" of your unit. Until
+the end of the turn, your unit and each unit you
+selected are eligible to declare a charge in a turn in
+which they Advanced.
+ARMOURED DUELLISTS
+BLITZ BRIGADE – BATTLE TACTIC STRATAGEM
+Ork crews delight in engaging enemy vehicles and
+monsters in mobile battles.
+WHEN: Your Shooting phase.
+TARGET: One Orks Vehicle unit from your army that
+has not been selected to shoot this phase.
+EFFECT: Until the end of the phase, each time your
+unit makes an attack that targets a Monster or
+Vehicle unit, add 1 to the Hit roll and add 1 to the
+Wound roll.
+IMPERVIOUS
+BLITZ BRIGADE – STRATEGIC PLOY STRATAGEM
+Ramshackle though they may appear, Ork vehicles
+are frighteningly resilient in their construction.
+WHEN: Your opponent’s Shooting phase, just after an
+enemy unit has selected its targets.
+TARGET: One Battlewagon, Kill Rig or Hunta Rig
+unit from your army that was selected as the target
+of one or more of the attacking unit’s attacks.
+EFFECT: Until the end of the phase, each time an
+attack targets your unit, if the Strength characteristic
+of that attack is greater than the Toughness
+characteristic of your unit, subtract 1 from the
+Wound roll.
+YOOZ IN TROUBLE NOW
+BLITZ BRIGADE – STRATEGIC PLOY STRATAGEM
+Spilling from their damaged transport, enraged
+Orkoid infantry mobs surge towards their attackers.
+WHEN: Your opponent’s Shooting phase, just after an
+enemy unit has shot.
+TARGET: One Battlewagon, Hunta Rig or Kill Rig
+model from your army that was hit by one or more of
+the attacking unit’s attacks.
+EFFECT: One Orks Infantry unit embarked within
+your model can disembark and make a Surge move.
+To do so, roll one D6: models in that unit move a
+number of inches up to this result, but that unit must
+end that move as close as possible to the closest
+enemy unit (excluding Aircraft). When doing so,
+those models can be moved within Engagement
+Range of that enemy unit.
+1CP
+1CP
+1CP
+1CP
+1CP
+1CP
+5
+
+
+--- PAGE 6 ---
+TAKTIKAL BRIGADE
+The Orks who belong to the Blood Axe clan seek to apply their own brand of taktiks to their
+endless wars. The most cunning of Blood Axe leaders have adapted the strategies of other
+species into a unique brand of clandestine warfare that, whilst simplistic, is brutally effective.
+DETACHMENT RULE
+LISSEN ’ERE
+Blood Axe leaders bellow actual orders to
+the ladz under their command.
+Once per battle round, in your Command
+phase or after being set up on the
+battlefield in your Movement phase, each
+Boss Snikrot, Mek and Warboss model in
+your army can issue Taktiks abilities.
+To do so, select one of the Taktiks abilities
+below and select one friendly Orks unit
+within 6" of that model to issue them
+to. That model must take a Leadership
+test: if failed, the selected unit suffers 1
+mortal wound. Until the start of your
+next Command phase, the selected unit
+is affected by the selected Taktik. A unit
+cannot have Taktiks issued to it in this
+way more than once per battle round.
+Taktiks abilities cannot be issued
+to Battle‑shocked units, and if a
+unit affected by Taktiks becomes
+Battle‑shocked, all Taktiks cease to affect
+that unit while it is Battle‑shocked.
+Get Stuck In: You can re‑roll Charge rolls
+made for this unit.
+Get On Wiv It: Add 1 to the Strength
+characteristic of melee weapons equipped
+by models in this unit.
+Sneaky Stalkin’: Infantry and Mounted
+models (excluding Meganobz) in this unit
+have the Stealth ability and each time
+a ranged attack targets this unit, those
+models have the Benefit of Cover against
+that attack.
+Shoota Drills: Each time an Infantry
+or Mounted model in this unit makes a
+ranged attack, add 1 to the Hit roll.
+KEYWORDS 
+Stormboyz units from your army gain the
+Battleline keyword.
+ENHANCEMENTS
+SKWAD LEADER
+An exemplar of the Blood Axes’ devious arts, this
+Warboss leads mobs of cunning Kommandos to battle.
+Warboss Infantry model only. During the Declare
+Battle Formations step, the bearer can be attached to a
+Kommandos unit. While leading a Kommandos unit, it
+has the Infiltrators and Stealth abilities.
+MEK KAPTIN
+Whilst Flash Gitz hate discipline of any sort,
+particularly militant Meks can keep them in line with
+a combination of brutal discipline and the promise of
+shiny gubbinz.
+Big Mek, Big Mek in Mega Armour or Big Mek with
+Shokk Attack Gun model only. During the Declare
+Battle Formations step, the bearer can be attached to a
+Flash Gitz unit. Each time a model in the bearer’s unit
+makes a ranged attack, you can re‑roll the Hit roll.
+MORK’S KUNNIN’
+Possessed of an exceptionally keen mind – for
+an Ork at least – this boss matches wits with his
+opponents, holding his ladz back until an opportune
+moment arrives.
+Orks model only. After both players have deployed
+their armies, select up to three Orks units from your
+army and redeploy them. When doing so, you can set
+those units up in Strategic Reserves, regardless of how
+many units are already in Strategic Reserves.
+GOB BOOMER
+Cobbled together from the remains of a humie
+vox‑caster, this device amplifies this Ork’s already
+booming voice, carrying their bellowed orders further.
+Warboss or Mek model only. Each time the bearer
+issues Taktiks, it can do so to a friendly Orks Infantry
+or Orks Mounted unit within 18", instead of 6".
+6
+
+
+--- PAGE 7 ---
+DAT’S OURS
+TAKTIKAL BRIGADE – STRATEGIC PLOY STRATAGEM
+A few Orks, particularly those of the Blood Axe Clan,
+can resist their destructive urges long enough to
+prioritise the seizing of objectives.
+WHEN: Command phase.
+TARGET: One Orks unit from your army that is within
+Engagement Range of one or more enemy units.
+EFFECT: Until the start of the next Command phase,
+add 1 to the Objective Control characteristic of
+models in your unit.
+FIGHT PROPPA
+TAKTIKAL BRIGADE – BATTLE TACTIC STRATAGEM
+Some deviant Blood Axes go so far as to practise
+hand‑to‑hand combat, tailoring fighting styles to
+specific types of enemies.
+WHEN: Fight phase.
+TARGET: One Orks Infantry or Orks Mounted unit
+from your army that has not been selected to fight
+this phase.
+EFFECT: Select the [SUSTAINED HITS 1] or
+[LETHAL HITS] ability. Until the end of the phase,
+melee weapons equipped by models in your unit
+have the selected ability.
+TAKTIKAL RETREAT
+TAKTIKAL BRIGADE – STRATEGIC PLOY STRATAGEM
+Blood Axes feel no shame in retreating from a
+fight, particularly if the boss wants someone else
+duffed up.
+WHEN: Your Movement phase, just after an Orks unit
+from your army Falls Back.
+TARGET: That Orks unit.
+EFFECT: Until the end of the turn, your unit is eligible
+to shoot and declare a charge in a turn in which it
+Fell Back.
+KRUNCHIN’ DESCENT
+TAKTIKAL BRIGADE – BATTLE TACTIC STRATAGEM
+With their rocket packs at full throttle, Stormboyz
+plummet to smash into their foes with
+bone‑crushing force.
+WHEN: Your Charge phase, just after a Stormboyz
+unit from your army ends a Charge move.
+TARGET: That Stormboyz unit.
+EFFECT: Select one enemy unit within Engagement
+Range of your unit, then roll one D6 for each model
+in your unit that is within Engagement Range of that
+enemy unit: for each 4+, that enemy unit suffers 1
+mortal wound (to a maximum of 6 mortal wounds).
+ON TO DA NEXT
+TAKTIKAL BRIGADE – STRATEGIC PLOY STRATAGEM
+Seeing little value in pursuing fleeing foes, Blood Axe
+mobs turn their attention towards the next fight or
+press towards whatever cache of shiny gubbinz the
+boss desires.
+WHEN: Your opponent’s Movement phase, just after
+an enemy unit Falls Back.
+TARGET: One Orks unit from your army that was
+within Engagement Range of that enemy unit at the
+start of the phase.
+EFFECT: Your unit can make a Normal move of up
+to 6".
+DED SNEAKY
+TAKTIKAL BRIGADE – STRATEGIC PLOY STRATAGEM
+Utilising camouflage, cover or misdirection, these
+Orks slip away to prepare their next ambush, leaving
+their foes staring at thin air.
+WHEN: End of your opponent’s Fight phase.
+TARGET: One Kommandos or Stormboyz unit from
+your army that is not within Engagement Range of
+one or more enemy units.
+EFFECT: Remove your unit from the battlefield and
+place it into Strategic Reserves.
+1CP
+1CP
+1CP
+1CP
+1CP
+1CP
+7
+
+
+--- PAGE 8 ---
+MORE DAKKA!
+Of all the Ork manias, few are as widespread as the love of heavy firepower. Temporarily united
+by a shared love of loud and destructive dakka, hordes of similarly obsessed Orks can produce
+storms of killing fire capable of felling even the most heavily armoured of enemies.
+DETACHMENT RULE
+DAKKA! DAKKA! DAKKA!
+Orks have no real concept of ammunition
+preservation, instead tending to hold the
+trigger down until their ammunition
+runs dry or their weapon falls apart in
+their hands.
+Ranged weapons equipped by Orks
+Infantry and Orks Walker models from
+your army have the [ASSAULT] ability.
+While the Waaagh! is active for
+your army, during your Shooting
+phase, ranged weapons equipped
+by Orks Infantry and Orks Walker
+models from your army have the
+[SUSTAINED HITS 1] ability.
+ENHANCEMENTS
+DA GOBSHOT THUNDERBUSS
+Requiring an entire chest of teef to be loaded into its
+breach before each shot, the Gobshot Thunderbuss’
+worky gubbinz plates its unconventional ammunition
+in gold before firing it in an inescapable cone of fanged
+death. Not only can this madcap weapon sweep away
+swathes of enemies with every shot, it also fires a literal
+fortune in teef every time, proclaiming its owner’s
+obscene wealth in the process.
+Orks model only. Ranged weapons equipped
+by the bearer have the [DEVASTATING WOUNDS] and
+[HAZARDOUS] abilities.
+DEAD SHINY SHOOTAS
+Rumoured to have been made by Big Mek Buzzgob, da
+Dead Shiny Shootas are a set of multi‑barrelled brutes
+packed full of dakka. The guns kick out a deafening
+storm of hot lead, much to the enjoyment of the Orks
+pulling the triggers, their volume of fire so great that
+even the most inaccurate shooter can land a respectable
+number of hits.
+Orks model only. Ranged weapons equipped
+by models in the bearer’s unit have the
+[RAPID FIRE 1] ability.
+TARGETIN’ SQUIGS
+The flashiest gitz have specially‑bred targetin’ squigs
+mounted atop their favourite shoota. It’s not certain
+whether these creatures actually aid the bearer or not
+as they cling for dear life atop their perches, which are
+inevitably the biggest shoota the owner has, as nothing
+aids accuracy like firing so many shots that you just
+can’t miss.
+Orks model only. Each time a model in the bearer’s
+unit makes a ranged attack, add 1 to the Hit roll.
+ZOG OFF AND EAT DAKKA!
+There’s no point in having the loudest and flashiest
+shoota if gitz don’t let ya fire them. This Ork will even
+go so far as to avoid a punch up in order to fire his
+snazzy weapons.
+Orks model only. The bearer’s unit is eligible to shoot
+in a turn in which it Fell Back.
+8
+
+
+--- PAGE 9 ---
+ORKS IS STILL ORKS
+MORE DAKKA! – BATTLE TACTIC STRATAGEM
+Even though they may be armed with the flashiest
+shootas, when enemies stray within arms reach, an
+Orks first and strongest instinct is to use their snazzy
+shoota as a cudgel, and bash their foe to a pulp.
+WHEN: Fight phase.
+TARGET: One Orks unit from your army that has not
+been selected to fight this phase.
+EFFECT: Until the end of the phase, each time a
+model in your unit makes an attack that targets an
+enemy unit, re‑roll a Wound roll of 1. If that enemy
+unit is within range of an objective marker, you can
+re‑roll the Wound roll instead.
+GET STUCK IN, LADZ!
+MORE DAKKA! – EPIC DEED STRATAGEM
+Lashing out with ferocious blows and bellowing loud
+enough to burst eardrums, the biggest Ork present
+persuades his ladz to fight even harder.
+WHEN: Your Command phase.
+TARGET: One Orks unit from your army (excluding
+Gretchin units).
+EFFECT: Until the start of your next Command phase,
+the Waaagh! is active for your unit, even if you have
+already called a Waaagh! this battle.
+Designer’s Note: This means that any abilities that
+are in effect while the Waaagh! is active for your
+army will be in effect for your unit.
+HUGE SHOW-OFFS
+MORE DAKKA! – EPIC DEED STRATAGEM
+The pilots of the biggest Orky war machines are
+prone to showing off when the dakka starts flying.
+After all, they have a reputation to uphold.
+WHEN: Your Command phase.
+TARGET: One Orks Walker unit (excluding Killa
+Kans) from your army.
+EFFECT: Until the start of your next Command phase,
+improve your unit’s Move, Leadership and Objective
+Control characteristics by 1, and each time a model
+in your unit makes an attack, add 1 to the Hit roll.
+LONG, UNCONTROLLED BURSTS
+MORE DAKKA! – BATTLE TACTIC STRATAGEM
+When facing off against sneaky gitz who like to
+lurk in cover, most Orks believe the most effective
+strategy is to fire off so many bullets and munitions
+that something is bound to hit the target.
+WHEN: Your Shooting phase.
+TARGET: One Orks unit from your army that has not
+been selected to shoot this phase.
+EFFECT: Until the end of the phase, ranged
+weapons equipped by models in your unit have the
+[IGNORES COVER] ability.
+SPESHUL SHELLS
+MORE DAKKA! – WARGEAR STRATAGEM
+Nothing helps a round punch through armour better
+than stuffing it full of extra propellant.
+WHEN: Your Shooting phase.
+TARGET: One Orks unit from your army that has not
+been selected to shoot this phase.
+EFFECT: Until the end of the phase, each time a
+model in your unit makes a ranged attack that
+targets the closest eligible target within 18", improve
+the Armour Penetration characteristic of ranged
+weapons equipped by models in your unit by 1.
+CALL DAT DAKKA?
+MORE DAKKA! – STRATEGIC PLOY STRATAGEM
+Gun‑crazed mobs of Orks take incoming fire as a
+primal challenge, one that must be answered with an
+even bigger show of dakka.
+WHEN: Your opponent’s Shooting phase, just after an
+enemy unit has shot.
+TARGET: One Orks unit from your army that had one
+or more of its models destroyed as a result of the
+attacking unit’s attacks.
+EFFECT: Your unit can shoot as if it were your
+Shooting phase, but must target only that enemy
+unit when doing so, and can only do so if that enemy
+unit is an eligible target.
+1CP
+2CP
+1CP
+1CP
+1CP
+1CP
+9
+
+
+--- PAGE 10 ---
+FREEBOOTER KREW
+Ork Freebooterz are the most selfish, acquisitive and merciless of their kind. Kicked out of their
+tribes for failing to respect even the brutal structures of Orkoid society, they find their way into
+the company of equally shifty gits and form Freebooter krewz. Freebooterz typically sail the void
+aboard kroozers bristling with guns and boarding craft, and take every opportunity to pillage and
+destroy everything in their path. When Freebooter Krewz gather under the banner of an especially
+ambitious and cunning Kaptin, they form pirate fleets that can endanger even fortified worlds
+and full‑fledged battle stations. Any manner of Ork can become a Freebooter – though the most
+iconic of their kind are the gunned‑up show-offs known as Flash Gitz – and so their krewz may
+include mobs of Boyz and Grots, hurtling packs of bad Ork Bikerboyz, piratical Beast Snaggas,
+fleets of trophy‑festooned Battlewagons and more besides. The only unifying features are the
+Freebooterz’ greed for loot of every kind, and their willingness to do just about anything to get
+their talons on it.
+DETACHMENT RULE
+HERE BE LOOT
+Grabbing loot is a Freebooter’s favourite
+pastime, followed closely by bludgeoning
+senseless anyone stupid enough to try to
+stop him doing so – or, even worse, seeking
+to take the loot for themselves.
+At the start of your Command phase,
+select one objective marker. Until the
+start of your next Command phase, that
+objective marker is your loot objective.
+Each time a model in an Orks Infantry,
+Orks Mounted or Orks Walker unit from
+your army makes an attack, that attack
+has the [SUSTAINED HITS 1] ability if either or
+both of the following are true:
+
+■ That model’s unit is within range of
+your loot objective.
+
+■That attack targets a unit within range
+of your loot objective.
+ENHANCEMENTS
+DA KAPTIN
+Kaptins are experts in violently motivating their lads in
+the pursuit of even more loot.
+Warboss model only. Once per battle round, at the
+start of any phase, you can select one friendly Orks
+unit that is Battle‑shocked and within 12" of the
+bearer. That unit suffers D3 mortal wounds and it is
+no longer Battle‑shocked.
+GIT‑SPOTTER SQUIG
+Wealthy Freebooterz can afford augmetically enhanced
+Git‑spotter Squigs to sit on their shoulders and spot gits.
+Orks model only. Ranged weapons equipped
+by models in the bearer’s unit have the
+[IGNORES COVER] ability.
+BIONIK WORKSHOP
+Bad Meks and Doks are sought after by Freebooterz to
+provide cybork bioniks for those with the teef to pay.
+Big Mek or Painboy model only. At the start of the
+battle, roll one D3 and compare the result to the
+list below. Until the end of the battle, models in the
+bearer’s unit have that bioniks ability.
+1. Bionik Legs: Add 2" to the Move characteristic of
+this model.
+2. Bionik Arms: Add 1 to the Strength characteristic
+of melee weapons equipped by this model.
+3. Bionik Bonce: Improve the Weapon Skill
+characteristic of melee weapons equipped by this
+model by 1.
+RAZGIT’S MAGIK MAP
+Stolen from a humie cogboy, this remarkable digital
+map helps Freebooterz outwit their enemies.
+Orks model only. After both players have deployed
+their armies, select up to three Orks Infantry
+units from your army and redeploy them. When
+doing so, you can set those units up in Strategic
+Reserves, regardless of how many units are already in
+Strategic Reserves.
+10
+
+
+--- PAGE 11 ---
+BASH AND GRAB
+FREEBOOTER KREW – BATTLE TACTIC STRATAGEM
+Freebooterz waste no time getting violently stuck
+into anyone unwise enough to try to keep prized loot
+out of their grasping claws.
+WHEN: The Fight phase.
+TARGET: One Orks unit from your army that has not
+been selected to fight this phase.
+EFFECT: Until the end of the phase, each time a
+model in your unit makes an attack that targets an
+enemy unit within range of the loot objective, you
+can re‑roll the Wound roll.
+GRAB AND BASH
+FREEBOOTER KREW – STRATEGIC PLOY STRATAGEM
+Few warriors in the galaxy fight with greater brutality
+than a Freebooter determined to hang onto his loot.
+WHEN: Your Command phase.
+TARGET: One Orks unit from your army (excluding
+Gretchin units) that is within range of the
+loot objective.
+EFFECT: Until the start of your next Command phase,
+the Waaagh! is active for your unit, even if you have
+already called a Waaagh! this battle.
+Designer’s Note: This means that any abilities that
+are in effect while the Waaagh! is active for your
+army will be in effect for your unit.
+BOARDIN’ RUSH
+FREEBOOTER KREW – BATTLE TACTIC STRATAGEM
+Having cut their gold‑plated fangs storming aboard
+hostile warships, these Freebooterz are good at
+getting stuck straight into the enemy.
+WHEN: Your Movement phase.
+TARGET: One Orks unit from your army that has not
+been selected to move this phase.
+EFFECT: Until the end of the phase, each time your
+unit Advances, do not make an Advance roll. Instead,
+until the end of the phase, add 6" to the Move
+characteristic of models in your unit.
+DECK FRAGGERS
+FREEBOOTER KREW – STRATEGIC PLOY STRATAGEM
+Invented by some sadistic Bad Mek, these
+shrapnel‑packed rounds of kustom ammunition
+are excellent for scything down tight‑packed
+enemy infantry.
+WHEN: Your Shooting phase.
+TARGET: One Orks unit from your army that has not
+been selected to shoot this phase.
+EFFECT: Until the end of the phase, each time a
+model in your unit targets an Infantry unit with a
+ranged weapon, that weapon has the [BLAST] ability.
+ROLLING LOOT‑HEAP
+FREEBOOTER KREW – STRATEGIC PLOY STRATAGEM
+Just because an enemy vehicle is still mobile and
+fighting doesn’t stop any suitably arrogant Flash Gitz
+from claiming it as their loot, especially when their
+snazzguns are more than capable of explosively
+backing up that claim.
+WHEN: Your Shooting phase.
+TARGET: One Flash Gitz unit from your army that has
+not been selected to shoot this phase.
+EFFECT: Until the end of the phase, ranged
+weapons equipped by models in your unit have the
+[ANTI‑VEHICLE 4+] ability.
+KRUMP AND RUN
+FREEBOOTER KREW – STRATEGIC PLOY STRATAGEM
+Freebooterz are unscrupulous pirates through and
+through, always on the look out for new looting
+opportunities and sometimes even willing to forgo a
+good punch up in favour of hauling away their riches.
+WHEN: Your opponent’s Movement phase, just after
+an enemy unit falls back.
+TARGET: One Orks unit from your army that was
+within engagement range of that enemy unit at the
+start of the phase and is not within range of one or
+more enemy units.
+EFFECT: Your unit can make a Normal move of up
+to 6".
+1CP
+1CP
+1CP
+1CP
+1CP
+1CP
+11
+
+
+--- PAGE 12 ---
+WAZDAKKA GUTSMEK
+M
+T
+SV
+W
+LD
+OC
+14"
+8
+3+
+10
+6+
+3
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Grabba dragga [ASSAULT, PRECISION]
+12"
+1
+2+
+10
+-2
+3
+Psyko-gatler  [ASSAULT, SUSTAINED HITS 1]
+24"
+12
+4+
+6
+-2
+2
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Fixit’s wrench [EXTRA ATTACKS]
+Melee
+1
+4+
+3
+0
+1
+Grabba dragga [LANCE]
+Melee
+6
+2+
+10
+-2
+3
+Speeding bulk and flaming exhaust [EXTRA ATTACKS]
+Melee
+6
+2+
+5
+-1
+1
+ABILITIES
+CORE: Deadly Demise D3, Deep Strike, Lone Operative
+FACTION: Waaagh!
+Fixit da Grot: At the start of your Command phase, this model
+regains up to D3 lost wounds.
+Throttlerokkit Shokka Engine: In your Command phase,
+select one of the abilities in the Throttlerokkit Shokka Engine
+section (see next page). Until the start of your next Command
+phase, this model has that ability.
+KEYWORDS: Mounted, Vehicle, Speed Freeks, Epic Hero, Smoke, Character,
+Wazdakka Gutsmek
+FACTION KEYWORDS:
+Orks
+INVULNERABLE SAVE
+4+
+
+
+--- PAGE 13 ---
+WAZDAKKA GUTSMEK
+Wazdakka Gutsmek thunders to battle aboard his kustom
+warbike, Big Revva. Using its throttlerokkit shokka, he reaches
+incredible speeds or even tellyports across the battlefield,
+spewing rounds from his psyko-gatler, tearing foes to bloody
+tatters with his grabba dragga, and wreaking high-speed havoc.
+KEYWORDS: Mounted, Vehicle, Speed Freeks, Epic Hero, Smoke, Character,
+Wazdakka Gutsmek
+FACTION KEYWORDS:
+Orks
+THROTTLEROKKIT SHOKKA ENGINE
+Turbo Engine: This unit is eligible to declare a charge in a turn in which it Advanced or Fell Back.
+Shokk Attack Engine: In your Command phase, if this unit is not within Engagement Range of one or
+more enemy units, you can remove it from the battlefield and place it into Strategic Reserves.
+Pulse Jet: Each time this unit Advances, do not make an Advance roll for it. Instead, until the end of
+the phase:
+	■Add 6" to the Move characteristic of models in this unit.
+	■Models in this unit can move through models and terrain features.
+WAAAGH! WAZDAKKA
+If this model is your Warlord, Warbiker units from your army have the Battleline keyword.
+UNIT COMPOSITION
+	■1 Wazdakka Gutsmek – Epic Hero
+This model is equipped with: 1 grabba dragga; 1 psyko-gatler;
+1 Fixit’s wrench; 1 speeding bulk and flaming exhaust.
+
+
+--- PAGE 14 ---
+BREAKA BOYZ
+M
+T
+SV
+W
+LD
+OC
+6"
+5
+4+
+2
+7+
+1
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Rokkit pistol [PISTOL]
+12"
+1
+5+
+9
+-2
+3
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Choppa
+Melee
+4
+3+
+5
+-1
+1
+Knucklebustas
+[ANTI-MONSTER 4+, ANTI-VEHICLE 4+, TWIN-LINKED]
+Melee
+5
+3+
+5
+-1
+1
+Smash hammer
+[ANTI-MONSTER 4+, ANTI-VEHICLE 4+]
+Melee
+2
+3+
+6
+-2
+3
+Tankhammer
+[ANTI-MONSTER 4+, ANTI-VEHICLE 4+, DEVASTATING WOUNDS,
+HAZARDOUS]
+Melee
+2
+3+
+6
+-2
+3
+ABILITIES
+FACTION: Waaagh!
+Trophy Hunters: Each time this unit declares a charge, you
+can re-roll the Charge roll.
+Bomb Squigs: Twice per battle, after this unit ends a Normal
+move, you can select one enemy unit within 12" of it and roll
+one D6: on a 2+, that enemy unit suffers D3 mortal wounds.
+Designer’s Note: Place two Bomb Squig tokens next to the
+unit, removing one each time this unit uses this ability.
+KEYWORDS: Infantry, Grenades, Breaka Boyz
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 15 ---
+BREAKA BOYZ
+Breaka Boyz dismantle the foe’s war engines and defences with
+well-placed krumpings from their smash hammers. Some use
+a pair of brutal knucklebustas, while the more addled opt for a
+tankhammer: a rokkit strapped to a big metal stick that offers a
+satisfyingly explosive means of up-close annihilation.
+KEYWORDS: Infantry, Grenades, Breaka Boyz
+FACTION KEYWORDS:
+Orks
+ATTACHED UNIT
+If a Character unit from your army with the Leader ability can be attached to a Boyz unit, it can be
+attached to this unit instead.
+WARGEAR OPTIONS
+	■The Boss Nob’s smash hammer can be replaced with 1 rokkit pistol.
+	■One Breaka Boy’s smash hammer can be replaced with 1 knucklebustas.
+	■One Breaka Boy’s smash hammer can be replaced with 1 tankhammer.
+UNIT COMPOSITION
+	■1 Boss Nob
+	■5 Breaka Boyz
+The Boss Nob is equipped with: rokkit pistol; smash
+hammer; choppa.
+Each Breaka Boy is equipped with: smash hammer.
+
+
+--- PAGE 16 ---
+TANKBUSTAS
+M
+T
+SV
+W
+LD
+OC
+6"
+5
+4+
+2
+7+
+1
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Rokkit launcha [BLAST]
+24"
+D3
+5+
+9
+-2
+3
+Rokkit pistol [PISTOL]
+12"
+1
+5+
+9
+-2
+3
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Choppa
+Melee
+4
+3+
+5
+-1
+1
+Close combat weapon
+Melee
+3
+3+
+5
+0
+1
+Smash hammer [ANTI-MONSTER 4+, ANTI-VEHICLE 4+]
+Melee
+2
+3+
+6
+-2
+3
+ABILITIES
+FACTION: Waaagh!
+Tank Hunters: Each time a model in this unit makes a ranged
+attack that targets a Monster or Vehicle unit, add 1 to the Hit
+roll and add 1 to the Wound roll.
+Bomb Squigs: Twice per battle, after this unit ends a Normal
+move, you can select one enemy unit within 12" of it and roll
+one D6: on a 2+, that enemy unit suffers D3 mortal wounds.
+Designer’s Note: Place two Bomb Squig tokens next to the
+unit, removing one each time this unit uses this ability.
+WARGEAR ABILITIES
+Pulsa Rokkit: Once per battle, when the bearer’s unit is
+selected to shoot in your Shooting phase, the bearer can use
+its pulsa rokkit. If it does, until the end of the phase, improve
+the Strength and Armour Penetration characteristics of ranged
+weapons equipped by models in the bearer’s unit by 1.
+KEYWORDS: Infantry, Grenades, Tankbustas
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 17 ---
+TANKBUSTAS
+Tankbustas fixate on blasting enemy vehicles into scrap using
+barrages of rokkits that detonate in deafening explosions. They
+wield varied, cobbled-together launchas, and are laden with an
+arsenal of explosive projectiles, whose dubious reliability is made
+up for by the Tankbustas’ enthusiasm.
+KEYWORDS: Infantry, Grenades, Tankbustas
+FACTION KEYWORDS:
+Orks
+ATTACHED UNIT
+If a Character unit from your army with the Leader ability can be attached to a Lootas unit, it can be
+attached to this unit instead.
+WARGEAR OPTIONS
+	■1 of the Boss Nob’s rokkit pistols can be replaced with 1 smash hammer.
+	■One Tankbusta can be equipped with one of the following:
+	◦1 pulsa rokkit
+	◦1 additional rokkit launcha
+UNIT COMPOSITION
+	■1 Boss Nob
+	■5 Tankbustas
+The Boss Nob is equipped with: 2 rokkit pistols; choppa.
+Each Tankbusta is equipped with: rokkit launcha; close
+combat weapon.
+
+
+--- PAGE 18 ---
+GARGANTUAN SQUIGGOTH
+KEYWORDS: Monster, Titanic, Towering, Transport, Gargantuan Squiggoth
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Kannon – frag [BLAST]
+36"
+D6
+5+
+5
+0
+1
+Kannon – shell
+36"
+1
+5+
+9
+-2
+D6
+Supa-kannon [BLAST]
+60"
+2D6
+5+
+12
+-2
+3
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Huge tusks – strike [LANCE]
+Melee
+6
+3+
+14
+-3
+12
+Huge tusks – sweep
+Melee
+18
+3+
+9
+-2
+3
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise 2D6, Firing Deck 20
+FACTION: Waaagh!
+Gargantuan: Each time this model makes a Normal, Advance
+or Fall Back move, it can move over models (excluding Titanic
+models) and terrain features that are 4" or less in height as if
+they were not there.
+Walking Bastion: This model does not suffer the penalty to
+its Hit rolls for making ranged attacks while enemy units are
+within Engagement Range of it.
+DAMAGED: 1-10 WOUNDS REMAINING
+While this model has 1-10 wounds remaining, subtract 6 from
+this model’s Objective Control characteristic and each time
+this model makes an attack, subtract 1 from the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+10"
+13
+3+
+30
+7+
+12
+ Before selecting targets for this weapon, select one of its profiles to make attacks with.
+
+
+--- PAGE 19 ---
+WARGEAR OPTIONS
+	■This model can be equipped with one of the following:
+	◦1 kannon
+	◦1 supa-kannon
+UNIT COMPOSITION
+	■1 Gargantuan Squiggoth
+This model is equipped with: huge tusks.
+TRANSPORT
+This model has a transport capacity of 20 Orks Infantry
+models. Each Mega Armour or Jump Pack model takes
+up the space of 2 models. Ghazghkull Thraka takes up
+the space of 18 models. If this model is equipped with
+a supa-kannon, it has a transport capacity of 15 Orks
+Infantry models.
+GARGANTUAN SQUIGGOTH
+Squiggoths can grow in size indefinitely. The larger they get, the more
+prized they become in the eyes of Ork Warbosses, whose simple
+minds see them for the colossal living weapons they are. Kitted out
+with armour, guns and bellowing passengers, truly giant specimens
+are walking bastions, their momentum all but unstoppable.
+KEYWORDS: Monster, Titanic, Towering, Transport, Gargantuan Squiggoth
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 20 ---
+ORKS
+UPDATES & ERRATA
+Page 94 – Ghazghkull Thraka, Abilities, Ghazghkull’s Waaagh! Banner
+Change to:
+‘Ghazghkull’s Waaagh! Banner (Aura): While a friendly Orks
+unit is within 12" of Makari, if the Waaagh! is active for your
+army, melee weapons equipped by models in that unit have the
+[LETHAL HITS] ability.’
+Page 95 – Warboss, Abilities, Da Biggest and da Best
+Change to:
+‘Da Biggest and da Best: While the Waaagh! is active for your army,
+add 4 to the Attacks characteristic of this model’s melee weapons.’
+Page 95 – Warboss in Mega Armour, Abilities, Dead Brutal
+Change to:
+‘Dead Brutal: While the Waaagh! is active for your army, this model’s
+’uge choppa has a Damage characteristic of 3.’
+Page 98 – Big Mek, Abilities, Shokk-boosta
+Change to:
+‘Shokk‑boosta: You can re‑roll Advance rolls made for this model’s
+unit. In addition, each time this model’s unit makes a Normal,
+Advance or Fall Back move, models in that unit can move through
+models and terrain features. When doing so, they can move within
+Engagement Range of such models but cannot end that move within
+Engagement Range of them, and any Desperate Escape test is
+automatically passed.’
+Page 105 – Zodgrod Wortsnagga, Abilities, Special Dose
+Change to:
+‘Special Dose: While the Waaagh! is active for your army, add 6" to the
+Move characteristic of models in this model’s unit.’
+Page 107 – Gretchin, Thievin’ Scavengers ability
+Change to:
+‘At the start of your Movement phase, roll one D6 for each objective
+marker you control that has one or more units from your army with
+this ability within range of it (excluding Battle-shocked units). If one or
+more of those rolls is a 4+, you gain 1CP.’
+Page 109 – Meganobz, Krumpin’ Time ability
+Change to:
+‘While the Waaagh! is active for your army, models in this unit have the
+Feel No Pain 5+ ability.’
+Page 117 – Battlewagon, Transport section
+Change to:
+‘This model has a transport capacity of 22 Orks Infantry models. If
+this model is equipped with a killkannon, it has a transport capacity of
+12 Orks Infantry models. Each Mega Armour or Jump Pack model
+takes up the space of 2 models. The Ghazghkull Thraka model takes
+up the space of 15 models but can only embark within this model if
+this model is not equipped with an ’ard case, kannon, killkannon or
+zzap gun.’
+Page 128 – Morkanaut, Abilities, Big an’ Shooty
+Change to:
+‘Big an’ Shooty: Each time this model makes a ranged attack, if the
+Waaagh! is active for your army, add 1 to the Hit roll.’
+Page 129 – Gorkanaut, Abilities, Big an’ Stompy
+Change to:
+‘Big an’ Stompy: Each time this model makes a melee attack, if the
+Waaagh! is active for your army, add 1 to the Hit roll.’
+Page 132 – Stompa, Transport section
+Change to:
+‘This model has a transport capacity of 22 Orks Infantry models.
+Each Mega Armour or Jump Pack model takes up the space of 2
+models. The Ghazghkull Thraka model takes up the space of
+15 models.’
+FAQS
+Q: If a unit has an ability that checks if the Waaagh! is active for your
+army in order for that ability to take effect (e.g. the Maganobz’ Krumpin’
+Time ability), does that ability take effect if another rule makes the
+Waaagh! active for that unit (e.g. the Bully Boyz Detachment rule)?
+A: Yes.
+Q: If a Character is attached to a unit of Meganobz at the start of
+a battle round in which I called a Waaagh!, but the Bodyguard unit
+is destroyed before the end of that battle round, does the surviving
+Character keep the Feel No Pain 5+ ability conferred by the
+Meganobz’ Krumpin’ Time ability until that Waaagh! ends, or does it
+lose that Feel No Pain 5+ ability once it is no longer an Attached unit?
+A: It loses the Feel No Pain 5+ ability once it is no longer an
+Attached unit.
+Q: Can my opponent use the Fire Overwatch Stratagem when I
+remove Boss Snikrot’s unit from the battlefield using his Kunnin’
+Infiltrator ability?
+A: No.
+
+
+--- PAGE 21 ---
+Q: Can my opponent use the Fire Overwatch Stratagem when I
+set Boss Snikrot’s unit back up the battlefield using his Kunnin’
+Infiltrator ability?
+A: Yes, unless he is leading a unit of Kommandos when he is set back
+up (due to their Sneaky Gitz ability).
+Q: If a model has an ability that triggers when you call a Waaagh! and
+that model is embarked within a Transport when this happens (e.g. a
+Warboss’ Da Biggest and da Best ability), does that ability
+take effect?
+A: No. Abilities do not take effect while units are embarked within
+Transports unless they explicitly state otherwise.
+Q: When using the Conniving Runts Stratagem, to be able to make the
+Normal move as part of the Stratagem, do I need to roll a 4+ and have
+inflicted any mortal wounds?
+A: No.
+Q: In the Effect section of the Go Get ’Em! Stratagem there is an
+additional effect if my unit contains 10 or more models. When do I
+check if my unit has 10 or more models?
+A: This is checked after the attacking unit has shot.
+Q: Can a unit equipped with multiple Bomb Squigs use its Bomb Squig
+ability more than once each phase?
+A: No.
+
+
+--- PAGE 22 ---
+WARHAMMER L E G E N D S
+UFTHAK BLACKHAWK
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Shokk rifle [DEVASTATING WOUNDS, HAZARDOUS, PRECISION]
+24"
+1
+4+
+8
+-2
+D6+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Princess’ jaws [EXTRA ATTACKS]
+Melee
+2
+4+
+4
+0
+1
+Snazzhammer [DEVASTATING WOUNDS]
+Melee
+4
+3+
+10
+-2
+2
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Leader
+FACTION: Waaagh!
+Tellyporta Tech: While this model is leading a unit, models in
+that unit have the Deep Strike ability.
+Gargantsmasha: Each time this model makes an attack that
+targets a Titanic unit, you can re-roll the Hit roll and you can
+re-roll the Wound roll.
+M
+T
+SV
+W
+LD
+OC
+6"
+5
+4+
+6
+6+
+1
+INVULNERABLE SAVE
+5+
+KEYWORDS: Infantry, Character, Grenades, Epic Hero, Warboss,
+Ufthak Blackhawk
+
+
+--- PAGE 23 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■None
+UNIT COMPOSITION
+	■1 Ufthak Blackhawk - Epic Hero
+This model is equipped with: shokk rifle; snazzhammer;
+Princess’ jaws.
+LEADER
+This model can be attached to the following units:
+	■Boyz
+	■Nobz
+UFTHAK BLACKHAWK
+KEYWORDS: Infantry, Character, Grenades, Epic Hero, Warboss,
+Ufthak Blackhawk
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 24 ---
+WARHAMMER L E G E N D S
+KANNONWAGON
+KEYWORDS: Vehicle, Transport, Kannonwagon
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Big shoota [RAPID FIRE 2]
+36"
+3
+5+
+5
+0
+1
+Supa-kannon – frag [BLAST]
+36"
+D6+3
+5+
+5
+0
+1
+Supa-kannon – shell
+36"
+1
+5+
+9
+-2
+D3+3
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Spiked ram
+Melee
+3
+4+
+8
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D6, Firing Deck 6
+FACTION: Waaagh!
+Big Booms: In your Shooting phase, just after selecting a
+target for this model’s supa-kannon, roll one D6 for the target
+unit and every other unit within 3" of that unit: on a 5+, the
+unit being rolled for is struck by a concussive wave. After this
+model has finished making its attacks against that target unit
+this phase, each unit struck by a concussive wave this phase
+suffers D3 mortal wounds.
+DAMAGED: 1-5 WOUNDS REMAINING
+While this model has 1-5 wounds remaining, each time this
+model makes an attack, subtract 1 from the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+12"
+10
+4+
+16
+7+
+4
+ Before selecting targets for this weapon, select one of its profiles to make attacks with.
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 25 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model can be equipped with up to 3 big shootas.
+UNIT COMPOSITION
+	■1 Kannonwagon
+This model is equipped with: supa-kannon; spiked ram.
+TRANSPORT
+This model has a transport capacity of 6 Orks Infantry
+models. Each Mega Armour or Jump Pack model takes
+up the space of 2 models. This model cannot transport
+Ghazghkull Thraka models.
+KEYWORDS: Vehicle, Transport, Kannonwagon
+FACTION KEYWORDS:
+Orks
+KANNONWAGON
+
+
+--- PAGE 26 ---
+WARHAMMER L E G E N D S
+DA RED GOBBO
+KEYWORDS: Infantry, Character, Grenades, Epic Hero, Grots, Da Red Gobbo
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Kustom grot blasta [DEVASTATING WOUNDS, PISTOL]
+12"
+D3
+4+
+4
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Icon of da Revolushun [DEVASTATING WOUNDS]
+Melee
+3
+4+
+3
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Leader
+FACTION: Waaagh!
+Da Revolushun!: While this model is leading a unit, each time
+a model in that unit makes an attack, add 1 to the Hit roll.
+Has Yoo Been a Good Little Grot This Year?: Once per battle,
+in your Shooting phase, you can target this model’s unit with
+the Grenade Stratagem for 0CP, and can do so even if you
+have already targeted a different unit with that Stratagem
+this phase.
+M
+T
+SV
+W
+LD
+OC
+6"
+2
+5+
+3
+7+
+1
+
+
+--- PAGE 27 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■None
+UNIT COMPOSITION
+	■1 Da Red Gobbo – Epic Hero
+This model is equipped with: kustom grot blasta; Icon of
+da Revolushun.
+LEADER
+This model can be attached to the following unit:
+	■Gretchin
+KEYWORDS: Infantry, Character, Grenades, Epic Hero, Grots, Da Red Gobbo
+FACTION KEYWORDS:
+Orks
+DA RED GOBBO
+
+
+--- PAGE 28 ---
+WARHAMMER L E G E N D S
+PAINBOY ON WARBIKE
+KEYWORDS: Mounted, Speed Freeks, Character, Painboy on Warbike
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Twin dakkagun [ASSAULT, RAPID FIRE 2, TWIN-LINKED]
+18"
+3
+5+
+5
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Killsaw
+Melee
+2
+4+
+12
+-3
+2
+Power klaw
+Melee
+3
+4+
+9
+-2
+2
+’Urty syringe [ANTI-INFANTRY 4+, EXTRA ATTACKS, PRECISION]
+Melee
+1
+3+
+2
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Leader
+FACTION: Waaagh!
+Dok’s Toolz: While this model is leading a unit, models in that
+unit have the Feel No Pain 5+ ability.
+Hold Still and Say ‘Aargh!’: Each time an attack made by
+this model with its ’urty syringe scores a Critical Wound
+against a unit (excluding Vehicle units), that unit suffers D6
+mortal wounds.
+M
+T
+SV
+W
+LD
+OC
+12"
+6
+4+
+4
+7+
+2
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 29 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model’s power klaw can be replaced with 1 killsaw.
+UNIT COMPOSITION
+	■1 Painboy on Warbike
+This model is equipped with: twin dakkagun; power klaw;
+'urty syringe.
+LEADER
+This model can be attached to the following unit:
+	■Warbikers
+KEYWORDS: Mounted, Speed Freeks, Character, Painboy on Warbike
+FACTION KEYWORDS:
+Orks
+PAINBOY ON WARBIKE
+
+
+--- PAGE 30 ---
+WARHAMMER L E G E N D S
+WARTRAKKS
+KEYWORDS: Mounted, Speed Freeks, Wartrakks
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Rack of rokkits [BLAST]
+24"
+D3+1
+5+
+9
+-2
+3
+Twin big shoota [RAPID FIRE 2, TWIN-LINKED]
+36"
+3
+5+
+5
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Spiked wheel
+Melee
+2
+4+
+6
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+FACTION: Waaagh!
+Drive-by Dakka: Each time a model in this unit makes a
+ranged attack that targets a unit within 9", improve the Armour
+Penetration characteristic of that attack by 1.
+M
+T
+SV
+W
+LD
+OC
+12"
+6
+4+
+6
+7+
+2
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 31 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■Any number of models can each have their twin big shoota replaced with 1 rack of rokkits.
+UNIT COMPOSITION
+	■1-2 Wartrakks
+Every model is equipped with: twin big shoota; spiked wheel.
+SPEED FREEKS
+If a model from your army with the Leader ability can be
+attached to a Warbikers unit, it can be attached to this
+unit instead.
+KEYWORDS: Mounted, Speed Freeks, Wartrakks
+FACTION KEYWORDS:
+Orks
+WARTRAKKS
+
+
+--- PAGE 32 ---
+WARHAMMER L E G E N D S
+SKORCHAS
+KEYWORDS: Mounted, Speed Freeks, Skorchas
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Skorcha [IGNORES COVER, TORRENT]
+12"
+D6
+N/A
+5
+-1
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Spiked wheel
+Melee
+2
+4+
+6
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+FACTION: Waaagh!
+Pyromaniaks: Each time a model in this unit makes a ranged
+attack with a Torrent weapon that targets an enemy unit
+within 6", re-roll a Wound roll of 1. If the target of that attack
+is also within range of an objective marker, you can re-roll the
+Wound roll instead.
+M
+T
+SV
+W
+LD
+OC
+12"
+6
+4+
+6
+7+
+2
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 33 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■None
+UNIT COMPOSITION
+	■1-2 Skorchas
+Every model is equipped with: skorcha; spiked wheel.
+SPEED FREEKS
+If a model from your army with the Leader ability can be
+attached to a Warbikers unit, it can be attached to this
+unit instead.
+KEYWORDS: Mounted, Speed Freeks, Skorchas
+FACTION KEYWORDS:
+Orks
+SKORCHAS
+
+
+--- PAGE 34 ---
+WARHAMMER L E G E N D S
+WARBUGGIES
+KEYWORDS: Mounted, Speed Freeks, Warbuggies
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Rack of rokkits [BLAST]
+24"
+D3+1
+5+
+9
+-2
+3
+Twin big shoota [RAPID FIRE 2, TWIN-LINKED]
+36"
+3
+5+
+5
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Spiked wheels
+Melee
+3
+4+
+6
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+FACTION: Waaagh!
+Outflank: When this unit arrives from Strategic Reserves, it
+can be set up within your opponent’s deployment zone (all
+other restrictions still apply).
+M
+T
+SV
+W
+LD
+OC
+12"
+6
+4+
+6
+7+
+2
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 35 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■Any number of models can each have their twin big shoota replaced with 1 rack of rokkits.
+UNIT COMPOSITION
+	■1-2 Warbuggies
+Every model is equipped with: twin big shoota;
+spiked wheels.
+SPEED FREEKS
+If a model from your army with the Leader ability can be
+attached to a Warbikers unit, it can be attached to this
+unit instead.
+KEYWORDS: Mounted, Speed Freeks, Warbuggies
+FACTION KEYWORDS:
+Orks
+WARBUGGIES
+
+
+--- PAGE 36 ---
+WARHAMMER L E G E N D S
+BIG GUNZ
+KEYWORDS: Vehicle, Artillery, Grots, Big Gunz
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Kannon – frag [BLAST, HEAVY]
+36"
+D6
+6+
+5
+0
+1
+Kannon – shell [HEAVY]
+36"
+1
+6+
+9
+-2
+D6
+Lobba [BLAST, HEAVY, INDIRECT FIRE]
+48"
+D6
+6+
+5
+0
+1
+Zzap gun [DEVASTATING WOUNDS, HEAVY]
+36"
+1
+6+
+2D6
+-3
+3
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Close combat weapons
+Melee
+2
+3+
+4
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+FACTION: Waaagh!
+Splat!: Each time a model in this unit makes a ranged attack
+that targets a unit containing 10 or more models, re-roll a Hit
+roll of 1.
+M
+T
+SV
+W
+LD
+OC
+3"
+4
+5+
+3
+8+
+1
+ Before selecting targets for this weapon, select one of its profiles to make attacks with.
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 37 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■Any number of models can each have their kannon replaced with one of the following:
+	◦1 lobba
+	◦1 zzap gun
+UNIT COMPOSITION
+	■1-2 Big Gunz
+Every model is equipped with: kannon; close
+combat weapons.
+BIG GUNZ
+Designer’s Note: Place two Grot Crew tokens next to each Big
+Gun model when this unit is first set up, removing one each
+time its Big Gun model loses a wound (a Big Gun model itself
+is considered to represent its final wound).
+KEYWORDS: Vehicle, Artillery, Grots, Big Gunz
+FACTION KEYWORDS:
+Orks
+BIG GUNZ
+
+
+--- PAGE 38 ---
+WARHAMMER L E G E N D S
+DEFFKOPTAS WITH BIG SHOOTAS
+KEYWORDS: Vehicle, Fly, Grenades, Deffkoptas with Big Shootas
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Kopta rokkits [BLAST, TWIN-LINKED]
+24"
+D3
+5+
+9
+-2
+3
+Kustom mega-blasta [HAZARDOUS]
+24"
+3
+5+
+9
+-2
+D6
+Slugga [PISTOL]
+12"
+1
+5+
+4
+0
+1
+Twin big shoota [RAPID FIRE 2, TWIN-LINKED]
+36"
+3
+5+
+5
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Killsaw
+Melee
+3
+4+
+12
+-3
+2
+Spinnin’ blades
+Melee
+6
+3+
+5
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deep Strike
+FACTION: Waaagh!
+Deff from Above: Each time this unit ends a Normal move, you
+can select one enemy unit it moved over during that move
+and roll one D6 for each model in this unit: for each 4+, that
+enemy unit suffers 1 mortal wound.
+M
+T
+SV
+W
+LD
+OC
+12"
+6
+4+
+4
+7+
+2
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 39 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■Any number of models can each have their twin big shoota replaced with one of the following:
+	◦1 kopta rockets
+	◦1 kustom mega-blasta
+	■Any number of models can each be equipped with 1 killsaw.
+UNIT COMPOSITION
+	■3 Deffkoptas with Big Shootas
+Every model is equipped with: slugga; twin big shoota;
+spinnin' blades.
+KEYWORDS: Vehicle, Fly, Grenades, Deffkoptas with Big Shootas
+FACTION KEYWORDS:
+Orks
+DEFFKOPTAS WITH BIG SHOOTAS
+
+
+--- PAGE 40 ---
+WARHAMMER L E G E N D S
+KILL KRUSHA
+KEYWORDS: Vehicle, Titanic, Transport, Kill Krusha
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Krusha kannon – blast burna [BLAST]
+48"
+3D6
+5+
+6
+-1
+1
+Krusha kannon – tankhamma shell [HEAVY]
+60"
+1
+5+
+16
+-3
+6
+Rokkit launcha [BLAST]
+24"
+D3
+5+
+9
+-2
+3
+Skorcha [IGNORES COVER, TORRENT]
+12"
+D6
+N/A
+5
+-1
+1
+Twin big shoota [RAPID FIRE 2, TWIN-LINKED]
+36"
+3
+5+
+5
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Tracks and wheels
+Melee
+6
+4+
+8
+-1
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D6+2, Firing Deck 12
+FACTION: Waaagh!
+Da Biggest Booms: In your Shooting phase, just after
+selecting a target for this model’s krusha kannon, the target
+unit and every other enemy Infantry unit within 3" of that
+unit must take a Battle-shock test.
+DAMAGED: 1-7 WOUNDS REMAINING
+While this model has 1-7 wounds remaining, subtract 4 from
+its Objective Control characteristic and each time this model
+makes an attack, subtract 1 from the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+10"
+12
+3+
+22
+7+
+8
+ Before selecting targets for this weapon, select one of its profiles to make attacks with.
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 41 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model can be equipped with one of the following:
+	◦1 twin big shoota
+	◦2 rokkit launchas 
+	◦1 skorcha
+	■This model can be equipped with one of the following:
+	◦1 twin big shoota
+	◦2 rokkit launchas
+	◦1 skorcha
+UNIT COMPOSITION
+	■1 Kill Krusha
+This model is equipped with: krusha kannon; tracks
+and wheels.
+TRANSPORT
+This model has a transport capacity of 12 Orks Infantry
+models. Each Mega Armour or Jump Pack model takes
+up the space of 2 models.  This model cannot transport
+Ghazghkull Thraka models.
+KEYWORDS: Vehicle, Titanic, Transport, Kill Krusha
+FACTION KEYWORDS:
+Orks
+KILL KRUSHA
+
+
+--- PAGE 42 ---
+WARHAMMER L E G E N D S
+DEFF ROLLA BATTLE FORTRESS
+KEYWORDS: Vehicle, Titanic, Transport, Deff Rolla Battle Fortress
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Big shoota [RAPID FIRE 2]
+36"
+3
+5+
+5
+0
+1
+Kannon – frag [BLAST]
+36"
+D6
+5+
+5
+0
+1
+Kannon – shell
+36"
+1
+5+
+9
+-2
+D6
+Lobba [BLAST, INDIRECT FIRE]
+48"
+D6
+5+
+5
+0
+1
+Rokkit launcha [BLAST]
+24"
+D3
+5+
+9
+-2
+3
+Skorcha [IGNORES COVER, TORRENT]
+12"
+D6
+N/A
+5
+-1
+1
+Twin big shoota [RAPID FIRE 2, TWIN-LINKED]
+36"
+3
+5+
+5
+0
+1
+Zzap gun [DEVASTATING WOUNDS]
+36"
+1
+5+
+2D6
+-3
+3
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Deff rolla
+Melee
+6
+3+
+9
+-1
+2
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D6+2, Firing Deck 22
+FACTION: Waaagh!
+Rolling Fortress: Each time a ranged attack is allocated to an
+Orks model from your army, if that model is not fully visible
+to every model in the attacking unit because of this Deff
+Rolla Battle Fortress model, that model has the Benefit of
+Cover against that attack.
+DAMAGED: 1-7 WOUNDS REMAINING
+While this model has 1-7 wounds remaining, subtract 4 from
+its Objective Control characteristic and each time this model
+makes an attack, subtract 1 from the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+10"
+12
+3+
+22
+7+
+8
+ Before selecting targets for this weapon, select one of its profiles to make attacks with.
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 43 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model can be equipped with up to 5 big shootas.
+	■Each of this model’s zzap guns can be replaced with one of the following:
+	◦1 lobba
+	◦1 kannon
+	■This model’s kannon can be replaced with one of the following:
+	◦1 lobba
+	◦1 zzap gun
+	■Each of this model’s twin big shootas can be replaced with one of the following:
+	◦1 skorcha
+	◦1 rokkit launcha
+UNIT COMPOSITION
+	■1 Deff Rolla Battle Fortress
+This model is equipped with: kannon; 2 twin big shootas; 2
+zzap guns; deff rolla.
+TRANSPORT
+This model has a transport capacity of 22 Orks Infantry
+models. Each Mega Armour or Jump Pack model takes up
+the space of 2 models. The Ghazghkull Thraka model takes up
+the space of 18 models.
+KEYWORDS: Vehicle, Titanic, Transport, Deff Rolla Battle Fortress
+FACTION KEYWORDS:
+Orks
+DEFF ROLLA BATTLE FORTRESS
+
+
+--- PAGE 44 ---
+WARHAMMER L E G E N D S
+CHINORK WARKOPTA
+KEYWORDS: Vehicle, Fly, Transport, Speed Freeks, Chinork Warkopta
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Big shoota [RAPID FIRE 2]
+36"
+3
+5+
+5
+0
+1
+Deffgun [RAPID FIRE 1]
+48"
+2
+5+
+8
+-1
+2
+Kustom mega-blasta [HAZARDOUS]
+24"
+3
+5+
+9
+-2
+D6
+Rattler kannon
+24"
+6
+5+
+6
+-1
+1
+Rokkit launcha [BLAST]
+24"
+D3
+5+
+9
+-2
+3
+Skorcha [IGNORES COVER, TORRENT]
+12"
+D6
+N/A
+5
+-1
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Armoured hull
+Melee
+3
+4+
+6
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D3, Deep Strike, Firing Deck 12
+FACTION: Waaagh!
+Aerial Deployment: If this model starts the game in Strategic
+Reserves, it can be set up in the Reinforcements step of your
+first, second or third Movement phase, regardless of any
+mission rules.
+WARGEAR ABILITIES
+Big Bomms: Once per battle, after the bearer ends a Normal
+move, you can select one enemy unit it moved across during
+that move and roll six D6: for each 4+, that unit suffers 1
+mortal wound.
+M
+T
+SV
+W
+LD
+OC
+14"
+8
+4+
+10
+7+
+2
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 45 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model can be equipped with up to 2 big bomms.
+	■This model’s big shoota can be replaced with one of the following:
+	◦1 kustom mega-blasta
+	◦1 rokkit launcha
+	◦1 skorcha
+	■This model’s 2 deffguns can be replaced with 2 rattler kannons.
+UNIT COMPOSITION
+	■1 Chinork Warkopta
+This model is equipped with: big shoota; 2 deffguns;
+armoured hull.
+TRANSPORT
+This model has a transport capacity of 12 Orks Infantry
+models. This model cannot transport Ghazghkull Thraka,
+Mega Armour or Jump Pack models.
+KEYWORDS: Vehicle, Fly, Transport, Speed Freeks, Chinork Warkopta
+FACTION KEYWORDS:
+Orks
+CHINORK WARKOPTA
+
+
+--- PAGE 46 ---
+WARHAMMER L E G E N D S
+FIGHTA-BOMMER
+KEYWORDS: Vehicle, Fly, Aircraft, Speed Freeks, Fighta-Bommer
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Grot-guided bomm [BLAST, ONE SHOT, INDIRECT FIRE]
+72"
+D6
+4+
+8
+-2
+2
+One Shot: The bearer can only shoot with this weapon once per battle.
+Twin big shoota [RAPID FIRE 2, TWIN-LINKED]
+36"
+3
+5+
+5
+0
+1
+Wing missiles
+24"
+1
+5+
+9
+-2
+3
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Armoured hull
+Melee
+3
+4+
+6
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D3
+FACTION: Waaagh!
+Strafing Run: Each time this model makes a ranged attack
+that targets a unit that cannot Fly, add 1 to the Hit roll.
+WARGEAR ABILITIES
+Small Bomms: Each time the bearer ends a Normal move,
+you can select one enemy unit it moved across during
+that move and roll three D6: for each 4+, that unit suffers 1
+mortal wound.
+DAMAGED: 1-4 WOUNDS REMAINING
+While this model has 1-4 wounds remaining, each time this
+model makes an attack, subtract 1 from the Hit roll.
+T
+SV
+W
+LD
+OC
+20+"
+M
+9
+3+
+12
+7+
+0
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 47 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model can be equipped with one of the following:
+	◦2 Grot-guided bomms
+	◦2 wing missiles
+	◦Small bomms
+UNIT COMPOSITION
+	■1 Fighta-Bommer
+This model is equipped with: 3 twin big shootas;
+armoured hull.
+KEYWORDS: Vehicle, Fly, Aircraft, Speed Freeks, Fighta-Bommer
+FACTION KEYWORDS:
+Orks
+FIGHTA-BOMMER
+
+
+--- PAGE 48 ---
+WARHAMMER L E G E N D S
+ATTACK FIGHTA
+KEYWORDS: Vehicle, Fly, Aircraft, Speed Freeks, Attack Fighta
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Twin big shoota [RAPID FIRE 2, TWIN-LINKED]
+36"
+3
+5+
+5
+0
+1
+Wing missiles
+24"
+1
+5+
+9
+-2
+3
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Armoured hull
+Melee
+3
+4+
+6
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D3
+FACTION: Waaagh!
+Interceptor: Each time this model makes a ranged attack that
+targets a unit that can Fly, add 1 to the Hit roll.
+WARGEAR ABILITIES
+Small Bomms: Each time the bearer ends a Normal move,
+you can select one enemy unit it moved across during
+that move and roll three D6: for each 4+, that unit suffers 1
+mortal wound.
+T
+SV
+W
+LD
+OC
+20+"
+M
+9
+3+
+10
+7+
+0
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 49 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model can be equipped with 1 wing missiles.
+UNIT COMPOSITION
+	■1 Attack Fighta
+This model is equipped with: 2 twin big shootas; small
+bomms; armoured hull.
+KEYWORDS: Vehicle, Fly, Aircraft, Speed Freeks, Attack Fighta
+FACTION KEYWORDS:
+Orks
+ATTACK FIGHTA
+
+
+--- PAGE 50 ---
+WARHAMMER L E G E N D S
+LIFTA WAGON
+KEYWORDS: Vehicle, Lifta Wagon
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Big shoota [RAPID FIRE 2]
+36"
+3
+5+
+5
+0
+1
+Lifta-droppa [ANTI-VEHICLE 3+]
+36"
+4
+5+
+6
+-3
+D6+1
+Rokkit launcha [BLAST]
+24"
+D3
+5+
+9
+-2
+3
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Deff rolla
+Melee
+6
+3+
+9
+-1
+2
+Grabbin’ klaw [EXTRA ATTACKS]
+Melee
+2
+3+
+8
+-2
+2
+Tracks and wheels
+Melee
+6
+4+
+8
+0
+1
+Wreckin’ ball [EXTRA ATTACKS]
+Melee
+1
+4+
+10
+0
+D6
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D6
+FACTION: Waaagh!
+Da Bigger Dey Are, da Better Dey Drop: Each time an attack
+made with this model’s lifta-droppa destroys an enemy model
+that has the Deadly Demise ability, that model’s Deadly
+Demise ability inflicts mortal wounds on a D6 roll of 3+
+instead of on a 6.
+DAMAGED: 1-5 WOUNDS REMAINING
+While this model has 1-5 wounds remaining, each time this
+model makes an attack, subtract 1 from the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+10"
+10
+3+
+16
+7+
+5
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 51 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model’s tracks and wheels can be replaced with 1 deff rolla.
+	■This model can be equipped with 1 grabbin’ klaw.
+	■This model can be equipped with 1 wreckin’ ball.
+	■This model can be equipped with one of the following:
+	◦1 big shoota
+	◦2 big shootas
+	◦1 big shoota and 1 rokkit launcha
+	◦1 rokkit launcha
+	◦2 rokkit launchas
+UNIT COMPOSITION
+	■1 Lifta Wagon
+This model is equipped with: lifta-droppa; tracks and wheels.
+KEYWORDS: Vehicle, Lifta Wagon
+FACTION KEYWORDS:
+Orks
+LIFTA WAGON
+
+
+--- PAGE 52 ---
+WARHAMMER L E G E N D S
+GROT BOMM LAUNCHA
+KEYWORDS: Mounted, Speed Freeks, Grots, Grot Bomm Launcha
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Grot-guided bomms [BLAST, ONE SHOT, INDIRECT FIRE]
+72"
+D6
+4+
+8
+-2
+2
+One Shot: The bearer can only shoot with this weapon once per battle.
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Spiked wheel
+Melee
+2
+4+
+6
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+FACTION: Waaagh!
+Furious Barrage: Each time this model makes a ranged attack
+that targets an enemy unit that contains five or more models,
+you can re-roll the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+12"
+6
+4+
+6
+7+
+2
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 53 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■None
+UNIT COMPOSITION
+	■1 Grot Bomm Launcha
+This model is equipped with: Grot-guided bomms;
+spiked wheel.
+KEYWORDS: Mounted, Speed Freeks, Grots, Grot Bomm Launcha
+FACTION KEYWORDS:
+Orks
+GROT BOMM LAUNCHA
+
+
+--- PAGE 54 ---
+WARHAMMER L E G E N D S
+BIG MEK ON WARBIKE
+KEYWORDS: Mounted, Speed Freeks, Character, Grenades, Big Mek,
+Big Mek on Warbike
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Kombi-weapon
+[ANTI-INFANTRY 4+, DEVASTATING WOUNDS, RAPID FIRE 1]
+24"
+1
+5+
+4
+0
+1
+Kustom mega-blasta [HAZARDOUS]
+24"
+3
+5+
+9
+-2
+D6
+Kustom mega-slugga [BLAST, HAZARDOUS]
+12"
+D3
+5+
+8
+-2
+D6
+Rokkit launcha [BLAST]
+24"
+D3
+5+
+9
+-2
+3
+Shokk attack gun [BLAST, HEAVY]
+60"
+D6+1
+5+
+9
+-4
+D6
+Slugga [PISTOL]
+12"
+1
+5+
+4
+0
+1
+Twin dakkagun [ASSAULT, RAPID FIRE 2, TWIN-LINKED]
+18"
+3
+5+
+5
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Big choppa
+Melee
+4
+3+
+7
+-1
+2
+Choppa
+Melee
+4
+3+
+5
+-1
+1
+Close combat weapon
+Melee
+4
+3+
+5
+0
+1
+Killsaw
+Melee
+3
+4+
+12
+-3
+2
+Power klaw
+Melee
+4
+4+
+9
+-2
+2
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Leader
+FACTION: Waaagh!
+More Dakka: While this model is leading a unit, each time a
+model in that unit makes a ranged attack, re-roll a Hit roll of 1.
+Mekaniak: At the end of your Movement phase, you can
+select one friendly Orks Vehicle model within 3" of this
+model. That Vehicle model regains up to D3 lost wounds, and,
+until the start of your next Movement phase, each time that
+Vehicle model makes an attack, add 1 to the Hit roll. Each
+model can only be selected for this ability once per turn.
+WARGEAR ABILITIES
+Kustom Force Field: While the bearer is leading a unit,
+models in that unit have a 4+ invulnerable save against
+ranged attacks.
+M
+T
+SV
+W
+LD
+OC
+12"
+6
+4+
+6
+7+
+2
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 55 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model’s slugga can be replaced with one of the following:
+	◦1 shokk attack gun
+	◦1 kustom force field
+	◦1 kombi-weapon
+	◦1 kustom mega-blasta
+	◦1 kustom mega-slugga
+	◦1 rokkit launcha
+	◦1 big choppa
+	◦1 power klaw
+	■This model’s choppa can be replaced with one of the following:
+	◦1 kombi-weapon
+	◦1 kustom mega-blasta
+	◦1 kustom mega-slugga
+	◦1 rokkit launcha
+	◦1 big choppa
+	◦1 killsaw
+	◦1 power klaw
+UNIT COMPOSITION
+	■1 Big Mek on Warbike
+This model is equipped with: slugga; twin dakkagun; choppa;
+close combat weapon.
+LEADER
+This model can be attached to the following unit:
+	■Warbikers
+KEYWORDS: Mounted, Speed Freeks, Character, Grenades, Big Mek,
+Big Mek on Warbike
+FACTION KEYWORDS:
+Orks
+BIG MEK ON WARBIKE
+
+
+--- PAGE 56 ---
+WARHAMMER L E G E N D S
+BOSS ZAGSTRUK
+KEYWORDS: Infantry, Jump Pack, Fly, Character, Epic Hero, Boss Zagstruk
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Slugga [PISTOL]
+12"
+1
+5+
+4
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Da Vulcha’s Klaws and choppa
+Melee
+6
+2+
+8
+-2
+2
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deep Strike, Feel No Pain 6+, Leader
+FACTION: Waaagh!
+Drill Boss: While this model is leading a unit, each time a
+model in that unit makes a melee attack, add 1 to the Hit roll.
+Plummeting Descent: You can re-roll Charge rolls made
+for this model’s unit in a turn in which it was set up on the
+battlefield from Reserves.
+M
+T
+SV
+W
+LD
+OC
+12"
+5
+4+
+6
+6+
+1
+INVULNERABLE SAVE
+5+
+
+
+--- PAGE 57 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■None
+UNIT COMPOSITION
+	■1 Boss Zagstruk – Epic Hero
+This model is equipped with: Da Vulcha’s Klaws and
+choppa; slugga.
+LEADER
+This model can be attached to the following unit:
+	■Stormboyz
+BOSS ZAGSTRUK
+Plummeting from his kustom fighta-bommer at the head of his infamous
+Vulcha Boyz, Boss Zagstruk hits the enemy like a four hundred pound
+rocket-propelled missile of pure, belligerent fury. Amidst the roar of his
+blitz missiles and the crunch of bone beneath his cybork foot-klaws,
+bloody havoc ensues.
+KEYWORDS: Infantry, Jump Pack, Fly, Character, Epic Hero, Boss Zagstruk
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 58 ---
+WARHAMMER L E G E N D S
+MAD DOK GROTSNIK
+KEYWORDS: Infantry, Character, Epic Hero, Painboy, Mad Dok Grotsnik
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Slugga [PISTOL]
+12"
+1
+5+
+4
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Power klaw [SUSTAINED HITS 1]
+Melee
+4
+3+
+9
+-2
+2
+’Urty syringe [ANTI-INFANTRY 4+, EXTRA ATTACKS, PRECISION]
+Melee
+1
+3+
+2
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Feel No Pain 5+, Leader
+FACTION: Waaagh!
+Mad Dok: While this model is leading a unit, models in that
+unit have the Feel No Pain 5+ ability.
+One Scalpel Short of a Medpack: While this model is leading a
+unit, that unit is eligible to declare a charge in a turn in which
+it Fell Back.
+M
+T
+SV
+W
+LD
+OC
+6"
+5
+5+
+4
+7+
+1
+INVULNERABLE SAVE
+5+
+
+
+--- PAGE 59 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■None
+UNIT COMPOSITION
+	■1 Mad Dok Grotsnik – Epic Hero
+This model is equipped with: slugga; power klaw;
+’urty syringe.
+LEADER
+This model can be attached to the following units:
+	■Boyz
+	■Burna Boyz
+	■Tankbustas
+	■Lootas
+	■Nobz
+MAD DOK GROTSNIK
+More so even than whatever passes for a ‘normal’ Painboy, Dok
+Grotsnik relishes the butchery of the battlefield. He is quite, quite mad
+and remarkably dangerous, treating each new war as an opportunity
+for experimentation, a chance to harvest new samples to add to his
+stockpile of gory anatomical spares.
+KEYWORDS: Infantry, Character, Epic Hero, Painboy, Mad Dok Grotsnik
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 60 ---
+WARHAMMER L E G E N D S
+NOB WITH WAAAGH! BANNER
+KEYWORDS: Infantry, Character, Nob with Waaagh! Banner
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Kustom shoota [RAPID FIRE 2]
+18"
+4
+5+
+4
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Waaagh! banner
+Melee
+3
+3+
+8
+-2
+2
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Leader
+FACTION: Waaagh!
+Plant the Waaagh! Banner: Once per battle, at the start of the
+battle round, this model can use this ability. If it does, until
+the start of the next battle round, this model’s unit gains the
+benefits of the Waaagh! ability as if you had called a Waaagh!
+this battle round.
+Da Boss Iz Watchin’: While this model is gaining the benefits
+of the Waaagh! ability, it has a 4+ invulnerable save and an
+Objective Control characteristic of 5.
+M
+T
+SV
+W
+LD
+OC
+6"
+5
+4+
+3
+7+
+1
+
+
+--- PAGE 61 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■None
+UNIT COMPOSITION
+	■1 Nob with Waaagh! Banner
+This model is equipped with: kustom shoota; Waaagh! banner.
+LEADER
+This model can be attached to the following units:
+	■Boyz
+	■Nobz
+NOB WITH WAAAGH! BANNER
+Entrusted to the warband’s most stubborn Nob, a Waaagh! banner
+serves as a rallying point and a place for the Warboss to display his
+favourite trophies, glyph plates and such. Should the ladz need some
+encouragement to get stuck into a scrap, the banner also doubles as a
+handy bludgeon to beat some ferocity into them.
+KEYWORDS: Infantry, Character, Nob with Waaagh! Banner
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 62 ---
+WARHAMMER L E G E N D S
+MEKBOY WORKSHOP
+KEYWORDS: Fortification, Vehicle, Mekboy Workshop
+ABILITIES
+CORE: Deadly Demise 1
+FACTION: Waaagh!
+Ramshackle Cover: Each time a ranged attack is allocated to
+a model, if that model is not fully visible to every model in the
+attacking unit because of this Fortification, that model has
+the Benefit of Cover against that attack.
+Workshop: When this Fortification is set up, all parts of it
+must be set up within 1” of another part. At the end of your
+Movement phase, each friendly Orks Vehicle model within
+12” of this Fortification can regain up to D3 lost wounds
+(roll separately for each model). Each model can only be
+affected by this ability once per turn.
+Fortification: While an enemy unit is only within Engagement
+Range of one or more Fortifications from your army:
+	■That unit can still be selected as the target of ranged
+attacks, but each time such an attack is made, unless it is
+made with a Pistol, subtract 1 from the Hit roll.
+	■Models in that unit do not need to take Desperate Escape
+tests due to Falling Back while Battle-shocked, except for
+those that will move over enemy models when doing so.
+M
+T
+SV
+W
+LD
+OC
+-
+9
+4+
+10
+7+
+0
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 63 ---
+WARHAMMER L E G E N D S
+UNIT COMPOSITION
+	■1 Mekboy Workshop
+WARGEAR OPTIONS
+	■ None
+MEKBOY WORKSHOP
+Mekboyz are more than happy to raise new workshops
+mid-battle, throwing the structures together from the wreck and
+ruin lying all about. Enemies watch in bemused horror as these
+ad hoc structures swarm with activity and start churning out
+upgraded and kustomised war engines right before their eyes!
+KEYWORDS: Fortification, Vehicle, Mekboy Workshop
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 64 ---
+WARHAMMER L E G E N D S
+BIG MEK WITH KUSTOM FORCE FIELD
+KEYWORDS: Infantry, Character, Grenades, Mek, Big Mek,
+Big Mek with Kustom Force Field
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Slugga [PISTOL]
+12"
+1
+5+
+4
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Choppa
+Melee
+4
+3+
+5
+-1
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Leader
+FACTION: Waaagh!
+More Dakka: While this model is leading a unit, each time a
+model in that unit makes a ranged attack, re-roll a Hit roll of 1.
+Kustom Force Field: While this model is leading a unit, models
+in that unit have a 5+ invulnerable save against ranged
+attacks. Once per battle, at the start of any phase, this model
+can overcharge its kustom force field. If it does, until the end
+of the phase, this invulnerable save is improved to 4+.
+WARGEAR ABILITIES
+Grot Helper: Once per battle, the bearer can overcharge its
+kustom force field one additional time.
+Designer’s Note: Place a Grot Helper token next to the bearer,
+removing it once this ability has been used.
+M
+T
+SV
+W
+LD
+OC
+6"
+5
+4+
+4
+7+
+1
+
+
+--- PAGE 65 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model can be equipped with 1 grot helper.
+UNIT COMPOSITION
+	■1 Big Mek with Kustom Force Field
+This model is equipped with: slugga; choppa.
+LEADER
+This model can be attached to the following units:
+	■Boyz
+	■Burna Boyz
+	■Tankbustas
+	■Lootas
+	■Nobz
+BIG MEK WITH KUSTOM FORCE FIELD
+Projected from a mass of whirly bits and alarmingly sparking worky
+gubbinz, the kustom force field is a wobbling energy dome that extends
+over the Big Mek and any nearby greenskins. Incoming enemy fire
+rebounds harmlessly from this unstable force field, leaving the Mek and
+his oblivious mates free to storm onward into battle.
+KEYWORDS: Infantry, Character, Grenades, Mek, Big Mek,
+Big Mek with Kustom Force Field
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 66 ---
+WARHAMMER L E G E N D S
+KAPTIN BADRUKK
+KEYWORDS: Infantry, Character, Epic Hero, Kaptin Badrukk
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Da Rippa – standard
+[HEAVY, SUSTAINED HITS 1]
+24"
+3
+5+
+7
+-2
+2
+Da Rippa – supercharge
+[HAZARDOUS, HEAVY, SUSTAINED HITS 1]
+24"
+3
+5+
+8
+-3
+3
+Slugga [PISTOL]
+12"
+1
+4+
+4
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Choppa
+Melee
+6
+2+
+5
+-1
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Leader
+FACTION: Waaagh!
+Flashiest Gitz: While this model is leading a unit, each time
+a model in that unit makes a ranged attack, you can re-roll
+the Hit roll.
+Ded Glowy Ammo (Aura): While an enemy Infantry unit
+is within 6" of this model, subtract 1 from the Toughness
+characteristic of models in that unit.
+M
+T
+SV
+W
+LD
+OC
+6"
+5
+3+
+6
+7+
+1
+Before selecting targets for this weapon, select one of its profiles to make attacks with.
+INVULNERABLE SAVE
+4+
+
+
+--- PAGE 67 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■None
+UNIT COMPOSITION
+	■1 Kaptin Badrukk – Epic Hero
+This model is equipped with: slugga; choppa; Da Rippa.
+LEADER
+This model can be attached to the following unit:
+	■Flash Gitz
+KAPTIN BADRUKK
+Kaptin Badrukk’s Goldtoof Armour is proof against anything the galaxy
+can throw at him. This is fortunate considering the levels of radiation
+that emanate from his pride and joy, Da Rippa. This kustom shoota fires
+unstable plasma shells that reduce Badrukk’s foes to glowing ash, at
+least until it malfunctions explosively.
+KEYWORDS: Infantry, Character, Epic Hero, Kaptin Badrukk
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 68 ---
+WARHAMMER L E G E N D S
+GROT TANKS
+KEYWORDS: Vehicle, Grots, Grot Tanks
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Grot tank shoota [DEVASTATING WOUNDS, RAPID FIRE 2]
+36"
+3
+4+
+5
+0
+1
+Grotzooka [BLAST, IGNORES COVER]
+18"
+D3+3
+4+
+6
+-1
+1
+Kustom mega-blasta [HAZARDOUS]
+24"
+2
+4+
+9
+-2
+D6
+Rokkit launcha [BLAST]
+24"
+D3
+4+
+9
+-2
+3
+Skorcha [IGNORES COVER, TORRENT]
+12"
+D6
+N/A
+5
+-1
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Ramshackle hull
+Melee
+3
+5+
+6
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise 1
+FACTION: Waaagh!
+Scatter!: Once per turn, when an enemy unit ends a Normal,
+Advance or Fall Back move within 9" of this unit, if this unit is
+not within Engagement Range of one or more enemy units, it
+can make a Normal move of up to 6".
+M
+T
+SV
+W
+LD
+OC
+10"
+6
+3+
+5
+8+
+2
+
+
+--- PAGE 69 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■Any number of models can each have their Grot tank shoota replaced with one of the following:
+	◦1 grotzooka
+	◦1 kustom mega-blasta
+	◦1 rokkit launcha
+	◦1 skorcha
+	■For every four models in this unit, one model can be equipped with one of the following in addition to
+any other weapons:
+	◦1 Grot tank shoota
+	◦1 grotzooka
+	◦1 kustom mega-blasta
+	◦1 rokkit launcha
+	◦1 skorcha
+UNIT COMPOSITION
+	■4-8 Grot Tanks
+Every model is equipped with: Grot tank shoota;
+ramshackle hull.
+GROT TANKS
+Grot tanks are the product of the deranged imaginations of grot riggers
+and scavs that have spent too long basking in the mad genius of the
+Big Meks. Diminutive imitations of far larger Ork war machines, these
+ramshackle creations are a natural accompaniment to their pilots’
+cunning ways of war.
+KEYWORDS: Vehicle, Grots, Grot Tanks
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 70 ---
+WARHAMMER L E G E N D S
+GROT MEGA-TANK
+KEYWORDS: Vehicle, Grots, Grot Mega-Tank
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Mega-tank weapons [RAPID FIRE 10]
+18"
+10
+4+
+5
+0
+1
+Twin big shoota [RAPID FIRE 2, TWIN-LINKED]
+18"
+3
+4+
+5
+0
+1
+Twin grotzooka [BLAST, IGNORES COVER, TWIN-LINKED]
+18"
+D3+3
+4+
+6
+-1
+1
+Twin kustom mega-blasta
+[HAZARDOUS, TWIN-LINKED]
+24"
+2
+4+
+9
+-2
+D6
+Twin rokkit launcha [BLAST, TWIN-LINKED]
+24"
+D3
+4+
+9
+-2
+3
+Twin skorcha
+[IGNORES COVER, TORRENT, TWIN-LINKED]
+12"
+D6
+N/A
+5
+-1
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Armoured hull
+Melee
+6
+4+
+4
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D3
+FACTION: Waaagh!
+Bizarrely Resilient: Each time an attack targets this model,
+worsen the Armour Penetration characteristic of that attack
+by 1.
+DAMAGED: 1-4 WOUNDS REMAINING
+While this model has 1-4 wounds remaining, each time this
+model makes an attack, subtract 1 from the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+8"
+9
+3+
+12
+8+
+4
+
+
+--- PAGE 71 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model’s twin big shoota can be replaced with one of the following:
+	◦1 twin grotzooka
+	◦1 twin kustom mega-blasta
+	◦1 twin rokkit launcha
+	◦1 twin skorcha
+	■This model’s twin grotzooka can be replaced with one of the following:
+	◦1 twin big shoota
+	◦1 twin kustom mega-blasta
+	◦1 twin rokkit launcha
+	◦1 twin skorcha
+UNIT COMPOSITION
+	■1 Grot Mega-Tank
+This model is equipped with: Mega-tank weapons; twin big
+shoota; twin grotzooka; armoured hull.
+GROT MEGA-TANK
+For some grot would-be Meks, the vicarious joys of riding in ramshackle Grot Tanks are not enough.
+They crave even bigger rigs, and even more gunz! To this end, the most ambitious of their kind build
+their best imitations of Battle Fortresses. These Grot Mega-tanks are even more dangerously erratic
+than their smaller kin, but bristle with all the best gear the grots can scavenge or pilfer, and have been
+the doom of many an unsuspecting foe.
+KEYWORDS: Vehicle, Grots, Grot Mega-Tank
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 72 ---
+WARHAMMER L E G E N D S
+SQUIGGOTH
+KEYWORDS: Monster, Transport, Squiggoth
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Kannon – frag [BLAST]
+36"
+D6
+5+
+5
+0
+1
+Kannon – shell
+36"
+1
+5+
+9
+-2
+D6
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Gorin’ horns – strike
+Melee
+4
+3+
+12
+-2
+D6
+Gorin’ horns – sweep
+Melee
+8
+3+
+9
+-1
+2
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D6, Firing Deck 10
+FACTION: Waaagh!
+Trample: Each time this model is selected to fight, you can
+select one enemy unit within Engagement Range of it and roll
+one D6, adding 2 to the result if this model made a Charge
+move this turn: on a 4-5, that enemy unit suffers D3 mortal
+wounds; on a 6+, that enemy unit suffers 3 mortal wounds.
+DAMAGED: 1-6 WOUNDS REMAINING
+While this model has 1-6 wounds remaining, each time this
+model makes an attack, subtract 1 from the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+10"
+10
+3+
+18
+7+
+5
+ Before selecting targets for this weapon, select one of its profiles to make attacks with.
+
+
+--- PAGE 73 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model can be equipped with 1 kannon.
+UNIT COMPOSITION
+	■1 Squiggoth
+This model is equipped with: gorin’ horns.
+TRANSPORT
+This model has a transport capacity of 10 Orks Infantry
+models. If this model is equipped with a kannon, it has a
+transport capacity of 6 Orks Infantry models. It cannot
+transport Mega Armour, Jump Pack or Ghazghkull
+Thraka models.
+SQUIGGOTH
+Squiggoths are enormous scaly creatures bred as beasts of war by Ork
+Pigdoks. With armour panelling bolted to their already thick hides and
+crude howdahs built on their backs, they thunder into battle loaded
+with heavy weapons and Boyz, trampling everything in their path and
+smashing into vehicles and buildings like a battering ram.
+KEYWORDS: Monster, Transport, Squiggoth
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 74 ---
+WARHAMMER L E G E N D S
+KILL TANK
+KEYWORDS: Vehicle, Titanic, Transport, Kill Tank
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Bursta kannon [BLAST]
+36"
+3D6
+5+
+14
+-2
+3
+Giga shoota [SUSTAINED HITS 1]
+48"
+30
+5+
+6
+-1
+1
+Skorcha [IGNORES COVER, TORRENT]
+12"
+D6
+N/A
+5
+-1
+1
+Twin big shoota [RAPID FIRE 2, TWIN-LINKED]
+36"
+3
+5+
+5
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Reinforced ram
+Melee
+8
+4+
+9
+-1
+2
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D6+2
+FACTION: Waaagh!
+Wall of Dakka: Each time this model makes a ranged attack
+that targets a unit within half range, add 1 to the Hit roll.
+DAMAGED: 1-8 WOUNDS REMAINING
+While this model has 1-8 wounds remaining, subtract 5 from
+this model’s Objective Control characteristic and each time
+this model makes an attack, subtract 1 from the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+12"
+12
+3+
+24
+6+
+10
+
+
+--- PAGE 75 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model’s bursta kannon can be replaced with 1 giga shoota.
+UNIT COMPOSITION
+	■1 Kill Tank
+This model is equipped with: bursta kannon; skorcha; twin big
+shoota; reinforced ram.
+TRANSPORT
+This model has a transport capacity of 12 Orks Infantry
+models. Each Mega Armour or Jump Pack model takes
+up the space of 2 models. It cannot transport Ghazghkull
+Thraka models.
+KILL TANK
+Kill Tanks are the Ork answer to super-heavy tank design. Hulking, slab-
+sided machines, they sport a shovel-bladed prow for ramming aside
+obstacles and flimsier vehicles, and a wide-bore siege mortar that fires
+huge rocket-boosted ordnance capable of wiping out hardened bunkers
+and rival vehicles with a single hit.
+KEYWORDS: Vehicle, Titanic, Transport, Kill Tank
+FACTION KEYWORDS:
+Orks
+
+
+--- PAGE 76 ---
+WARHAMMER L E G E N D S
+MEGA DREAD
+KEYWORDS: Vehicle, Walker, Mega Dread
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Boombits [TORRENT]
+12"
+D6
+N/A
+5
+0
+1
+Killkannon
+24"
+D6+3
+5+
+9
+-2
+2
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Dread killsaw
+Melee
+4
+3+
+14
+-3
+4
+Dread rippa klaw
+Melee
+6
+3+
+12
+-2
+3
+Stompy feet
+Melee
+4
+3+
+7
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D6
+FACTION: Waaagh!
+Mega Carnage: Each time this model is selected to fight, you
+can select one enemy unit within Engagement Range of it and
+roll one D6, adding 2 to the result if this model made a Charge
+move this turn: on a 4-5, that enemy unit suffers D3 mortal
+wounds; on a 6+, that enemy unit suffers 3 mortal wounds.
+Dead Rippy: If this model is equipped with 2 dread killsaws,
+those weapons have the [TWIN-LINKED] ability. If this model is
+equipped with 2 dread rippa klaws, those weapons have the
+[TWIN-LINKED] ability.
+DAMAGED: 1-5 WOUNDS REMAINING
+While this model has 1-5 wounds remaining, each time this
+model makes an attack, subtract 1 from the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+8"
+10
+2+
+16
+7+
+5
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 77 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model’s killkannon can be replaced with one of the following:
+	◦1 dread killsaw
+	◦1 dread rippa klaw
+	■This model’s dread rippa klaw can be replaced with one of the following:
+	◦1 dread killsaw
+	◦1 killkannon
+UNIT COMPOSITION
+	■1 Mega Dread
+This model is equipped with: 2 boombits; killkannon; dread
+rippa klaw; stompy feet.
+KEYWORDS: Vehicle, Walker, Mega Dread
+FACTION KEYWORDS:
+Orks
+MEGA DREAD
+A huge thundering walker twice the size and more of a Deff Dread, Mega
+Dreads embody the Mekboy love of violence and machine-work taken
+to the extreme. They are able to rip open the largest tank with their
+claws, mount weapons usually only seen on a heavy vehicle and stomp
+through hails of fire to reach their victims.
+
+
+--- PAGE 78 ---
+WARHAMMER L E G E N D S
+MEKA-DREAD
+KEYWORDS: Vehicle, Walker, Meka-Dread
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Killkannon
+24"
+D6+3
+5+
+9
+-2
+2
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Dread killsaw
+Melee
+4
+3+
+14
+-3
+4
+Dread rippa klaw
+Melee
+6
+3+
+12
+-2
+3
+Stompy feet
+Melee
+4
+3+
+7
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D6
+FACTION: Waaagh!
+Mekaniak: At the end of your Movement phase, you can
+select one friendly Orks Vehicle model within 3" of this
+model. That Vehicle model regains up to D3 lost wounds, and,
+until the start of your next Movement phase, each time that
+Vehicle model makes an attack, add 1 to the Hit roll. Each
+model can only be selected for this ability once per turn.
+Dead Rippy: If this model is equipped with 2 dread killsaws,
+those weapons have the [TWIN-LINKED] ability. If this model is
+equipped with 2 dread rippa klaws, those weapons have the
+[TWIN-LINKED] ability.
+DAMAGED: 1-5 WOUNDS REMAINING
+While this model has 1-5 wounds remaining, each time this
+model makes an attack, subtract 1 from the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+8"
+10
+2+
+16
+7+
+5
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 79 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model’s killkannon can be replaced with one of the following:
+	◦1 dread killsaw
+	◦1 dread rippa klaw
+	■This model’s dread rippa klaw can be replaced with one of the following:
+	◦1 dread killsaw
+	◦1 killkannon
+UNIT COMPOSITION
+	■1 Meka-Dread
+This model is equipped with: killkannon; dread rippa klaw;
+stompy feet.
+KEYWORDS: Vehicle, Walker, Meka-Dread
+FACTION KEYWORDS:
+Orks
+MEKA-DREAD
+Kustomised from the same basic chassis as Mega Dreads, Meka-Dreads
+commonly house a Mekboy who has wired himself into his own creation.
+They couple the spectacular firepower and close-quarters destruction of
+most Ork combat walkers with their pilot's ability to work crude but effective
+battlefield repairs on other damaged Orkoid war machines.
+
+
+--- PAGE 80 ---
+WARHAMMER L E G E N D S
+BIG TRAKK
+KEYWORDS: Vehicle, Transport, Big Trakk
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Big shoota [RAPID FIRE 2]
+36"
+3
+5+
+5
+0
+1
+Kannon – frag [BLAST]
+36"
+D6
+5+
+5
+0
+1
+Kannon – shell
+36"
+1
+5+
+9
+-2
+D6
+Supa-kannon – frag [BLAST]
+36"
+D6+3
+5+
+5
+0
+1
+Supa-kannon – shell
+36"
+1
+5+
+9
+-2
+D3+3
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Armoured hull
+Melee
+3
+4+
+6
+0
+1
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Deadly Demise D3, Firing Deck 12
+FACTION: Waaagh!
+Spiked Ram: Each time this model ends a Charge move, select
+one enemy unit within Engagement Range of it and roll one
+D6: on a 2-5, that enemy unit suffers D3 mortal wounds; on a
+6, that enemy unit suffers 3 mortal wounds.
+DAMAGED: 1-4 WOUNDS REMAINING
+While this model has 1-4 wounds remaining, each time this
+model makes an attack, subtract 1 from the Hit roll.
+M
+T
+SV
+W
+LD
+OC
+12"
+9
+4+
+12
+7+
+3
+ Before selecting targets for this weapon, select one of its profiles to make attacks with.
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 81 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model can be equipped with one of the following:
+	◦1 kannon
+	◦1 supa-kannon
+UNIT COMPOSITION
+	■1 Big Trakk
+This model is equipped with: 2 big shootas; armoured hull.
+TRANSPORT
+This model has a transport capacity of 12 Orks Infantry
+models. Each Mega Armour or Jump Pack model takes
+up the space of 2 models. This model cannot transport
+Ghazghkull Thraka models.
+KEYWORDS: Vehicle, Transport, Big Trakk
+FACTION KEYWORDS:
+Orks
+BIG TRAKK
+Made for when a normal Trukk just isn't big enough, Big Trakks are heavy
+rigs that can carry the Orks over the worst terrain or mount their Big
+Gunz and lots of gear. They are not all that fast, nor are they as tough
+as a full-blown Battlewagon, but Big Trakks make up for these shortfalls
+with their hauling power.
+
+
+--- PAGE 82 ---
+WARHAMMER L E G E N D S
+WARBOSS ON WARBIKE
+KEYWORDS: Mounted, Character, Speed Freeks, Grenades, Warboss
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Twin dakkagun [ASSAULT, RAPID FIRE 2, TWIN-LINKED]
+18"
+3
+5+
+5
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Big choppa
+Melee
+5
+2+
+8
+-1
+2
+Killsaw
+Melee
+3
+4+
+12
+-3
+2
+Power klaw
+Melee
+4
+3+
+10
+-2
+2
+FACTION KEYWORDS:
+Orks
+ABILITIES
+CORE: Leader
+FACTION: Waaagh!
+Speedboss: While this model is leading a unit, each time a
+model in that unit makes a melee attack, add 1 to the Hit roll.
+High-octane Fuel: Each time this model’s unit Advances, do
+not make an Advance roll for it. Instead, until the end of the
+phase, add 6" to the Move characteristic of models in this
+model’s unit.
+M
+T
+SV
+W
+LD
+OC
+12"
+6
+4+
+7
+6+
+2
+INVULNERABLE SAVE
+5+
+
+
+--- PAGE 83 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■This model’s killsaw can be replaced with one of the following:
+	◦1 big choppa
+	◦1 power klaw
+UNIT COMPOSITION
+	■1 Warboss on Warbike
+This model is equipped with: twin dakkagun; killsaw.
+LEADER
+This model can be attached to the following units:
+	■Warbikers
+	■Nobz on Warbikes
+KEYWORDS: Mounted, Character, Speed Freeks, Grenades, Warboss
+FACTION KEYWORDS:
+Orks
+WARBOSS ON WARBIKE
+Some Ork Warbosses choose to ride into battle astride massive
+smoke-belching warbikes. Not only does such a rocket-propelled mode
+of transport deliver them into the enemy battle lines with remarkable
+speed and violence, but it also furnishes them with a great deal of loud,
+flashy dakka to unleash on the way into the fight.
+
+
+--- PAGE 84 ---
+WARHAMMER L E G E N D S
+NOBZ ON WARBIKES
+KEYWORDS: Mounted, Speed Freeks, Grenades, Nobz on Warbikes
+RANGED WEAPONS
+RANGE
+A
+BS
+S
+AP
+D
+Slugga [PISTOL]
+12"
+1
+5+
+4
+0
+1
+Twin dakkagun [ASSAULT, RAPID FIRE 2, TWIN-LINKED]
+18"
+3
+5+
+5
+0
+1
+MELEE WEAPONS
+RANGE
+A
+WS
+S
+AP
+D
+Big choppa
+Melee
+3
+3+
+7
+-1
+2
+Choppa
+Melee
+3
+3+
+5
+-1
+1
+Close combat weapon
+Melee
+3
+3+
+5
+0
+1
+Killsaw
+Melee
+2
+4+
+12
+-3
+2
+Power klaw
+Melee
+3
+4+
+9
+-2
+2
+Power stabba [LANCE]
+Melee
+3
+4+
+8
+-1
+2
+FACTION KEYWORDS:
+Orks
+ABILITIES
+FACTION: Waaagh!
+Drive-by Krumpin': Each time this unit Consolidates, each
+model in this unit can move up to 6" instead of up to 3".
+M
+T
+SV
+W
+LD
+OC
+12"
+6
+4+
+4
+7+
+2
+INVULNERABLE SAVE
+6+
+
+
+--- PAGE 85 ---
+WARHAMMER L E G E N D S
+WARGEAR OPTIONS
+	■Any number of models can each be equipped with 1 slugga.
+	■Any number of models can each have their choppa replaced with one of the following:
+	◦1 big choppa
+	◦1 killsaw
+	◦1 power klaw
+	◦1 power stabba
+	◦1 slugga
+UNIT COMPOSITION
+	■3 Nobz on Warbikes
+Every model is equipped with: twin dakkagun; choppa; close
+combat weapon.
+SPEED FREEKS MOB
+If a model from your army with the Leader ability can be
+attached to a Warbikers unit, it can be attached to this
+unit instead.
+KEYWORDS: Mounted, Speed Freeks, Grenades, Nobz on Warbikes
+FACTION KEYWORDS:
+Orks
+NOBZ ON WARBIKES
+When a mob of Ork Nobz takes to the battlefield riding kustomised
+warbikes, the ground shakes beneath their hurtling advance and the
+enemy scatter in terror. Capable of unleashing hails of devastating – if
+inaccurate – fire and bringing an array of brutal close combat weapons to
+bear, Nobz on Warbikes are a threat to even the mightiest foes.

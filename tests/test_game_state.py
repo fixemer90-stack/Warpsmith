@@ -4,11 +4,11 @@ import numpy as np
 import pytest
 
 from backend.state.game_state import (
+    GamePhase,
     GameState,
     PlayerState,
-    UnitState,
     TerrainType,
-    GamePhase,
+    UnitState,
     create_empty_game,
     create_standard_map,
 )
@@ -50,14 +50,28 @@ def test_player_state_properties():
 
     # Add units
     unit1 = UnitState(
-        unit_id="unit1", name="Marine", faction="Space Marines",
-        position=(0, 0), current_wounds=4, max_wounds=4,
-        models_remaining=1, models_total=1, leadership=6, objective_control=2,
+        unit_id="unit1",
+        name="Marine",
+        faction="Space Marines",
+        position=(0, 0),
+        current_wounds=4,
+        max_wounds=4,
+        models_remaining=1,
+        models_total=1,
+        leadership=6,
+        objective_control=2,
     )
     unit2 = UnitState(
-        unit_id="unit2", name="Terminator", faction="Space Marines",
-        position=(1, 1), current_wounds=6, max_wounds=6,
-        models_remaining=1, models_total=1, leadership=6, objective_control=3,
+        unit_id="unit2",
+        name="Terminator",
+        faction="Space Marines",
+        position=(1, 1),
+        current_wounds=6,
+        max_wounds=6,
+        models_remaining=1,
+        models_total=1,
+        leadership=6,
+        objective_control=3,
         is_warlord=True,
     )
 
@@ -92,14 +106,28 @@ def test_game_state_unit_operations():
 
     # Add units
     unit1 = UnitState(
-        unit_id="marine1", name="Tactical Marine", faction="Space Marines",
-        position=(0, 0), current_wounds=4, max_wounds=4,
-        models_remaining=1, models_total=1, leadership=6, objective_control=2,
+        unit_id="marine1",
+        name="Tactical Marine",
+        faction="Space Marines",
+        position=(0, 0),
+        current_wounds=4,
+        max_wounds=4,
+        models_remaining=1,
+        models_total=1,
+        leadership=6,
+        objective_control=2,
     )
     unit2 = UnitState(
-        unit_id="ork1", name="Ork Boy", faction="Orks",
-        position=(5, 3), current_wounds=4, max_wounds=4,
-        models_remaining=1, models_total=1, leadership=5, objective_control=1,
+        unit_id="ork1",
+        name="Ork Boy",
+        faction="Orks",
+        position=(5, 3),
+        current_wounds=4,
+        max_wounds=4,
+        models_remaining=1,
+        models_total=1,
+        leadership=5,
+        objective_control=1,
     )
 
     player1.units = {"marine1": unit1}

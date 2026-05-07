@@ -12,10 +12,23 @@ Validates:
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from backend.model.unit import Unit
+
+
+@dataclass
+class RosterState:
+    """Сохранённый ростер: данные из БД или генерации.
+    Отличается от PlayerState (игровой процесс) — это просто данные."""
+
+    name: str
+    faction: str
+    total_pts: int
+    units: dict[str, "Unit"] = field(default_factory=dict)
+    warlord_unit_name: str | None = None
+    detachment: str = ""
 
 
 class GameSize(Enum):
@@ -31,6 +44,11 @@ class GameSize(Enum):
         return _GAME_SIZE_LIMITS[self]
 
     @property
+    def map_size(self) -> tuple[int, int]:
+        """(height, width) in cells = table size in inches."""
+        return _GAME_SIZE_MAPS[self]
+
+    @property
     def label(self) -> str:
         return _GAME_SIZE_LABELS[self]
 
@@ -40,6 +58,14 @@ _GAME_SIZE_LIMITS: dict[GameSize, int] = {
     GameSize.INCURSION: 1000,
     GameSize.STRIKE_FORCE: 2000,
     GameSize.ONSLAUGHT: 3000,
+}
+
+# Standard 40k table sizes (height × width in inches → rows × cols in cells)
+_GAME_SIZE_MAPS: dict[GameSize, tuple[int, int]] = {
+    GameSize.COMBAT_PATROL: (30, 44),  # 500 pts → 44"×30"
+    GameSize.INCURSION: (44, 44),  # 1000 pts → 44"×44"
+    GameSize.STRIKE_FORCE: (44, 60),  # 2000 pts → 44"×60"
+    GameSize.ONSLAUGHT: (44, 90),  # 3000 pts → 44"×90"
 }
 
 _GAME_SIZE_LABELS: dict[GameSize, str] = {
@@ -56,7 +82,7 @@ class RosterValidationError:
 
     code: str
     message: str
-    detail: Optional[dict] = None
+    detail: dict | None = None
 
 
 @dataclass
@@ -180,7 +206,7 @@ def validate_squad_size(
     unit_name: str,
     squad_size: int,
     unit: "Unit",
-) -> Optional[RosterValidationError]:
+) -> RosterValidationError | None:
     """Check that squad size is within the unit's allowed range.
 
     Returns an error if out of range, None if valid.

@@ -1,27 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        .card { @apply bg-gray-800 border border-gray-700 rounded-lg p-6; }
-        .btn { @apply bg-yellow-600 hover:bg-yellow-500 font-bold py-2 px-4 rounded transition; }
-        .input { @apply w-full bg-gray-700 border border-gray-600 rounded px-3 py-2; }
-        [x-cloak] { display: none !important; }
+        .card {
+            @apply bg-gray-800 border border-gray-700 rounded-lg p-6;
+        }
+
+        .btn {
+            @apply bg-yellow-600 hover:bg-yellow-500 font-bold py-2 px-4 rounded transition;
+        }
+
+        .input {
+            @apply w-full bg-gray-700 border border-gray-600 rounded px-3 py-2;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        /* ── Progressive Disclosure ─────────────────────────── */
+        /* Beginner: simplified — all 6 stats shown with tooltips, no weapon tables */
+        .mode-beginner .stat-value       { display: none; }
+        .mode-beginner .weapon-table     { display: none; }
+        .mode-beginner .keyword-list     { display: none; }
+        .mode-beginner .modifier-text    { display: none; }
+        .mode-beginner .ability-rules    { display: none; }
+        .mode-beginner .datasheet-detail { display: none; }
+        .mode-beginner .expert-only      { display: none; }
+
+        .mode-beginner .beginner-friendly { display: inline; }
+        .mode-beginner .beginner-stats    { display: flex; }
+        .mode-beginner .beginner-advice   { display: block; }
+
+        /* Expert (default): full datasheet */
+        .mode-expert .beginner-friendly { display: none; }
+        .mode-expert .beginner-stats    { display: none; }
+        .mode-expert .beginner-advice   { display: none; }
+
+        .mode-expert .stat-value       { display: flex; }
+        .mode-expert .weapon-table     { display: table; }
+        .mode-expert .keyword-list     { display: flex; }
+        .mode-expert .ability-rules    { display: block; }
+        .mode-expert .modifier-text    { display: inline; }
+        .mode-expert .expert-only      { display: block; }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen"
-      x-data="{ user: null }"
-      x-init="fetch('/api/me').then(r => r.ok ? r.json().then(d => { user = d; user.features = d.features || {}; }) : null).catch(() => null)">
+
+<body class="bg-gray-900 text-gray-100 min-h-screen" x-data="{ user: null }"
+    x-init="fetch('/api/me').then(r => r.ok ? r.json().then(d => { user = d; user.features = d.features || {}; }) : null).catch(() => null)">
 
     <!-- Upgrade Banner — для Free -->
     <template x-if="user && !user.features?.ads_enabled === false">
-        <div class="bg-gradient-to-r from-yellow-900 to-yellow-700 px-6 py-3 text-center text-sm flex items-center justify-center gap-4">
+        <div
+            class="bg-gradient-to-r from-yellow-900 to-yellow-700 px-6 py-3 text-center text-sm flex items-center justify-center gap-4">
             <span>⚡ Upgrade to Premium — no ads, unlimited rosters, priority AI</span>
             <a href="/pricing" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-4 py-1 rounded text-sm">
                 🔥 Upgrade Now
@@ -42,16 +82,33 @@
 
     <nav class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex items-center gap-6">
         <a href="/" class="text-xl font-bold text-yellow-500">🔧 Warpsmith</a>
-        <a href="/team-builder" class="hover:text-yellow-400">Team Builder</a>
-        <a href="/faction-browser" class="hover:text-yellow-400">Browser</a>
-        <a href="/scenario-setup" class="hover:text-yellow-400">Scenario</a>
-        <a href="/pricing" class="hover:text-yellow-400">Pricing</a>
+        <a href="/team-builder" class="text-gray-400 hover:text-white text-sm">Team Builder</a>
+        <a href="/my-rosters" class="text-gray-400 hover:text-white text-sm">Rosters</a>
+        <a href="/faction-browser" class="text-gray-400 hover:text-white text-sm">Browser</a>
+        <a href="/scenario-setup" class="text-gray-400 hover:text-white text-sm">Scenario</a>
+
+        <!-- Progressive Disclosure Toggle -->
+        <div x-data="progressiveDisclosure()" x-init="loadMode()"
+            class="flex items-center gap-0.5 bg-gray-900 rounded-lg p-0.5 border border-gray-700">
+            <button @click="setMode('beginner')" class="text-xs px-2 py-0.5 rounded transition-colors font-medium"
+                :class="mode === 'beginner'
+                        ? 'bg-green-600 text-white'
+                        : 'text-gray-500 hover:text-gray-200'">
+                🟢 Beginner
+            </button>
+            <button @click="setMode('expert')" class="text-xs px-2 py-0.5 rounded transition-colors font-medium"
+                :class="mode === 'expert'
+                        ? 'bg-purple-600 text-white'
+                        : 'text-gray-500 hover:text-gray-200'">
+                🟣 Expert
+            </button>
+        </div>
 
         <div class="ml-auto flex items-center gap-4">
             <template x-if="user">
                 <div class="flex items-center gap-3">
                     <span class="text-sm text-yellow-400 border border-yellow-600 rounded px-2 py-0.5"
-                          x-text="user.tier === 'premium' ? '⭐ PREMIUM' : 'FREE'"></span>
+                        x-text="user.tier === 'premium' ? '⭐ PREMIUM' : 'FREE'"></span>
                     <span class="text-sm text-gray-300" x-text="user.display_name"></span>
                     <a href="/auth/logout" class="text-sm text-gray-400 hover:text-white">Logout</a>
                 </div>
@@ -72,8 +129,12 @@
         </div>
     </template>
 
+    <script src="/static/progressive_disclosure.js"></script>
+    <script src="/static/tooltips.js"></script>
+
     <main class="container mx-auto px-4 py-8">
         {% block content %}{% endblock %}
     </main>
 </body>
+
 </html>

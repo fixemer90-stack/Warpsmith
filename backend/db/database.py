@@ -1,9 +1,9 @@
 """SQLite wrapper — мини ORM без зависимостей."""
 
+import contextlib
 import os
 import sqlite3
 from pathlib import Path
-from typing import Optional
 
 
 class Database:
@@ -15,6 +15,10 @@ class Database:
 
     def connect(self) -> sqlite3.Connection:
         if self._conn is None:
+            # Ensure parent directory exists
+            db_dir = os.path.dirname(self.db_path)
+            if db_dir:
+                os.makedirs(db_dir, exist_ok=True)
             try:
                 self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
                 self._conn.row_factory = sqlite3.Row
@@ -24,11 +28,11 @@ class Database:
                 # Clean them up and fall back to DELETE journal mode
                 db_dir = os.path.dirname(self.db_path) or "."
                 for f in os.listdir(db_dir):
-                    if f.startswith(os.path.basename(self.db_path)) and (f.endswith("-shm") or f.endswith("-wal")):
-                        try:
+                    if f.startswith(os.path.basename(self.db_path)) and (
+                        f.endswith(("-shm", "-wal"))
+                    ):
+                        with contextlib.suppress(OSError):
                             os.remove(os.path.join(db_dir, f))
-                        except OSError:
-                            pass
                 self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
                 self._conn.row_factory = sqlite3.Row
                 self._conn.execute("PRAGMA journal_mode=DELETE")
@@ -42,10 +46,8 @@ class Database:
         for suffix in ("-shm", "-wal"):
             p = os.path.join(db_dir, base + suffix)
             if os.path.exists(p):
-                try:
+                with contextlib.suppress(OSError):
                     os.remove(p)
-                except OSError:
-                    pass
 
     @property
     def conn(self) -> sqlite3.Connection:
@@ -81,6 +83,7 @@ class Database:
             email        TEXT NOT NULL UNIQUE,
             password_hash TEXT NOT NULL,
             display_name TEXT DEFAULT '',
+            tier         TEXT DEFAULT 'free',
             created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             last_login   TIMESTAMP
         );
@@ -112,14 +115,18 @@ class Database:
             FOREIGN KEY (user_id) REFERENCES users(id)
         );
 
+        DROP TABLE IF EXISTS replays;
         CREATE TABLE IF NOT EXISTS replays (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            scenario_id INTEGER,
-            round       INTEGER,
-            phase       TEXT,
-            events      TEXT DEFAULT '[]',
-            created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (scenario_id) REFERENCES scenarios(id)
+            game_id TEXT PRIMARY KEY,
+            created_at TEXT NOT NULL,
+            roster_a TEXT NOT NULL,
+            roster_b TEXT NOT NULL,
+            mission TEXT NOT NULL,
+            deployment TEXT NOT NULL,
+            seed INTEGER NOT NULL,
+            replay_json TEXT NOT NULL,
+            summary TEXT,
+            user_id INTEGER
         );
 
         CREATE INDEX IF NOT EXISTS idx_rosters_user ON rosters(user_id);
@@ -127,6 +134,9 @@ class Database:
         CREATE INDEX IF NOT EXISTS idx_scenarios_user ON scenarios(user_id);
         """
         self.conn.executescript(schema)
+        # Миграция: добавляем tier для существующих БД
+        with contextlib.suppress(Exception):
+            self.execute("ALTER TABLE users ADD COLUMN tier TEXT DEFAULT 'free'")
         self.commit()
 
 

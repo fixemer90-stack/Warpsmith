@@ -12,7 +12,7 @@ class UserFeatures:
     # ── Определения планов ─────────────────────────────────────
 
     FREE: ClassVar[dict] = {
-        "max_rosters": 1,
+        "max_rosters": 3,
         "simulation_ai": "basic",  # упрощённая симуляция
         "export_enabled": False,
         "public_rosters_create": False,  # может только смотреть

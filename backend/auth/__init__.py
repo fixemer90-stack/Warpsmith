@@ -93,20 +93,26 @@ def decode_jwt(token: str) -> dict | None:
 
 
 class User:
-    """Пользователь системы: id, email, display_name."""
+    """Пользователь системы: id, email, display_name, tier."""
 
-    def __init__(self, id: int, email: str, display_name: str):
+    def __init__(self, id: int, email: str, display_name: str, tier: str = "free"):
         self.id = id
         self.email = email
         self.display_name = display_name
+        self.tier = tier
 
     def to_dict(self) -> dict:
-        return {"id": self.id, "email": self.email, "display_name": self.display_name}
+        return {
+            "id": self.id,
+            "email": self.email,
+            "display_name": self.display_name,
+            "tier": self.tier,
+        }
 
     @classmethod
     def by_email(cls, email: str) -> Optional["User"]:
         row = db.fetchone(
-            "SELECT id, email, display_name FROM users WHERE email = ?",
+            "SELECT id, email, display_name, tier FROM users WHERE email = ?",
             (email.strip().lower(),),
         )
         return cls(**row) if row else None
@@ -114,7 +120,7 @@ class User:
     @classmethod
     def by_id(cls, user_id: int) -> Optional["User"]:
         row = db.fetchone(
-            "SELECT id, email, display_name FROM users WHERE id = ?",
+            "SELECT id, email, display_name, tier FROM users WHERE id = ?",
             (user_id,),
         )
         return cls(**row) if row else None
@@ -126,9 +132,12 @@ class User:
         if not display_name:
             display_name = email.split("@")[0]
         pw_hash = hash_password(password)
+        # На localhost — сразу Premium для удобства тестирования
+        is_local = os.getenv("HOSTING", "").lower() not in ("true", "1", "yes")
+        tier = "premium" if is_local else "free"
         cur = db.execute(
-            "INSERT INTO users (email, password_hash, display_name) VALUES (?, ?, ?)",
-            (email, pw_hash, display_name),
+            "INSERT INTO users (email, password_hash, display_name, tier) VALUES (?, ?, ?, ?)",
+            (email, pw_hash, display_name, tier),
         )
         db.commit()
         return cls.by_id(cur.lastrowid)
@@ -138,7 +147,7 @@ class User:
         """Проверить учётные данные. Возвращает User или None."""
         email = email.strip().lower()
         row = db.fetchone(
-            "SELECT id, email, display_name, password_hash FROM users WHERE email = ?",
+            "SELECT id, email, display_name, tier, password_hash FROM users WHERE email = ?",
             (email,),
         )
         if not row:
@@ -181,7 +190,6 @@ async def get_current_user(request: Request) -> User:
     if user is None:
         raise HTTPException(status_code=401, detail="User not found")
     return user
-
 
 
 async def get_current_user_optional(request: Request) -> User | None:
@@ -228,10 +236,8 @@ def make_logout_cookie() -> dict:
     """Параметры cookie для удаления токена."""
     return {
         "key": "token",
-        "value": "",
         "httponly": True,
         "secure": True,
         "samesite": "lax",
-        "max_age": 0,
         "path": "/",
     }

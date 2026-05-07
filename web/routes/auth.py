@@ -25,9 +25,14 @@ from backend.auth import (
     validate_email,
     validate_password_strength,
 )
+from backend.loader.icon_map import CATEGORY_COLORS, get_card_style, get_icon_html
 
 router = APIRouter(tags=["auth"])
 templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
+# Jinja2 globals для карточек юнитов
+templates.env.globals["unit_icon"] = get_icon_html
+templates.env.globals["card_style"] = get_card_style
+templates.env.globals["CATEGORY_COLORS"] = CATEGORY_COLORS
 
 # Определяем, HTTPS ли мы (production) или localhost
 _IS_SECURE = os.getenv("HOSTING", "").lower() in ("true", "1", "yes")
@@ -136,9 +141,4 @@ async def api_me(request: Request, user=Depends(get_optional_user)):
     return JSONResponse(user.to_dict())
 
 
-# ── Health check ─────────────────────────────────────────────────
-
-
-@router.get("/api/health")
-async def health():
-    return JSONResponse({"status": "ok"})
+# ── Health check: в api.py (GET /api/health) ─────────────────────

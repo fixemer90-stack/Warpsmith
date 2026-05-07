@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto p-4">
+    <h1 class="text-2xl font-bold text-yellow-500 mb-6">🎬 Replays</h1>
+
+    <div x-data="replaysList()" x-init="loadList()">
+        <div x-show="loading" class="card text-center py-12">
+            <div class="text-4xl mb-4">⏳</div>
+            <p class="text-gray-400">Loading replays...</p>
+        </div>
+
+        <div x-show="!loading && replays.length === 0" class="card text-center py-12">
+            <p class="text-gray-500">No replays yet.</p>
+            <a href="/scenario-setup" class="btn inline-block mt-4">Run a Simulation</a>
+        </div>
+
+        <div x-show="!loading && replays.length > 0" class="space-y-3">
+            <template x-for="r in replays" :key="r.game_id">
+                <div class="card flex items-center justify-between gap-4">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-mono text-yellow-400" x-text="r.game_id?.slice(0,12)"></span>
+                            <span class="text-xs text-gray-500" x-text="r.mission"></span>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1" x-text="'Seed: ' + r.seed + ' · ' + r.deployment"></div>
+                    </div>
+                    <div class="flex gap-2 flex-shrink-0">
+                        <a :href="'/replay/' + r.game_id" class="btn text-xs px-3 py-1">🎬 Replay</a>
+                        <a :href="'/result/' + r.game_id" class="btn text-xs px-3 py-1">📊 Results</a>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</div>
+
+<script>
+function replaysList() {
+    return {
+        replays: [],
+        loading: true,
+        async loadList() {
+            try {
+                const resp = await fetch('/api/replays');
+                if (resp.ok) this.replays = await resp.json();
+            } catch (e) {
+                console.error('Failed to load replays:', e);
+            } finally {
+                this.loading = false;
+            }
+        }
+    };
+}
+</script>
+{% endblock %}

@@ -14,8 +14,6 @@ body {
   padding: 40px 20px; min-height: 100vh;
 }
 .wrapper { max-width: 1200px; width: 100%; }
-
-/* Header */
 .header { text-align: center; margin-bottom: 40px; }
 .header h1 { font-size: 28px; font-weight: 700; }
 .header h1 .g1 { color: #fbbf24; }
@@ -23,83 +21,45 @@ body {
 .header .sub { font-size: 12px; color: #64748b; margin-top: 8px; }
 .pulse-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #34d399; margin-right: 8px; animation: pulse 2s infinite; vertical-align: middle; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-/* Stats */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
 .stat { background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; padding: 16px; text-align: center; }
 .stat .val { font-size: 24px; font-weight: 700; }
 .stat .lbl { font-size: 10px; color: #64748b; margin-top: 4px; }
 .stat .g1 { color: #34d399; } .stat .g2 { color: #22d3ee; } .stat .g3 { color: #a78bfa; } .stat .g4 { color: #fbbf24; }
-
-/* Phase cards */
 .phases { display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; }
-
-.phase {
-  background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; overflow: hidden;
-  transition: .15s;
-}
+.phase { background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; overflow: hidden; transition: .15s; }
 .phase:hover { border-color: #334155; }
-
-/* Phase header - always visible */
-.phase-header {
-  display: flex; align-items: center; gap: 16px;
-  padding: 16px 20px; cursor: pointer; user-select: none;
-}
+.phase-header { display: flex; align-items: center; gap: 16px; padding: 16px 20px; cursor: pointer; user-select: none; }
 .phase-header:hover { background: rgba(30,41,59,0.3); }
-
-.phase-bar {
-  width: 4px; height: 40px; border-radius: 2px; flex-shrink: 0;
-}
+.phase-bar { width: 4px; height: 40px; border-radius: 2px; flex-shrink: 0; }
 .phase-bar.done { background: #34d399; }
 .phase-bar.active { background: linear-gradient(180deg,#fbbf24,#f59e0b); }
 .phase-bar.future { background: #334155; }
-
 .phase-info { flex: 1; min-width: 0; }
 .phase-info .num { font-size: 10px; color: #64748b; }
 .phase-info .name { font-size: 15px; font-weight: 600; }
 .phase-info .desc { font-size: 11px; color: #94a3b8; margin-top: 2px; }
-
 .phase-pct { font-size: 13px; font-weight: 700; text-align: right; flex-shrink: 0; }
 .phase-pct .pct-done { color: #34d399; }
 .phase-pct .pct-active { color: #fbbf24; }
 .phase-pct .pct-future { color: #334155; }
-
 .phase-arrow { font-size: 12px; color: #334155; flex-shrink: 0; transition: transform .2s; }
-
-/* Progress bar below header */
 .phase-progress { height: 4px; background: #1e293b; margin: 0 20px; border-radius: 2px; }
-.phase-progress .fill {
-  height: 100%; border-radius: 2px; transition: width .5s;
-}
+.phase-progress .fill { height: 100%; border-radius: 2px; transition: width .5s; }
 .phase-progress .fill.done { background: #34d399; width: 100%; }
-.phase-progress .fill.active { background: linear-gradient(90deg,#fbbf24,#f59e0b); width: 20%; }
+.phase-progress .fill.active { background: linear-gradient(90deg,#fbbf24,#f59e0b); }
 .phase-progress .fill.future { background: #334155; width: 0%; }
-
-/* Feature list - collapsible */
 .features { border-top: 1px solid #1e293b; }
-details.features > summary { list-style: none; display: none; }
 .feature-list { padding: 12px 20px 16px; display: flex; flex-direction: column; gap: 6px; }
-
-.feature {
-  display: flex; align-items: center; gap: 10px;
-  padding: 6px 10px; border-radius: 6px; font-size: 11px;
-  transition: .1s;
-}
+.feature { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 6px; font-size: 11px; transition: .1s; }
 .feature:hover { background: rgba(30,41,59,0.4); }
-
 .feature .f-icon { font-size: 12px; width: 20px; text-align: center; }
 .feature .f-name { flex: 1; color: #e2e8f0; }
-.feature .f-deps { font-size: 9px; color: #475569; }
 .feature .f-hours { font-size: 9px; color: #64748b; width: 40px; text-align: right; }
-
-.feature .f-status {
-  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-}
+.feature .f-status { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .feature .f-status.done { background: #34d399; }
 .feature .f-status.wip { background: #fbbf24; }
 .feature .f-status.empty { background: #334155; }
-
-/* Architecture layer */
 .arch { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
 .layer { background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; padding: 16px 20px; }
 .layer-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
@@ -110,16 +70,12 @@ details.features > summary { list-style: none; display: none; }
 .comp .s.done { background: #34d399; }
 .comp .s.wip { background: #fbbf24; }
 .comp .s.empty { background: #334155; }
-
-/* Legend */
 .legend { display: flex; gap: 20px; justify-content: center; font-size: 10px; color: #64748b; margin-bottom: 24px; flex-wrap: wrap; }
 .legend span { display: flex; align-items: center; gap: 4px; }
 .legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .legend .sw.done { background: #34d399; }
 .legend .sw.wip { background: #fbbf24; }
 .legend .sw.empty { background: #334155; }
-
-/* Footer */
 .footer { text-align: center; font-size: 10px; color: #1e293b; padding: 20px 0; }
 </style>
 </head>
@@ -131,7 +87,6 @@ details.features > summary { list-style: none; display: none; }
     <div class="sub"><span class="pulse-dot"></span>v0.7.7 · 7 phases · ~75 features · ~270h</div>
   </div>
 
-  <!-- Stats -->
   <div class="stats">
     <div class="stat"><div class="val g1">3</div><div class="lbl">Phases Started</div></div>
     <div class="stat"><div class="val g2">68</div><div class="lbl">Files Complete</div></div>
@@ -139,38 +94,34 @@ details.features > summary { list-style: none; display: none; }
     <div class="stat"><div class="val g4">0.7.7</div><div class="lbl">Current Version</div></div>
   </div>
 
-  <!-- Phases with Features -->
   <div class="phases">
 
     <!-- Phase 0 -->
     <div class="phase">
-      <div class="phase-header" onclick="this.nextElementSibling.nextElementSibling.hidden^=1">
+      <div class="phase-header">
         <div class="phase-bar done"></div>
         <div class="phase-info">
-          <div class="num">Phase 0 · 15 features</div>
+          <div class="num">Phase 0 · 12 features</div>
           <div class="name">📦 Foundation</div>
-          <div class="desc">Auth, Wiki, Billing, OAuth, Docs scaffold</div>
+          <div class="desc">FastAPI, Auth, Wiki, Billing, OAuth, Docs scaffold</div>
         </div>
         <div class="phase-pct"><span class="pct-done">100%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
       <div class="phase-progress"><div class="fill done"></div></div>
-      <div class="features">
+      <div class="features" hidden>
         <div class="feature-list">
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🏗️</span><span class="f-name">FastAPI scaffold + main.py</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔐</span><span class="f-name">JWT auth · bcrypt · httponly cookie</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🧾</span><span class="f-name">Register / Login / Logout routes</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔐</span><span class="f-name">JWT auth + bcrypt + httponly cookie</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🧾</span><span class="f-name">Register/Login/Logout routes + forms</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🔑</span><span class="f-name">OAuth Google + VK providers</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🗄️</span><span class="f-name">SQLite schema + migration</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📚</span><span class="f-name">Wiki vault: 360 pages (Orks, Tau, AdMech)</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📄</span><span class="f-name">C4, ADR, SRS, UX documentation</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🖼️</span><span class="f-name">SVG Icons · ICON_MAP (16 categories)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📚</span><span class="f-name">Wiki vault: 490 pages</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📄</span><span class="f-name">C4, ADR (11), SRS, UX docs</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🖼️</span><span class="f-name">SVG Icons · ICON_MAP (18 categories)</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🎨</span><span class="f-name">base.html + Tailwind + HTMX + Alpine</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">💳</span><span class="f-name">Billing stubs · Feature Gate · Plans</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📊</span><span class="f-name">Balance Dataslate v3.4 applied</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📝</span><span class="f-name">Faction Packs: AdMech + Ork Errata</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🧹</span><span class="f-name">Linting: ruff + mypy + pre-commit</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📄</span><span class="f-name">Feature docs: Phase 1 (12 specs) + Phase 2 (12 specs)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">💳</span><span class="f-name">Billing stubs + Feature Gate + Plans</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📊</span><span class="f-name">Wiki monorepo: data in repo</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🏷️</span><span class="f-name">Release policy + CHANGELOG</span><span class="f-hours">✅</span></div>
         </div>
       </div>
@@ -178,31 +129,32 @@ details.features > summary { list-style: none; display: none; }
 
     <!-- Phase 1 -->
     <div class="phase">
-      <div class="phase-header" onclick="this.nextElementSibling.nextElementSibling.hidden^=1">
-        <div class="phase-bar active"></div>
+      <div class="phase-header">
+        <div class="phase-bar done"></div>
         <div class="phase-info">
-          <div class="num">Phase 1 · 12 features</div>
+          <div class="num">Phase 1 · 13 features</div>
           <div class="name">⚙️ Combat Engine</div>
-          <div class="desc">Monte Carlo dice · Hit→Wound→Save→Damage→FNP · /api/simulate</div>
+          <div class="desc">Monte Carlo · Hit→Wound→Save→FNP · /api/simulate · PMF</div>
         </div>
         <div class="phase-pct"><span class="pct-done">100%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
       <div class="phase-progress"><div class="fill done"></div></div>
-      <div class="features">
+      <div class="features" hidden>
         <div class="feature-list">
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📦</span><span class="f-name">Unit dataclass (M/T/SV/W/LD/OC) + invul/FNP/wargear</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔫</span><span class="f-name">Weapon dataclass (S/AP/D/keywords) + DiceExpr</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔧</span><span class="f-name">Modifier system (±1, rerolls, caps, sustained/lethal)</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📥</span><span class="f-name">Wiki Loader — .md → Unit objects</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📦</span><span class="f-name">Unit dataclass (M/T/SV/W/LD/OC)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔫</span><span class="f-name">Weapon dataclass (S/AP/D/keywords)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔧</span><span class="f-name">Modifier system (±1, rerolls, caps)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📥</span><span class="f-name">Wiki Loader: .md → Unit objects</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🎲</span><span class="f-name">Dice pool (NumPy D6 Monte Carlo)</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">💥</span><span class="f-name">Combat sequence: Hit→Wound→Save→Damage→FNP</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔥</span><span class="f-name">Modifiers: Sustained, Lethal, Devastating, Ignores Cover</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🧪</span><span class="f-name">Tests: Shoota/Marine, HB/Marine, Plasma overcharge</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🌐</span><span class="f-name">POST /api/simulate (Weapon×Target → JSON)</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📊</span><span class="f-name">PMF chart — damage distribution graph</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📋</span><span class="f-name">Round Viewer stub — JSON result display</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📐</span><span class="f-name">MultiAttack: multiple weapons + squads</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">💥</span><span class="f-name">Hit→Wound→Save→Damage→FNP</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔥</span><span class="f-name">Sustained, Lethal, Devastating keywords</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🧪</span><span class="f-name">Tests: Shoota/Marine, HB/Marine</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🌐</span><span class="f-name">POST /api/simulate</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📊</span><span class="f-name">PMF chart (Chart.js)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📋</span><span class="f-name">Round Viewer stub</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📐</span><span class="f-name">MultiAttack: squads + multiple weapons</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">⚡</span><span class="f-name">Keywords Phase 2: Blast, Heavy, Torrent, etc.</span><span class="f-hours">✅</span></div>
         </div>
       </div>
     </div>
@@ -212,29 +164,29 @@ details.features > summary { list-style: none; display: none; }
       <div class="phase-header">
         <div class="phase-bar done"></div>
         <div class="phase-info">
-          <div class="num">Phase 2 · 12 features</div>
+          <div class="num">Phase 2 · 13 features</div>
           <div class="name">🎲 Game System</div>
-          <div class="desc">Game Loop · State · Map · Roster validation · Missions</div>
-          <div style="font-size:10px;color:#94a3b8;margin-top:4px;padding:0 20px">✅ 12/12 · Phase 2 завершена</div>
+          <div class="desc">Game Loop · State · Map · Roster CRUD · Team Builder</div>
         </div>
         <div class="phase-pct"><span class="pct-done">100%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
-      <div class="phase-progress"><div class="fill done" style="width:100%"></div></div>
-      <div class="features">
+      <div class="phase-progress"><div class="fill done"></div></div>
+      <div class="features" hidden>
         <div class="feature-list">
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📊</span><span class="f-name">Game State: positions, wounds, CP, VP, round</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🗺️</span><span class="f-name">2D Map: NumPy grid, deploy zones, terrain</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">👁️</span><span class="f-name">Line of Sight — simple ray casting</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📊</span><span class="f-name">Game State: positions, wounds, CP, VP</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🗺️</span><span class="f-name">2D Map: NumPy grid, terrain, deploy zones</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">👁️</span><span class="f-name">Line of Sight ray casting</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🎯</span><span class="f-name">Missions: objectives, scoring, deployment</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔄</span><span class="f-name">Game Loop: Command→Move→Shoot→Charge→Fight</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">⚡</span><span class="f-name">Phase transitions + alternating activations</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">💀</span><span class="f-name">Battle-shock + CP generation + stratagems</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🏆</span><span class="f-name">Victory Points + end-game conditions</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">📏</span><span class="f-name">Roster validation (PTS, Warlord, 3× cap) + GameSize</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">💾</span><span class="f-name">Roster CRUD: SQLite save/load/delete via API</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status done"></span><span class="f-icon">🛠️</span><span class="f-name">Team Builder: faction picker, unit modal, PTS bar</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔄</span><span class="f-name">Game Loop: 6 phases</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">⚡</span><span class="f-name">Phase transitions + activations</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">💀</span><span class="f-name">Battle-shock + CP + stratagems</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🏆</span><span class="f-name">Victory Points + end-game</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📏</span><span class="f-name">Roster validation + GameSize</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">💾</span><span class="f-name">Roster CRUD: SQLite via API</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🛠️</span><span class="f-name">Team Builder UI + PTS bar</span><span class="f-hours">✅</span></div>
           <div class="feature"><span class="f-status done"></span><span class="f-icon">🔗</span><span class="f-name">Leader compatibility checker</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🛡️</span><span class="f-name">Cover & Terrain: +1SV, Ignores Cover, LoS</span><span class="f-hours">✅</span></div>
         </div>
       </div>
     </div>
@@ -242,26 +194,27 @@ details.features > summary { list-style: none; display: none; }
     <!-- Phase 3 -->
     <div class="phase">
       <div class="phase-header">
-        <div class="phase-bar future"></div>
+        <div class="phase-bar active"></div>
         <div class="phase-info">
-          <div class="num">Phase 3 · 8 features</div>
+          <div class="num">Phase 3 · 9 features</div>
           <div class="name">🧠 AI & Automation</div>
-          <div class="desc">Greedy AI · Faction behaviors · Auto-sim · Replay</div>
+          <div class="desc">Greedy AI · Faction Profiles · Autoplay · Replay · Viewer</div>
         </div>
-        <div class="phase-pct"><span class="pct-future">0%</span></div>
+        <div class="phase-pct"><span class="pct-active">67%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
-      <div class="phase-progress"><div class="fill future"></div></div>
-      <div class="features">
+      <div class="phase-progress"><div class="fill active" style="width:67%"></div></div>
+      <div class="features" hidden>
         <div class="feature-list">
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🤖</span><span class="f-name">Greedy decision engine (best target/action)</span><span class="f-hours">6h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">💚</span><span class="f-name">Ork AI: charge priority, Waaagh! timing</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🔵</span><span class="f-name">T'au AI: distance, Guided Fire, Kauyon/Mont'ka</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📍</span><span class="f-name">Deployment AI: zone placement logic</span><span class="f-hours">3h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">▶️</span><span class="f-name">Auto-play: AI vs AI full scenario</span><span class="f-hours">6h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📼</span><span class="f-name">Replay record (JSON event log per round)</span><span class="f-hours">3h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">👀</span><span class="f-name">Round viewer — step-by-step replay</span><span class="f-hours">6h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📊</span><span class="f-name">Result screen: kills, damage, VP chart</span><span class="f-hours">3h</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🤖</span><span class="f-name">Greedy decision engine (26 tests)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">💚</span><span class="f-name">Faction AI Profiles (Orks/Tau/AdMech)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status wip"></span><span class="f-icon">📍</span><span class="f-name">Deployment AI (faction_ai not integrated)</span><span class="f-hours">🔧</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">▶️</span><span class="f-name">Auto-play: AI vs AI — VP > 0, objectives</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📼</span><span class="f-name">Replay recording — ReplayRecorder + SQLite</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">👀</span><span class="f-name">Round viewer: Alpine.js + Canvas</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📊</span><span class="f-name">Result screen: Chart.js VP timeline</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">💥</span><span class="f-name">Waaagh! — Orks Army Rule</span><span class="f-hours">3h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🎯</span><span class="f-name">FTGG + Markerlight — Tau Army Rule</span><span class="f-hours">4h</span></div>
         </div>
       </div>
     </div>
@@ -269,26 +222,28 @@ details.features > summary { list-style: none; display: none; }
     <!-- Phase 4 -->
     <div class="phase">
       <div class="phase-header">
-        <div class="phase-bar future"></div>
+        <div class="phase-bar done"></div>
         <div class="phase-info">
-          <div class="num">Phase 4 · 8 features</div>
+          <div class="num">Phase 4 · 10 features</div>
           <div class="name">🎨 Web UI Polish</div>
-          <div class="desc">Team Builder UX · Canvas Map · Tooltips · SVG Icons</div>
+          <div class="desc">Faction browser · Unit modal · Detachments · Synergy · Map · Icons · Movement</div>
         </div>
-        <div class="phase-pct"><span class="pct-future">0%</span></div>
+        <div class="phase-pct"><span class="pct-done">100%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
-      <div class="phase-progress"><div class="fill future"></div></div>
-      <div class="features">
+      <div class="phase-progress"><div class="fill done"></div></div>
+      <div class="features" hidden>
         <div class="feature-list">
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🔍</span><span class="f-name">Faction browser + category/PTS filter</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📋</span><span class="f-name">Unit modal: size, loadout, wargear selection</span><span class="f-hours">6h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🎯</span><span class="f-name">Detachment picker with rule preview</span><span class="f-hours">3h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">💡</span><span class="f-name">Synergy hints: leader + transport compatibility</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🗺️</span><span class="f-name">Canvas map: terrain tiles + deploy zones</span><span class="f-hours">8h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📖</span><span class="f-name">Progressive Disclosure (3 modes)</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">❓</span><span class="f-name">Tooltips on every stat (M/T/SV/W/LD/OC)</span><span class="f-hours">3h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🖼️</span><span class="f-name">SVG icon integration in unit cards</span><span class="f-hours">2h</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔍</span><span class="f-name">Faction browser + filters</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📋</span><span class="f-name">Unit modal: size, loadout, wargear</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🎯</span><span class="f-name">Detachment picker with rule preview</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">💡</span><span class="f-name">Synergy hints: leader + transport</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🗺️</span><span class="f-name">Canvas map: terrain + deploy zones</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📖</span><span class="f-name">Progressive Disclosure (3 modes)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">❓</span><span class="f-name">Tooltips on every stat</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🖼️</span><span class="f-name">SVG icons in unit cards</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🎲</span><span class="f-name">Generate Random Opponent</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🏃</span><span class="f-name">Movement Phase (10ed): Normal/Advance/Fall Back</span><span class="f-hours">✅</span></div>
         </div>
       </div>
     </div>
@@ -296,26 +251,25 @@ details.features > summary { list-style: none; display: none; }
     <!-- Phase 5 -->
     <div class="phase">
       <div class="phase-header">
-        <div class="phase-bar future"></div>
+        <div class="phase-bar done"></div>
         <div class="phase-info">
           <div class="num">Phase 5 · 7 features</div>
           <div class="name">☁️ Production</div>
-          <div class="desc">Docker · CI/CD · HTTPS · Logging · Monitoring</div>
+          <div class="desc">Docker · Deploy scripts · Rate limiting · CI/CD</div>
         </div>
-        <div class="phase-pct"><span class="pct-future">0%</span></div>
+        <div class="phase-pct"><span class="pct-done">100%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
-      <div class="phase-progress"><div class="fill future"></div></div>
-      <div class="features">
+      <div class="phase-progress"><div class="fill done"></div></div>
+      <div class="features" hidden>
         <div class="feature-list">
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🐳</span><span class="f-name">Dockerfile + docker-compose</span><span class="f-hours">3h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🚀</span><span class="f-name">Deployment scripts (Dokku/Railway/self-host)</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🚦</span><span class="f-name">Rate limiting (slowapi)</span><span class="f-hours">✅</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🛡️</span><span class="f-name">CORS hardening + CSP headers</span><span class="f-hours">1h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📝</span><span class="f-name">Logging (structlog) + Sentry</span><span class="f-hours">2h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🔄</span><span class="f-name">CI/CD: GitHub Actions (lint+test+deploy)</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">💾</span><span class="f-name">Backup strategy (SQLite dump)</span><span class="f-hours">1h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🧪</span><span class="f-name">Load test + error monitoring</span><span class="f-hours">2h</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🐳</span><span class="f-name">Dockerfile + docker-compose</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🚀</span><span class="f-name">Deploy: Dokku, Railway, self-host</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🚦</span><span class="f-name">Rate limiting (slowapi)</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🛡️</span><span class="f-name">CORS hardening + CSP headers</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">📝</span><span class="f-name">Logging (structlog) + Sentry</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">🔄</span><span class="f-name">CI/CD: GitHub Actions</span><span class="f-hours">✅</span></div>
+          <div class="feature"><span class="f-status done"></span><span class="f-icon">💾</span><span class="f-name">SQLite backup strategy</span><span class="f-hours">✅</span></div>
         </div>
       </div>
     </div>
@@ -325,22 +279,23 @@ details.features > summary { list-style: none; display: none; }
       <div class="phase-header">
         <div class="phase-bar future"></div>
         <div class="phase-info">
-          <div class="num">Phase 6 · 6 features</div>
+          <div class="num">Phase 6 · 7 features</div>
           <div class="name">💰 Monetization</div>
-          <div class="desc">Stripe live · Ads · Tier enforcement</div>
+          <div class="desc">Stripe live · Ads · Tier enforcement · Premium trial</div>
         </div>
         <div class="phase-pct"><span class="pct-future">0%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
       <div class="phase-progress"><div class="fill future"></div></div>
-      <div class="features">
+      <div class="features" hidden>
         <div class="feature-list">
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">💳</span><span class="f-name">Stripe Checkout (live keys)</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🔐</span><span class="f-name">Stripe webhook verification (signature)</span><span class="f-hours">2h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🚧</span><span class="f-name">Feature Gate in API: tier check on every endpoint</span><span class="f-hours">3h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🔐</span><span class="f-name">Stripe webhook + signature verification</span><span class="f-hours">2h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🚧</span><span class="f-name">Feature Gate: tier check on every endpoint</span><span class="f-hours">3h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">📢</span><span class="f-name">Upgrade banner + ad placeholder</span><span class="f-hours">2h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📊</span><span class="f-name">Ad network integration (Carbon/EthicalAds)</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">⏱️</span><span class="f-name">Usage limits: max simulations/day for Free</span><span class="f-hours">2h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📊</span><span class="f-name">Ad network integration</span><span class="f-hours">4h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">⏱️</span><span class="f-name">Usage limits: max simulations/day</span><span class="f-hours">2h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🎁</span><span class="f-name">2-Week Premium Trial</span><span class="f-hours">2h</span></div>
         </div>
       </div>
     </div>
@@ -352,24 +307,24 @@ details.features > summary { list-style: none; display: none; }
         <div class="phase-info">
           <div class="num">Phase 7 · 10 features</div>
           <div class="name">🚀 Expansion</div>
-          <div class="desc">More factions · Export · Community features · Campaigns</div>
+          <div class="desc">More factions · Export · Community · Campaigns · Mobile</div>
         </div>
         <div class="phase-pct"><span class="pct-future">0%</span></div>
         <div class="phase-arrow">▾</div>
       </div>
       <div class="phase-progress"><div class="fill future"></div></div>
-      <div class="features">
+      <div class="features" hidden>
         <div class="feature-list">
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📚</span><span class="f-name">Fill remaining faction stubs (Chaos, Imperium)</span><span class="f-hours">—</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📤</span><span class="f-name">Export: CSV/JSON for rosters + replays</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📥</span><span class="f-name">Import: Battlescribe / NewRecruit roster</span><span class="f-hours">8h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📚</span><span class="f-name">Remaining faction stubs</span><span class="f-hours">—</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📤</span><span class="f-name">Export: CSV/JSON rosters</span><span class="f-hours">4h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📥</span><span class="f-name">Import: Battlescribe/NewRecruit</span><span class="f-hours">8h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">👥</span><span class="f-name">Community: public rosters, ratings</span><span class="f-hours">6h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🏕️</span><span class="f-name">Campaign: linked scenarios, persistent army</span><span class="f-hours">10h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📱</span><span class="f-name">Mobile responsive layout</span><span class="f-hours">6h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🏕️</span><span class="f-name">Campaign mode</span><span class="f-hours">10h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📱</span><span class="f-name">Mobile responsive</span><span class="f-hours">6h</span></div>
           <div class="feature"><span class="f-status empty"></span><span class="f-icon">🌍</span><span class="f-name">i18n: English locale</span><span class="f-hours">8h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🤖</span><span class="f-name">Custom AI personalities (aggressive/cautious)</span><span class="f-hours">6h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📈</span><span class="f-name">Analytics: most used units/weapons</span><span class="f-hours">4h</span></div>
-          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🎮</span><span class="f-name">Hot-seat mode: 2 players, same PC</span><span class="f-hours">8h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🤖</span><span class="f-name">Custom AI personalities</span><span class="f-hours">6h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">📈</span><span class="f-name">Analytics: unit/weapon usage</span><span class="f-hours">4h</span></div>
+          <div class="feature"><span class="f-status empty"></span><span class="f-icon">🎮</span><span class="f-name">Hot-seat: 2 players, same PC</span><span class="f-hours">8h</span></div>
         </div>
       </div>
     </div>
@@ -381,10 +336,11 @@ details.features > summary { list-style: none; display: none; }
     <div class="layer" style="border-color:rgba(34,211,238,.2)">
       <div class="layer-title"><div class="dot" style="background:#22d3ee"></div>Frontend — Web UI</div>
       <div class="comps">
-        <div class="comp" style="border-color:#22d3ee"><span class="s wip"></span>🛠️ Team Builder</div>
-        <div class="comp" style="border-color:#22d3ee"><span class="s empty"></span>🗺️ Scenario Setup</div>
-        <div class="comp" style="border-color:#22d3ee"><span class="s empty"></span>🎬 Round Viewer</div>
-        <div class="comp" style="border-color:#22d3ee"><span class="s wip"></span>💳 Pricing</div>
+        <div class="comp" style="border-color:#22d3ee"><span class="s done"></span>🛠️ Team Builder</div>
+        <div class="comp" style="border-color:#22d3ee"><span class="s done"></span>🗺️ Scenario Setup</div>
+        <div class="comp" style="border-color:#22d3ee"><span class="s done"></span>🔍 Faction Browser</div>
+        <div class="comp" style="border-color:#22d3ee"><span class="s done"></span>🎬 Round Viewer</div>
+        <div class="comp" style="border-color:#22d3ee"><span class="s done"></span>💳 Pricing Page</div>
         <div class="comp" style="border-color:#22d3ee"><span class="s done"></span>🔐 Login/Register</div>
       </div>
     </div>
@@ -392,30 +348,32 @@ details.features > summary { list-style: none; display: none; }
       <div class="layer-title"><div class="dot" style="background:#34d399"></div>Backend — FastAPI</div>
       <div class="comps">
         <div class="comp" style="border-color:#34d399"><span class="s done"></span>🔐 Auth JWT</div>
-        <div class="comp" style="border-color:#34d399"><span class="s wip"></span>🔑 OAuth</div>
-        <div class="comp" style="border-color:#34d399"><span class="s wip"></span>🎯 Feature Gate</div>
-        <div class="comp" style="border-color:#34d399"><span class="s empty"></span>💥 Combat Engine</div>
-        <div class="comp" style="border-color:#34d399"><span class="s empty"></span>🔄 Game Loop</div>
-        <div class="comp" style="border-color:#34d399"><span class="s empty"></span>🧠 AI Engine</div>
-        <div class="comp" style="border-color:#34d399"><span class="s wip"></span>📥 Wiki Loader</div>
+        <div class="comp" style="border-color:#34d399"><span class="s done"></span>🔑 OAuth (Google/VK)</div>
+        <div class="comp" style="border-color:#34d399"><span class="s done"></span>🎯 Feature Gate</div>
+        <div class="comp" style="border-color:#34d399"><span class="s done"></span>💥 Combat Engine</div>
+        <div class="comp" style="border-color:#34d399"><span class="s done"></span>🔄 Game Loop</div>
+        <div class="comp" style="border-color:#34d399"><span class="s done"></span>🧠 AI Engine</div>
+        <div class="comp" style="border-color:#34d399"><span class="s done"></span>📥 Wiki Loader</div>
+        <div class="comp" style="border-color:#34d399"><span class="s done"></span>📝 Roster CRUD</div>
       </div>
     </div>
     <div class="layer" style="border-color:rgba(167,139,250,.2)">
       <div class="layer-title"><div class="dot" style="background:#a78bfa"></div>Data — Wiki &amp; SQLite</div>
       <div class="comps">
-        <div class="comp" style="border-color:#a78bfa"><span class="s done"></span>📚 Wiki (360 pages)</div>
-        <div class="comp" style="border-color:#a78bfa"><span class="s done"></span>🗄️ SQLite</div>
-        <div class="comp" style="border-color:#a78bfa"><span class="s empty"></span>📊 Replays</div>
-        <div class="comp" style="border-color:#a78bfa"><span class="s wip"></span>📝 Rosters</div>
+        <div class="comp" style="border-color:#a78bfa"><span class="s done"></span>📚 Wiki (490 files)</div>
+        <div class="comp" style="border-color:#a78bfa"><span class="s done"></span>🗄️ SQLite (users, rosters)</div>
+        <div class="comp" style="border-color:#a78bfa"><span class="s done"></span>📊 Replays</div>
       </div>
     </div>
     <div class="layer" style="border-color:rgba(251,191,36,.2)">
-      <div class="layer-title"><div class="dot" style="background:#fbbf24"></div>External</div>
+      <div class="layer-title"><div class="dot" style="background:#fbbf24"></div>External / DevOps</div>
       <div class="comps">
         <div class="comp" style="border-color:#fbbf24"><span class="s wip"></span>💳 Stripe</div>
-        <div class="comp" style="border-color:#fbbf24"><span class="s wip"></span>🔑 Google/VK</div>
-        <div class="comp" style="border-color:#fbbf24"><span class="s empty"></span>🐳 Docker</div>
+        <div class="comp" style="border-color:#fbbf24"><span class="s done"></span>🔑 Google/VK OAuth</div>
+        <div class="comp" style="border-color:#fbbf24"><span class="s done"></span>🐳 Dockerfile</div>
+        <div class="comp" style="border-color:#fbbf24"><span class="s done"></span>📄 Deploy docs</div>
         <div class="comp" style="border-color:#fbbf24"><span class="s empty"></span>📢 Ads</div>
+        <div class="comp" style="border-color:#fbbf24"><span class="s done"></span>🔄 CI/CD</div>
       </div>
     </div>
   </div>
@@ -426,9 +384,12 @@ details.features > summary { list-style: none; display: none; }
     <span><span class="sw wip"></span>In Progress</span>
     <span><span class="sw empty"></span>Not Started</span>
     <span style="color:#334155;">|</span>
-    <span>Phase 0: <span class="sw done"></span> 100%</span>
-    <span>Phase 1: <span class="sw done"></span> 100%</span>
-    <span>Phase 2: <span class="sw done"></span> 100%</span>
+    <span>P0: <span class="sw done"></span> 100%</span>
+    <span>P1: <span class="sw done"></span> 100%</span>
+    <span>P2: <span class="sw done"></span> 100%</span>
+    <span>P3: <span class="sw wip"></span> 67%</span>
+    <span>P4: <span class="sw done"></span> 100%</span>
+    <span>P5: <span class="sw done"></span> 100%</span>
   </div>
 
   <div class="footer">Warpsmith · v0.7.7 · 2026-05-01</div>
@@ -436,25 +397,21 @@ details.features > summary { list-style: none; display: none; }
 </div>
 
 <script>
-// Collapsible phases — click header to toggle features
 document.querySelectorAll('.phase-header').forEach(hdr => {
   hdr.addEventListener('click', function() {
     const features = this.parentElement.querySelector('.features');
     const arrow = this.querySelector('.phase-arrow');
-    if (features.hidden) {
-      features.hidden = false;
-      arrow.textContent = '▴';
-    } else {
-      features.hidden = true;
-      arrow.textContent = '▾';
-    }
+    features.hidden = !features.hidden;
+    arrow.textContent = features.hidden ? '▾' : '▴';
   });
 });
-// Phase 0 and Phase 1 start expanded
-document.querySelectorAll('.phase')[0].querySelector('.features').hidden = false;
-document.querySelectorAll('.phase')[0].querySelector('.phase-arrow').textContent = '▴';
-document.querySelectorAll('.phase')[1].querySelector('.features').hidden = false;
-document.querySelectorAll('.phase')[1].querySelector('.phase-arrow').textContent = '▴';
+// Phase 0, 1, 2, 4, 5 start expanded (done), 3 expanded (active)
+document.querySelectorAll('.phase').forEach((ph, i) => {
+  if ([0,1,2,3,4,5].includes(i)) {
+    ph.querySelector('.features').hidden = false;
+    ph.querySelector('.phase-arrow').textContent = '▴';
+  }
+});
 </script>
 </body>
 </html>

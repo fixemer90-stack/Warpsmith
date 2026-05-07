@@ -55,6 +55,7 @@ class Weapon:
     damage_dice: DiceExpr
     tags: list[str] = field(default_factory=list)
     abilities: list[str] = field(default_factory=list)
+    one_shot_used: bool = False
 
     def __post_init__(self) -> None:
         if self.type == "melee" and self.range_max is not None:

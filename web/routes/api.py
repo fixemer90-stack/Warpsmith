@@ -31,16 +31,40 @@ class SimulationRequest(BaseModel):
 
 def _unit_icons(unit) -> list[str]:
     """All SVG icons for a unit based on its YAML tags, in priority order."""
+
     tags = {t.lower().replace(" ", "-") for t in unit.tags}
-    priority = ["legends", "epic-hero", "psyker", "titanic", "monster", "dreadnought",
-                "walker", "battlesuit", "transport", "vehicle", "fly", "artillery",
-                "battleline", "character", "elite", "infantry", "medic", "speed-freek"]
+
+    priority = [
+        "legends",
+        "epic-hero",
+        "psyker",
+        "titanic",
+        "monster",
+        "dreadnought",
+        "walker",
+        "battlesuit",
+        "transport",
+        "vehicle",
+        "fly",
+        "artillery",
+        "battleline",
+        "character",
+        "elite",
+        "infantry",
+        "medic",
+        "speed-freek",
+    ]
+
     seen = set()
+
     result = []
+
     for icon in priority:
         if icon in tags and icon not in seen:
             result.append(icon)
+
             seen.add(icon)
+
     return result
 
 
@@ -54,29 +78,44 @@ async def list_units(faction: str = ""):
 
     if faction:
         unit_names = wiki.list_units(faction)
+
     else:
         unit_names = wiki.list_units()
 
     result = []
+
     for name in unit_names:
         unit = wiki.get_unit(name)
+
         if unit:
-            result.append({
-                "name": unit.name,
-                "faction": unit.faction,
-                "category": unit.category,
-                "icon": _unit_icons(unit),
-                "points": unit.points,
-                "movement": unit.movement,
-                "toughness": unit.toughness,
-                "save": unit.save,
-                "wounds": unit.wounds,
-                "abilities": unit.abilities,  # Add abilities for team builder modal
-                "weapons": [
-                    {"name": w.name, "type": w.type}
-                    for w in (unit.ranged_weapons + unit.melee_weapons)
-                ],
-            })
+            # Derive squad_size from model_count if still default
+            squad = getattr(unit, "squad_size", {"min": 1, "max": 1, "step": 1})
+            if squad.get("min") == 1 and squad.get("max") == 1:
+                min_m, max_m = unit.model_count
+                if min_m != 1 or max_m != 1:
+                    squad = {"min": min_m, "max": max_m, "step": 1}
+
+            result.append(
+                {
+                    "name": unit.name,
+                    "faction": unit.faction,
+                    "category": unit.category,
+                    "icon": _unit_icons(unit),
+                    "points": unit.points,
+                    "movement": unit.movement,
+                    "toughness": unit.toughness,
+                    "save": unit.save,
+                    "wounds": unit.wounds,
+                    "leadership": unit.leadership,
+                    "oc": unit.objective_control,
+                    "squad_size": squad,
+                    "abilities": unit.abilities,
+                    "weapons": [
+                        {"name": w.name, "type": w.type}
+                        for w in (unit.ranged_weapons + unit.melee_weapons)
+                    ],
+                }
+            )
 
     return {"faction": faction, "units": result}
 
@@ -681,77 +720,395 @@ async def generate_roster(faction: str = "", pts_limit: int = 2000):
 
     try:
         wiki.load()
+
     except Exception:
-        raise HTTPException(500, detail="Wiki not loaded")
+        return {"items": [], "total": 0, "page": page, "pages": 0, "factions": [], "categories": []}
 
-    # Filter units by faction (or all factions)
-    candidates = []
-    for name, unit in wiki.units.items():
-        if unit.points <= 0 or unit.points is None:
-            continue
-        if faction and unit.faction != faction:
-            continue
-        if unit.is_epic_hero:
-            candidates.append((name, unit, 1))
-        else:
-            min_m, max_m = unit.model_count
-            candidates.append((name, unit, min_m))
+    all_units = list(wiki.units.values())
 
-    if not candidates:
-        raise HTTPException(404, detail=f"No valid units for faction '{faction}'")
+    if faction:
+        all_units = [u for u in all_units if u.faction == faction]
 
-    random.shuffle(candidates)
+    if category:
+        all_units = [u for u in all_units if u.category.lower() == category.lower()]
 
-    selected = []
-    total = 0
-    has_warlord = False
-    epic_heroes = set()
-    counts = {}
+    if pts_min is not None:
+        all_units = [u for u in all_units if u.points >= pts_min]
 
-    for name, unit, squad_size in candidates:
-        if total >= pts_limit:
-            break
+    if pts_max is not None:
+        all_units = [u for u in all_units if u.points <= pts_max]
 
-        # Respect 3x cap
-        if counts.get(name, 0) >= 3:
-            continue
+    if search:
+        q = search.lower()
 
-        # Epic Hero unique
-        if unit.is_epic_hero:
-            if name in epic_heroes:
-                continue
-            epic_heroes.add(name)
+        all_units = [u for u in all_units if q in u.name.lower() or q in u.faction.lower()]
 
-        cost = unit.points * squad_size
-        if total + cost > pts_limit:
-            continue
+    if role:
+        role = role.lower()
 
-        selected.append({"unit_name": name, "squad_size": squad_size})
-        total += cost
-        counts[name] = counts.get(name, 0) + 1
-        if unit.can_be_warlord:
-            has_warlord = True
+        if role == "leader":
+            all_units = [
+                u
+                for u in all_units
+                if u.is_leader or u.can_be_warlord or u.category.lower() == "character"
+            ]
 
-    if not has_warlord:
-        # Force-add a cheap warlord-capable unit
-        warlords = [(n, u) for n, u in wiki.units.items()
-                    if u.can_be_warlord and u.points > 0
-                    and (not faction or u.faction == faction)]
-        if warlords:
-            n, u = random.choice(warlords)
-            cost = u.points
-            if total + cost <= pts_limit or True:  # force even if over
-                selected.insert(0, {"unit_name": n, "squad_size": 1})
-                total += cost
+        elif role == "transport":
+            all_units = [
+                u for u in all_units if "transport" in u.tags or u.category.lower() == "transport"
+            ]
+
+        elif role == "battleline":
+            all_units = [
+                u for u in all_units if u.category.lower() == "battleline" or "battleline" in u.tags
+            ]
+
+    reverse = sort_dir.lower() == "desc"
+
+    if sort_by == "points":
+        all_units.sort(key=lambda u: u.points, reverse=reverse)
+
+    elif sort_by == "category":
+        cat_order = {c: i for i, c in enumerate(CATEGORY_ORDER)}
+
+        all_units.sort(
+            key=lambda u: (cat_order.get(u.category.lower(), 99), u.name), reverse=reverse
+        )
+
+    else:
+        all_units.sort(key=lambda u: u.name.lower(), reverse=reverse)
+
+    total = len(all_units)
+
+    pages = max(1, (total + per_page - 1) // per_page)
+
+    start = (page - 1) * per_page
+
+    page_units = all_units[start : start + per_page]
+
+    items = []
+
+    for u in page_units:
+        cat_lower = u.category.lower()
+
+        icon_file = ICON_MAP.get(cat_lower, "infantry.svg")
+
+        color = CATEGORY_COLORS.get(cat_lower, "#6b7280")
+
+        role_flags = []
+
+        if u.is_leader or u.can_be_warlord or cat_lower == "character":
+            role_flags.append("leader")
+
+        if "transport" in u.tags or cat_lower == "transport":
+            role_flags.append("transport")
+
+        if cat_lower == "battleline" or "battleline" in u.tags:
+            role_flags.append("battleline")
+
+        if u.is_epic_hero:
+            role_flags.append("epic-hero")
+
+        items.append(
+            {
+                "name": u.name,
+                "faction": u.faction,
+                "category": u.category,
+                "points": u.points,
+                "movement": u.movement,
+                "toughness": u.toughness,
+                "save": u.save,
+                "wounds": u.wounds,
+                "leadership": u.leadership,
+                "oc": u.objective_control,
+                "icon_url": f"/static/icons/{icon_file}",
+                "color": color,
+                "role_flags": role_flags,
+            }
+        )
+
+    factions = sorted(set(u.faction for u in wiki.units.values()))
+
+    categories = sorted(
+        set(u.category for u in wiki.units.values()),
+        key=lambda c: CATEGORY_ORDER.index(c.lower()) if c.lower() in CATEGORY_ORDER else 99,
+    )
 
     return {
-        "roster": {
-            "name": f"AI {faction.title() if faction else 'Random'} Army",
-            "faction": faction or "mixed",
-            "pts_limit": pts_limit,
-            "total_pts": total,
-            "units": selected,
-        }
+        "items": items,
+        "total": total,
+        "page": page,
+        "pages": pages,
+        "factions": factions,
+        "categories": categories,
+    }
+
+
+@router.get("/units/{unit_name}/detail")
+async def unit_detail(unit_name: str):
+    """Полные данные юнита для модалки."""
+
+    with contextlib.suppress(Exception):
+        wiki.load()
+
+    unit = wiki.get_unit(unit_name)
+
+    if not unit:
+        raise HTTPException(404, detail="Unit not found")
+
+    from backend.loader.icon_map import CATEGORY_COLORS, ICON_MAP
+
+    # Get all weapons (ranged + melee)
+
+    weapons = []
+
+    for w in getattr(unit, "ranged_weapons", []) + getattr(unit, "melee_weapons", []):
+        weapons.append(
+            {
+                "name": w.name,
+                "type": w.type,
+                "range": w.range_max if w.type == "ranged" else None,
+                "attacks": f"{w.attacks_dice[0]}D{w.attacks_dice[1]}"
+                if w.attacks_dice[0] > 0
+                else str(w.attacks_dice[2]),
+                "skill": w.skill,
+                "strength": w.strength,
+                "ap": w.ap,
+                "damage": f"{w.damage_dice[0]}D{w.damage_dice[1]}"
+                if w.damage_dice[0] > 0
+                else str(w.damage_dice[2]),
+                "keywords": getattr(w, "tags", []),
+            }
+        )
+
+    # Get wargear options from frontmatter (F4.2 extended system)
+
+    extended_wargear_options = getattr(unit, "extended_wargear_options", [])
+
+    nob_options = getattr(unit, "nob_options", [])
+
+    squad_size = getattr(unit, "squad_size", {"min": 1, "max": 1, "step": 1})
+    # If squad_size is still default (1:1), derive from model_count
+    if squad_size.get("min") == 1 and squad_size.get("max") == 1:
+        min_m, max_m = unit.model_count
+        if min_m != 1 or max_m != 1:
+            squad_size = {"min": min_m, "max": max_m, "step": 1}
+
+    # Abilities
+
+    abilities = getattr(unit, "abilities", [])
+
+    if isinstance(abilities, list):
+        abilities = [{"name": a, "description": ""} if isinstance(a, str) else a for a in abilities]
+
+    return {
+        "name": unit.name,
+        "faction": unit.faction,
+        "category": unit.category,
+        "points": unit.points,
+        "movement": unit.movement,
+        "toughness": unit.toughness,
+        "save": unit.save,
+        "wounds": unit.wounds,
+        "leadership": unit.leadership,
+        "oc": unit.objective_control,
+        "abilities": abilities,
+        "squad_size": squad_size,
+        "wargear_options": extended_wargear_options,
+        "nob_options": nob_options,
+        "weapons": weapons,
+        "transport_capacity": getattr(unit, "transport_capacity", None),
+        "leader_for": getattr(unit, "leader_for", []),
+        "keywords": getattr(unit, "keywords", []),
+        "faction_keywords": getattr(unit, "faction_keywords", []),
+        "icon_url": f"/static/icons/{ICON_MAP.get(unit.category.lower(), 'infantry.svg')}",
+        "color": CATEGORY_COLORS.get(unit.category.lower(), "#6b7280"),
+        "icon_tags": [unit.category.lower().replace(" ", "-")]
+        + [t for t in _unit_icons(unit) if t != unit.category.lower().replace(" ", "-")],
+    }
+
+
+@router.get("/map/tiles")
+async def get_map_tiles(
+    map_id: int | None = None,
+    scenario: str | None = None,
+):
+    """
+
+    Вернуть сетку тайлов для отображения на Canvas.
+
+    Response: {
+
+        "width": 16, "height": 16,
+
+        "tiles": [[tile_type, ...], ...],  # 16×16 matrix of TileType values
+
+        "deploy_zones": {
+
+            "player1": [(x1,y1), (x2,y2), ...],
+
+            "player2": [(x3,y3), (x4,y4), ...],
+
+        },
+
+        "units": [
+
+            {"name": "Warboss", "x": 2, "y": 3, "faction": "orks",
+
+             "icon": "/static/icons/character.svg", "color": "#a855f7"},
+
+        ],
+
+    }
+
+    """
+
+    from enum import Enum
+
+    from backend.loader.icon_map import CATEGORY_COLORS, ICON_MAP
+
+    class TileType(Enum):
+        OPEN = 0
+
+        LIGHT_COVER = 1
+
+        HEAVY_COVER = 2
+
+        OBSTACLE = 3
+
+        DIFFICULT = 4
+
+        DEPLOY_ZONE = 5
+
+    grid_size = 16
+
+    # Generate a balanced map with central obstacles
+
+    tiles = []
+
+    for y in range(grid_size):
+        row = []
+
+        for x in range(grid_size):
+            # Default to open ground
+
+            tile_type = TileType.OPEN.value
+
+            # Central obstacle cluster
+
+            if 6 <= x <= 9 and 6 <= y <= 9:
+                tile_type = TileType.OBSTACLE.value
+
+            # Light cover on flanks
+
+            elif (x == 3 or x == 12) and 4 <= y <= 11:
+                tile_type = TileType.LIGHT_COVER.value
+
+            # Heavy cover in corners
+
+            elif (x <= 2 or x >= 13) and (y <= 2 or y >= 13):
+                tile_type = TileType.HEAVY_COVER.value
+
+            # Difficult terrain near obstacles
+
+            elif (
+                5 <= x <= 10
+                and 5 <= y <= 10
+                and tile_type == TileType.OPEN.value
+                and (x + y) % 3 == 0
+            ):
+                tile_type = TileType.DIFFICULT.value
+
+            row.append(tile_type)
+
+        tiles.append(row)
+
+    # Deploy zones
+
+    deploy_zones = {
+        "player1": [],  # left side (x: 0-3)
+        "player2": [],  # right side (x: 12-15)
+    }
+
+    for x in range(4):  # player1: x 0-3
+        for y in range(grid_size):
+            deploy_zones["player1"].append([x, y])
+
+    for x in range(12, grid_size):  # player2: x 12-15
+        for y in range(grid_size):
+            deploy_zones["player2"].append([x, y])
+
+    # Mark deploy zone tiles
+
+    for coord in deploy_zones["player1"] + deploy_zones["player2"]:
+        x, y = coord
+
+        if tiles[y][x] == TileType.OPEN.value:
+            tiles[y][x] = TileType.DEPLOY_ZONE.value
+
+    return {
+        "width": grid_size,
+        "height": grid_size,
+        "tiles": tiles,
+        "deploy_zones": deploy_zones,
+        "units": [],  # Empty for now, can be populated from scenario
+    }
+
+
+@router.get("/health")
+async def health():
+
+    return {"status": "ok", "version": "0.3.0"}
+
+
+@router.get("/factions")
+async def list_factions():
+    """Список доступных фракций."""
+
+    try:
+        wiki.load()
+
+    except Exception:
+        return {"factions": []}
+
+    faction_names = wiki.list_factions()
+
+    # Try to get proper labels from wiki faction pages
+
+    from pathlib import Path
+
+    import frontmatter
+
+    labels = {}
+
+    for f_id in faction_names:
+        fp = wiki.wiki_path / "factions" / f"{f_id}.md"
+
+        if not fp.exists():
+            # Try case-insensitive match
+
+            for f in (wiki.wiki_path / "factions").iterdir():
+                if f.is_file() and f.stem.lower() == f_id.lower():
+                    fp = f
+
+                    break
+
+        if fp.exists():
+            try:
+                post = frontmatter.load(str(fp))
+
+                labels[f_id] = str(post.metadata.get("title", f_id.replace("-", " ").title()))
+
+            except Exception:
+                labels[f_id] = f_id.replace("-", " ").title()
+
+        else:
+            labels[f_id] = f_id.replace("-", " ").title()
+
+    return {
+        "factions": [
+            {"id": f, "label": labels.get(f, f.replace("-", " ").title())} for f in faction_names
+        ]
     }
 
 

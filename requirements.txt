@@ -1,0 +1,17 @@
+fastapi>=0.115
+uvicorn[standard]>=0.34
+jinja2>=3.1
+numpy>=2.0
+python-multipart>=0.0.18
+PyJWT[crypto]>=2.8
+bcrypt>=4.2
+pyyaml>=6.0
+python-frontmatter>=1.1
+structlog>=25.1
+sentry-sdk>=2.20
+slowapi>=0.1.9
+httpx>=0.28
+pytest>=8.0
+pytest-asyncio>=0.25
+pytest-cov>=6.0
+htmy>=0.1

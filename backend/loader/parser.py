@@ -1,5 +1,6 @@
 """Parse YAML frontmatter and markdown tables into Unit and Weapon models."""
 
+import contextlib
 import logging
 import re
 from pathlib import Path
@@ -11,6 +12,54 @@ from backend.loader.schema import ensure_list, parse_bool, parse_model_count, pa
 from backend.model.unit import Unit, WargearSlot, Weapon, parse_dice_expression
 
 logger = logging.getLogger(__name__)
+
+# ── Header-aware column mapping for weapon tables ────────────────
+
+# Maps header cell keywords (lowercase) to canonical column names
+_HEADER_ALIASES: dict[str, str] = {
+    "name": "name",
+    "weapon": "name",
+    "оружие": "name",
+    "type": "type",
+    "тип": "type",
+    "range": "range",
+    "дальность": "range",
+    "дальн": "range",
+    "a": "attacks",
+    "attacks": "attacks",
+    "атаки": "attacks",
+    "bs": "skill",
+    "ws": "skill",
+    "bs/ws": "skill",
+    "skill": "skill",
+    "меткость": "skill",
+    "s": "strength",
+    "strength": "strength",
+    "сила": "strength",
+    "ap": "ap",
+    "d": "damage",
+    "damage": "damage",
+    "урон": "damage",
+    "особенности": "abilities",
+    "abilities": "abilities",
+    "способности": "abilities",
+}
+
+
+def _map_header_columns(header_cells: list[str]) -> dict[str, int]:
+    """Map header column names to their 0-based cell index.
+
+    Returns a dict like {'name': 0, 'range': 2, 'attacks': 3, ...}
+    Skips headers that don't match any known alias.
+    """
+    mapping: dict[str, int] = {}
+    for idx, cell in enumerate(header_cells):
+        key = cell.strip().lower()
+        canonical = _HEADER_ALIASES.get(key)
+        if canonical and canonical not in mapping:
+            mapping[canonical] = idx
+    return mapping
+
 
 DIRECT_FIELDS = {
     "title": "name",
@@ -50,7 +99,9 @@ def parse_unit(filepath: Path) -> Unit | None:
         return None
 
     # Skip non-unit concept pages (weapon descriptions, wargear, etc.)
-    if metadata.get("type") != "entity" and not re.search(r"\|\s*M\s*\|\s*T\s*\|\s*SV\s*\|", post.content):
+    if metadata.get("type") != "entity" and not re.search(
+        r"\|\s*M\s*\|\s*T\s*\|\s*SV\s*\|", post.content
+    ):
         logger.debug("Skipping non-unit page: %s", filepath)
         return None
 
@@ -144,21 +195,49 @@ def _parse_weapons_from_frontmatter(data: list[Any]) -> tuple[list[Weapon], list
 
 def _build_weapon(raw_weapon: dict[str, Any]) -> Weapon | None:
     try:
-        range_value = str(raw_weapon.get("range", "0")).replace('"', "").strip()
-        is_ranged = range_value.lower() != "melee"
-        range_max = int(range_value) if is_ranged and range_value else 0
+        range_value = _clean_range(str(raw_weapon.get("range", "0")))
+        is_ranged = range_value.lower() not in ("melee", "—", "", "ближний")
+
         skill_raw = str(raw_weapon.get("skill", "5+")).replace("+", "").strip()
-        tags = [str(tag).strip().lower().replace(" ", "_") for tag in ensure_list(raw_weapon.get("tags", []))]
+        if skill_raw.lower() in ("", "—", "n/a", "-"):
+            skill_raw = "6"
+        tags = [
+            str(tag).strip().lower().replace(" ", "_")
+            for tag in ensure_list(raw_weapon.get("tags", []))
+        ]
         abilities = [str(item).strip() for item in ensure_list(raw_weapon.get("abilities", []))]
 
+        # Handle strength with dice expressions (e.g. "2D6", "D6")
+        strength_raw = str(raw_weapon.get("strength", "3")).strip()
+        try:
+            strength = int(strength_raw)
+        except ValueError:
+            dice = parse_dice_expression(strength_raw)
+            strength = _avg_dice(dice)
+
+        # Handle non-numeric AP (e.g. "—")
+        ap_raw = str(raw_weapon.get("ap", "0")).strip()
+        try:
+            ap = int(ap_raw)
+        except ValueError:
+            ap = 0
+
+        if is_ranged:
+            try:
+                range_max = int(range_value)
+            except ValueError:
+                range_max = 0
+        else:
+            range_max = None
+
         return Weapon(
-            name=str(raw_weapon.get("name", "")).strip(),
+            name=str(raw_weapon.get("name", "")).strip().strip("*"),
             type="ranged" if is_ranged else "melee",
             range_max=range_max if is_ranged else None,
             attacks_dice=parse_dice_expression(str(raw_weapon.get("attacks", "1"))),
             skill=int(skill_raw),
-            strength=int(raw_weapon.get("strength", 3)),
-            ap=int(raw_weapon.get("ap", 0)),
+            strength=strength,
+            ap=ap,
             damage_dice=parse_dice_expression(str(raw_weapon.get("damage", "1"))),
             tags=tags,
             abilities=abilities,
@@ -168,41 +247,90 @@ def _build_weapon(raw_weapon: dict[str, Any]) -> Weapon | None:
         return None
 
 
+def _clean_range(value: str) -> str:
+    """Clean a range value: remove quotes, strip Ranged/Melee prefix, handle non-numeric."""
+    cleaned = value.replace('"', "").replace("\u201c", "").replace("\u201d", "").strip()
+
+    # Extract numeric from strings like "Ranged 36", "Melee" (returns None)
+    match = re.search(r"(\d+)", cleaned)
+    if match:
+        return match.group(1)
+
+    # Return the cleaned value as-is (may be "Melee", "—", etc.)
+    return cleaned
+
+
+def _avg_dice(dice: tuple[int, int, int]) -> int:
+    """Calculate average of a dice expression."""
+    count, sides, modifier = dice
+    if count == 0:
+        return modifier
+    return int(count * (sides + 1) / 2 + modifier)
+
+
 def _parse_weapons_from_markdown(body: str) -> tuple[list[Weapon], list[Weapon]]:
     table_pattern = r"\|(.+)\|\n\|[-:| ]+\|\n((?:\|.+\|\n?)*)"
     ranged: list[Weapon] = []
     melee: list[Weapon] = []
 
     for match in re.finditer(table_pattern, body):
-        # Skip profile tables (those with M and T columns)
         header = match.group(1).strip()
         header_cells = [c.strip() for c in header.split("|")]
-        if any(c.upper().startswith("M") for c in header_cells) and any(c.upper().startswith("T") for c in header_cells):
+
+        # Skip profile tables (those with M and T columns)
+        if any(c.upper().startswith("M") for c in header_cells) and any(
+            c.upper().startswith("T") for c in header_cells
+        ):
+            continue
+
+        # Map column indices by header name (supports English, Russian, 8 or 9 columns)
+        col = _map_header_columns(header_cells)
+
+        # Must have at minimum: name, attacks/skill/strength/ap/damage
+        # range may be absent — then type column provides it
+        required = {"name", "attacks", "skill", "strength", "ap", "damage"}
+        if "range" in col:
+            required.add("range")
+        elif "type" not in col:
+            continue
+        if not required.issubset(col):
             continue
 
         rows_text = match.group(2)
         for row in rows_text.strip().splitlines():
             cells = [cell.strip() for cell in row.split("|")[1:-1]]
-            if len(cells) < 7:
+
+            # Skip rows that don't cover required columns
+            max_col = max(col.values())
+            if len(cells) <= max_col:
                 continue
 
+            # Extract abilities from the abilities column (if present)
             abilities = []
-            if len(cells) > 7 and cells[7] != "-":
-                abilities = [item.strip() for item in cells[7].split(",") if item.strip()]
+            if "abilities" in col and col["abilities"] < len(cells):
+                ab_cell = cells[col["abilities"]]
+                if ab_cell and ab_cell != "—":
+                    abilities = [
+                        item.strip().strip("[]")
+                        for item in re.split(r"[,\n]", ab_cell)
+                        if item.strip() and item.strip() != "—"
+                    ]
 
-            weapon = _build_weapon(
-                {
-                    "name": cells[0],
-                    "range": cells[1],
-                    "attacks": cells[2],
-                    "skill": cells[3],
-                    "strength": cells[4],
-                    "ap": cells[5],
-                    "damage": cells[6],
-                    "abilities": abilities,
-                    "tags": [],
-                }
-            )
+            weapon_data: dict[str, Any] = {
+                "name": cells[col["name"]] if col["name"] < len(cells) else "",
+                "range": cells[col["range"]]
+                if "range" in col and col["range"] < len(cells)
+                else (cells[col["type"]] if "type" in col and col["type"] < len(cells) else "0"),
+                "attacks": cells[col["attacks"]] if col["attacks"] < len(cells) else "1",
+                "skill": cells[col["skill"]] if col["skill"] < len(cells) else "5+",
+                "strength": cells[col["strength"]] if col["strength"] < len(cells) else "3",
+                "ap": cells[col["ap"]] if col["ap"] < len(cells) else "0",
+                "damage": cells[col["damage"]] if col["damage"] < len(cells) else "1",
+                "abilities": abilities,
+                "tags": [],
+            }
+
+            weapon = _build_weapon(weapon_data)
             if weapon is None:
                 continue
             if weapon.type == "ranged":
@@ -232,7 +360,9 @@ def _parse_weapons_from_bullets(body: str) -> tuple[list[Weapon], list[Weapon]]:
     for match in re.finditer(pattern, body):
         abilities = []
         if match.group("abilities"):
-            abilities = [item.strip() for item in match.group("abilities").split(",") if item.strip()]
+            abilities = [
+                item.strip() for item in match.group("abilities").split(",") if item.strip()
+            ]
 
         weapon = _build_weapon(
             {
@@ -371,10 +501,8 @@ def _parse_profile_from_markdown(body: str) -> dict[str, int]:
             # Only treat as INV if it's a number (with optional +)
             if inv_raw and not any(c.isalpha() for c in inv_raw):
                 inv_str = inv_raw.replace("+", "").strip()
-                try:
+                with contextlib.suppress(ValueError):
                     result["invulnerable_save"] = int(inv_str)
-                except ValueError:
-                    pass
 
         return result
 

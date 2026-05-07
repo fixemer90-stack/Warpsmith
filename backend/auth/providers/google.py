@@ -61,7 +61,8 @@ class GoogleProvider(OAuthProvider):
                 },
             )
         if resp.status_code != 200:
-            raise OAuthError(f"Token exchange failed: {resp.text}", self.name)
+            msg = f"Token exchange failed: {resp.text}"
+            raise OAuthError(msg, self.name)
         return dict(resp.json())
 
     async def get_user_info(self, access_token: str) -> OAuthUserInfo:
@@ -73,7 +74,8 @@ class GoogleProvider(OAuthProvider):
                 },
             )
         if resp.status_code != 200:
-            raise OAuthError(f"Userinfo failed: {resp.text}", self.name)
+            msg = f"Userinfo failed: {resp.text}"
+            raise OAuthError(msg, self.name)
         data = resp.json()
         return OAuthUserInfo(
             sub=data["sub"],

@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-4"
+     x-data="resultScreen()"
+     x-init="loadResult('{{ game_id }}')">
+
+    <!-- Loading State -->
+    <div x-show="loading" class="card text-center py-12">
+        <div class="text-4xl mb-4">⏳</div>
+        <p class="text-gray-400">Loading battle result...</p>
+    </div>
+
+    <!-- Error State -->
+    <div x-show="error" class="card border-red-600 text-center py-12">
+        <div class="text-4xl mb-4">❌</div>
+        <p class="text-red-400" x-text="error"></p>
+    </div>
+
+    <!-- Main Content -->
+    <div x-show="!loading && !error">
+
+        <!-- Header: Battle Result -->
+        <div class="card mb-6">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-yellow-500">⚔️ Battle Result</h1>
+                    <p class="text-sm text-gray-400 mt-1">
+                        Game ID: <span class="font-mono text-yellow-300" x-text="replay?.game_id?.slice(0,12) || gameId"></span>
+                        · Mission: <span class="text-yellow-300" x-text="replay?.mission || '-'"></span>
+                        · Deployment: <span class="text-yellow-300" x-text="replay?.deployment || '-'"></span>
+                    </p>
+                </div>
+                <div class="text-right">
+                    <template x-if="replay?.summary?.winner !== undefined">
+                        <div>
+                            <span class="text-sm text-gray-400">🏆 Winner: </span>
+                            <span class="text-xl font-bold text-yellow-400" x-text="winnerName"></span>
+                        </div>
+                    </template>
+                    <template x-if="winnerReason">
+                        <p class="text-xs text-gray-500 mt-1" x-text="winnerReason"></p>
+                    </template>
+                </div>
+            </div>
+            <div class="flex items-center gap-6 mt-3 pt-3 border-t border-gray-700 text-sm">
+                <div>
+                    <span class="text-gray-400">Army A: </span>
+                    <span class="text-blue-400 font-semibold" x-text="_getPlayerName(0) || '-'"></span>
+                </div>
+                <div>
+                    <span class="text-gray-400">Army B: </span>
+                    <span class="text-red-400 font-semibold" x-text="_getPlayerName(1) || '-'"></span>
+                </div>
+                <div>
+                    <span class="text-gray-400">Rounds: </span>
+                    <span class="text-yellow-400 font-semibold" x-text="replay?.rounds?.length || 0"></span>
+                </div>
+                <div>
+                    <span class="text-gray-400">Seed: </span>
+                    <span class="text-yellow-400 font-semibold" x-text="replay?.seed || '-'"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <!-- VP P1 -->
+            <div class="card text-center">
+                <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">VP — <span x-text="_getPlayerName(0) || 'P1'"></span></div>
+                <div class="text-3xl font-bold text-blue-400" x-text="replay?.rounds?.[replay.rounds.length-1]?.end_state?.victory_points ? Object.values(replay.rounds[replay.rounds.length-1].end_state.victory_points)[0] || 0 : 0"></div>
+            </div>
+            <!-- VP P2 -->
+            <div class="card text-center">
+                <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">VP — <span x-text="_getPlayerName(1) || 'P2'"></span></div>
+                <div class="text-3xl font-bold text-red-400" x-text="replay?.rounds?.[replay.rounds.length-1]?.end_state?.victory_points ? (Object.values(replay.rounds[replay.rounds.length-1].end_state.victory_points)[1] || 0) : 0"></div>
+            </div>
+            <!-- Kills P1 -->
+            <div class="card text-center">
+                <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Kills — <span x-text="_getPlayerName(0) || 'P1'"></span></div>
+                <div class="text-3xl font-bold text-green-400" x-text="destroyedUnits.player2.length"></div>
+            </div>
+            <!-- Kills P2 -->
+            <div class="card text-center">
+                <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Kills — <span x-text="_getPlayerName(1) || 'P2'"></span></div>
+                <div class="text-3xl font-bold text-orange-400" x-text="destroyedUnits.player1.length"></div>
+            </div>
+            <!-- Damage P1 -->
+            <div class="card text-center">
+                <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Damage — <span x-text="_getPlayerName(0) || 'P1'"></span></div>
+                <div class="text-3xl font-bold text-blue-300" x-text="phaseTotals.damage_p1.toFixed(1)"></div>
+            </div>
+            <!-- Damage P2 -->
+            <div class="card text-center">
+                <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Damage — <span x-text="_getPlayerName(1) || 'P2'"></span></div>
+                <div class="text-3xl font-bold text-red-300" x-text="phaseTotals.damage_p2.toFixed(1)"></div>
+            </div>
+            <!-- Charges P1 -->
+            <div class="card text-center">
+                <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Charges — <span x-text="_getPlayerName(0) || 'P1'"></span></div>
+                <div class="text-3xl font-bold text-purple-400" x-text="replay?.rounds?.reduce((s,r) => s + (r.events||[]).filter(e => e.event_type==='charge' && e.result_value > 0 && !e.actor_id?.startsWith('player2')).length, 0) || 0"></div>
+            </div>
+            <!-- Charges P2 -->
+            <div class="card text-center">
+                <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Charges — <span x-text="_getPlayerName(1) || 'P2'"></span></div>
+                <div class="text-3xl font-bold text-pink-400" x-text="replay?.rounds?.reduce((s,r) => s + (r.events||[]).filter(e => e.event_type==='charge' && e.result_value > 0 && e.actor_id?.startsWith('player2')).length, 0) || 0"></div>
+            </div>
+        </div>
+
+        <!-- VP Timeline Chart -->
+        <div class="card mb-6">
+            <h2 class="text-lg font-semibold text-gray-200 mb-3">📈 VP Timeline</h2>
+            <div class="bg-gray-950 rounded-lg p-4">
+                <canvas id="vp-chart" height="300"></canvas>
+            </div>
+        </div>
+
+        <!-- Phase Breakdown Table -->
+        <div class="card mb-6">
+            <h2 class="text-lg font-semibold text-gray-200 mb-3">📋 Phase Breakdown</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-700 text-gray-400 uppercase text-xs tracking-wide">
+                            <th class="py-2 px-3">Round</th>
+                            <th class="py-2 px-3">Phase</th>
+                            <th class="py-2 px-3 text-right">Events</th>
+                            <th class="py-2 px-3 text-right">Damage P1</th>
+                            <th class="py-2 px-3 text-right">Damage P2</th>
+                            <th class="py-2 px-3 text-right">Kills</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="(row, idx) in phaseTable" :key="idx">
+                            <tr class="border-b border-gray-800 hover:bg-gray-800/50 transition"
+                                :class="idx % 2 === 0 ? 'bg-gray-850' : ''">
+                                <td class="py-2 px-3 font-mono" x-text="row.round"></td>
+                                <td class="py-2 px-3 capitalize" x-text="row.phase"></td>
+                                <td class="py-2 px-3 text-right font-mono" x-text="row.events"></td>
+                                <td class="py-2 px-3 text-right font-mono text-blue-300" x-text="row.damage_p1.toFixed(1)"></td>
+                                <td class="py-2 px-3 text-right font-mono text-red-300" x-text="row.damage_p2.toFixed(1)"></td>
+                                <td class="py-2 px-3 text-right font-mono text-green-300" x-text="row.kills"></td>
+                            </tr>
+                        </template>
+                    </tbody>
+                    <tfoot>
+                        <tr class="border-t border-gray-600 font-semibold text-gray-200">
+                            <td class="py-2 px-3" colspan="2">Total</td>
+                            <td class="py-2 px-3 text-right font-mono" x-text="phaseTotals.events"></td>
+                            <td class="py-2 px-3 text-right font-mono" x-text="phaseTotals.damage_p1.toFixed(1)"></td>
+                            <td class="py-2 px-3 text-right font-mono" x-text="phaseTotals.damage_p2.toFixed(1)"></td>
+                            <td class="py-2 px-3 text-right font-mono" x-text="phaseTotals.kills"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div x-show="phaseTable.length === 0" class="text-gray-500 text-sm py-4 text-center">
+                No phase data available.
+            </div>
+        </div>
+
+        <!-- Destroyed Units -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+            <div class="card">
+                <h2 class="text-lg font-semibold text-gray-200 mb-3">
+                    💀 <span x-text="_getPlayerName(0) || 'Player 1'"></span> Lost
+                </h2>
+                <div x-show="destroyedUnits.player1.length > 0">
+                    <ul class="space-y-1">
+                        <template x-for="(name, idx) in destroyedUnits.player1" :key="idx">
+                            <li class="text-sm text-red-300 px-3 py-1.5 bg-red-900/20 rounded border border-red-800/30">
+                                <span x-text="name"></span>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+                <div x-show="destroyedUnits.player1.length === 0" class="text-gray-500 text-sm py-4 text-center">
+                    No units lost.
+                </div>
+            </div>
+            <div class="card">
+                <h2 class="text-lg font-semibold text-gray-200 mb-3">
+                    💀 <span x-text="_getPlayerName(1) || 'Player 2'"></span> Lost
+                </h2>
+                <div x-show="destroyedUnits.player2.length > 0">
+                    <ul class="space-y-1">
+                        <template x-for="(name, idx) in destroyedUnits.player2" :key="idx">
+                            <li class="text-sm text-blue-300 px-3 py-1.5 bg-blue-900/20 rounded border border-blue-800/30">
+                                <span x-text="name"></span>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+                <div x-show="destroyedUnits.player2.length === 0" class="text-gray-500 text-sm py-4 text-center">
+                    No units lost.
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card flex items-center justify-center gap-4 flex-wrap">
+            <a :href="'/replay/' + gameId"
+               class="btn inline-block text-center">
+                🎬 View Full Replay
+            </a>
+            <a href="/scenario-setup"
+               class="btn inline-block text-center">
+                🔄 New Simulation
+            </a>
+            <button @click="exportJSON()"
+                    class="btn">
+                📥 Export JSON
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script src="/static/result_chart.js"></script>
+{% endblock %}

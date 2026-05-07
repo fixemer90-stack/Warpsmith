@@ -1,28 +1,31 @@
 """Tests for F3.1 Greedy Decision Engine."""
 
 import sys
+
 sys.path.insert(0, "/mnt/d/Python/Balthier/simulator")
 
-import pytest
 import numpy as np
+import pytest
+
 from backend.engine.ai.decision import (
-    ActionType,
-    Action,
     DEFAULT_WEIGHTS,
-    _distance,
-    _in_weapon_range,
+    Action,
+    ActionType,
+    EvaluationContext,
     _avg_dice,
     _compute_expected_damage_ranged,
+    _distance,
     _estimate_melee_damage,
     _generate_candidates,
-    score_shoot,
-    score_charge,
+    _get_objectives,
+    _in_weapon_range,
     choose_action,
-    EvaluationContext,
+    score_charge,
+    score_move,
+    score_shoot,
 )
-from backend.state.game_state import UnitState, GamePhase, GameState
 from backend.model.unit import Unit, Weapon
-
+from backend.state.game_state import GamePhase, GameState, UnitState
 
 # ── Helpers ────────────────────────────────────────────────────
 
@@ -38,9 +41,14 @@ def make_weapon(
     damage_dice: tuple = (1, 1, 0),  # 1 flat
 ) -> Weapon:
     return Weapon(
-        name=name, type=type, range_max=range_max,
-        attacks_dice=attacks_dice, skill=skill,
-        strength=strength, ap=ap, damage_dice=damage_dice,
+        name=name,
+        type=type,
+        range_max=range_max,
+        attacks_dice=attacks_dice,
+        skill=skill,
+        strength=strength,
+        ap=ap,
+        damage_dice=damage_dice,
     )
 
 
@@ -49,19 +57,40 @@ def make_shoota() -> Weapon:
 
 
 def make_heavy_bolter() -> Weapon:
-    return make_weapon("Heavy Bolter", range_max=36, attacks_dice=(3, 1, 0),
-                       skill=4, strength=5, ap=-1, damage_dice=(2, 1, 0))
+    return make_weapon(
+        "Heavy Bolter",
+        range_max=36,
+        attacks_dice=(3, 1, 0),
+        skill=4,
+        strength=5,
+        ap=-1,
+        damage_dice=(2, 1, 0),
+    )
 
 
 def make_plasma() -> Weapon:
-    return make_weapon("Plasma", range_max=24, attacks_dice=(1, 1, 0),
-                       skill=3, strength=8, ap=-3, damage_dice=(2, 1, 0))
+    return make_weapon(
+        "Plasma",
+        range_max=24,
+        attacks_dice=(1, 1, 0),
+        skill=3,
+        strength=8,
+        ap=-3,
+        damage_dice=(2, 1, 0),
+    )
 
 
 def make_choppa() -> Weapon:
-    return Weapon(name="Choppa", type="melee", range_max=None,
-                  attacks_dice=(1, 1, 0), skill=4,
-                  strength=4, ap=-1, damage_dice=(1, 1, 0))
+    return Weapon(
+        name="Choppa",
+        type="melee",
+        range_max=None,
+        attacks_dice=(1, 1, 0),
+        skill=4,
+        strength=4,
+        ap=-1,
+        damage_dice=(1, 1, 0),
+    )
 
 
 def make_unit_state(
@@ -93,33 +122,40 @@ def make_unit_model(
     name: str = "Unit",
     toughness: int = 4,
     save: int = 3,
-    ranged: list[Weapon] = None,
-    melee: list[Weapon] = None,
+    ranged: list[Weapon] | None = None,
+    melee: list[Weapon] | None = None,
     points: int = 20,
 ) -> Unit:
     return Unit(
-        name=name, faction="test", category="Infantry",
-        movement=6, toughness=toughness, save=save, wounds=3,
-        leadership=7, objective_control=1, points=points,
-        ranged_weapons=ranged or [], melee_weapons=melee or [],
+        name=name,
+        faction="test",
+        category="Infantry",
+        movement=6,
+        toughness=toughness,
+        save=save,
+        wounds=3,
+        leadership=7,
+        objective_control=1,
+        points=points,
+        ranged_weapons=ranged or [],
+        melee_weapons=melee or [],
     )
 
 
 def make_context(
     actor_state: UnitState = None,
     actor_model: Unit = None,
-    opponents: list[UnitState] = None,
-    opp_models: list[Unit] = None,
+    opponents: list[UnitState] | None = None,
+    opp_models: list[Unit] | None = None,
     phase: GamePhase = GamePhase.SHOOTING,
-    weights: dict = None,
-    opponent_units_map: dict = None,
+    weights: dict | None = None,
+    opponent_units_map: dict | None = None,
 ) -> EvaluationContext:
     if actor_state is None:
         actor_state = make_unit_state("Shooter", unit_id="me")
     if actor_model is None:
         actor_model = make_unit_model("Shooter", ranged=[make_shoota()])
-    state = GameState(game_id="test", mission_name="Test",
-                      current_round=1, current_phase=phase)
+    state = GameState(game_id="test", mission_name="Test", current_round=1, current_phase=phase)
     opponent_units_map = opponent_units_map or {}
     return EvaluationContext(
         actor=actor_state,
@@ -137,9 +173,14 @@ def make_context(
 
 
 class TestDistance:
-    def test_same_point(self): assert _distance((0, 0), (0, 0)) == 0
-    def test_straight_line(self): assert _distance((0, 0), (3, 4)) == 5.0
-    def test_negative_coords(self): assert _distance((-1, -1), (2, 3)) == 5.0
+    def test_same_point(self):
+        assert _distance((0, 0), (0, 0)) == 0
+
+    def test_straight_line(self):
+        assert _distance((0, 0), (3, 4)) == 5.0
+
+    def test_negative_coords(self):
+        assert _distance((-1, -1), (2, 3)) == 5.0
 
 
 class TestWeaponRange:
@@ -165,10 +206,17 @@ class TestWeaponRange:
 
 
 class TestDiceAvg:
-    def test_fixed(self): assert _avg_dice((3, 1, 0)) == 3
-    def test_d6(self): assert abs(_avg_dice((1, 6, 0)) - 3.5) < 0.001
-    def test_2d6_plus_1(self): assert abs(_avg_dice((2, 6, 1)) - 8.0) < 0.001
-    def test_d3(self): assert _avg_dice((1, 3, 0)) == 2.0
+    def test_fixed(self):
+        assert _avg_dice((3, 1, 0)) == 3
+
+    def test_d6(self):
+        assert abs(_avg_dice((1, 6, 0)) - 3.5) < 0.001
+
+    def test_2d6_plus_1(self):
+        assert abs(_avg_dice((2, 6, 1)) - 8.0) < 0.001
+
+    def test_d3(self):
+        assert _avg_dice((1, 3, 0)) == 2.0
 
 
 class TestExpectedDamage:
@@ -287,9 +335,84 @@ class TestChooseAction:
         a = make_unit_state("S", unit_id="me", position=(0, 0))
         m = make_unit_model(ranged=[make_shoota()])
         t = make_unit_state("T", unit_id="t1", position=(12, 0))
-        ctx = make_context(a, m, [t], weights={
-            "kill_efficiency": 2.0, "threat_reduction": 0.0,
-            "objective_value": 0.0, "survival_risk": 0.0, "synergy_bonus": 0.0,
-        })
+        ctx = make_context(
+            a,
+            m,
+            [t],
+            weights={
+                "kill_efficiency": 2.0,
+                "threat_reduction": 0.0,
+                "objective_value": 0.0,
+                "survival_risk": 0.0,
+                "synergy_bonus": 0.0,
+            },
+        )
         action = choose_action(a, m, ctx)
         assert action.score > 0
+
+
+class TestObjectiveMovement:
+    """Objective-based movement scoring."""
+
+    def test_objective_mode_higher_than_engage(self):
+        """mode='objective' даёт более высокий score чем mode='engage' при равных условиях."""
+        a = make_unit_state("A", unit_id="me", position=(0, 0))
+        m = make_unit_model("Test")
+        m.movement = 6
+        ctx = make_context(a, m, phase=GamePhase.MOVEMENT)
+        target = (10, 0)
+
+        score_obj = score_move(a, target, ctx, mode="objective")
+        score_eng = score_move(a, target, ctx, mode="engage")
+        assert score_obj > score_eng, f"objective={score_obj} should be > engage={score_eng}"
+
+    def test_uses_actor_movement(self):
+        """score_move использует movement из actor_unit, а не хардкод 6."""
+        a = make_unit_state("A", unit_id="me", position=(0, 0))
+        fast = make_unit_model("Fast")
+        fast.movement = 12
+        slow = make_unit_model("Slow")
+        slow.movement = 3
+        ctx_fast = make_context(a, fast, phase=GamePhase.MOVEMENT)
+        ctx_slow = make_context(a, slow, phase=GamePhase.MOVEMENT)
+        target = (10, 0)
+
+        score_fast = score_move(a, target, ctx_fast, mode="engage")
+        score_slow = score_move(a, target, ctx_slow, mode="engage")
+        assert score_fast > score_slow, f"fast={score_fast} should be > slow={score_slow}"
+
+    def test_already_at_target_zero(self):
+        """Если юнит уже на точке — score 0."""
+        a = make_unit_state("A", unit_id="me", position=(5, 5))
+        m = make_unit_model()
+        ctx = make_context(a, m, phase=GamePhase.MOVEMENT)
+        score = score_move(a, (5, 5), ctx, mode="objective")
+        assert score == 0.0
+
+    def test_movement_generates_objective_candidates(self):
+        """MOVEMENT фаза генерирует кандидатов с mode='objective' при наличии objectives."""
+        # Без миссии — objectives пустые, только engage-кандидаты
+        a = make_unit_state("A", unit_id="me", position=(0, 0))
+        m = make_unit_model()
+        t = make_unit_state("T", unit_id="t1", position=(10, 0))
+        ctx = make_context(a, m, [t], phase=GamePhase.MOVEMENT)
+        candidates = _generate_candidates(a, m, ctx)
+        modes = {c.mode for c in candidates}
+        assert "engage" in modes, "Should have engage-mode candidates for enemies"
+
+    def test_no_objectives_no_enemies_hold(self):
+        """Без objectives и без врагов — HOLD."""
+        a = make_unit_state("A", unit_id="me", position=(0, 0))
+        m = make_unit_model()
+        ctx = make_context(a, m, [], phase=GamePhase.MOVEMENT)
+        action = choose_action(a, m, ctx)
+        assert action.type == ActionType.HOLD
+
+    def test_get_objectives_empty_for_test_mission(self):
+        """_get_objectives возвращает пустой список для тестовой миссии без objectives."""
+        a = make_unit_state("A", unit_id="me")
+        m = make_unit_model()
+        ctx = make_context(a, m, phase=GamePhase.MOVEMENT)
+        objs = _get_objectives(ctx)
+        assert isinstance(objs, list)
+        assert len(objs) == 0

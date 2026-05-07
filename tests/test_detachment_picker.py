@@ -97,12 +97,14 @@ class TestRegistryDetachmentSupport:
 
     def test_registry_has_detachments_method(self):
         from backend.loader.registry import registry
+
         # These methods should exist
-        assert hasattr(registry, 'list_detachments')
-        assert hasattr(registry, 'get_detachment')
+        assert hasattr(registry, "list_detachments")
+        assert hasattr(registry, "get_detachment")
 
     def test_registry_detachments_loaded(self):
         from backend.loader.registry import registry
+
         try:
             registry.load()
             # Should not raise an exception
@@ -117,7 +119,7 @@ class TestDetachmentDataModel:
     """Test detachment data classes."""
 
     def test_detachment_creation(self):
-        from backend.loader.registry import Detachment, DetachmentRule, Stratagem, Enhancement
+        from backend.loader.registry import Detachment, DetachmentRule, Enhancement, Stratagem
 
         rule = DetachmentRule(name="Test Rule", description="Test description")
         strat = Stratagem(name="Test Strat", cost=1, when="Test when", effect="Test effect")
@@ -129,7 +131,7 @@ class TestDetachmentDataModel:
             description="Test description",
             detachment_rule=rule,
             stratagems=[strat],
-            enhancements=[enh]
+            enhancements=[enh],
         )
 
         assert det.name == "Test Detachment"

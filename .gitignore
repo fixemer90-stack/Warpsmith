@@ -22,8 +22,12 @@ venv/
 *.db-shm
 *.db-wal
 
-# Wiki vault (симлинк или отдельный репозиторий)
-wiki/
+# Wiki vault (теперь часть репозитория — см. simulator/wiki/)
+# Но исходники PDF/txt не коммитим
+wiki/raw/papers/
+
+# Test credentials (локальная разработка)
+.test-credentials
 
 # OS files
 .DS_Store

@@ -5,7 +5,7 @@ function getIconHtml(category, size = 16) {
     const svgMap = window._iconSvgMap || {};
     const svg = svgMap[category] || svgMap['infantry'] || '';
     if (!svg) return '';
-    return svg.replace('<svg ', `<svg width="${size}" height="${size}" style="fill: currentColor" `);
+    return svg.replace('<svg ', '<svg width="' + size + '" height="' + size + '" style="fill: currentColor" ');
 }
 
 function teamBuilder() {
@@ -22,6 +22,7 @@ function teamBuilder() {
         validationErrors: [],
         _units: [],
         detachments: [],
+        editRosterId: null,
 
         // Unit Modal State
         showUnitModal: false,
@@ -32,7 +33,7 @@ function teamBuilder() {
         currentUnitName: '',
 
         // Detachment State
-        detachment: '',
+        // (detachment is defined above in State section)
 
         // Computed
         get unitsByCategory() {
@@ -46,7 +47,6 @@ function teamBuilder() {
             const order = ['Epic Hero', 'Character', 'Battleline', 'Transport', 'Vehicle', 'Monster', 'Infantry', 'Legends'];
             const sorted = {};
             order.forEach(c => { if (grouped[c]) sorted[c] = grouped[c]; });
-            // Any uncategorized go at the end but before Legends (if not already in order)
             Object.keys(grouped).filter(c => !order.includes(c)).forEach(c => sorted[c] = grouped[c]);
             return sorted;
         },
@@ -71,14 +71,12 @@ function teamBuilder() {
         // Unit Modal Computed
         get currentWeapons() {
             if (!this.unitDetail) return [];
-            // Resolve weapons from selected loadout + nob option
             const loadout = this.unitDetail.wargear_options
                 ?.find(o => o.name === this.selectedLoadout);
             const nobOpt = this.unitDetail.nob_options
                 ?.find(o => o.name === this.selectedNobOption);
 
             let weaponNames = loadout?.weapons || [];
-            // If nob option has weapons, they replace the default
             if (nobOpt?.replaces && nobOpt?.weapons) {
                 weaponNames = weaponNames.filter(w => w !== nobOpt.replaces);
                 weaponNames.push(...nobOpt.weapons);
@@ -90,17 +88,12 @@ function teamBuilder() {
 
         get totalCost() {
             if (!this.unitDetail) return 0;
-            const basePts = this.unitDetail.points;
-            // Wargear option cost (per model)
+            const minSquad = this.unitDetail.squad_size?.min || 1;
+            const ptsPerModel = this.unitDetail.points / minSquad;
             const loadout = this.unitDetail.wargear_options
                 ?.find(o => o.name === this.selectedLoadout);
             const loadoutPts = loadout?.points || 0;
-            // Nob option cost (one-time)
-            const nobOpt = this.unitDetail.nob_options
-                ?.find(o => o.name === this.selectedNobOption);
-            const nobPts = nobOpt?.points || 0;
-
-            return (basePts + loadoutPts) * this.squadSize + nobPts;
+            return ptsPerModel + loadoutPts;
         },
 
         getQuickSizes() {
@@ -118,7 +111,6 @@ function teamBuilder() {
 
         onFactionChange() {
             this.loadUnits();
-            // Emit faction change event for detachment picker
             const event = new CustomEvent('faction-changed', {
                 detail: { faction: this.faction }
             });
@@ -165,14 +157,50 @@ function teamBuilder() {
         },
 
         init() {
-            // Listen for detachment selection
             document.addEventListener('detachment-selected', (e) => {
                 this.detachment = e.detail.detachment;
             });
+
+            const params = new URLSearchParams(window.location.search);
+            const editId = params.get('edit');
+            if (editId) {
+                this.loadRosterForEdit(editId);
+            }
         },
+
+        async loadRosterForEdit(rosterId) {
+            try {
+                const resp = await fetch(`/api/rosters/${rosterId}`);
+                if (!resp.ok) {
+                    alert('Failed to load roster for editing');
+                    window.location.href = '/my-rosters';
+                    return;
+                }
+                const roster = await resp.json();
+                this.editRosterId = roster.id;
+                this.name = roster.name;
+                this.faction = roster.faction;
+                this.ptsLimit = roster.pts_limit;
+                this.gameSize = roster.pts_limit;
+                this.detachment = roster.detachment || '';
+                this.roster = (roster.units || []).map(u => ({
+                    name: u.unit_name,
+                    squad_size: u.squad_size,
+                    pts: u.pts || 0,
+                    loadout: u.loadout || '',
+                    nob_option: u.nob_option || '',
+                    weapons: u.weapons || [],
+                }));
+                await this.loadUnits();
+            } catch (e) {
+                console.error('Failed to load roster for edit:', e);
+                alert('Failed to load roster for editing');
+            }
+        },
+
         async loadUnits() {
             if (!this.faction) {
-                this.units = [];
+                this._units = [];
                 this.detachments = [];
                 return;
             }
@@ -181,14 +209,14 @@ function teamBuilder() {
                     fetch(`/api/units?faction=${encodeURIComponent(this.faction)}`),
                     fetch(`/api/detachments?faction=${encodeURIComponent(this.faction)}`),
                 ]);
-                
-        if (unitsResp.ok) {
-            const unitsData = await unitsResp.json();
-            this._units = unitsData.units || [];
-            const keys = Object.keys(this.unitsByCategory);
-            this.selectedCategory = keys.length > 0 ? keys[0] : '';
-        }
-                
+
+                if (unitsResp.ok) {
+                    const unitsData = await unitsResp.json();
+                    this._units = unitsData.units || [];
+                    const keys = Object.keys(this.unitsByCategory);
+                    this.selectedCategory = keys.length > 0 ? keys[0] : '';
+                }
+
                 if (detResp.ok) {
                     const detData = await detResp.json();
                     this.detachments = Array.isArray(detData)
@@ -199,58 +227,88 @@ function teamBuilder() {
                 console.error('Failed to load units/detachments:', error);
             }
         },
-        
 
-        
         removeUnit(idx) {
             this.roster.splice(idx, 1);
         },
-        
+
         async saveRoster() {
-            if (!this.isValid) {
-                alert('Please fix validation errors before saving');
+            if (!this.name || !this.faction || this.roster.length === 0) {
+                this.validationErrors = [{
+                    code: 'missing_field',
+                    message: 'Name, faction, and at least one unit are required'
+                }];
                 return;
             }
-            
+
+            if (this.totalPts > this.ptsLimit) {
+                this.validationErrors = [{
+                    code: 'points_exceeded',
+                    message: `Total points (${this.totalPts}) exceed limit (${this.ptsLimit})`
+                }];
+                return;
+            }
+
+            const method = this.editRosterId ? 'PUT' : 'POST';
+            const url = this.editRosterId
+                ? `/api/rosters/${this.editRosterId}`
+                : '/api/rosters';
+
             try {
-                const response = await fetch('/api/rosters', {
-                    method: 'POST',
+                const response = await fetch(url, {
+                    method: method,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         name: this.name,
                         faction: this.faction,
                         pts_limit: this.ptsLimit,
-                        detachment: this.detachment,
+                        detachment: this.detachment || '',
                         units: this.roster.map(u => ({
                             unit_name: u.name,
-                            squad_size: u.squad_size
+                            squad_size: u.squad_size,
+                            pts: u.pts,
+                            loadout: u.loadout || '',
+                            weapons: u.weapons || []
                         }))
                     })
                 });
-                
+
                 if (response.ok) {
-                    alert('Roster saved successfully!');
-                    // Reset form after successful save
-                    this.name = 'My Army';
-                    this.faction = '';
-                    this.detachment = '';
-                    this.roster = [];
+                    alert(this.editRosterId ? 'Roster updated!' : 'Roster saved!');
+                    if (this.editRosterId) {
+                        this.editRosterId = null;
+                        window.location.href = '/my-rosters';
+                    } else {
+                        this.name = 'My Army';
+                        this.faction = '';
+                        this.detachment = '';
+                        this.roster = [];
+                    }
                     this.validationErrors = [];
                 } else {
                     const errorData = await response.json();
-                    if (errorData.validation_errors) {
-                        // Format validation errors for display
-                        this.validationErrors = errorData.validation_errors.map(err => ({
-                            code: err.error || 'validation_error',
-                            message: err.message || 'Validation failed'
-                        }));
+                    const detail = errorData.detail || errorData;
+
+                    if (detail.validation_errors) {
+                        this.validationErrors = detail.validation_errors;
+                    } else if (typeof detail === 'string') {
+                        this.validationErrors = [{
+                            code: 'error',
+                            message: detail
+                        }];
                     } else {
-                        alert('Failed to save roster: ' + (errorData.detail || response.statusText));
+                        this.validationErrors = [{
+                            code: 'error',
+                            message: detail.message || 'Unknown error'
+                        }];
                     }
                 }
             } catch (error) {
                 console.error('Error saving roster:', error);
-                alert('Failed to save roster due to network error');
+                this.validationErrors = [{
+                    code: 'network_error',
+                    message: 'Failed to save roster due to network error'
+                }];
             }
         }
     };

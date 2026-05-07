@@ -7,24 +7,160 @@
 
 ---
 
+## 2026-05-07
+
+### Added
+- **F4.12 My Rosters — delete, edit, duplicate** (4h): полная CRUD страница для управления сохранёнными ростерами
+  - `PUT /api/rosters/{id}` — обновление ростера с валидацией
+  - `POST /api/rosters/{id}/duplicate` — копирование ростера с суффиксом "(copy)", приватный по умолчанию
+  - `/my-rosters` страница с таблицей ростеров, кнопками действий (✏ Edit, 📋 Copy, ✕ Delete)
+  - Team Builder edit mode: `?edit={id}` URL параметр загружает существующий ростер для редактирования
+  - Delete confirmation modal с подтверждением удаления
+  - Tier limit banner: Free пользователи видят 1/1 лимит с ссылкой на Premium upgrade
+  - Expandable roster preview: показ списка юнитов по нажатию ▼/▲
+  - `web/templates/my_rosters.html` — Alpine.js страница с reactive UI
+  - `web/static/my_rosters.js` — CRUD операции с fetch API и error handling
+  - `tests/test_rosters.py` — 5 новых тестов (PUT update, POST duplicate, not found, public→private copy)
+  - Ростеры теперь сортируются по `updated_at DESC` (свежие сверху)
+  - Authorization: пользователи могут управлять только своими ростерами
+
+### Changed
+- **Navigation**: добавлен пункт "Rosters" в главный навигатор (`web/templates/base.html`)
+- **ROADMAP.md**: F4.12 отмечен как ✅ completed
+- **Scenario Setup — редизайн выбора миссии** (`web/templates/scenario_setup.html`): выпадающий список заменён на три крупные кнопки (Only War ⚔️, Purge the Foe 💀, Take and Hold 🎯). Каждая кнопка содержит описание сути миссии: тип скоринга, количество objectives, тип деплоя. Выбранная миссия подсвечивается цветной рамкой и точкой-индикатором.
+
+### Fixed
+- **README.md**: исправлено «5 миссий: ..., Supply Drop, Area Denial» → «3 миссии: Only War, Purge the Foe, Take and Hold». Supply Drop и Area Denial не реализованы в коде.
+- **scenario_setup.html**: дропдаун миссий показывал Only War, Supply Drop, Area Denial — заменён на три реальные миссии из реестра `MISSIONS`
+- **F2.4 Missions spec** (`docs/features/f2.4-missions.md`): полностью переписан под реальный код `mission.py` (~595 строк). Старый spec не описывал `VPTracker`, `GameResult`, `check_end_game()`, `_resolve_tie()`, `SCORING_MAP`, `DeploymentType` enum, `get_deployment_zones()`, OC-базированный `update_objective_control()`.
+
+## 2026-05-06
+
+### Added
+- **F1.13 Weapon Keywords Phase 2** (backend/engine/modifiers.py, backend/engine/combat.py, backend/model/unit.py, tests/test_weapon_keywords_phase2.py): полная реализация 9 дополнительных weapon keywords
+  - **Blast**: +1 attack per 5 models (max +4)
+  - **Heavy**: +1 hit when stationary
+  - **Torrent**: auto-hits (ignores hit rolls)
+  - **Melta**: +1 damage at half range
+  - **Rapid Fire**: +1 attack at half range
+  - **Lance**: +1 wound on charge
+  - **Pistol**: no movement penalty
+  - **Precision**: rerolls wound rolls
+  - **One Shot**: cannot fire after first shot
+- **F2.13 Cover & Terrain Effects** (backend/engine/combat.py, backend/state/game_state.py): механика укрытий и terrain effects
+  - **Cover**: INFANTRY +1 SV when terrain blocks LoS, or standing on woods/ruins
+  - **Ignores Cover**: cancels cover bonus
+  - **Indirect Fire**: -1 to hit without LoS, additional -1 if target has cover
+  - **Bresenham LoS**: accurate line-of-sight calculation for terrain blocking
+- **F4.11 Movement Phase (10ed)** (`backend/engine/scenario.py`, `docs/features/f4.11-movement-phase.md`): полная реализация по правилам 10th edition
+  - 4 действия: Normal Move / Advance / Fall Back / Remain Stationary
+  - `UnitState.has_advanced` — флаг запрета стрельбы/charge после Advance/Fall Back
+  - Обновлены `_shooting_phase` и `_charge_phase` — пропускают юниты с `has_advanced`
+  - AI objective distribution: юниты равномерно распределяются по всем objectives (greedy-присвоение)
+  - Неприсвоенные юниты движутся к ближайшему врагу
+  - `_move_toward()`: остановка за 1 клетку до врага (Engagement Range), проверка bounds/terrain
+  - `_fall_back()`: отступление к своей deployment zone ИЛИ от конкретного врага
+  - `_pick_movement_action()`: веса выбора действия по расстоянию до цели и позиции
+
+### Changed
+- **Phase 1 Combat Engine**: 100% complete (was 92%) — all 13 features implemented and tested
+- **AI vs AI**: VP > 0 (раньше было 0 — юниты шли к врагу, а не к objectives)
+- **ROADMAP.md**: Phase 4 добавлен (Movement Phase), Phase 3 VP tracking — done
+
+## 2026-05-05
+
+### Fixed
+- **Dockerfile**: `python:3.12-slim-bookworm` → `python:3.12-slim` (невалидный тег); CMD переведён в exec-форму с `exec` (сигналы доходят до uvicorn)
+- **railway.json**: убран `startCommand` (дублировал CMD из Dockerfile); `healthcheckPath: "/"` (не требует wiki)
+- **Logout 500** (`backend/auth/__init__.py`): `make_logout_cookie()` возвращал `value` и `max_age` — Starlette `delete_cookie()` их не принимает (TypeError → 500)
+- **Generate Random Opponent** (`web/routes/api.py`): без фракции выбирается случайная; Warlord не добавляется сверх лимита PTS (был `or True`)
+- **Mission scoring** (`backend/state/mission.py`): `check_end_game()` переведён на `str | None` winner; поддержка player_id "1"/"2" и "p1"/"p2"
+- **Squad size** (`web/routes/api.py` — unit_detail): `squad_size` из `model_count` для массовых отрядов (Boyz 1→10)
+- **Security headers tests** (`tests/test_security_headers.py`): CSP assertion убран (отключён в коде); `/` → `/health` (rate limit exempt)
+- **conftest.py**: `RATE_LIMIT_ANON` выставляется до импорта main
+
+### Changed
+- **F2.8 VPTracker** (`backend/engine/scenario.py`): `apply_scoring()` заменил ручной `+=` в `_command_phase`; `check_end_game()` вызывается после Morale (добавляет vp_cap=100, army_wiped, round_completed)
+- **F3.5 ReplayRecorder**: импортирован в `autoplay.py`, добавлен в `AutoPlayResult`
+- **ROADMAP.md**: Phase 2 100%→95%, Phase 3 100%→71%, добавлены таблицы «Что доделать»
+- **Docs**: обновлены F2.4, F2.8, F3.4, F3.5, F3.6; Features_index — пайплайн Phase 2+3; F6.7 Premium Trial
+
+### Added
+- **F6.7 spec** (`docs/features/f6.7-premium-trial.md`): 2-недельный Premium триал для новых пользователей
+- **Phase 2+3 pipeline**: Features_index — сквозная диаграмма от Team Builder до replay viewer
+
 ## 2026-05-04
 
 ### Added
+- **F5.5 Logging (structlog) + Sentry error tracking** — `backend/logging_setup.py` (создано), `main.py` (патч — инициализация structlog + Sentry), `.env.example` (добавлен SENTRY_DSN, LOG_LEVEL) — структурированное JSON логирование в production, цветное в dev, логирование каждого HTTP-запроса с request_id, duration_ms, status_code, отправка необработанных исключений в Sentry
+- **F5.6 CI/CD — GitHub Actions (lint + test + deploy)** — `.github/workflows/ci.yml` (lint: ruff + mypy, test: pytest с coverage > 80%, docker: build + push в GHCR), `.github/workflows/deploy.yml` (deploy: Dokku/Railway после успешного CI), `tests/test_coverage.py` (порог покрытия), обновлен `pyproject.toml` с `--cov-fail-under=80`
 - **F5.2 Deployment** — `Procfile`, `app.json`, `deploy/dokku-setup.sh`, `deploy/railway.json`, `deploy/systemd.service`, `docs/deployment.md` — поддерживает 3 сценария: Dokku (git push + letsencrypt + volume), Railway (serverless + Dockerfile), self-host (systemd + nginx + certbot)
+- **F4.6 Progressive Disclosure** — `web/static/progressive_disclosure.js`: Alpine.js контроллер с тремя режимами (Beginner/Intermediate/Expert), localStorage, CSS классы `mode-beginner/mode-intermediate/mode-expert` на `<body>`, переключатель B/I/E в хедере; unit cards показывают beginner-friendly/expert-only контент
+- **Тесты F4.6** — `tests/test_progressive_disclosure.py`: 7 тестов (toggle, CSS, JS, mode-классы)
+- **F4.7 Stat Tooltips** — `web/static/tooltips.js`: STAT_TOOLTIPS с 6 статами (M/T/SV/W/LD/OC), tooltipManager Alpine.js компонент с hover-попапом, auto-flip по краям экрана, glossary модалка по клику; `web/templates/partials/tooltip_definitions.html`; `data-stat` атрибуты на всех статах в team_builder
+- **Тесты F4.7** — `tests/test_tooltips.py`: 10 тестов (JS включён, партиал, все 6 data-stat атрибутов)
 - F4.8 SVG icons — `web/static/icons/legends.svg` (tombstone), `_unit_icons()` включает `legends` в priority, `icon_map.py` загружает все SVG динамически
 - API `/api/detachments` — эндпоинт возвращает `rule_name`, `rule_description`, `stratagem_count`, `enhancement_count` для inline preview
-- Wiki YAML детачментов — `detachment_rule`, `stratagems`, `enhancements` добавлены в frontmatter 21 файла
+|- Wiki YAML детачментов — `detachment_rule`, `stratagems`, `enhancements` добавлены в frontmatter 21 файла
+- **F4.9 Generate Random Opponent** — `POST /api/rosters/generate` для AI-ростера. Добавлен в ROADMAP.md, Features_index.md, создана feature-спека `f4.9-generate-opponent.md`
+
+### Changed
+|- **Wiki → Monorepo (fix Railway deploy)** — wiki-хранилище (489 файлов, 35 MB) перемещено из внешнего `/mnt/d/Python/Balthier/wiki/` в `simulator/wiki/`. Данные теперь — часть репозитория, попадают в Docker-образ автоматически.
+  - `.dockerignore`: удалена строка `wiki/` — **это была коренная причина пустого Railway**
+  - `.gitignore`: `wiki/` больше не игнорируется (комментарий обновлён)
+  - `backend/loader/registry.py`: убраны хардкодные пути `/mnt/d/Python/Balthier/wiki` и `/mnt/d/Python/Maksim/wiki`
+  - `tests/test_docker.py`: проверка `.dockerignore` обновлена
+  - Локально проверено: 160 юнитов, 23 детачмента, 3 фракции
+- **Версия 0.6.0 → 0.6.6** — `pyproject.toml`, `README.md`, `AGENTS.md`, `DEV_INDEX.md`
+- **AGENTS.md** — полный рерайт под v0.7.5: актуальная структура проекта, AI через F3.2 Faction AI Profiles (не ork_ai/tau_ai), wiki monorepo, Railway deploy, 18 SVG иконок, все JS-файлы
+- **README.md** — переписан под Railway: убран `cd /mnt/d/Python/Balthier/simulator`, все ссылки на `warpsmith-production.up.railway.app`, Phase 3 → 71%, Phase 4 → 9 фич
+- **F2.1 Game State doc** — приведён в соответствие с реальным кодом: `RosterState → PlayerState`, `players: dict` вместо `roster_a/roster_b`, `GamePhase` enum, `next_phase()` метод
+- **F2.5 Game Loop doc** — переписан под актуальный GameState API. Статус: `done → wip`
+- **F3.1 Decision Engine doc** — `EvaluationContext.opponent: RosterState` → `opponent_units: list[UnitState]`, Integration под `state.players`
+- **F2.4 Missions doc** — `score_kill_points()` через `state.players[id]`, тесты под актуальный конструктор
+- **F3.4 Deployment AI doc** — `place_units()` сигнатура под актуальный код, `warlord_unit_name`
+- **F3.5 Autoplay doc** — переписан под реальное состояние: ✅/🟡/❌, разрыв старого API, TODO на завершение
+- **ROADMAP.md** — Phase 4: 9/9 features (+F4.9), Features_index.md обновлён
 
 ### Fixed
-- Team Builder: дублирование заголовка 🛠 Team Builder, два селекта Detachment, `@change="loadUnits()"` → `@change="onFactionChange()"` (диспатчит событие в detachmentPicker)
-- Detachment Picker: добавлен `collapsed`/`expand` — после выбора список сворачивается, кнопка Change разворачивает
-- `detachment_picker.js` не подгружался в team_builder.html — добавлен `<script src=...>`
-- YAML parsing: апострофы в `'Ere We Go` и `'Ard as Nails` ломали frontmatter — обёрнуты в двойные кавычки
-- WatchFiles reload отключён — файлы больше не откатываются к git-версиям
+|- **Auth 500 на Railway** — `/data/` директория не существовала. `database.py`: `connect()` создаёт родительскую директорию через `os.makedirs(exist_ok=True)`
+|- **F4.2 Unit Modal** — создан `web/static/unit_modal.js`. HTML модалки расширен до полного datasheet: stats strip, squad stepper, wargear, weapons table, total cost
+|- **F4.8 SVG Icons** — создан `web/templates/partials/unit_card.html`. Jinja2 globals `unit_icon`, `card_style`, `CATEGORY_COLORS` в main.py, pages.py, auth.py
+|- **F3.5 Autoplay — импорты** — `DecisionEngine` (не существовал) → `choose_action`, `RosterState` → из `roster.py`, `BattlefieldMap` без `terrain` → с `np.full`
+|- **F3.5 Autoplay — тесты** — `test_autoplay.py` переписан под актуальные `Weapon`, `Unit`, `Mission` API
+|- **F3.5 RosterState** — добавлен `@dataclass RosterState` в `backend/state/roster.py`
+|- **Generate Opponent — 405** — `/api/rosters/generate`: `POST` → `GET` (фронт вызывал `fetch` без `method: 'POST'`)
+|- **F3.5 Autoplay AI vs AI** — `backend/engine/ai/autoplay.py` переписан: `run_auto_game(roster_a: RosterState, roster_b: RosterState, mission_name, config)`. Создаёт `GameState(players=...)`, использует `Scenario.run_round()` для game loop, `deploy_game()` для размещения. 16 тестов (было 5/12)
+|- **F3.6 Replay Recording** — `backend/engine/replay.py` исправлен под актуальный `GameState` (`state.players` вместо `roster_a/b`), `UnitState` поля (`name`, `models_remaining`), tuple-позиции. 18 тестов (было 14 с 4 known-fail)
+|- **Парсинг оружия (header-aware)** — `backend/loader/parser.py`: `_parse_weapons_from_markdown()` переписан на динамическое маппинг колонок по заголовкам таблицы. Поддержка русских/английских заголовков, 8/9 колонок, `N/A` skill (torrent), `—`/`-` во всех полях, dice-выражения в strength. Колонка `range` опциональна — если таблица использует `тип`/`type` вместо отдельной `Range`, range подставляется из неё. `_clean_range()`: `re.match` → `re.search` (извлекает число из `"Ranged 24"`). 0→406→410 оружий распарсено, 10 осталось (wiki data quality)
+|- **Dockerfile single-stage** — убран мультистейдж, `build-essential`, `COPY --from=builder`. `FROM python:3.12-slim`, `pip install -e .` через manylinux wheels. Нет ABI mismatch
+|- **PyJWT вместо python-jose** — `pyproject.toml`: `python-jose[cryptography]` → `PyJWT[crypto]>=2.8`. Код делает `import jwt`, а `python-jose` даёт `import jose` — это было причиной 500 на Railway
+|- **`.dockerignore` — wiki excluded** — `*.md` заменено на `docs/`. Wiki (`.md` файлы) теперь копируется в Docker-образ
+|- **`/api/rosters/generate` — 401** — роут был зарегистрирован ПОСЛЕ `/rosters/{roster_id}` (с auth). FastAPI матчил `generate` как `{roster_id}` → вызывал `get_roster()` с `Depends(get_current_user)`. Перемещён перед динамическим роутом
+|- **`team_builder.js` — saveRoster** — переписан: валидация полей (`name`, `faction`, PTS), ошибки в `validationErrors` (inline, без `alert`), `errorData.detail.validation_errors` распаковывается корректно. Убран дубликат `detachment: ''`. `this.units` → `this._units`
+|- **Auth bcrypt — Docker fix** — bcrypt C-расширение не загружалось на Railway: скомпилированный `.so` из builder-стадии не подходил runtime (различия libc между кэшированными слоями). Фикс: `pip install bcrypt` в runtime-стадии (manylinux wheel, не требует gcc)
+|- Team Builder: дублирование заголовка, два селекта Detachment, `@change="loadUnits()"` → `@change="onFactionChange()"`
+|- Detachment Picker: collapsed/expand, `detachment_picker.js` не подгружался
+|- YAML parsing: апострофы в `'Ere We Go` и `'Ard as Nails`
+||- WatchFiles reload отключён
+|||- **Phase 4 cleanup** — `GET /api/rosters/generate` → `POST` (REST-корректно); `scenario_setup.js` отправляет POST с JSON body; добавлены `test_icon_map.py` (10 тестов), `test_generate_roster.py` (7 тестов). Phase 4 верифицирована: 102 теста ✅\n|||- **F3.7 Round Viewer** — `web/templates/round_viewer.html` (полный Alpine.js реплей вьювер с Canvas), `web/static/replay_viewer.js`, роуты `/api/replays/{game_id}`, `/replay/{game_id}`; 5 тестов\n|||- **F3.8 Result Screen** — `web/templates/result.html`, `web/static/result_chart.js` (Chart.js VP timeline), роуты `/api/results/{game_id}`, `/result/{game_id}`; 6 тестов\n|||- **F5.3 Rate limiting** — slowapi: 30 req/min anon, health exempt, `RATE_LIMIT_*` env vars; 3 теста\n|||- **F5.4 Security headers** — `backend/security/headers.py`: X-Content-Type-Options, X-Frame-Options, CSP, HSTS, Referrer-Policy, Permissions-Policy; CORS production-aware; 3 теста\n|||- **Dockerfile** — `python:3.12-slim-bookworm`, `requirements.txt` вместо `-e .`, shell-form CMD с `${PORT:-8000}`
+|
+|### Implemented
+|- **F2.5 Game Loop** — реализованы все 6 фаз в `backend/engine/scenario.py`:
+  - Command: CP генерация, warlord bonus, VP scoring (было)
+  - Movement: юниты двигаются к центру карты, Fall Back из engagement
+  - Shooting: поиск целей в радиусе 12, при наличии unit_models — Monte Carlo combat engine (F1.6)
+  - Charge: 2D6 roll, engagement при успехе
+  - Fight: alternating activations, melee resolution
+  - Morale: battle-shock тесты (2D6, snake eyes/boxcars)
+  - `Scenario.__init__`: добавлен опциональный `unit_models: dict[str, Unit]` и `battlefield: BattlefieldMap` для LoS
+|- **F2.3 Line of Sight** — Bresenham ray casting в `BattlefieldMap.has_los()`. IMPASSABLE terrain блокирует LoS, старт/финиш не проверяются, результаты кэшируются. Подключён к `Scenario._shooting_phase()`
 
 ## 2026-05-03
 
 ### Added
+- **F3.2 Faction AI Profiles** — `backend/engine/ai/faction_ai.py`: FactionAIProfile, load_profile() из YAML ai: секции wiki/factions/*.md, get_weights() с учётом активных behaviors (Waaagh!, Kauyon, Mont'ka, Doctrina Imperatives), get_target_multiplier(), get_active_behavior_override(), choose_action_with_faction_ai() для интеграции с F3.1
+- **Тесты F3.2** — `tests/test_faction_ai.py`: 18 тестов (загрузка профилей 3 фракций, активация behaviors, cooldown, target_priority, action_override, deployment)
 - **F3.1 Greedy Decision Engine** — `backend/engine/ai/decision.py`: ActionType, Action, EvaluationContext, choose_action() с взвешенной оценкой (shoot/charge/move), генерация кандидатов по фазам, поддержка opponent_units_map для статов целей
 - **F4.3 Detachment Picker with Rule Preview** — `backend/loader/registry.py` расширение с Detachment/Stratagem/Enhancement классами, `/api/detachments` endpoints, `web/templates/partials/detachment_picker.html`, `web/static/detachment_picker.js` с HTMX reactive loading и detail modal
 - **F4.4 Synergy Hints: Leader Compatibility, Transport Capacity** — `/api/rosters/synergies` endpoint с SynergyCheck моделью, `web/templates/partials/synergy_panel.html`, `web/static/synergy_hints.js` с 500ms debouncing, визуальные индикаторы (dots/borders) в roster списке, wiki synergies из YAML

@@ -1,0 +1,95 @@
+<!-- web/templates/partials/tooltip_definitions.html -->
+<!-- F4.7 — Tooltip system: hover on data-stat elements -->
+
+<div x-data="tooltipManager()"
+     @mouseover="handleHover($event)"
+     @mouseout="handleOut()"
+     @click="handleClick($event)"
+     class="contents">
+
+    <!-- Tooltip Popup -->
+    <div x-show="visible"
+         x-cloak
+         class="fixed z-50 pointer-events-none"
+         :style="`left: ${x}px; top: ${y}px;`">
+        <div class="bg-gray-900 border border-gray-600 rounded-lg shadow-xl
+                    p-3 max-w-xs transition-opacity duration-100"
+             :class="visible ? 'opacity-100' : 'opacity-0'">
+
+            <template x-if="tooltip">
+            <div>
+            <div class="flex items-center gap-2 mb-2">
+                <span class="text-lg font-bold text-white" x-text="tooltip.name"></span>
+                <span class="text-xs text-gray-500" x-text="tooltip.full_name"></span>
+            </div>
+
+            <p class="text-gray-300 text-xs mb-2" x-text="tooltip.description"></p>
+
+            <div class="bg-gray-800 rounded p-2 mb-2">
+                <span class="text-blue-300 text-xs font-semibold">How it works</span>
+                <p class="text-gray-400 text-xs mt-0.5" x-text="tooltip.how_it_works"></p>
+            </div>
+
+            <div x-show="tooltip.examples?.length > 0">
+                <span class="text-gray-500 text-xs font-semibold">Examples</span>
+                <div class="space-y-1 mt-1">
+                    <template x-for="ex in tooltip.examples" :key="ex.unit">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-gray-400" x-text="ex.unit"></span>
+                            <span class="text-white font-mono ml-2" x-text="ex.value"></span>
+                            <span class="text-gray-500 ml-1 text-[10px]" x-text="ex.note"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div x-show="tooltip.related_stats?.length > 0" class="mt-2 pt-2 border-t border-gray-700">
+                <span class="text-gray-500 text-[10px]">Related: </span>
+                <template x-for="(stat, i) in tooltip.related_stats" :key="stat">
+                    <span class="text-gray-400 text-[10px]">
+                        <span x-text="stat"></span>
+                        <span x-show="i < tooltip.related_stats.length - 1">, </span>
+                    </span>
+                </template>
+            </div>
+            </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- Glossary Modal (click-to-open) -->
+    <template x-if="glossaryOpen && glossaryStat">
+        <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+             @click.away="glossaryOpen = false">
+            <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-white" x-text="glossaryStat.name"></h3>
+                    <button @click="glossaryOpen = false"
+                            class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
+
+                <p class="text-gray-300 text-sm mb-3" x-text="glossaryStat.description"></p>
+
+                <div class="bg-gray-700 rounded p-3 mb-3">
+                    <h4 class="text-blue-300 text-xs font-semibold mb-1">Rules</h4>
+                    <p class="text-gray-400 text-sm" x-text="glossaryStat.how_it_works"></p>
+                </div>
+
+                <h4 class="text-gray-400 text-xs font-semibold mb-2">Unit Examples</h4>
+                <div class="space-y-1">
+                    <template x-for="ex in glossaryStat.examples" :key="ex.unit">
+                        <div class="flex justify-between text-sm bg-gray-700/50 rounded px-3 py-1">
+                            <span class="text-gray-300" x-text="ex.unit"></span>
+                            <span class="text-white font-mono" x-text="ex.value"></span>
+                        </div>
+                    </template>
+                </div>
+
+                <button @click="glossaryOpen = false"
+                        class="mt-4 w-full bg-gray-700 text-white rounded py-2 hover:bg-gray-600">
+                    Close
+                </button>
+            </div>
+        </div>
+    </template>
+</div>

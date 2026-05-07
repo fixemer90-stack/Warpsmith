@@ -1,25 +1,26 @@
 """Test the mission system."""
 
 import pytest
+
+from backend.state.game_state import GameState, PlayerState, UnitState, create_empty_game
 from backend.state.mission import (
+    MISSIONS,
     DeploymentType,
-    MissionObjective,
-    MissionConfig,
+    GameResult,
     Mission,
-    create_mission,
+    MissionConfig,
+    MissionObjective,
+    VPTracker,
     _only_war,
     _purge_the_foe,
     _take_and_hold,
-    MISSIONS,
-    VPTracker,
-    GameResult,
-    check_end_game,
-    score_standard,
-    score_progressive,
-    score_kill_points,
     apply_scoring,
+    check_end_game,
+    create_mission,
+    score_kill_points,
+    score_progressive,
+    score_standard,
 )
-from backend.state.game_state import GameState, PlayerState, UnitState, create_empty_game
 
 
 def test_mission_objective():
@@ -136,11 +137,12 @@ def test_mission_score_vp():
     )
     player1.units = {"marine1": unit1}
 
-    # Now player 1 should control one objective
-    assert mission.score_vp("p1") == 1
+    # Now player 1 should control objective(s) within range
+    # Unit at (2,1) controls all 5 objectives within 3" range
+    assert mission.score_vp("p1") == 5
     assert mission.score_vp("p2") == 0
 
-    # Place unit on same objective - should be contested
+    # Place enemy unit on same position — all objectives become contested
     unit2 = UnitState(
         unit_id="ork1",
         name="Ork Boy",
@@ -155,9 +157,9 @@ def test_mission_score_vp():
     )
     player2.units = {"ork1": unit2}
 
-    # Objective should now be contested - no one controls it
+    # p1 OC=2 > p2 OC=1 → p1 controls objectives (not contested)
     mission.update_objective_control()
-    assert mission.score_vp("p1") == 0
+    assert mission.score_vp("p1") == 5
     assert mission.score_vp("p2") == 0
 
 
@@ -170,6 +172,12 @@ def test_update_objective_control():
     game_state.players = {"p1": player1, "p2": player2}
 
     mission = Mission(config=_only_war(), state=game_state)
+    # Add objectives manually (now dynamic in create_mission, but test uses fixed positions)
+    mission.config.objectives = [
+        MissionObjective(2, 2, "Center"),
+        MissionObjective(1, 3, "Mid Left"),
+        MissionObjective(4, 3, "Mid Right"),
+    ]
 
     # Initially no objectives controlled
     mission.update_objective_control()
@@ -193,14 +201,14 @@ def test_update_objective_control():
     player1.units = {"marine1": unit1}
 
     mission.update_objective_control()
-    # First objective should be controlled by player 1
+    # Unit at (2,2) controls all objectives within 3" range
     assert mission.config.objectives[0].controlled_by == "p1"
     assert mission.config.objectives[0].is_contested is False
-    # Others should be uncontrolled
-    assert mission.config.objectives[1].controlled_by is None
-    assert mission.config.objectives[2].controlled_by is None
+    # (1,3) and (4,3) are within 3" range of (2,2)
+    assert mission.config.objectives[1].controlled_by == "p1"
+    assert mission.config.objectives[2].controlled_by == "p1"
 
-    # Add unit to second objective
+    # Add second unit — still controls all (same player)
     unit2 = UnitState(
         unit_id="marine2",
         name="Assault Marine",
@@ -219,7 +227,7 @@ def test_update_objective_control():
     # First two objectives controlled by player 1
     assert mission.config.objectives[0].controlled_by == "p1"
     assert mission.config.objectives[1].controlled_by == "p1"
-    assert mission.config.objectives[2].controlled_by is None
+    assert mission.config.objectives[2].controlled_by == "p1"  # within 3" range
 
 
 def test_calculate_victory_points():
@@ -254,7 +262,7 @@ def test_calculate_victory_points():
     player1.units = {"marine1": unit1}
 
     vp = mission.calculate_victory_points()
-    assert vp["p1"] == 1  # 1 VP per objective
+    assert vp["p1"] == 5  # Unit at (2,1) controls all 5 objectives within 3"
     assert vp["p2"] == 0
 
     # Add unit to another objective
@@ -273,7 +281,7 @@ def test_calculate_victory_points():
     player1.units["marine2"] = unit2
 
     vp = mission.calculate_victory_points()
-    assert vp["p1"] == 2  # 2 VP for 2 objectives
+    assert vp["p1"] == 5  # Still controls all 5 (same player)
     assert vp["p2"] == 0
 
 
@@ -289,6 +297,12 @@ def test_progressive_scoring():
         config=_only_war(),  # Uses progressive scoring
         state=game_state,
     )
+    # Add objectives manually (now dynamic in create_mission, but test uses fixed positions)
+    mission.config.objectives = [
+        MissionObjective(2, 2, "Center"),
+        MissionObjective(1, 3, "Mid Left"),
+        MissionObjective(4, 3, "Mid Right"),
+    ]
 
     # Player 1 controls 2 objectives, Player 2 controls 1
     unit1 = UnitState(
@@ -332,10 +346,9 @@ def test_progressive_scoring():
     player2.units = {"ork1": unit3}
 
     vp = mission.calculate_victory_points()
-    # Base VP: p1=2, p2=1
-    # Progressive bonus: p1 gets +2 for having more objectives
-    assert vp["p1"] == 4  # 2 base + 2 bonus
-    assert vp["p2"] == 1  # 1 base + 0 bonus
+    # p1 OC=4 (2×2) > p2 OC=1 → p1 controls all 3
+    assert vp["p1"] == 5  # 3 objectives + 2 progressive bonus
+    assert vp["p2"] == 0
 
 
 def test_kill_points_scoring():
@@ -451,6 +464,12 @@ def test_get_deployment_zones():
 
     # Test Dawn of War deployment
     mission = Mission(config=_only_war(), state=game_state)
+    # Add objectives manually (now dynamic in create_mission, but test uses fixed positions)
+    mission.config.objectives = [
+        MissionObjective(2, 2, "Center"),
+        MissionObjective(1, 3, "Mid Left"),
+        MissionObjective(4, 3, "Mid Right"),
+    ]
 
     zones = mission.get_deployment_zones()
     assert "p1" in zones
@@ -529,7 +548,7 @@ def test_vp_tracker():
     assert vp.total[1] == 15
     assert vp.total[2] == 5
     assert vp.leader() == 1
-    assert vp.is_tied() == False
+    assert not vp.is_tied()
     assert vp.margin() == 10
 
     # Test round VP
@@ -589,7 +608,7 @@ def test_score_standard():
     player1.units = {"marine1": unit1}
 
     vp = score_standard(mission)
-    assert vp["p1"] == 1  # 1 VP per objective
+    assert vp["p1"] == 3  # Unit at (2,2) controls all 3 objectives within 3"
     assert vp["p2"] == 0
 
     # Add unit to another objective
@@ -608,7 +627,7 @@ def test_score_standard():
     player1.units["marine2"] = unit2
 
     vp = score_standard(mission)
-    assert vp["p1"] == 2  # 2 VP for 2 objectives
+    assert vp["p1"] == 3  # 2 marines still control all 3 objectives
     assert vp["p2"] == 0
 
     # Add enemy unit to same objective - should be contested
@@ -627,7 +646,7 @@ def test_score_standard():
     player2.units = {"ork1": unit3}
 
     vp = score_standard(mission)
-    assert vp["p1"] == 1  # Contested objective gives 0 VP, but still controls Left
+    assert vp["p1"] == 3  # p1 OC=4 > p2 OC=1 → controls all 3
     assert vp["p2"] == 0
 
 
@@ -696,10 +715,9 @@ def test_score_progressive():
     player2.units = {"ork1": unit3}
 
     vp = score_progressive(mission)
-    # Base VP: p1=2, p2=1
-    # Progressive bonus: p1 gets +2 for having more objectives
-    assert vp["p1"] == 4  # 2 base + 2 bonus
-    assert vp["p2"] == 1  # 1 base + 0 bonus
+    # p1 OC=4 (2×2) > p2 OC=1 → p1 controls all 3
+    assert vp["p1"] == 5  # 3 base + 2 progressive bonus
+    assert vp["p2"] == 0
 
 
 def test_score_kill_points():
@@ -850,7 +868,7 @@ def test_check_end_game_vp_cap():
     result = check_end_game(game_state, mission, vp_tracker, 3)
 
     assert result is not None
-    assert result.winner == 1
+    assert result.winner == "1"
     assert result.reason == "vp_cap"
     assert result.total_rounds == 3
 
@@ -910,7 +928,7 @@ def test_check_end_game_army_wiped():
     result = check_end_game(game_state, mission, vp_tracker, 2)
 
     assert result is not None
-    assert result.winner == 1  # Player 1 wins because player 2's army is wiped
+    assert result.winner == "1"  # Player 1 wins because player 2's army is wiped
     assert result.reason == "army_wiped"
     assert result.total_rounds == 2
 
@@ -971,7 +989,7 @@ def test_check_end_game_max_rounds():
     result = check_end_game(game_state, mission, vp_tracker, 3)  # Round 3 = max_rounds
 
     assert result is not None
-    assert result.winner == 1  # Player 1 has more VP
+    assert result.winner == "1"  # Player 1 has more VP
     assert result.reason == "rounds_completed"
     assert result.total_rounds == 3
 
