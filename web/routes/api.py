@@ -571,7 +571,12 @@ async def get_map_tiles(
             elif (x <= 2 or x >= 13) and (y <= 2 or y >= 13):
                 tile_type = TileType.HEAVY_COVER.value
             # Difficult terrain near obstacles
-            elif 5 <= x <= 10 and 5 <= y <= 10 and tile_type == TileType.OPEN.value and (x + y) % 3 == 0:
+            elif (
+                5 <= x <= 10
+                and 5 <= y <= 10
+                and tile_type == TileType.OPEN.value
+                and (x + y) % 3 == 0
+            ):
                 tile_type = TileType.DIFFICULT.value
 
             row.append(tile_type)
