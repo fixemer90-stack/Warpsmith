@@ -71,7 +71,7 @@ def create_app() -> FastAPI:
 
     app = FastAPI(
         title="Warpsmith — WH40k Battle Simulator",
-        version="0.3.0",
+        version="0.7.7",
         description="Warpsmith — симулятор сценариев боёв Warhammer 40,000: сбор армии, AI-vs-AI бой, пораундовый реплей.",
     )
 

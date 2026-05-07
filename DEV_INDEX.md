@@ -1,7 +1,9 @@
 # Developer Index — Warpsmith
 
 Центральный хаб проекта. Отсюда ведут все тропы.
-Обновлён: 2026-05-06 | v0.7.5
+Обновлён: 2026-05-04 | v0.7.7
+
+**Навигация:** [INDEX.md](/mnt/d/Python/Balthier/INDEX.md) ← · → [WIKI_INDEX.md](/mnt/d/Python/Balthier/wiki/WIKI_INDEX.md) · → [Features Index](docs/features/Features_index.md)
 
 ## 📋 Граф документации
 
@@ -158,7 +160,7 @@ uv run python -m pytest tests/ -q
 
 ```bash
 curl http://127.0.0.1:8000/api/health
-# → {"status": "ok", "version": "0.3.0"}
+# → {"status": "ok", "version": "0.7.7"}
 
 curl http://127.0.0.1:8000/api/factions
 # → {"factions": [3 factions]}
