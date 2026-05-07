@@ -37,14 +37,16 @@ const unitModalMixin = {
 
     get totalCost() {
         if (!this.unitDetail) return 0;
-        const basePts = this.unitDetail.points;
+        const minSquad = this.unitDetail.squad_size?.min || 1;
+        const ptsPerModel = this.unitDetail.points / minSquad;
         const loadout = this.unitDetail.wargear_options
             ?.find(o => o.name === this.selectedLoadout);
         const loadoutPts = loadout?.points || 0;
         const nobOpt = this.unitDetail.nob_options
             ?.find(o => o.name === this.selectedNobOption);
         const nobPts = nobOpt?.points || 0;
-        return (basePts + loadoutPts) * this.squadSize + nobPts;
+        const squadPts = (ptsPerModel + loadoutPts) * this.squadSize;
+        return squadPts + nobPts;
     },
 
     getQuickSizes() {
@@ -71,7 +73,7 @@ const unitModalMixin = {
             })
             .then(data => {
                 this.unitDetail = data;
-                this.squadSize = data.squad_size?.min || 5;
+                this.squadSize = data.squad_size?.min || 1;
                 this.selectedLoadout = data.wargear_options?.[0]?.name || '';
                 this.selectedNobOption = '';
                 this.unitLoading = false;

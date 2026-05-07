@@ -56,7 +56,7 @@ function teamBuilder() {
                 .filter(u => u.faction === this.faction || !this.faction);
         },
         get totalPts() {
-            return this.roster.reduce((sum, u) => sum + u.pts * u.squad_size, 0);
+            return this.roster.reduce((sum, u) => sum + u.pts, 0);
         },
         get unitCount() {
             return this.roster.length;
@@ -93,7 +93,11 @@ function teamBuilder() {
             const loadout = this.unitDetail.wargear_options
                 ?.find(o => o.name === this.selectedLoadout);
             const loadoutPts = loadout?.points || 0;
-            return ptsPerModel + loadoutPts;
+            const nobOpt = this.unitDetail.nob_options
+                ?.find(o => o.name === this.selectedNobOption);
+            const nobPts = nobOpt?.points || 0;
+            const squadPts = (ptsPerModel + loadoutPts) * this.squadSize;
+            return squadPts + nobPts;
         },
 
         getQuickSizes() {
@@ -130,7 +134,7 @@ function teamBuilder() {
                 .then(r => r.json())
                 .then(data => {
                     this.unitDetail = data;
-                    this.squadSize = data.squad_size.min || 5;
+                    this.squadSize = data.squad_size?.min || 1;
                     this.selectedLoadout = data.wargear_options?.[0]?.name || '';
                     this.selectedNobOption = '';
                     this.unitLoading = false;
