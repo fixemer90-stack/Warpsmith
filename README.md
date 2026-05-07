@@ -30,7 +30,7 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - Game State: фазы, позиции, CP, VP, ранения
 - 2D-карта (NumPy), Bresenham LoS ray casting
 - Cover & Terrain Effects: +1 SV, Ignores Cover, Indirect Fire -1 to hit
-- 5 миссий: Only War, Purge the Foe, Take and Hold, Supply Drop, Area Denial
+- 3 миссии: Only War, Purge the Foe, Take and Hold
 - Game Loop (6 фаз): Command → Movement (10ed rules) → Shooting → Charge → Fight → Morale
 - Battle-shock + CP generation + stratagem resolution
 - Roster validation (PTS, Warlord, 3× cap) + CRUD через `/api/rosters`

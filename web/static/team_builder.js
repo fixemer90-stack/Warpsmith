@@ -126,7 +126,7 @@ function teamBuilder() {
             this.selectedLoadout = '';
             this.selectedNobOption = '';
 
-            fetch(/api/units /\/detail)
+            fetch(`/api/units/${encodeURIComponent(unitName)}/detail`)
                 .then(r => r.json())
                 .then(data => {
                     this.unitDetail = data;
@@ -170,7 +170,7 @@ function teamBuilder() {
 
         async loadRosterForEdit(rosterId) {
             try {
-                const resp = await fetch(/api/rosters /\);
+                const resp = await fetch(`/api/rosters/${rosterId}`);
                 if (!resp.ok) {
                     alert('Failed to load roster for editing');
                     window.location.href = '/my-rosters';
@@ -206,8 +206,8 @@ function teamBuilder() {
             }
             try {
                 const [unitsResp, detResp] = await Promise.all([
-                    fetch(/api/units ? faction =\),
-                    fetch(/api/detachments ? faction =\),
+                    fetch(`/api/units?faction=${encodeURIComponent(this.faction)}`),
+                    fetch(`/api/detachments?faction=${encodeURIComponent(this.faction)}`),
                 ]);
 
                 if (unitsResp.ok) {

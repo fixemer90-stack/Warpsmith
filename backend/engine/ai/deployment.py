@@ -262,13 +262,12 @@ def _find_best_position(
 
             # Determine unit's deployment role from faction profile or fallback
             deploy_role = _get_deploy_role(unit, unit_model, faction_profile)
+            max_depth = abs(zone.x_max - zone.x_min) or 1
             if deploy_role == "front_line":
                 dist_to_front = abs(x - front_edge_x)
-                max_depth = abs(zone.x_max - zone.x_min) or 1
                 score += 0.8 * (1.0 - dist_to_front / max_depth)
             elif deploy_role == "back_field":
                 dist_to_back = abs(x - (zone.x_min if is_p1 else zone.x_max))
-                max_depth = abs(zone.x_max - zone.x_min) or 1
                 score += 0.8 * (1.0 - dist_to_back / max_depth)
             elif deploy_role == "mid_field":
                 dist_center = _distance((x, y), center)

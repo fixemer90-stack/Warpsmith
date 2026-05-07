@@ -206,19 +206,19 @@ function resultScreen() {
 
             this.replay.rounds.forEach((round) => {
                 (round.events || []).forEach((evt) => {
-                    if (evt.event_type === 'kill' && evt.target_name) {
-                        const pid = this._actorPlayerId(evt.actor_id);
-                        // If actor is player 1, they killed a player 2 unit
-                        if (pid === 0 || pid === '1' || pid === 'player1') {
-                            if (!killedIds.has(evt.target_id || evt.target_name)) {
-                                killedIds.add(evt.target_id || evt.target_name);
-                                result.player2.push(evt.target_name);
-                            }
-                        } else {
-                            if (!killedIds.has(evt.target_id || evt.target_name)) {
-                                killedIds.add(evt.target_id || evt.target_name);
-                                result.player1.push(evt.target_name);
-                            }
+                    if (evt.event_type === 'kill') {
+                        // Kill events have actor_name = dead unit ("X was destroyed")
+                        const deadName = evt.actor_name;
+                        const deadId = evt.actor_id;
+                        if (!deadName) return;
+                        // Try to determine which player owned the dead unit
+                        const victimPid = this._victimPlayerId(deadId || deadName);
+                        if (victimPid === 0 && !killedIds.has(deadId || deadName)) {
+                            killedIds.add(deadId || deadName);
+                            result.player2.push(deadName);
+                        } else if (victimPid === 1 && !killedIds.has(deadId || deadName)) {
+                            killedIds.add(deadId || deadName);
+                            result.player1.push(deadName);
                         }
                     }
                 });
@@ -251,7 +251,6 @@ function resultScreen() {
         _actorPlayerId(actorId) {
             // Try to determine which player an actor belongs to
             if (!this.replay || !this.replay.rounds) return 0;
-            // Check from rosters
             const keys = this._getPlayerKeys();
             for (let i = 0; i < keys.length; i++) {
                 const roster = this.replay.rosters[keys[i]];
@@ -280,6 +279,11 @@ function resultScreen() {
                 }
             }
             return 0;
+        },
+
+        _victimPlayerId(unitId) {
+            // Determine which player a dead unit belonged to (reverse of _actorPlayerId)
+            return this._actorPlayerId(unitId);
         },
 
         get winnerName() {

@@ -163,15 +163,10 @@
 
     <nav class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex items-center gap-6">
         <a href="/" class="text-xl font-bold text-yellow-500">🔧 Warpsmith</a>
-        <a href="/team-builder" class="hover:text-yellow-400">Team Builder</a>
-        <a href="/my-rosters" class="hover:text-yellow-400">Rosters</a><a href="/my-rosters" class="flex items-center gap-2 text-gray-400 hover:text-white hover:bg-white/10 transition-colors duration-150 px-3 py-1.5 rounded-md text-sm font-medium
-          {% if request.path.startswith('/my-rosters') %}bg-white/10 text-white{% endif %}" {% if
-            request.path.startswith('/my-rosters') %}aria-current="page" {% endif %}>
-            <svg class="w-4 h-4"><!-- иконка --></svg>
-            Rosters
-        </a> <a href="/faction-browser" class="hover:text-yellow-400">Browser</a>
-        <a href="/scenario-setup" class="hover:text-yellow-400">Scenario</a>
-        <a href="/pricing" class="hover:text-yellow-400">Pricing</a>
+        <a href="/team-builder" class="text-gray-400 hover:text-white text-sm">Team Builder</a>
+        <a href="/my-rosters" class="text-gray-400 hover:text-white text-sm">Rosters</a>
+        <a href="/faction-browser" class="text-gray-400 hover:text-white text-sm">Browser</a>
+        <a href="/scenario-setup" class="text-gray-400 hover:text-white text-sm">Scenario</a>
 
         <!-- Progressive Disclosure Toggle -->
         <div x-data="progressiveDisclosure()" x-init="loadMode()"
