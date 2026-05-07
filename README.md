@@ -2,7 +2,7 @@
 
 > Симулятор боёв Warhammer 40,000 — Monte Carlo анализ, AI, веб-интерфейс.
 
-**Версия:** 0.7.7 | **Статус:** Phase 1 ✅ | Phase 2 ✅ | Phase 3 ✅ | Phase 4 ✅ | Phase 5 🚧
+**Версия:** 0.7.7 | **Статус:** Phase 1 ✅ | Phase 2 🔧 | Phase 3 🔧 | Phase 4 ✅ | Phase 5 ✅
 
 Warpsmith — симулятор боёв по правилам Warhammer 40,000 10-й редакции. Wiki-driven: фракции, юниты, оружие, стратагемы — всё из YAML frontmatter в ~490 .md файлах. Monorepo: данные в `simulator/wiki/`, попадают в Docker-образ автоматически.
 
@@ -36,7 +36,7 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - Roster validation (PTS, Warlord, 3× cap) + CRUD через `/api/rosters`
 - Team Builder UI: faction picker, unit modal, PTS bar, detachment picker
 
-### 🔧 Phase 3: AI & Automation (67%)
+### 🔧 Phase 3: AI & Automation (78%)
 - Greedy Decision Engine: target/action evaluation (26 тестов)
 - Faction AI Profiles: wiki-driven (Orks, Tau, AdMech)
 - Deployment AI: zone placement (4 deployment types, faction_ai pending)
@@ -52,7 +52,7 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - Detachment picker with rule preview
 - Synergy hints: leader compatibility, transport capacity
 - Canvas map: terrain tiles + deploy zones interactivity
-- Progressive Disclosure: Beginner / Intermediate / Expert modes
+- Progressive Disclosure: Beginner / Expert modes
 - Stat tooltips on every stat (M/T/SV/W/LD/OC) with glossary modal
 - SVG icons (18 категорий, inline) в unit cards
 - Generate Random Opponent: AI-ростер в 1 клик
@@ -79,7 +79,7 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 ```bash
 cd simulator
 uv run python -m pytest tests/ -q
-# → 440 тестов (34 файла)
+# → 451 тестов (41 файл)
 ```
 
 ## 📁 Структура
@@ -109,7 +109,7 @@ simulator/
 │   │   └── pages.py          HTML pages
 │   ├── templates/            Jinja2 + HTMX partials
 │   └── static/               JS (Alpine.js), SVG icons (18)
-├── tests/                    34 файла, 440 тестов
+├── tests/                    41 файл, 451 тестов
 └── docs/                     architecture · requirements · features (50+ specs)
 ```
 
@@ -118,7 +118,7 @@ simulator/
 | Документ | О чём |
 |----------|-------|
 | [DEV_INDEX.md](DEV_INDEX.md) | Хаб разработчика: запуск, API, тесты |
-| [ROADMAP.md](ROADMAP.md) | Дорожная карта (7 фаз, 81 фича, 329h) |
+| [ROADMAP.md](ROADMAP.md) | Дорожная карта (7 фаз, 77 фич, 319h) |
 | [ROADMAP.html](ROADMAP.html) | Визуальная дорожная карта |
 | [RELEASE.md](RELEASE.md) | Политика релизов (ZeroVer, GitHub Flow) |
 | [CHANGELOG.md](CHANGELOG.md) | История изменений (Keep a Changelog) |
@@ -130,12 +130,12 @@ simulator/
 
 ## 📊 Статистика
 
-- **Тестов:** 440 (34 файла)
+- **Тестов:** 451 (41 файл)
 - **Юнитов:** 160 (Orks 81, Tau 40, AdMech 39)
 - **Wiki:** ~490 .md — в репозитории (`simulator/wiki/`)
 - **Стратагем:** 114 (Core 13, Orks 42, AdMech 42, Tau 19)
 - **Энхансментов:** 88
 - **Детачментов:** 23
 - **API эндпоинтов:** 25+ (4 модуля: api, api_detachments, api_rosters, api_replays)
-- **Фаз:** 7 · 81 фича · ~329 часов
+- **Фаз:** 7 · 77 фич · ~319 часов
 - **SVG иконок:** 18 категорий
