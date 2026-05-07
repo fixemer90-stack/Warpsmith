@@ -7,6 +7,33 @@
 
 ---
 
+## 2026-05-07
+
+### Added
+- **F4.12 My Rosters — delete, edit, duplicate** (4h): полная CRUD страница для управления сохранёнными ростерами
+  - `PUT /api/rosters/{id}` — обновление ростера с валидацией
+  - `POST /api/rosters/{id}/duplicate` — копирование ростера с суффиксом "(copy)", приватный по умолчанию
+  - `/my-rosters` страница с таблицей ростеров, кнопками действий (✏ Edit, 📋 Copy, ✕ Delete)
+  - Team Builder edit mode: `?edit={id}` URL параметр загружает существующий ростер для редактирования
+  - Delete confirmation modal с подтверждением удаления
+  - Tier limit banner: Free пользователи видят 1/1 лимит с ссылкой на Premium upgrade
+  - Expandable roster preview: показ списка юнитов по нажатию ▼/▲
+  - `web/templates/my_rosters.html` — Alpine.js страница с reactive UI
+  - `web/static/my_rosters.js` — CRUD операции с fetch API и error handling
+  - `tests/test_rosters.py` — 5 новых тестов (PUT update, POST duplicate, not found, public→private copy)
+  - Ростеры теперь сортируются по `updated_at DESC` (свежие сверху)
+  - Authorization: пользователи могут управлять только своими ростерами
+
+### Changed
+- **Navigation**: добавлен пункт "Rosters" в главный навигатор (`web/templates/base.html`)
+- **ROADMAP.md**: F4.12 отмечен как ✅ completed
+- **Scenario Setup — редизайн выбора миссии** (`web/templates/scenario_setup.html`): выпадающий список заменён на три крупные кнопки (Only War ⚔️, Purge the Foe 💀, Take and Hold 🎯). Каждая кнопка содержит описание сути миссии: тип скоринга, количество objectives, тип деплоя. Выбранная миссия подсвечивается цветной рамкой и точкой-индикатором.
+
+### Fixed
+- **README.md**: исправлено «5 миссий: ..., Supply Drop, Area Denial» → «3 миссии: Only War, Purge the Foe, Take and Hold». Supply Drop и Area Denial не реализованы в коде.
+- **scenario_setup.html**: дропдаун миссий показывал Only War, Supply Drop, Area Denial — заменён на три реальные миссии из реестра `MISSIONS`
+- **F2.4 Missions spec** (`docs/features/f2.4-missions.md`): полностью переписан под реальный код `mission.py` (~595 строк). Старый spec не описывал `VPTracker`, `GameResult`, `check_end_game()`, `_resolve_tie()`, `SCORING_MAP`, `DeploymentType` enum, `get_deployment_zones()`, OC-базированный `update_objective_control()`.
+
 ## 2026-05-06
 
 ### Added

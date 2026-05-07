@@ -17,8 +17,8 @@ function replayViewer() {
         canvas: null,
         ctx: null,
         CELL_SIZE: 32,
-        GRID_COLS: 19,
-        GRID_ROWS: 14,
+        mapWidth: 19,
+        mapHeight: 14,
 
         // Derived
         get currentRoundEvents() {
@@ -40,7 +40,7 @@ function replayViewer() {
             if (!this.replay) return 0;
             const state = this._getCurrentState();
             if (!state || !state.victory_points) return 0;
-            const keys = Object.keys(state.victory_points);
+            const keys = Object.keys(state.victory_points).sort();
             return state.victory_points[keys[0]] || 0;
         },
 
@@ -48,7 +48,7 @@ function replayViewer() {
             if (!this.replay) return 0;
             const state = this._getCurrentState();
             if (!state || !state.victory_points) return 0;
-            const keys = Object.keys(state.victory_points);
+            const keys = Object.keys(state.victory_points).sort();
             return state.victory_points[keys[1]] || 0;
         },
 
@@ -68,6 +68,13 @@ function replayViewer() {
                     throw new Error(`Server error: ${resp.status}`);
                 }
                 this.replay = await resp.json();
+
+                // Extract map dimensions from first round's start_state
+                if (this.replay.rounds && this.replay.rounds.length > 0) {
+                    const st = this.replay.rounds[0].start_state;
+                    if (st && st.map_width) this.mapWidth = st.map_width;
+                    if (st && st.map_height) this.mapHeight = st.map_height;
+                }
 
                 // Initialize navigation
                 this.currentRoundIndex = 0;
@@ -224,7 +231,7 @@ function replayViewer() {
             ctx.strokeStyle = '#1f2937';
             ctx.lineWidth = 0.5;
 
-            for (let x = 0; x <= this.GRID_COLS; x++) {
+            for (let x = 0; x <= this.mapWidth; x++) {
                 const px = x * this.CELL_SIZE + 20;
                 ctx.beginPath();
                 ctx.moveTo(px, 10);
@@ -232,7 +239,7 @@ function replayViewer() {
                 ctx.stroke();
             }
 
-            for (let y = 0; y <= this.GRID_ROWS; y++) {
+            for (let y = 0; y <= this.mapHeight; y++) {
                 const py = y * this.CELL_SIZE + 20;
                 ctx.beginPath();
                 ctx.moveTo(10, py);
@@ -252,15 +259,9 @@ function replayViewer() {
             const round = this.replay.rounds[this.currentRoundIndex];
             if (!round) return null;
 
-            // Use start_state if no events, otherwise use end_state
+            // Show end_state for all events — reflects positions after round actions
             const events = round.events || [];
-            if (events.length === 0 || this.eventIndex < 0) {
-                return round.start_state || null;
-            }
-
-            // For the last event, use end_state
-            // For earlier events, use start_state (we don't have per-event snapshots)
-            if (this.eventIndex >= events.length - 1) {
+            if (events.length > 0 && this.eventIndex >= 0) {
                 return round.end_state || round.start_state || null;
             }
             return round.start_state || null;

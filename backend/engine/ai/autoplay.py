@@ -216,21 +216,55 @@ def _build_unit_models(roster_a: RosterState, roster_b: RosterState) -> dict[str
 def _build_summary(
     state: GameState, round_logs: list[dict[str, Any]], _placements: dict[str, list[Any]]
 ) -> dict[str, Any]:
-    """Построить сводку симуляции."""
+    """Построить сводку симуляции из game_log текстов."""
+    import re
+
     total_kills: dict[str, int] = {}
-    total_damage: dict[str, int] = {}
+    total_damage: dict[str, float] = {}
     charge_count: dict[str, int] = {}
 
+    # Build unit_name → player_id map
+    unit_owner: dict[str, str] = {}
+    for pid, player in state.players.items():
+        for uname in player.units:
+            unit_owner[uname] = pid
+
+    # Patterns
+    kill_re = re.compile(r"^(.+?)\s+was\s+destroyed$")
+    damage_re = re.compile(r"^(.+?)\s+hits\s+(.+?)\s+for\s+([\d.]+)\s+damage$")
+    charge_re = re.compile(r"^(.+?)\s+charges\s+.+engaged!")
+
     for log in round_logs:
-        if isinstance(log, dict) and "events" in log:
-            for event in log["events"]:
-                player = str(event.get("player", "0"))
-                if event.get("type") == "kill":
-                    total_kills[player] = total_kills.get(player, 0) + 1
-                if event.get("damage", 0) > 0:
-                    total_damage[player] = total_damage.get(player, 0) + event["damage"]
-                if event.get("action") == "charge":
-                    charge_count[player] = charge_count.get(player, 0) + 1
+        if not isinstance(log, dict):
+            continue
+        for line in log.get("phase_logs", []):
+            # Kill: "X was destroyed" — credit killer (find who attacked X)
+            m = kill_re.match(line)
+            if m:
+                victim = m.group(1).strip()
+                # Find killer by scanning damage lines in same round
+                # Simplified: the victim belongs to one player, credit the other
+                victim_pid = unit_owner.get(victim, "0")
+                killer_pid = "1" if victim_pid == "2" else ("2" if victim_pid == "1" else "0")
+                total_kills[killer_pid] = total_kills.get(killer_pid, 0) + 1
+                continue
+
+            # Damage: "X hits Y for N damage" — credit X's player
+            m = damage_re.match(line)
+            if m:
+                actor = m.group(1).strip()
+                dmg = float(m.group(3))
+                pid = unit_owner.get(actor, "0")
+                total_damage[pid] = total_damage.get(pid, 0.0) + dmg
+                continue
+
+            # Charge: "X charges Y ... engaged!" — credit X's player
+            m = charge_re.match(line)
+            if m:
+                actor = m.group(1).strip()
+                pid = unit_owner.get(actor, "0")
+                charge_count[pid] = charge_count.get(pid, 0) + 1
+                continue
 
     # Army info from state.players
     army_info: dict[str, dict[str, Any]] = {}
@@ -266,8 +300,41 @@ def _check_game_end(state: GameState) -> bool:
     return bool(
         hasattr(state, "current_round")
         and hasattr(state, "max_rounds")
-        and state.current_round >= state.max_rounds
+        and state.current_round > state.max_rounds
     )
+
+
+def _snapshot_state(state: GameState) -> dict[str, Any]:
+    """Serialize current GameState for replay round-viewer canvas."""
+    units: dict[str, list[dict[str, Any]]] = {}
+    for player_id, player in state.players.items():
+        player_units: list[dict[str, Any]] = []
+        for unit in player.units.values():
+            player_units.append({
+                "id": getattr(unit, "unit_id", unit.name),
+                "name": unit.name,
+                "position": {"x": unit.position[0], "y": unit.position[1]},
+                "is_alive": getattr(unit, "is_alive", True),
+                "is_engaged": getattr(unit, "is_engaged", False),
+                "is_battle_shocked": getattr(unit, "is_battle_shocked", False),
+                "models_remaining": getattr(unit, "models_remaining", getattr(unit, "current_wounds", 1)),
+                "models_total": getattr(unit, "max_wounds", 1),
+                "victory_points": getattr(player, "victory_points", 0),
+            })
+        units[player_id] = player_units
+
+    victory_points = {
+        pid: getattr(player, "victory_points", 0)
+        for pid, player in state.players.items()
+    }
+
+    return {
+        "round": state.current_round,
+        "units": units,
+        "victory_points": victory_points,
+        "map_width": state.map_width,
+        "map_height": state.map_height,
+    }
 
 
 def run_auto_game(
@@ -376,14 +443,22 @@ def run_auto_game(
             if elapsed > config.time_limit_seconds * 1000:
                 raise TimeoutError(f"Simulation exceeded {config.time_limit_seconds}s")
 
+            # Snapshot state BEFORE round
+            start_state = _snapshot_state(state)
+
             # Run one round via Scenario
             scenario.run_round()
+
+            # Snapshot state AFTER round
+            end_state = _snapshot_state(state)
 
             # Collect round log — capture ALL entries since last round start
             round_log = {
                 "round": r + 1,
                 "events": [],
                 "phase_logs": state.game_log[last_log_len:],
+                "start_state": start_state,
+                "end_state": end_state,
             }
             round_logs.append(round_log)
             last_log_len = len(state.game_log)

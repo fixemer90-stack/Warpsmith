@@ -63,7 +63,7 @@
 |---|------|------|--------|
 | [F3.1](f3.1-greedy-decision-engine.md) | Greedy decision engine — target/action evaluation + objective movement | 6h | ✅ |
 | [F3.2](f3.2-faction-ai-profiles.md) | Faction AI Profiles — wiki-driven (Orks, Tau, AdMech) | 4h | ✅ |
-| [F3.4](f3.4-deployment-ai.md) | Deployment AI: zone placement logic (faction_ai не интегрирован) | 3h | 🔧 |
+| [F3.4](f3.4-deployment-ai.md) | Deployment AI: zone placement + faction_ai profiles | 3h | ✅ |
 | [F3.5](f3.5-autoplay.md) | Auto-play: AI vs AI — 16 тестов, VP > 0, objectives | 6h | ✅ |
 | [F3.6](f3.6-replay-recording.md) | Replay recording — 18 тестов, ReplayRecorder, SQLite | 3h | ✅ |
 | [F3.7](f3.7-round-viewer.md) | Round viewer: Alpine.js + Canvas replay | 6h | ✅ |
@@ -71,12 +71,7 @@
 | [F3.10](f3.10-waaagh.md) | Waaagh! Army Rule — Orks: +1"M, 5+FNP, +1S melee | 3h | ⚪ |
 | [F3.11](f3.11-ftgg-markerlight.md) | For The Greater Good + Markerlight — Tau: Spotter/Guided | 4h | ⚪ |
 
-**Всего:** 9 features, ~46 часов. 🔧 67%
-
-**Deprecated (заменены F3.2):**
-- [F3.2 — Ork AI](f3.2-ork-ai.md)
-- [F3.3 — T'au AI](f3.3-tau-ai.md)
-- [F3.9 — AdMech AI](f3.9-admech-ai.md)
+**Всего:** 9 features, ~46 часов. 🔧 78%
 
 ---
 
@@ -97,9 +92,10 @@
 | [F4.9](f4.9-generate-opponent.md) | Generate Random Opponent | 2h | ✅ |
 | [F4.11](f4.11-movement-phase.md) | Movement Phase (10ed): Normal/Advance/Fall Back/Remain Stationary | 4h | ✅ |
 | [F4.10](f4.10-leaflet-map.md) | Leaflet map: game format + mission visualization | 6h | ⚪ |
-| [F4.12](f4.12-my-rosters.md) | My Rosters — delete, edit, duplicate | 4h | ⚪ |
+| [F4.12](f4.12-my-rosters.md) | My Rosters — delete, edit, duplicate | 4h | ✅ |
+| [F4.13](f4.13-replays-list.md) | Replays List Page — `/replays` | 1h | ✅ |
 
-**Всего:** 12 features, ~50 часов. ✅ 83%
+**Всего:** 13 features, ~51 часов. ✅ 92%
 
 ---
 
@@ -170,9 +166,9 @@ POST /api/auto-play  (api_replays.py)
 |------|----------|------|--------|
 | **Phase 1** — Combat Engine | 13 | ~36h | ✅ 100% |
 | **Phase 2** — Game System | 13 | ~62h | ✅ 100% |
-| **Phase 3** — AI & Automation | 9 | ~46h | 🔧 67% |
-| **Phase 4** — Web UI Polish | 12 | ~50h | ✅ 83% |
+| **Phase 3** — AI & Automation | 9 | ~46h | 🔧 78% |
+| **Phase 4** — Web UI Polish | 13 | ~51h | ✅ 92% |
 | **Phase 5** — Production | 7 | ~16h | ✅ 100% |
 | **Phase 6** — Monetization | 7 | ~17h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |
-| **Итого** | **~71** | **~267h** | |
+| **Итого** | **~72** | **~268h** | |

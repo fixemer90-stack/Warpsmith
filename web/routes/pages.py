@@ -155,6 +155,16 @@ async def my_rosters(request: Request):
     )
 
 
+@router.get("/replays", response_class=HTMLResponse)
+async def replays_list(request: Request):
+    """Страница со списком реплеев."""
+    return templates.TemplateResponse(
+        request,
+        "replays.html",
+        {"request": request, "title": "Replays — Warpsmith"},
+    )
+
+
 @router.get("/round-viewer/{scenario_id}", response_class=HTMLResponse)
 async def round_viewer(request: Request, scenario_id: str):
     """Просмотр результатов симуляции."""

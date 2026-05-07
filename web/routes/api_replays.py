@@ -412,8 +412,8 @@ async def auto_play_simulation(
             replay_rounds.append(
                 ReplayRound(
                     round=round_num,
-                    start_state={},
-                    end_state={},
+                    start_state=rl.get("start_state", {}),
+                    end_state=rl.get("end_state", {}),
                     events=parsed_events,
                     phase_summary={"phase_logs": phase_logs},
                 )
