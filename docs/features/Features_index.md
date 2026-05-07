@@ -50,8 +50,9 @@
 | [F2.11](f2.11-team-builder-ui.md) | Team Builder UI — Alpine.js, PTS bar | 8h | ✅ |
 | [F2.12](f2.12-leader-compatibility.md) | Leader Compatibility Checker | 3h | ✅ |
 | [F2.13](f2.13-cover-terrain.md) | Cover & Terrain Effects — +1 SV, Ignores Cover, Indirect Fire, Bresenham LoS | 4h | ✅ |
+| [F2.14](f2.14-primary-missions.md) | Primary Missions — The Ritual, Supply Drop, Scorched Earth | 12h | ⚪ |
 
-**Всего:** 13 features, ~62 часов. ✅ 100%
+**Всего:** 14 features, ~74 часов. ✅ 93%
 
 ---
 
@@ -165,10 +166,10 @@ POST /api/auto-play  (api_replays.py)
 | Фаза | Features | Часы | Статус |
 |------|----------|------|--------|
 | **Phase 1** — Combat Engine | 13 | ~36h | ✅ 100% |
-| **Phase 2** — Game System | 13 | ~62h | ✅ 100% |
+| **Phase 2** — Game System | 14 | ~74h | ✅ 93% |
 | **Phase 3** — AI & Automation | 9 | ~46h | 🔧 78% |
 | **Phase 4** — Web UI Polish | 13 | ~51h | ✅ 92% |
 | **Phase 5** — Production | 7 | ~16h | ✅ 100% |
 | **Phase 6** — Monetization | 7 | ~17h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |
-| **Итого** | **~72** | **~268h** | |
+| **Итого** | **~73** | **~280h** | |

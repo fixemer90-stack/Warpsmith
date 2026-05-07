@@ -26,14 +26,13 @@ class TerrainType(Enum):
 
 
 class GamePhase(Enum):
-    """Phases of a Warhammer 40k turn."""
+    """Phases of a Warhammer 40k 10th edition turn."""
 
     COMMAND = "command"
     MOVEMENT = "movement"
     SHOOTING = "shooting"
     CHARGE = "charge"
     FIGHT = "fight"
-    MORALE = "morale"
 
 
 @dataclass
@@ -88,7 +87,7 @@ class PlayerState:
     player_id: str
     name: str
     faction: str
-    command_points: int = 6
+    command_points: int = 0
     victory_points: int = 0
     units: dict[str, UnitState] = field(default_factory=dict)
     stratagems_used: list[str] = field(default_factory=list)
@@ -145,11 +144,8 @@ class GameState:
 
     @property
     def is_game_over(self) -> bool:
-        """Check if the game has ended."""
-        # Game ends after max rounds or if any player reaches 10+ VP
-        return self.current_round > self.max_rounds or any(
-            player.victory_points >= 10 for player in self.players.values()
-        )
+        """Check if the game has ended — rounds limit only."""
+        return self.current_round > self.max_rounds
 
     @property
     def winner(self) -> str | None:

@@ -153,11 +153,14 @@ function resultScreen() {
                 const phaseGroups = {};
 
                 events.forEach((evt) => {
-                    const key = `${round.round || '?'}-${evt.phase || 'general'}`;
+                    // Skip events without a phase (deployment logs, round start, phase transitions)
+                    if (!evt.phase) return;
+
+                    const key = `${round.round || '?'}-${evt.phase}`;
                     if (!phaseGroups[key]) {
                         phaseGroups[key] = {
                             round: round.round || '?',
-                            phase: evt.phase || 'unknown',
+                            phase: evt.phase,
                             events: 0,
                             damage_p1: 0,
                             damage_p2: 0,
@@ -249,29 +252,17 @@ function resultScreen() {
         },
 
         _actorPlayerId(actorId) {
-            // Try to determine which player an actor belongs to
+            // Determine which player an actor belongs to
             if (!this.replay || !this.replay.rounds) return 0;
-            const keys = this._getPlayerKeys();
-            for (let i = 0; i < keys.length; i++) {
-                const roster = this.replay.rosters[keys[i]];
-                if (roster && roster.units) {
-                    for (const unit of roster.units) {
-                        if (unit.unit_id === actorId || unit.name === actorId) {
-                            return i;
-                        }
-                    }
-                }
-            }
-            // Fallback: check first round end_state units
-            const firstRound = this.replay.rounds[0];
-            if (firstRound) {
-                const state = firstRound.start_state || firstRound.end_state;
+            // Check state snapshots for unit by id or name
+            for (const round of this.replay.rounds) {
+                const state = round.start_state || round.end_state;
                 if (state && state.units) {
                     const pids = Object.keys(state.units);
                     for (let i = 0; i < pids.length; i++) {
                         const units = state.units[pids[i]] || [];
                         for (const u of units) {
-                            if (u.id === actorId) {
+                            if (u.id === actorId || u.name === actorId) {
                                 return i;
                             }
                         }

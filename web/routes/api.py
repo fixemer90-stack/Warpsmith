@@ -508,7 +508,8 @@ async def unit_detail(unit_name: str):
         "faction_keywords": getattr(unit, "faction_keywords", []),
         "icon_url": f"/static/icons/{ICON_MAP.get(unit.category.lower(), 'infantry.svg')}",
         "color": CATEGORY_COLORS.get(unit.category.lower(), "#6b7280"),
-        "icon_tags": [unit.category.lower().replace(" ", "-")] + [t for t in _unit_icons(unit) if t != unit.category.lower().replace(" ", "-")],
+        "icon_tags": [unit.category.lower().replace(" ", "-")]
+        + [t for t in _unit_icons(unit) if t != unit.category.lower().replace(" ", "-")],
     }
 
 

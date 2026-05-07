@@ -185,6 +185,18 @@
             No events in this round
         </div>
     </div>
+
+    <!-- Actions -->
+    <div class="card mt-4 flex items-center justify-center gap-4 flex-wrap">
+        <a :href="'/result/' + gameId"
+           class="btn inline-block text-center">
+            📊 View Result
+        </a>
+        <a href="/scenario-setup"
+           class="btn inline-block text-center">
+            🔄 New Simulation
+        </a>
+    </div>
 </div>
 
 <script src="/static/replay_viewer.js"></script>
