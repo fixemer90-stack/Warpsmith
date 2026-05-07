@@ -15,6 +15,7 @@ def _make_unit(
     is_epic_hero: bool = False,
 ) -> Unit:
     """Helper to build a Unit with minimal boilerplate."""
+    min_sq, max_sq = model_count
     return Unit(
         name=name,
         faction="orks",
@@ -27,6 +28,7 @@ def _make_unit(
         objective_control=1,
         points=points,
         model_count=model_count,
+        squad_size={"min": min_sq, "max": max_sq, "step": 1},
         keywords=keywords or ["Infantry", "Orks"],
         can_be_warlord=can_be_warlord,
         is_epic_hero=is_epic_hero,

@@ -178,9 +178,16 @@ class Scenario:
             assigned_objs = set()
 
             if objectives:
-                # For each objective, assign the closest available unit
+                # For each objective, assign the closest unit
+                # Melee units skip objectives if faction prefers aggression
                 obj_remaining = list(range(len(objectives)))
                 assigned_units = set()
+
+                # Check faction preference: aggressive (Orks) → melee hunts enemies
+                profile = self._faction_profiles.get(player.faction)
+                is_aggressive = (
+                    profile is not None and profile.weights.get("charge_aggression", 1.0) > 1.0
+                )
 
                 for _ in range(len(alive_units)):
                     best_unit = None
@@ -190,6 +197,11 @@ class Scenario:
                     for unit in alive_units:
                         if unit.unit_id in assigned_units:
                             continue
+                        # Aggressive factions: melee units skip objectives → hunt enemies
+                        if is_aggressive:
+                            model = self._unit_models.get(unit.unit_id)
+                            if model and self._is_melee_focused(unit, model):
+                                continue
                         for oi in obj_remaining:
                             ox, oy = objectives[oi]
                             d = (unit.position[0] - ox) ** 2 + (unit.position[1] - oy) ** 2
@@ -599,11 +611,11 @@ class Scenario:
                     if self.state.move_unit(unit.unit_id, closest.position):
                         unit.is_engaged = True
                         self.state.game_log.append(
-                            f'{unit.name} charges {closest.name} (rolled {roll} ≥ {dist:.0f})" – engaged!'
+                            f"{unit.name} charges {closest.name} (rolled {roll} ≥ {dist:.0f}) — engaged!"
                         )
                 else:
                     self.state.game_log.append(
-                        f'{unit.name} fails charge (rolled {roll} < {dist:.0f})")'
+                        f"{unit.name} fails charge (rolled {roll} < {dist:.0f})"
                     )
                 unit.has_charged = True
 
