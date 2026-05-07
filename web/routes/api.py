@@ -92,6 +92,13 @@ async def list_units(faction: str = ""):
         unit = wiki.get_unit(name)
 
         if unit:
+            # Derive squad_size from model_count if still default
+            squad = getattr(unit, "squad_size", {"min": 1, "max": 1, "step": 1})
+            if squad.get("min") == 1 and squad.get("max") == 1:
+                min_m, max_m = unit.model_count
+                if min_m != 1 or max_m != 1:
+                    squad = {"min": min_m, "max": max_m, "step": 1}
+
             result.append(
                 {
                     "name": unit.name,
@@ -103,7 +110,10 @@ async def list_units(faction: str = ""):
                     "toughness": unit.toughness,
                     "save": unit.save,
                     "wounds": unit.wounds,
-                    "abilities": unit.abilities,  # Add abilities for team builder modal
+                    "leadership": unit.leadership,
+                    "oc": unit.objective_control,
+                    "squad_size": squad,
+                    "abilities": unit.abilities,
                     "weapons": [
                         {"name": w.name, "type": w.type}
                         for w in (unit.ranged_weapons + unit.melee_weapons)
@@ -498,6 +508,7 @@ async def unit_detail(unit_name: str):
         "faction_keywords": getattr(unit, "faction_keywords", []),
         "icon_url": f"/static/icons/{ICON_MAP.get(unit.category.lower(), 'infantry.svg')}",
         "color": CATEGORY_COLORS.get(unit.category.lower(), "#6b7280"),
+        "icon_tags": [unit.category.lower().replace(" ", "-")] + [t for t in _unit_icons(unit) if t != unit.category.lower().replace(" ", "-")],
     }
 
 

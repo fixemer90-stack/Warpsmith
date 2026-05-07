@@ -13,7 +13,7 @@ load_dotenv()
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -149,6 +149,11 @@ def create_app() -> FastAPI:
     @limiter.exempt
     async def health_check():
         return {"status": "ok"}
+
+    # Favicon
+    @app.get("/favicon.ico")
+    async def favicon():
+        return RedirectResponse("/static/favicon.svg")
 
     return app
 

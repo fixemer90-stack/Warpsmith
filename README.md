@@ -2,7 +2,7 @@
 
 > Симулятор боёв Warhammer 40,000 — Monte Carlo анализ, AI, веб-интерфейс.
 
-**Версия:** 0.7.5 | **Статус:** Phase 0–2 ✅ | Phase 3 🔧 67% | Phase 4 ✅ | Phase 5 ✅
+**Версия:** 0.7.5 | **Статус:** Phase 0–2 ✅ | Phase 3 🔧 67% | Phase 4 ✅ 92% | Phase 5 ✅
 
 Warpsmith — симулятор боёв по правилам Warhammer 40,000 10-й редакции. Wiki-driven: фракции, юниты, оружие, стратагемы — всё из YAML frontmatter в ~490 .md файлах. Monorepo: данные в `simulator/wiki/`, попадают в Docker-образ автоматически.
 
@@ -46,7 +46,7 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - Result screen: Chart.js VP timeline, phase breakdown table
 - ⚪ Waaagh! (Orks) + For The Greater Good (Tau) — спеки готовы
 
-### ✅ Phase 4: Web UI Polish (100%)
+### ✅ Phase 4: Web UI Polish (92%)
 - Faction browser: category/PTS filter, sort, search
 - Unit modal: squad size, loadout, wargear, full datasheet with weapons table
 - Detachment picker with rule preview

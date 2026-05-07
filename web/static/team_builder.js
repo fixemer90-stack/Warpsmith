@@ -5,7 +5,7 @@ function getIconHtml(category, size = 16) {
     const svgMap = window._iconSvgMap || {};
     const svg = svgMap[category] || svgMap['infantry'] || '';
     if (!svg) return '';
-    return svg.replace('<svg ', <svg width="\" height="\" style="fill: currentColor" );
+    return svg.replace('<svg ', '<svg width="' + size + '" height="' + size + '" style="fill: currentColor" ');
 }
 
 function teamBuilder() {
@@ -244,14 +244,14 @@ function teamBuilder() {
             if (this.totalPts > this.ptsLimit) {
                 this.validationErrors = [{
                     code: 'points_exceeded',
-                    message: Total points(\) exceed limit(\)
+                    message: `Total points (${this.totalPts}) exceed limit (${this.ptsLimit})`
                 }];
                 return;
             }
 
             const method = this.editRosterId ? 'PUT' : 'POST';
             const url = this.editRosterId
-                ? /api/rosters /\
+                ? `/api/rosters/${this.editRosterId}`
                 : '/api/rosters';
 
             try {

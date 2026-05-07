@@ -25,7 +25,7 @@ graph TD
     FEAT --> F1["Phase 1: Combat (100%)"]
     FEAT --> F2["Phase 2: Game System (100%)"]
     FEAT --> F3["Phase 3: AI (67%)"]
-    FEAT --> F4["Phase 4: UI (83%)"]
+    FEAT --> F4["Phase 4: UI (92%)"]
     FEAT --> F5["Phase 5: Production (100%)"]
 
     C4 --> C4L1["Уровень 1: Контекст"]
@@ -184,7 +184,7 @@ curl http://127.0.0.1:8000/api/map/tiles
 | Phase 1: Combat Engine | ✅ 100% | Monte Carlo, 13 keywords, /api/simulate |
 | Phase 2: Game System | ✅ 100% | Game Loop, Map, LoS, Cover, Roster CRUD |
 | Phase 3: AI & Automation | 🔧 67% | Greedy AI, Faction Profiles, Autoplay, Replay, Viewer |
-| Phase 4: Web UI Polish | ✅ 83% | Faction browser, Unit modal, Detachments, Synergy, Map, Movement |
+| Phase 4: Web UI Polish | ✅ 92% | Faction browser, Unit modal, Detachments, Synergy, Map, Movement, My Rosters, Replays |
 | Phase 5: Production | ✅ 100% | Docker, Railway, Rate limit, CORS, structlog, CI/CD, Backup |
 | Phase 6: Monetization | ⏳ 0% | Stripe, Ads, Premium Trial |
 | Phase 7: Expansion | ⏳ 0% | Import/Export, i18n, Campaigns |

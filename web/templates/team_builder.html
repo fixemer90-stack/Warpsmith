@@ -87,25 +87,40 @@
                             </span>
                             <span class="text-yellow-400 text-xs shrink-0 ml-2" x-text="unit.points + 'pts'"></span>
                         </div>
-                        <!-- Beginner-friendly simplified stats -->
-                        <div class="beginner-friendly hidden text-xs text-gray-500 mt-1">
-                            <span x-text="unit.category"></span>
-                            <span class="mx-1">·</span>
-                            <span x-text="`Speed ${unit.movement}\u2033 · Tough ${unit.toughness} · Save ${unit.save}+`"></span>
+                        <!-- Beginner-friendly: all stats with full names -->
+                        <div class="beginner-stats hidden text-xs text-gray-400 gap-2 flex-wrap mt-1">
+                            {% raw %}
+                            <span data-stat="M" x-text="'Movement ' + unit.movement + '&quot;'"></span>
+                            <span class="text-gray-600">·</span>
+                            <span data-stat="T" x-text="'Toughness ' + unit.toughness"></span>
+                            <span class="text-gray-600">·</span>
+                            <span data-stat="SV" x-text="'Save ' + unit.save + '+'"></span>
+                            <span class="text-gray-600">·</span>
+                            <span data-stat="W" x-text="'Wounds ' + unit.wounds"></span>
+                            <template x-if="unit.leadership">
+                                <span class="text-gray-600">·</span>
+                            </template>
+                            <template x-if="unit.leadership">
+                                <span data-stat="LD" x-text="'Leadership ' + unit.leadership + '+'"></span>
+                            </template>
+                            <template x-if="unit.oc">
+                                <span class="text-gray-600">·</span>
+                            </template>
+                            <template x-if="unit.oc">
+                                <span data-stat="OC" x-text="'Objective Control ' + unit.oc"></span>
+                            </template>
+                            {% endraw %}
                         </div>
-                        <!-- Intermediate/Expert: full stat line -->
-                        <div class="stat-value text-gray-400 text-xs mt-1 flex gap-2">
-                            <span x-text="unit.category"></span>
-                            <span class="mx-1">|</span>
-                            <span data-stat="M" x-text="`M${unit.movement}`"></span>
-                            <span data-stat="T" x-text="`T${unit.toughness}`"></span>
-                            <span data-stat="SV" x-text="`SV${unit.save}+`"></span>
-                            <span data-stat="W" x-text="`W${unit.wounds}`"></span>
-                        </div>
-                        <!-- Expert-only: LD + OC with tooltips -->
-                        <div class="expert-only hidden text-gray-500 text-xs mt-0.5 flex gap-3">
-                            <span data-stat="LD" x-text="`LD ${unit.leadership || '?'}`"></span>
-                            <span data-stat="OC" x-text="`OC ${unit.oc || '?'}`"></span>
+                        <!-- Expert: compact stat line with all 6 stats -->
+                        <div class="stat-value text-gray-400 text-xs mt-1 flex gap-2 flex-wrap">
+                            {% raw %}
+                            <span data-stat="M" x-text="'M' + unit.movement + '&quot;'"></span>
+                            <span data-stat="T" x-text="'T' + unit.toughness"></span>
+                            <span data-stat="SV" x-text="'SV' + unit.save + '+'"></span>
+                            <span data-stat="W" x-text="'W' + unit.wounds"></span>
+                            <span data-stat="LD" x-show="unit.leadership" x-text="'LD' + unit.leadership + '+'"></span>
+                            <span data-stat="OC" x-show="unit.oc" x-text="'OC' + unit.oc"></span>
+                            {% endraw %}
                         </div>
                     </div>
                 </template>
@@ -199,8 +214,12 @@
                                 flex items-center gap-3">
                         <div class="flex-1">
                             <h2 class="text-lg font-bold text-white" x-text="unitDetail.name"></h2>
-                            <span class="text-xs text-gray-400"
-                                  x-text="unitDetail.category ? unitDetail.category.replace('-', ' ') : ''"></span>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <template x-for="tag in (unitDetail.icon_tags || [])" :key="tag">
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-700 text-gray-300 capitalize"
+                                          x-text="tag.replace('-', ' ')"></span>
+                                </template>
+                            </div>
                         </div>
                         <span class="text-yellow-400 font-bold text-lg"
                               x-text="unitDetail.points + 'pts'"></span>
