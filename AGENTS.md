@@ -1,22 +1,24 @@
 # Agent Rules — Warpsmith
 
 Этот файл управляет поведением AI-агентов при работе над проектом.
-Обновлён: 2026-05-01 (соответствует v0.7.7).
+нетОбновлён: 2026-05-07 (соответствует v0.7.7).
 
 ## Языки и стек
 
-| Слой | Язык | Фреймворк |
-|------|------|-----------|
-| Backend | Python 3.12+ | FastAPI + Pydantic v2 |
-| HTML-шаблоны | Jinja2 | Tailwind CSS (CDN) |
-| Интерактив | JavaScript (ES6) | HTMX 2.x + Alpine.js 3.x |
-| Карта | JavaScript (ES6) | Canvas API (vanilla) |
-| База данных | SQL (SQLite 3) | sqlite3 (stdlib) |
-| Симуляции | Python | NumPy 2.x (Monte Carlo) |
-| Тесты | Python | pytest + pytest-cov |
+| Слой         | Язык             | Фреймворк                |
+| ------------ | ---------------- | ------------------------ |
+| Backend      | Python 3.12+     | FastAPI + Pydantic v2    |
+| HTML-шаблоны | Jinja2           | Tailwind CSS (CDN)       |
+| Интерактив   | JavaScript (ES6) | HTMX 2.x + Alpine.js 3.x |
+| Карта | JavaScript (ES6) | Canvas API (scenario setup, replay) + Leaflet.js F4.10 (mission viz) |
+| База данных  | SQL (SQLite 3)   | sqlite3 (stdlib)         |
+| Симуляции    | Python           | NumPy 2.x (Monte Carlo)  |
+| Тесты        | Python           | pytest + pytest-cov      |
 
-**Зависимости:** fastapi, uvicorn, jinja2, numpy, python-multipart, python-jose[cryptography],
-bcrypt, httpx, python-dotenv, pyyaml, python-frontmatter, pytest, pytest-cov
+**Зависимости:** fastapi, uvicorn[standard], jinja2, numpy, python-multipart,
+PyJWT[crypto], bcrypt, httpx, python-dotenv, pyyaml, pДавython-frontmatter,
+structlog, sentry-sdk[fastapi], slowapi, htmy, pytest, pytest-asyncio, pytest-cov
+**Dev:** ruff, mypy, pre-commit
 
 ## Структура проекта
 
@@ -24,10 +26,16 @@ bcrypt, httpx, python-dotenv, pyyaml, python-frontmatter, pytest, pytest-cov
 simulator/
 ├── main.py                   ← точка входа FastAPI
 ├── pyproject.toml            ← зависимости
-├── ROADMAP.md                ← дорожная карта (7 фаз, ~75 фич)
+├── ROADMAP.md                ← дорожная карта (7 фаз, 77 фич, ~319h)
 ├── AGENTS.md                 ← этот файл
+├── CHANGELOG.md              ← Keep a Changelog
 ├── DEV_INDEX.md              ← хаб разработчика
 ├── wiki/                     ← ~490 .md — данные в репозитории (monorepo)
+│   ├── units/{faction}/      ← юниты (orks, tau, mechanicus)
+│   ├── factions/             ← AI профили фракций
+│   ├── detachments/{faction}/← детачменты
+│   ├── enhancements/{faction}/← энхансменты
+│   └── stratagems/           ← стратагемы
 │
 ├── backend/
 │   ├── auth/                 ← JWT, bcrypt, Cookie helpers
@@ -55,17 +63,18 @@ simulator/
 │   │   ├── dice.py           ← NumPy D6 pool
 │   │   ├── combat.py         ← Hit → Wound → Save → Damage → FNP
 │   │   ├── modifiers.py      ← ±1, Sustained, Lethal, Devastating, rerolls
-│   │   ├── scenario.py       ← Game Loop: Deployment → Round → End
+│   │   ├── scenario.py       ← Game Loop (5 фаз): Command→Movement→Shooting→Charge→Fight
 │   │   └── ai/               ← AI-поведение
 │   │       ├── decision.py   ← Greedy Decision Engine (F3.1)
 │   │       ├── deployment.py ← Zone placement AI (F3.4)
-│   │       ├── faction_ai.py ← Wiki-driven FactionAIProfile g
+│   │       ├── faction_ai.py ← Wiki-driven FactionAIProfile
 │   │       └── autoplay.py   ← AI vs AI full scenario (F3.5)
 │   │
 │   ├── state/                ← Игровое состояние
-│   │   ├── game_state.py     ← Позиции, раны, CP, VP
+│   │   ├── game_state.py     ← Позиции, раны, CP, VP, GamePhase (5 members)
 │   │   ├── map.py            ← 2D-карта (NumPy) + террейн + LoS
-│   │   └── mission.py        ← Миссии, метки целей, условия победы
+│   │   ├── mission.py        ← Миссии, метки целей, условия победы
+│   │   └── roster.py         ← RosterState, validate_roster()
 │   │
 │   ├── db/                   ← SQLite persistence
 │   │   └── database.py       ← SQLite wrapper + migrate() — auto-creates /data/ dir
@@ -76,7 +85,7 @@ simulator/
 │
 ├── web/
 │   ├── routes/               ← FastAPI роуты
-│   │   ├── pages.py          ← HTML: /, /team-builder, /scenario-setup, /pricing, /faction-browser
+│   │   ├── pages.py          ← HTML: /, /team-builder, /scenario-setup, /pricing, /faction-browser, /replays, /my-rosters
 │   │   ├── api.py                    ← core: /api/units, /api/simulate, /api/map, /api/health, /api/factions
 │   │   ├── api_detachments.py        ← /api/detachments
 │   │   ├── api_rosters.py            ← /api/rosters, /api/rosters/generate, /api/rosters/synergies
@@ -84,12 +93,15 @@ simulator/
 │   │   └── auth.py                   ← /register, /login, /logout, /api/me
 │   │
 │   ├── templates/            ← Jinja2-шаблоны
-│   │   ├── base.html         ← Layout + auth header + B/I/E toggle + upgrade banner + ad
+│   │   ├── base.html         ← Layout + auth header + B/E toggle + upgrade banner + ad
 │   │   ├── index.html        ← Главная
 │   │   ├── team_builder.html ← Сбор армии (полная модалка со статами/варгиром/оружием)
-│   │   ├── scenario_setup.html
+│   │   ├── scenario_setup.html← Выбор сторон, миссии, карты
 │   │   ├── faction_browser.html
-│   │   ├── round_viewer.html
+│   │   ├── round_viewer.html ← Пошаговый реплей (Canvas + Alpine)
+│   │   ├── result.html       ← Итог битвы (Chart.js VP timeline, фазы, убийства)
+│   │   ├── replays.html      ← Список реплеев
+│   │   ├── my_rosters.html   ← CRUD сохранённых ростеров
 │   │   ├── pricing.html      ← Free vs Premium
 │   │   ├── auth/
 │   │   │   ├── login.html
@@ -99,7 +111,8 @@ simulator/
 │   │       ├── synergy_panel.html
 │   │       ├── canvas_map.html
 │   │       ├── tooltip_definitions.html
-│   │       └── unit_card.html
+│   │       ├── unit_card.html
+│   │       └── unit_modal.html
 │   │
 │   └── static/
 │       ├── team_builder.js          ← Alpine.js: ростер, PTS, save/load
@@ -107,7 +120,11 @@ simulator/
 │       ├── synergy_hints.js         ← SynergyHints controller (F4.4)
 │       ├── detachment_picker.js     ← DetachmentPicker controller (F4.3)
 │       ├── canvas_map.js            ← CanvasMap controller (F4.5)
-│       ├── progressive_disclosure.js ← B/I/E mode toggle (F4.6)
+│       ├── scenario_setup.js        ← Отправка симуляции
+│       ├── progressive_disclosure.js← B/E mode toggle (F4.6)
+│       ├── my_rosters.js            ← CRUD операции с ростерами
+│       ├── replay_viewer.js         ← Canvas + step-by-step реплей
+│       ├── result_chart.js          ← Chart.js VP график + таблица фаз
 │       ├── tooltips.js              ← STAT_TOOLTIPS + tooltipManager (F4.7)
 │       ├── unit_card.css            ← Стили карточек юнитов
 │       └── icons/*.svg              ← 18 категорийных иконок
@@ -117,19 +134,9 @@ simulator/
 │   │   ├── C4.md             ← 4 уровня контейнеров (+Auth, Billing, OAuth)
 │   │   └── ADR.md            ← 11 архитектурных решений
 │   └── features/
-│       └── Features_index.md ← указатель на все feature-спеки (Phase 1–7)
+│       └── Features_index.md ← указатель на все feature-спеки (Phase 1–7, 77 фич)
 │
-└── tests/                    ← 29 файлов, ~340 тестов
-    ├── test_combat.py
-    ├── test_faction_ai.py
-    ├── test_ai_decision.py
-    ├── test_detachment_picker.py
-    ├── test_synergy_hints.py
-    ├── test_tooltips.py
-    ├── test_progressive_disclosure.py
-    ├── test_unit_modal.py
-    ├── test_docker.py
-    └── ...
+└── tests/                    ← 41 файл, 451+ тестов
 ```
 
 ## Правила разработки
@@ -147,13 +154,14 @@ simulator/
     а не через изменение кода.
   - `web/templates/` — никаких хардкодных `<option>`, `<template x-if>`
     для списков. Только `x-for` с данными из `/api/*`.
-- **SQLite:** raw SQL через `sqlite3` (stdlib). DB_PATH на Railway — `/data/simulator.db`
+- **SQLite:** raw SQL через `sqlite3` (stdlib). DB_PATH на Railway — `/data/simulator.db` с Volume
 - **JS:** ES6, без TypeScript
 
 ### 2. Тесты
 - **pytest** для всех backend-компонентов
 - Каждый модуль engine/ имеет отдельный test-файл
-- `pytest tests/ --cov=backend/engine` — coverage > 80%
+- `pytest tests/ -q` — 451+ тестов, 41 файл
+- Перед запуском: `rm -f *.db-shm *.db-wal` (SQLite WAL recovery)
 - Monte Carlo тесты: `numpy.random.seed(42)` для воспроизводимости
 
 ### 3. Данные
@@ -161,6 +169,8 @@ simulator/
 - Wiki → читается через WikiRegistry при старте → in-memory кэш
 - **Миграции БД:** raw SQL в `Database.migrate()` (CREATE TABLE IF NOT EXISTS)
 - **Кэш:** pickle-файл Registry для быстрого старта
+- **squad_size** в YAML frontmatter: `{min: N, max: M, step: S}` — стоимость points указана за минимальный состав
+- **tags** в YAML frontmatter: список категорий юнита (infantry, vehicle, character, battleline, fly, etc.)
 
 ### 4. Git
 - Репозиторий: `fixemer90-stack/Warpsmith` на GitHub
@@ -175,20 +185,51 @@ simulator/
 - **Alpine.js** — реактивное состояние (x-data, x-model, x-init, x-if)
 - **Tailwind** — через CDN, никаких билдов
 - Карта — `<canvas>` с позиционированием (canvas_map.js)
-- **Progressive Disclosure** — B/I/E режим через CSS-классы `mode-beginner/mode-intermediate/mode-expert`
+- **Progressive Disclosure** — 2 режима: Beginner (полные названия) / Expert (сокращения M,T,SV,W,LD,OC)
+  CSS-классы `.mode-beginner` / `.mode-expert` на body
 - **SVG иконки** — inline через Jinja2 helpers `unit_icon()` и `card_style()`
+- **PTS формула:** `ptsPerModel = unit.points / squad_size.min`.
+  `totalCost = (ptsPerModel + loadoutPts) × squadSize + nobPts`.
+  Итог сохраняется в ростере как pts, `totalPts = sum(pts)`.
+- **icon_tags:** API возвращает ВСЕ tags юнита без фильтрации (user explicitly rejected dedup).
 
-### 6. Добавление новой фракции
+### 6. Game Loop (10th Edition)
+```
+5 фаз: Command → Movement → Shooting → Charge → Fight
+```
+- **Command:** CP generation (+1/player), battle-shock tests (встроены, нет отдельной Morale фазы), VP scoring
+- **Movement:** Normal Move (M"), Advance (+D6", нельзя стрелять/заряжаться), Fall Back (отход, нельзя стрелять/заряжаться)
+- **Shooting:** выбор цели по дальности оружия + LoS, faction target_priority bias
+- **Charge:** 2D6 ≥ расстояние до ближайшего врага. Melee-юниты никогда не Advancят
+- **Fight:** alternating activations, упрощённый melee (1 damage per attack)
+
+### 7. Movement AI
+- Юниты назначаются на объективы (ближайший к юниту)
+- Melee-юниты **пропускают** объективы если `charge_aggression > 1.0` в faction profile → идут на врага
+- Оставшиеся без назначения → ближайший враг
+- Движение останавливается за 1.5 клетки от врага (не входит в Engagement Range)
+- Ranged-юниты всегда держат точки
+
+### 8. PTS валидация (бэкенд)
+`validate_roster()` проверяет:
+- PTS лимит (points / minSquad × squadSize)
+- Squad size в пределах `unit.squad_size.{min, max}`
+- 3 копии юнита (6 для Battleline)
+- Уникальность Epic Heroes
+- Наличие Warlord
+- Непустой ростер
+
+### 9. Добавление новой фракции
 1. Создать `wiki/factions/<Name>.md` — описание фракции + YAML `ai:` секция с weights/behaviors
 2. Создать `wiki/units/<faction>/<Unit Name>.md` — каждый юнит
 3. Создать `wiki/detachments/<faction>/<Detachment>.md` — каждый детачмент (с YAML detachment_rule, stratagems, enhancements)
 4. Создать `wiki/enhancements/<faction>/<Enhancement>.md` — энхансменты
 5. **Код менять не нужно** — AI загружается через `load_profile()` из YAML `ai:` секции, юниты/детачменты — через WikiRegistry
 
-### 7. Деплой
+### 10. Деплой
 - **Production:** Railway (`warpsmith-production.up.railway.app`)
-- Dockerfile + multi-stage build, wiki входит в образ автоматически
-- `DB_PATH=/data/simulator.db` — SQLite на Railway (ephemeral, воссоздаётся при перезапуске)
+- Dockerfile, wiki входит в образ автоматически
+- **DB_PATH=/data/simulator.db** — SQLite на Railway. Необходим Volume, смонтированный в `/data` для персистентности
 - `HOSTING=true` — production-режим (Secure cookie, без reload)
 - Ветка по умолчанию: `main` (Railway тянет из неё)
 

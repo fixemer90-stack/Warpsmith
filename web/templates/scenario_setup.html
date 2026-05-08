@@ -5,7 +5,7 @@
     <script>
         window._rosters = {{ rosters_json | safe }};
     </script>
-    <script src="/static/canvas_map.js"></script>
+    <script src="/static/map_view.js"></script>
 
     <h1 class="text-2xl font-bold text-white mb-6">🗺 Scenario Setup</h1>
 
@@ -23,10 +23,10 @@
 
                 <select x-model="player1Roster"
                         class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm mb-2">
-                    <option value="">-- Select your roster --</option>
-                    {% for r in rosters %}
-                    <option value="{{ r.id }}">{{ r.name }} ({{ r.faction }}, {{ r.pts_limit }}pts)</option>
-                    {% endfor %}
+                    <option value="">-- Select roster --</option>
+                    <template x-for="r in compatibleRosters" :key="r.id">
+                        <option :value="r.id" x-text="`${r.name} (${r.faction}, ${r.pts_limit}pts)`"></option>
+                    </template>
                 </select>
 
                 <div class="text-xs text-gray-500">
@@ -45,9 +45,9 @@
                 <select x-model="player2Roster" @change="clearOpponent()"
                         class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm mb-2">
                     <option value="">-- Select saved roster --</option>
-                    {% for r in rosters %}
-                    <option value="{{ r.id }}">{{ r.name }} ({{ r.faction }}, {{ r.pts_limit }}pts)</option>
-                    {% endfor %}
+                    <template x-for="r in compatibleRosters" :key="r.id">
+                        <option :value="r.id" x-text="`${r.name} (${r.faction}, ${r.pts_limit}pts)`"></option>
+                    </template>
                 </select>
 
                 <div class="flex items-center gap-2 mb-2">
@@ -115,7 +115,7 @@
                         <span class="text-sm font-bold text-white">Purge the Foe</span>
                         <span x-show="mission === 'purge-the-foe'" class="ml-auto w-3 h-3 rounded-full bg-red-500"></span>
                     </div>
-                    <div class="text-xs text-gray-400 leading-relaxed">No objectives — pure carnage. VP = % of enemy army destroyed. Search & Destroy deployment.</div>
+                    <div class="text-xs text-gray-400 leading-relaxed">5 objectives + kill scoring — VP = % of enemy army destroyed. Search & Destroy deployment.</div>
                 </button>
 
                 <!-- Take and Hold -->
@@ -163,7 +163,7 @@
     </div>
 
     <!-- Step 3: Battlefield Preview -->
-    {% include "partials/canvas_map.html" %}
+    {% include "partials/map_view.html" %}
 
     <!-- Start button -->
     <button @click="startSimulation()"
