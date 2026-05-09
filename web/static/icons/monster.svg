@@ -1,10 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <!-- Monster maw/claw -->
-  <path d="M2 12c0-5.523 4.477-10 10-10s10 4.477 10 10"/>
-  <path d="M4 14l3-2 2 3 2-4 3 3 2-3 4 3"/>
-  <path d="M2 14h20"/>
-  <circle cx="9" cy="8" r="1.5" fill="currentColor"/>
-  <circle cx="15" cy="8" r="1.5" fill="currentColor"/>
-  <path d="M6 18c1 .5 3 .5 4 0"/>
-  <path d="M14 18c1 .5 3 .5 4 0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title>Monster unit class icon</title>
+<defs>
+  <style>
+    .bg{fill:#12100e;}
+    .ring{fill:none;stroke:#d8c27a;stroke-width:6;stroke-linejoin:round;}
+    .gold{fill:#d8c27a;}
+    .dark{fill:#12100e;}
+    .line{fill:none;stroke:#d8c27a;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+    .thin{fill:none;stroke:#d8c27a;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;}
+    .cut{fill:none;stroke:#12100e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;}
+  </style>
+</defs>
+<path class="bg" d="M64 6 111 24v38c0 30-19 51-47 60C36 113 17 92 17 62V24L64 6Z"/>
+<path class="ring" d="M64 10 106 27v35c0 27-17 46-42 55-25-9-42-28-42-55V27L64 10Z"/>
+
+<path class="gold" d="M36 87 47 35l17 22 17-22 11 52H36Z"/>
+<path class="dark" d="M50 66h9v9h-9zM69 66h9v9h-9zM55 84h18v8H55z"/>
+<path class="gold" d="M43 38 29 22l24 7zM85 38l14-16-24 7z"/>
+<path class="line" d="M36 95h56"/>
+
 </svg>

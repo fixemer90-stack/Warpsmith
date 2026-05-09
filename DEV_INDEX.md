@@ -11,7 +11,7 @@
 graph TD
     DEV["📌 DEV_INDEX.md<br/>← вы здесь"] --> ROAD["🛣️ ROADMAP.md<br/>дорожная карта"]
     DEV --> AGENTS["🤖 AGENTS.md<br/>правила для AI-агентов"]
-    DEV --> FEAT["📝 Features Index<br/>61 feature specs"]
+    DEV --> FEAT["📝 Features Index<br/>62 feature specs"]
     DEV --> C4["🏗 C4.md<br/>архитектура (Mermaid)"]
     DEV --> ADR["⚖️ ADR.md<br/>11 архитектурных решений"]
     DEV --> SRS["📖 SRS.md<br/>системные требования"]
@@ -25,7 +25,7 @@ graph TD
     AGENTS --> WIKI["Wiki-driven — YAML frontmatter"]
 
     FEAT --> F1["Phase 1: Combat (100%)"]
-    FEAT --> F2["Phase 2: Game System (100%)"]
+    FEAT --> F2["Phase 2: Game System (93%)"]
     FEAT --> F3["Phase 3: AI (78%)"]
     FEAT --> F4["Phase 4: UI (100%)"]
     FEAT --> F5["Phase 5: Production (100%)"]
@@ -53,7 +53,7 @@ graph TD
 |---|----------|------------|
 | 1 | **DEV_INDEX.md** | 📌 Хаб всех документов (этот файл) |
 | 2 | **AGENTS.md** | 🤖 Правила разработки для AI-агентов |
-| 3 | **ROADMAP.md** | 🛣️ Дорожная карта: 7 фаз, 81 фича |
+| 3 | **ROADMAP.md** | 🛣️ Дорожная карта: 7 фаз, 82 фичи |
 | 4 | **ROADMAP.html** | 🖥️ Визуальная дорожная карта |
 | 5 | **CHANGELOG.md** | 📜 История изменений (Keep a Changelog) |
 | 6 | **RELEASE.md** | 📦 Политика релизов (ZeroVer, GitHub Flow) |
@@ -61,10 +61,11 @@ graph TD
 | 8 | **docs/architecture/ADR.md** | ⚖️ 11 архитектурных решений |
 | 9 | **docs/requirements/SRS.md** | 📖 7 разделов требований |
 | 10 | **docs/requirements/UX.md** | 🎨 UX-дизайн |
-| 11 | **docs/deployment.md** | ☁️ Деплой: Railway, Dokku, self-host |
-| 12 | **docs/features/Features_index.md** | 📝 Индекс feature-спек (61 specs; roadmap 78+ фич) |
-| 13 | **main.py** | 💻 Точка входа FastAPI |
-| 14 | **pyproject.toml** | 📦 Зависимости + ruff + mypy + pytest |
+| 11 | **docs/requirements/code-review-plan.md** | 🔎 План полной проверки кода: 25 atomic review tasks |
+| 12 | **docs/deployment.md** | ☁️ Деплой: Railway, Dokku, self-host |
+| 13 | **docs/features/Features_index.md** | 📝 Индекс feature-спек (62 specs; roadmap 82+ фич) |
+| 14 | **main.py** | 💻 Точка входа FastAPI |
+| 15 | **pyproject.toml** | 📦 Зависимости + ruff + mypy + pytest |
 
 ## 🏗 Проект
 
@@ -120,7 +121,7 @@ simulator/
 ├── docs/
 │   ├── architecture/      C4.md, ADR.md
 │   ├── requirements/      SRS.md, UX.md
-│   ├── features/          61 specs (F1.1–F6.7)
+│   ├── features/          62 specs (F1.1–F6.7 + F2.18 terrain requirement)
 │   └── deployment.md
 │
 └── wiki/                  480 .md — данные в репозитории (monorepo)
@@ -144,6 +145,7 @@ simulator/
 | Изменить Feature Gate | ADR-010 | `backend/billing/plans.py` |
 | Добавить страницу | ADR-002 (HTMX) | `web/templates/` + `web/routes/pages.py` |
 | Поправить БД | ADR-003, SRS.md | `backend/db/database.py` |
+| Править terrain / cover / LoS | F2.13 → F2.18 + raw Terrain | `backend/state/map.py`, `backend/state/line_of_sight.py`, `backend/engine/combat.py` |
 | Написать тест | AGENTS.md | `tests/test_*.py` |
 | Создать эндпоинт API | C4.md | `web/routes/api.py` (core) или `api_rosters.py`/`api_replays.py`/`api_detachments.py` |
 

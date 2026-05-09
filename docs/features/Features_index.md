@@ -54,8 +54,9 @@
 | [F2.15](f2.15-primary-missions.md) | Primary Missions — The Ritual, Supply Drop, Scorched Earth | 12h | ⚪ |
 | [F2.16](f2.16-shooting-refinements.md) | Shooting Refinements — rapid fire range, cover modifiers | 4h | ⚪ |
 | [F2.17](f2.17-secondary-missions.md) | Secondary Missions — Fixed & Tactical (Pariah Nexus, 18 миссий) | 16h | ⚪ |
+| [F2.18](f2.18-terrain-mechanics-10e.md) | Terrain Mechanics 10e — ruins footprint LoS, woods/craters/barricades, Plunging Fire | 10h | ⚪ |
 
-**Всего:** 18 features, ~113 часов. ✅ 72%
+**Всего:** 19 features, ~123 часов. ✅ 68%
 
 ---
 
@@ -169,10 +170,10 @@ POST /api/auto-play  (api_replays.py)
 | Фаза | Features | Часы | Статус |
 |------|----------|------|--------|
 | **Phase 1** — Combat Engine | 13 | ~36h | ✅ 100% |
-| **Phase 2** — Game System | 18 | ~113h | ✅ 72% |
+| **Phase 2** — Game System | 19 | ~123h | ✅ 68% |
 | **Phase 3** — AI & Automation | 9 | ~46h | 🔧 78% |
 | **Phase 4** — Web UI Polish | 14 | ~57h | ✅ 100% |
 | **Phase 5** — Production | 7 | ~16h | ✅ 100% |
 | **Phase 6** — Monetization | 7 | ~17h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |
-| **Итого** | **~77** | **~319h** | |
+| **Итого** | **~78** | **~329h** | |
