@@ -1,7 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="speed-freek icon">
-<title>speed-freek</title>
-<defs><style>.bg{fill:#151515}.fg{fill:#e8e2d0}.st{stroke:#e8e2d0;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;fill:none}.dark{fill:#151515}.acc{fill:#b8a66a}</style></defs>
-<path class="bg" d="M64 6 112 24v38c0 30-20 50-48 60C36 112 16 92 16 62V24L64 6Z"/>
-<path class="st" d="M64 8 110 25v37c0 28-19 48-46 58-27-10-46-30-46-58V25L64 8Z"/>
-<path class="fg" d="M27 78h74v13H27zM39 61h39l14 17H31l8-17Z"/><circle class="fg" cx="41" cy="94" r="11"/><circle class="fg" cx="87" cy="94" r="11"/><circle class="dark" cx="41" cy="94" r="5"/><circle class="dark" cx="87" cy="94" r="5"/><path class="acc" d="M75 41l26 6-22 12 5-10z"/><path class="st" d="M26 56h17M20 67h14M17 80h11"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title>Speed Freek unit class icon</title>
+<defs>
+  <style>
+    .bg{fill:#12100e;}
+    .ring{fill:none;stroke:#d8c27a;stroke-width:6;stroke-linejoin:round;}
+    .gold{fill:#d8c27a;}
+    .dark{fill:#12100e;}
+    .line{fill:none;stroke:#d8c27a;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+    .thin{fill:none;stroke:#d8c27a;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;}
+    .cut{fill:none;stroke:#12100e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;}
+  </style>
+</defs>
+<path class="bg" d="M64 6 111 24v38c0 30-19 51-47 60C36 113 17 92 17 62V24L64 6Z"/>
+<path class="ring" d="M64 10 106 27v35c0 27-17 46-42 55-25-9-42-28-42-55V27L64 10Z"/>
+
+<path class="gold" d="M34 68h55l9 17H30l4-17Z"/><circle class="dark" cx="45" cy="87" r="9"/><circle class="dark" cx="82" cy="87" r="9"/><path class="gold" d="M49 49h29l10 19H41l8-19Z"/><path class="dark" d="M57 55h15l5 9H52z"/><path class="line" d="M31 50H18M35 39H22M97 56h13"/><path class="gold" d="M85 39l13 7-13 7z"/>
 </svg>
