@@ -158,6 +158,7 @@ simulator/
 - **JS:** ES6, без TypeScript
 - **Warlord для ростеров:** если в ростере несколько Character/Warlord-capable юнитов, Team Builder и API требуют ровно один явный `is_warlord: true`; в roster panel рядом с eligible юнитами есть кнопка `👑`, при добавлении второго eligible юнита прежний implicit выбор сбрасывается, Save disabled до клика по одной короне; флаг хранится в `units` JSON вместе с loadout/weapons/pts.
 - **Generated opponent:** `/api/rosters/generate` обязан возвращать save-and-play ростер: `squad_size` из YAML `unit.squad_size["min"]`, ровно один Warlord, points в лимите, Scenario Setup редиректит по top-level `game_id`.
+- **Terrain 10e:** F2.13 — упрощённый baseline. Для новых terrain/cover/LoS задач сначала читать `wiki/raw/papers/Terrain.md` и `docs/features/f2.18-terrain-mechanics-10e.md`: ruins блокируют LoS через footprint, woods дают cover/not fully visible без полного LoS block, barricades дают 2" engagement только через barricade, Plunging Fire даёт AP -1 с высоты >6".
 
 ### 2. Тесты
 - **pytest** для всех backend-компонентов

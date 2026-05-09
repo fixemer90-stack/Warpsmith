@@ -2,7 +2,7 @@
 
 > Симулятор боёв Warhammer 40,000 — Monte Carlo анализ, AI, веб-интерфейс.
 
-**Версия:** 0.7.7 | **Статус:** Phase 1 ✅ | Phase 2 ✅ | Phase 3 🔧 | Phase 4 ✅ | Phase 5 ✅
+**Версия:** 0.7.7 | **Статус:** Phase 1 ✅ | Phase 2 🔧 | Phase 3 🔧 | Phase 4 ✅ | Phase 5 ✅
 
 Warpsmith — симулятор боёв по правилам Warhammer 40,000 10-й редакции. Wiki-driven: фракции, юниты, оружие, стратагемы — всё из YAML frontmatter в ~490 .md файлах. Monorepo: данные в `simulator/wiki/`, попадают в Docker-образ автоматически.
 
@@ -26,10 +26,11 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - POST `/api/simulate` и `/api/simulate-unit` — JSON с PMF
 - PMF chart (Chart.js), 13 тестов F1.13
 
-### ✅ Phase 2: Game System (100%)
+### 🔧 Phase 2: Game System (93%)
 - Game State: фазы, позиции, CP, VP, ранения
 - 2D-карта (NumPy), Bresenham LoS ray casting
 - Cover & Terrain Effects: +1 SV, Ignores Cover, Indirect Fire -1 to hit
+- F2.18 Terrain Mechanics 10e requirement: ruins footprint LoS, woods/craters/barricades, Plunging Fire
 - 3 миссии: Only War, Purge the Foe, Take and Hold
 - Game Loop (5 фаз): Command (CP + Battle-shock) → Movement → Shooting → Charge → Fight
 - Battle-shock + CP generation + stratagem resolution
@@ -88,7 +89,7 @@ uv run python -m pytest tests/ -q
 ```
 simulator/
 ├── DEV_INDEX.md              хаб разработчика
-├── ROADMAP.md                дорожная карта (7 фаз, 81 фича)
+├── ROADMAP.md                дорожная карта (7 фаз, 82 фичи)
 ├── main.py                   FastAPI приложение
 ├── wiki/                     ~490 .md — данные в репозитории (monorepo)
 ├── backend/
@@ -111,7 +112,7 @@ simulator/
 │   ├── templates/            Jinja2 + HTMX partials
 │   └── static/               JS (Alpine.js), SVG icons (18)
 ├── tests/                    41 файл, 454 теста
-└── docs/                     architecture · requirements · features (61 specs)
+└── docs/                     architecture · requirements · features (62 specs)
 ```
 
 ## 📚 Документация
@@ -119,14 +120,15 @@ simulator/
 | Документ | О чём |
 |----------|-------|
 | [DEV_INDEX.md](DEV_INDEX.md) | Хаб разработчика: запуск, API, тесты |
-| [ROADMAP.md](ROADMAP.md) | Дорожная карта (7 фаз, 77 фич, 319h) |
+| [ROADMAP.md](ROADMAP.md) | Дорожная карта (7 фаз, 82 фичи, 339h) |
 | [ROADMAP.html](ROADMAP.html) | Визуальная дорожная карта |
 | [RELEASE.md](RELEASE.md) | Политика релизов (ZeroVer, GitHub Flow) |
 | [CHANGELOG.md](CHANGELOG.md) | История изменений (Keep a Changelog) |
 | [AGENTS.md](AGENTS.md) | Правила разработки для AI-агентов |
 | [docs/architecture/C4.md](docs/architecture/C4.md) | C4-архитектура (4 уровня) |
 | [docs/architecture/ADR.md](docs/architecture/ADR.md) | 11 архитектурных решений |
-| [docs/features/Features_index.md](docs/features/Features_index.md) | 61 feature-спецификация |
+| [docs/requirements/code-review-plan.md](docs/requirements/code-review-plan.md) | План полной проверки кода: 25 атомизированных review-задач |
+| [docs/features/Features_index.md](docs/features/Features_index.md) | 62 feature-спецификации |
 | [wiki/WIKI_INDEX.md](wiki/WIKI_INDEX.md) | Индекс вики-данных |
 
 ## 📊 Статистика
@@ -138,5 +140,5 @@ simulator/
 - **Энхансментов:** 88
 - **Детачментов:** 23
 - **API эндпоинтов:** 25+ (4 модуля: api, api_detachments, api_rosters, api_replays)
-- **Фаз:** 7 · 77 фич · ~319 часов
+- **Фаз:** 7 · 82 фичи · ~339 часов
 - **SVG иконок:** 18 категорий

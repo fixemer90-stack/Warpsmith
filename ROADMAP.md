@@ -1,7 +1,7 @@
 # Roadmap — Warpsmith
 
 > Дорожная карта разработки. Версия 0.7.7
-> **Статус:** Phase 0 ✅ | Phase 1 ✅ | Phase 2 ✅
+> **Статус:** Phase 0 ✅ | Phase 1 ✅ | Phase 2 🔧
 
 ---
 
@@ -59,7 +59,7 @@
 ## 🔧 Phase 2: Game System
 
 ```
-[████████████████████] 100% · 13 features
+[███████████████████░] 93% · 14 features (13 done, 1 pending)
 ```
 
 **Цель:** Полный Game Loop с картой, миссиями, ростерами.
@@ -79,6 +79,7 @@
 | 2.11 | ✅ | Team Builder UI: faction picker, unit modal, PTS bar | 8h |
 | 2.12 | ✅ | Synergy hints: leader compatibility, transport capacity | 3h |
 | 2.13 | ✅ | Cover & Terrain Effects: +1SV cover, Ignores Cover, Indirect Fire -1 to hit, Bresenham LoS | 4h |
+| 2.18 | ⚪ | Terrain Mechanics 10e: ruins footprint LoS, woods/craters/barricades, Plunging Fire | 10h |
 
 
 ---
@@ -205,10 +206,10 @@
 | ---------------------- | -------- | --------- | ------ |
 | **0. Foundation**      | 12       | ~40ч      | ✅ 100% |
 | **1. Combat Engine**   | 13       | ~70ч      | ✅ 100% |
-| **2. Game System**     | 13       | ~62ч      | ✅ 100% |
+| **2. Game System**     | 14       | ~72ч      | 🔧 93%  |
 | **3. AI & Automation** | 9        | ~46ч      | 🔧 67%  |
 | **4. Web UI Polish**   | 14       | ~57ч      | ✅ 100% |
 | **5. Production**      | 7        | ~15ч      | ✅ 100% |
 | **6. Monetization**    | 7        | ~15ч      | ⏳ 0%   |
 | **7. Expansion**       | 10       | ~40ч      | ⏳ 0%   |
-| **Итого**              | **~81**  | **~329ч** |        |
+| **Итого**              | **~82**  | **~339ч** |        |
