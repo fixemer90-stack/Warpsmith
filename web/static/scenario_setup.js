@@ -272,7 +272,9 @@ function scenarioSetup() {
                             faction: this.player2Generated.faction || '',
                             pts_limit: this.player2Generated.total_pts || 2000,
                             units: (this.player2Generated.units || []).map(u => ({
-                                unit_name: u.unit_name, squad_size: u.squad_size,
+                                unit_name: u.unit_name,
+                                squad_size: u.squad_size,
+                                is_warlord: !!u.is_warlord,
                             })),
                             is_public: false,
                         }),
@@ -292,8 +294,9 @@ function scenarioSetup() {
                 const resp = await fetch(`/api/auto-play?${params}`, { method: 'POST' });
                 if (resp.ok) {
                     const data = await resp.json();
-                    if (data.result && data.result.game_id)
-                        window.location.href = `/result/${data.result.game_id}`;
+                    const gameId = data.game_id || data.result?.game_id;
+                    if (gameId)
+                        window.location.href = `/result/${gameId}`;
                     else alert('Simulation completed, but no game_id returned');
                 } else {
                     const err = await resp.json().catch(() => ({}));

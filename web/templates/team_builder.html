@@ -146,6 +146,11 @@
             </div>
 
             <!-- Unit List -->
+            <template x-if="warlordRequired && !hasValidWarlordSelection">
+                <div class="mb-3 bg-amber-900/30 border border-amber-700 rounded p-2 text-amber-200 text-xs">
+                    Multiple Characters detected. Click one 👑 crown in the roster to choose the Warlord.
+                </div>
+            </template>
             <div class="space-y-2 max-h-80 overflow-y-auto">
                 <template x-for="(entry, idx) in roster" :key="idx">
                     <div class="rounded p-2 flex justify-between items-center"
@@ -156,8 +161,25 @@
                             <span class="text-white text-sm" x-text="entry.name"></span>
                             <span class="text-gray-400 text-xs ml-1"
                                   x-text="`x${entry.squad_size}`"></span>
+                            <template x-if="entry.is_warlord">
+                                <span class="ml-1 text-[10px] px-1.5 py-0.5 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-600/60">
+                                    Warlord
+                                </span>
+                            </template>
                         </div>
                         <div class="flex items-center gap-2">
+                            <template x-if="entry.can_be_warlord">
+                                <button type="button"
+                                        @click.stop="setWarlord(idx)"
+                                        class="text-xs rounded px-1.5 py-0.5 border transition"
+                                        :title="entry.is_warlord ? 'Selected Warlord' : 'Set as Warlord'"
+                                        :aria-label="entry.is_warlord ? 'Selected Warlord' : 'Set as Warlord'"
+                                        :class="entry.is_warlord
+                                            ? 'bg-yellow-500/20 border-yellow-500 text-yellow-300'
+                                            : 'border-gray-600 text-gray-500 hover:text-yellow-300 hover:border-yellow-500'">
+                                    👑
+                                </button>
+                            </template>
                             <span class="text-yellow-400 text-xs" x-text="entry.pts + 'pts'"></span>
                             <button @click="removeUnit(idx)" class="text-red-400 text-xs hover:text-red-300">✕</button>
                         </div>

@@ -2,7 +2,7 @@
 
 > Симулятор боёв Warhammer 40,000 — Monte Carlo анализ, AI, веб-интерфейс.
 
-**Версия:** 0.7.7 | **Статус:** Phase 1 ✅ | Phase 2 🔧 | Phase 3 🔧 | Phase 4 ✅ | Phase 5 ✅
+**Версия:** 0.7.7 | **Статус:** Phase 1 ✅ | Phase 2 ✅ | Phase 3 🔧 | Phase 4 ✅ | Phase 5 ✅
 
 Warpsmith — симулятор боёв по правилам Warhammer 40,000 10-й редакции. Wiki-driven: фракции, юниты, оружие, стратагемы — всё из YAML frontmatter в ~490 .md файлах. Monorepo: данные в `simulator/wiki/`, попадают в Docker-образ автоматически.
 
@@ -46,17 +46,18 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 - Result screen: Chart.js VP timeline, phase breakdown table
 - ⚪ Waaagh! (Orks) + For The Greater Good (Tau) — спеки готовы
 
-### ✅ Phase 4: Web UI Polish (92%)
+### ✅ Phase 4: Web UI Polish (100%)
 - Faction browser: category/PTS filter, sort, search
 - Unit modal: squad size, loadout, wargear, full datasheet with weapons table
-- Detachment picker with rule preview
+- Compact detachment picker: rule preview + stratagem/enhancement badges
 - Synergy hints: leader compatibility, transport capacity
 - Canvas map: terrain tiles + deploy zones interactivity
 - Progressive Disclosure: Beginner / Expert modes
 - Stat tooltips on every stat (M/T/SV/W/LD/OC) with glossary modal
 - SVG icons (18 категорий, inline) в unit cards
-- Generate Random Opponent: AI-ростер в 1 клик
+- Generate Random Opponent: AI-ростер в 1 клик, валидный Warlord, корректный squad_size, запуск симуляции
 - Movement Phase (10ed): Normal Move / Advance / Fall Back / Remain Stationary
+- Team Builder: явный выбор Warlord при нескольких Character/Warlord-capable юнитах
 
 ### ✅ Phase 5: Production (100%)
 - Dockerfile + docker-compose, single-stage build
@@ -79,7 +80,7 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 ```bash
 cd simulator
 uv run python -m pytest tests/ -q
-# → 451 тестов (41 файл)
+# → 454 теста (41 файл), 3 skipped
 ```
 
 ## 📁 Структура
@@ -109,8 +110,8 @@ simulator/
 │   │   └── pages.py          HTML pages
 │   ├── templates/            Jinja2 + HTMX partials
 │   └── static/               JS (Alpine.js), SVG icons (18)
-├── tests/                    41 файл, 451 тестов
-└── docs/                     architecture · requirements · features (50+ specs)
+├── tests/                    41 файл, 454 теста
+└── docs/                     architecture · requirements · features (61 specs)
 ```
 
 ## 📚 Документация
@@ -125,12 +126,12 @@ simulator/
 | [AGENTS.md](AGENTS.md) | Правила разработки для AI-агентов |
 | [docs/architecture/C4.md](docs/architecture/C4.md) | C4-архитектура (4 уровня) |
 | [docs/architecture/ADR.md](docs/architecture/ADR.md) | 11 архитектурных решений |
-| [docs/features/Features_index.md](docs/features/Features_index.md) | 50+ feature-спецификаций |
+| [docs/features/Features_index.md](docs/features/Features_index.md) | 61 feature-спецификация |
 | [wiki/WIKI_INDEX.md](wiki/WIKI_INDEX.md) | Индекс вики-данных |
 
 ## 📊 Статистика
 
-- **Тестов:** 451 (41 файл)
+- **Тестов:** 454 (41 файл), 3 skipped
 - **Юнитов:** 160 (Orks 81, Tau 40, AdMech 39)
 - **Wiki:** ~490 .md — в репозитории (`simulator/wiki/`)
 - **Стратагем:** 114 (Core 13, Orks 42, AdMech 42, Tau 19)

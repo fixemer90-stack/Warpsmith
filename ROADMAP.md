@@ -8,7 +8,7 @@
 ## ✅ Phase 0: Foundation
 
 ```
-[████████████████████] 100% · 12 features
+[████████████████████] 100% · 14 features
 ```
 
 ### Features
@@ -116,7 +116,7 @@
 ## ✅ Phase 4: Web UI Polish
 
 ```
-[████████████████████] 100% · 11 features
+[████████████████████] 100% · 14 features
 ```
 
 **Цель:** Полноценное веб-приложение, готовое к пользователям. ✅ Верифицировано: все фичи рабочие.
@@ -125,14 +125,17 @@
 |---|--------|------|------|
 | 4.1 | ✅ | Faction browser + category/PTS filter | 4h |
 | 4.2 | ✅ | Unit modal: squad size, loadout, wargear, full datasheet | 6h |
-| 4.3 | ✅ | Detachment picker with rule preview | 3h |
+| 4.3 | ✅ | Compact detachment picker: rule preview + stratagem/enhancement badges | 3h |
 | 4.4 | ✅ | Synergy hints: leader compatibility, transport capacity | 4h |
 | 4.5 | ✅ | Canvas map: terrain tiles + deploy zones interactivity (superseded by F4.14) | 8h |
 | 4.6 | ✅ | Progressive Disclosure: Beginner / Intermediate / Expert | 4h |
 | 4.7 | ✅ | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h |
 | 4.8 | ✅ | SVG icons integration in unit cards | 2h |
-| 4.9 | ✅ | Generate Random Opponent | 2h |
+| 4.9 | ✅ | Generate Random Opponent: valid Warlord, squad_size, auto-play redirect | 2h |
+| 4.10 | ✅ | Leaflet map: game format + mission visualization (superseded by F4.14) | 6h |
 | 4.11 | ✅ | Movement Phase (10ed): Normal Move / Advance / Fall Back / Remain Stationary, AI objective distribution | 4h |
+| 4.12 | ✅ | My Rosters + Team Builder explicit Warlord persistence; edit mode uses `api_rosters.py` decoded units | 4h |
+| 4.13 | ✅ | Replays List Page — `/replays` | 1h |
 | 4.14 | ✅ | Strategic battlefield map: mission objectives + roster units + true scale | 6h |
 
 ---
@@ -204,7 +207,7 @@
 | **1. Combat Engine**   | 13       | ~70ч      | ✅ 100% |
 | **2. Game System**     | 13       | ~62ч      | ✅ 100% |
 | **3. AI & Automation** | 9        | ~46ч      | 🔧 67%  |
-| **4. Web UI Polish**   | 10       | ~41ч      | ✅ 100% |
+| **4. Web UI Polish**   | 14       | ~57ч      | ✅ 100% |
 | **5. Production**      | 7        | ~15ч      | ✅ 100% |
 | **6. Monetization**    | 7        | ~15ч      | ⏳ 0%   |
 | **7. Expansion**       | 10       | ~40ч      | ⏳ 0%   |

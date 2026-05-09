@@ -68,3 +68,10 @@ class TestGenerateRoster:
         for unit in roster["units"]:
             assert "unit_name" in unit
             assert "squad_size" in unit
+
+    def test_generate_roster_marks_exactly_one_warlord(self):
+        """Generated rosters include explicit Warlord metadata for saving/simulation."""
+        resp = client.post("/api/rosters/generate", json={"faction": "orks", "pts_limit": 500})
+        assert resp.status_code == 200
+        units = resp.json()["roster"]["units"]
+        assert sum(1 for u in units if u.get("is_warlord")) == 1

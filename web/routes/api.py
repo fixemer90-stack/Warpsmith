@@ -1,19 +1,14 @@
 """JSON API для симуляции."""
 
 import contextlib
-import json
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
-from backend.auth import User, get_current_user
-from backend.billing.plans import UserFeatures
-from backend.db.database import db
 from backend.engine.combat import MultiAttackResult, simulate_unit_attack, simulate_weapon_attack
 from backend.engine.dice import DicePool
 from backend.loader.registry import registry as wiki
-from backend.state.roster import validate_roster
 
 router = APIRouter()
 
@@ -110,6 +105,8 @@ async def list_units(faction: str = ""):
                     "oc": unit.objective_control,
                     "squad_size": squad,
                     "abilities": unit.abilities,
+                    "can_be_warlord": unit.can_be_warlord,
+                    "is_leader": unit.is_leader,
                     "weapons": [
                         {"name": w.name, "type": w.type}
                         for w in (unit.ranged_weapons + unit.melee_weapons)
@@ -436,6 +433,8 @@ async def unit_detail(unit_name: str):
         "leadership": unit.leadership,
         "oc": unit.objective_control,
         "abilities": abilities,
+        "can_be_warlord": unit.can_be_warlord,
+        "is_leader": unit.is_leader,
         "squad_size": squad_size,
         "wargear_options": extended_wargear_options,
         "nob_options": nob_options,
@@ -668,106 +667,3 @@ async def list_factions():
             {"id": f, "label": labels.get(f, f.replace("-", " ").title())} for f in faction_names
         ]
     }
-
-
-# ── Roster CRUD ─────────────────────────────────────────
-
-
-class RosterUnit(BaseModel):
-    unit_name: str
-    squad_size: int = 1
-
-
-class RosterCreate(BaseModel):
-    name: str
-    faction: str
-    pts_limit: int = 2000
-    detachment: str | None = None
-    units: list[RosterUnit]
-    is_public: bool = False
-
-
-class RosterUpdate(BaseModel):
-    name: str | None = None
-    units: list[RosterUnit] | None = None
-    is_public: bool | None = None
-
-
-class SynergyCheck(BaseModel):
-    type: str  # "leader" | "transport" | "synergy"
-    severity: str  # "info" | "warning" | "error"
-    source_unit: str
-    target_unit: str | None = None
-    message: str
-    icon: str = "💡"
-    action_url: str | None = None
-
-
-@router.post("/rosters")
-async def create_roster(data: RosterCreate, user: User = Depends(get_current_user)):
-    """Создать новый ростер."""
-
-    # Check Free tier limit
-    features = UserFeatures.for_user(user)
-    current = db.fetchone("SELECT COUNT(*) as cnt FROM rosters WHERE user_id = ?", (user.id,))[
-        "cnt"
-    ]
-    if current >= features["max_rosters"]:
-        raise HTTPException(403, detail="Max rosters limit reached. Upgrade to Premium.")
-
-    # Load wiki and validate
-    with contextlib.suppress(Exception):
-        wiki.load()
-    units_list = [(u.unit_name, u.squad_size) for u in data.units]
-    validation = validate_roster(units_list, wiki.units, pts_limit=data.pts_limit)
-    if not validation.is_valid:
-        raise HTTPException(
-            400,
-            detail={
-                "error": "roster_invalid",
-                "validation_errors": [e.__dict__ for e in validation.errors],
-            },
-        )
-
-    cur = db.execute(
-        """INSERT INTO rosters (user_id, name, faction, pts_limit, detachment, units, is_public)
-           VALUES (?, ?, ?, ?, ?, ?, ?)""",
-        (
-            user.id,
-            data.name,
-            data.faction,
-            data.pts_limit,
-            data.detachment,
-            json.dumps([u.model_dump() for u in data.units]),
-            int(data.is_public),
-        ),
-    )
-    db.commit()
-    return {"id": cur.lastrowid, **data.model_dump()}
-
-
-@router.get("/rosters")
-async def list_rosters(user: User = Depends(get_current_user), public_only: bool = False):
-    """Список ростереров текущего пользователя."""
-
-    if public_only:
-        rows = db.fetchall("SELECT * FROM rosters WHERE is_public = 1 ORDER BY updated_at DESC")
-    else:
-        rows = db.fetchall(
-            "SELECT * FROM rosters WHERE user_id = ? ORDER BY updated_at DESC",
-            (user.id,),
-        )
-    return {"rosters": [dict(r) for r in rows]}
-
-
-@router.get("/rosters/{roster_id}")
-async def get_roster(roster_id: int, user: User = Depends(get_current_user)):
-    """Получить ростер по id."""
-
-    row = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_id,))
-    if not row:
-        raise HTTPException(404, detail="Roster not found")
-    if row["user_id"] != user.id and not row["is_public"]:
-        raise HTTPException(403, detail="Not authorized")
-
-    return dict(row)

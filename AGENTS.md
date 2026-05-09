@@ -1,7 +1,7 @@
 # Agent Rules — Warpsmith
 
 Этот файл управляет поведением AI-агентов при работе над проектом.
-нетОбновлён: 2026-05-07 (соответствует v0.7.7).
+Обновлён: 2026-05-09 (соответствует v0.7.7).
 
 ## Языки и стек
 
@@ -16,7 +16,7 @@
 | Тесты        | Python           | pytest + pytest-cov      |
 
 **Зависимости:** fastapi, uvicorn[standard], jinja2, numpy, python-multipart,
-PyJWT[crypto], bcrypt, httpx, python-dotenv, pyyaml, pДавython-frontmatter,
+PyJWT[crypto], bcrypt, httpx, python-dotenv, pyyaml, python-frontmatter,
 structlog, sentry-sdk[fastapi], slowapi, htmy, pytest, pytest-asyncio, pytest-cov
 **Dev:** ruff, mypy, pre-commit
 
@@ -26,7 +26,7 @@ structlog, sentry-sdk[fastapi], slowapi, htmy, pytest, pytest-asyncio, pytest-co
 simulator/
 ├── main.py                   ← точка входа FastAPI
 ├── pyproject.toml            ← зависимости
-├── ROADMAP.md                ← дорожная карта (7 фаз, 77 фич, ~319h)
+├── ROADMAP.md                ← дорожная карта (7 фаз, ~81 фича, ~329h)
 ├── AGENTS.md                 ← этот файл
 ├── CHANGELOG.md              ← Keep a Changelog
 ├── DEV_INDEX.md              ← хаб разработчика
@@ -88,7 +88,7 @@ simulator/
 │   │   ├── pages.py          ← HTML: /, /team-builder, /scenario-setup, /pricing, /faction-browser, /replays, /my-rosters
 │   │   ├── api.py                    ← core: /api/units, /api/simulate, /api/map, /api/health, /api/factions
 │   │   ├── api_detachments.py        ← /api/detachments
-│   │   ├── api_rosters.py            ← /api/rosters, /api/rosters/generate, /api/rosters/synergies
+│   │   ├── api_rosters.py            ← /api/rosters, /api/rosters/generate, /api/rosters/synergies (единственный owner roster CRUD)
 │   │   ├── api_replays.py            ← /api/auto-play, /api/replays, /api/results
 │   │   └── auth.py                   ← /register, /login, /logout, /api/me
 │   │
@@ -156,11 +156,13 @@ simulator/
     для списков. Только `x-for` с данными из `/api/*`.
 - **SQLite:** raw SQL через `sqlite3` (stdlib). DB_PATH на Railway — `/data/simulator.db` с Volume
 - **JS:** ES6, без TypeScript
+- **Warlord для ростеров:** если в ростере несколько Character/Warlord-capable юнитов, Team Builder и API требуют ровно один явный `is_warlord: true`; в roster panel рядом с eligible юнитами есть кнопка `👑`, при добавлении второго eligible юнита прежний implicit выбор сбрасывается, Save disabled до клика по одной короне; флаг хранится в `units` JSON вместе с loadout/weapons/pts.
+- **Generated opponent:** `/api/rosters/generate` обязан возвращать save-and-play ростер: `squad_size` из YAML `unit.squad_size["min"]`, ровно один Warlord, points в лимите, Scenario Setup редиректит по top-level `game_id`.
 
 ### 2. Тесты
 - **pytest** для всех backend-компонентов
 - Каждый модуль engine/ имеет отдельный test-файл
-- `pytest tests/ -q` — 451+ тестов, 41 файл
+- `pytest tests/ -q` — 454 теста, 41 файл, 3 skipped
 - Перед запуском: `rm -f *.db-shm *.db-wal` (SQLite WAL recovery)
 - Monte Carlo тесты: `numpy.random.seed(42)` для воспроизводимости
 

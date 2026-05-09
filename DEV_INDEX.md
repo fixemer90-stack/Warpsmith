@@ -107,7 +107,7 @@ simulator/
 │   ├── routes/
 │   │   ├── api.py                core: /units, /simulate, /map, /health, /factions
 │   │   ├── api_detachments.py    /detachments
-│   │   ├── api_rosters.py        /rosters, /generate, /synergies
+│   │   ├── api_rosters.py        /rosters, /generate, /synergies (единственный owner roster CRUD)
 │   │   ├── api_replays.py        /auto-play, /replays, /results
 │   │   ├── auth.py               /register, /login, /logout, /api/me
 │   │   └── pages.py              HTML: /, /team-builder, /scenario-setup, ...
@@ -136,6 +136,8 @@ simulator/
 |----------|-----------|-------------|
 | Добавить юнита | AGENTS.md → wiki-driven | `wiki/units/<faction>/<Name>.md` |
 | Добавить детачмент | AGENTS.md → wiki-driven | `wiki/detachments/<faction>/<Name>.md` |
+| Править Warlord/ростеры | F4.12 + C4 | `web/static/team_builder.js`, `web/routes/api_rosters.py` |
+| Править генератор оппонента | F4.9 + tests | `web/routes/api_rosters.py`, `web/static/scenario_setup.js` |
 | Добавить стратагему | AGENTS.md → wiki-driven | `wiki/stratagems/<faction>/<Name>.md` |
 | Добавить AI-поведение | ADR-005, C4 → AI | `backend/engine/ai/decision.py` |
 | Добавить OAuth-провайдера | ADR-011 | `backend/auth/providers/<name>.py` |
