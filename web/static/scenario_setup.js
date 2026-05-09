@@ -1,4 +1,4 @@
-// Scenario Setup — Alpine.js component (F4.10 v2)
+// Scenario Setup — Alpine.js component with strategic SVG battlefield map
 function scenarioSetup() {
     return {
         // State
@@ -68,19 +68,16 @@ function scenarioSetup() {
             const pts = parseInt(this.gameFormat) || 2000;
             const sizes = { 500: [44,30], 1000: [44,44], 2000: [44,60], 3000: [44,90] };
             const [w, h] = sizes[pts] || [44, 60];
-            const objs = this._getMissionObjectives(w, h);
-
             // Destroy previous map instance fully
-            if (window.mapViewInstance) {
-                window.mapViewInstance.destroy();
-                window.mapViewInstance = null;
+            if (window.battlefieldMapInstance) {
+                window.battlefieldMapInstance.destroy();
+                window.battlefieldMapInstance = null;
             }
 
-            window.mapViewInstance = mapView();
-            window.mapViewInstance.initMap(w, h, objs, null, null);
+            window.battlefieldMapInstance = battlefieldMap();
+            window.battlefieldMapInstance.initMap(w, h, this.mission, null, null);
 
-            // Add units after tiles load
-            setTimeout(() => this.updateMapUnits(), 400);
+            this.updateMapUnits();
         },
 
         _getMissionObjectives(mw, mh) {
@@ -107,8 +104,8 @@ function scenarioSetup() {
                 ...this.player1Units.map(u => ({ ...u, player: 1, color: '#3b82f6' })),
                 ...this.player2Units.map(u => ({ ...u, player: 2, color: '#ef4444' })),
             ];
-            if (window.mapViewInstance) {
-                window.mapViewInstance.showUnits(allUnits);
+            if (window.battlefieldMapInstance) {
+                window.battlefieldMapInstance.showUnits(allUnits);
             }
         },
 

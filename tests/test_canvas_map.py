@@ -57,26 +57,27 @@ class TestMapTilesAPI:
         assert data["units"] == []
 
 
-class TestLeafletMapIntegration:
-    """F4.10 — Leaflet map replaces Canvas map in Scenario Setup."""
+class TestStrategicBattlefieldMapIntegration:
+    """Strategic SVG battlefield map replaces the old Canvas/Leaflet previews."""
 
-    def test_scenario_setup_includes_leaflet(self):
+    def test_scenario_setup_includes_strategic_svg_map(self):
         resp = client.get("/scenario-setup")
         assert resp.status_code == 200
-        assert "battlefield-map" in resp.text  # Leaflet container ID
-        assert "map_view.js" in resp.text
-        assert "leaflet.js" in resp.text
+        assert "battlefield-map" in resp.text
+        assert "battlefield-map-svg" in resp.text
+        assert "battlefield_map.js" in resp.text
+        assert "map_view.js" not in resp.text
+        assert "leaflet.js" not in resp.text
 
-    def test_leaflet_map_always_visible(self):
-        """Map is always visible (v2 — no placeholder, init on page load)."""
+    def test_strategic_map_always_visible(self):
+        """Map is always visible and includes scale/objective/unit legend."""
         resp = client.get("/scenario-setup")
         assert resp.status_code == 200
-        # Map container always present
         assert 'id="battlefield-map"' in resp.text
-        # Terrain legend always visible
-        assert "Open" in resp.text
-        assert "Light Cover" in resp.text
-        assert "Obstacle" in resp.text
+        assert "Scale: 1 grid = 6″" in resp.text
+        assert "Objective" in resp.text
+        assert "P1 Unit" in resp.text
+        assert "P2 Unit" in resp.text
 
     def test_map_tiles_dynamic_size(self):
         """Map tiles API accepts dynamic width/height for different formats."""
@@ -99,14 +100,28 @@ class TestLeafletMapIntegration:
         assert max(xs_p1) < min(xs_p2)  # zones don't overlap
         assert len(xs_p1) <= 9  # ~20% of 44
 
-    def test_map_view_init_function(self):
-        """map_view.js should have initMap function."""
-        import os
+    def test_battlefield_map_supports_mission_objectives_units_and_scale(self):
+        """New map must render mission objectives, roster units, and real table scale."""
         from pathlib import Path
-        js_file = Path(__file__).parent.parent / "web" / "static" / "map_view.js"
+
+        js_file = Path(__file__).parent.parent / "web" / "static" / "battlefield_map.js"
         assert js_file.exists()
         content = js_file.read_text(encoding="utf-8")
         assert "initMap" in content
+        assert "showUnits" in content
+        assert "getMissionObjectives" in content
+        assert "drawScaleRuler" in content
+        assert "only-war" in content
+        assert "take-and-hold" in content
+        assert "purge-the-foe" in content
+
+    def test_base_template_has_no_leaflet_dependency(self):
+        from pathlib import Path
+
+        base = Path(__file__).parent.parent / "web" / "templates" / "base.html"
+        content = base.read_text(encoding="utf-8")
+        assert "leaflet" not in content.lower()
+        assert "L.map" not in content
 
     def test_compatible_rosters_filter(self):
         """scenario_setup.js should have compatibleRosters."""

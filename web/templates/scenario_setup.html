@@ -5,7 +5,7 @@
     <script>
         window._rosters = {{ rosters_json | safe }};
     </script>
-    <script src="/static/map_view.js"></script>
+    <script src="/static/battlefield_map.js"></script>
 
     <h1 class="text-2xl font-bold text-white mb-6">🗺 Scenario Setup</h1>
 
@@ -163,7 +163,7 @@
     </div>
 
     <!-- Step 3: Battlefield Preview -->
-    {% include "partials/map_view.html" %}
+    {% include "partials/battlefield_map.html" %}
 
     <!-- Start button -->
     <button @click="startSimulation()"
