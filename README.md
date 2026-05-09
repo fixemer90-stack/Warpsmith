@@ -127,7 +127,8 @@ simulator/
 | [AGENTS.md](AGENTS.md) | Правила разработки для AI-агентов |
 | [docs/architecture/C4.md](docs/architecture/C4.md) | C4-архитектура (4 уровня) |
 | [docs/architecture/ADR.md](docs/architecture/ADR.md) | 11 архитектурных решений |
-| [docs/requirements/code-review-plan.md](docs/requirements/code-review-plan.md) | План полной проверки кода: 25 атомизированных review-задач |
+| [docs/requirements/code-review-plan.md](docs/requirements/code-review-plan.md) / [code-review index](docs/requirements/code-review/code-review.md) | План полной проверки кода: 25 атомизированных review-задач и статусы выполнения |
+| [docs/api/endpoints.md](docs/api/endpoints.md) | One-page API endpoint index; подробные схемы в Swagger `/docs` |
 | [docs/features/Features_index.md](docs/features/Features_index.md) | 62 feature-спецификации |
 | [wiki/WIKI_INDEX.md](wiki/WIKI_INDEX.md) | Индекс вики-данных |
 
@@ -139,6 +140,6 @@ simulator/
 - **Стратагем:** 114 (Core 13, Orks 42, AdMech 42, Tau 19)
 - **Энхансментов:** 88
 - **Детачментов:** 23
-- **API эндпоинтов:** 25+ (4 модуля: api, api_detachments, api_rosters, api_replays)
+- **API эндпоинтов:** 27 unique `/api` endpoints; 53 total FastAPI routes including pages/auth (Swagger: `/docs`)
 - **Фаз:** 7 · 82 фичи · ~339 часов
 - **SVG иконок:** 18 категорий

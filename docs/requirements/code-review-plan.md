@@ -23,6 +23,8 @@ tags: [requirements, code-review, verification, quality, security]
 5. Performance — N+1, unbounded loops/fetching, sync vs async, лишние UI re-render, pagination.
 
 **Итоговый формат каждого review-отчёта:** `APPROVE` или `REQUEST CHANGES`, блоки `Critical`, `Important`, `Suggestions`, `What's Done Well`, `Verification Story`.
+**Atomic artifacts:** individual CR files are maintained under `docs/requirements/code-review/`; the execution index is `docs/requirements/code-review/code-review.md`.
+
 
 ---
 

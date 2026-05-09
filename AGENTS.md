@@ -141,6 +141,22 @@ simulator/
 
 ## Правила разработки
 
+### 0. Обязательные внешние skills для агентов
+
+При работе в этом проекте AI-агенты обязаны использовать локальные skills из Obsidian/agent-skills репозитория:
+
+| Skill | Windows path | WSL path | Когда применять |
+|-------|--------------|----------|-----------------|
+| `planning-and-task-breakdown` | `D:\Python\Balthier\agent-skills-0.6.0\skills\planning-and-task-breakdown` | `/mnt/d/Python/Balthier/agent-skills-0.6.0/skills/planning-and-task-breakdown/SKILL.md` | Любая крупная/нечёткая задача, новая feature spec, декомпозиция требований, планирование atomic tasks, оценка dependency graph, подготовка parallel batches. |
+| `code-review-and-quality` | `D:\Python\Balthier\agent-skills-0.6.0\skills\code-review-and-quality` | `/mnt/d/Python/Balthier/agent-skills-0.6.0/skills/code-review-and-quality/SKILL.md` | Перед merge/release, после feature/fix/refactor, при проверке кода другого агента/человека, при выполнении CR-задач из `docs/requirements/code-review/`. |
+
+Правила применения:
+- **Планирование:** перед реализацией большой задачи сначала читать `planning-and-task-breakdown/SKILL.md` и создавать/обновлять written plan с атомарными задачами, acceptance criteria, verification steps, dependencies и checkpoints. Во время планирования не писать production code.
+- **Code review:** при review читать `code-review-and-quality/SKILL.md` и проверять пять осей: Correctness, Readability/Simplicity, Architecture, Security, Performance. Сначала читать требования и тесты, потом production code. Findings классифицировать как Critical/Important/Suggestion/Nit/FYI и давать конкретный fix recommendation.
+- **Warpsmith full-code review:** canonical план и статусы находятся в `docs/requirements/code-review-plan.md` и `docs/requirements/code-review/code-review.md`; отдельные atomic CR-файлы лежат в `docs/requirements/code-review/`.
+- **Размер задач:** если задача затрагивает 8+ файлов или не помещается в один focused session — разбить дальше до S/M задач.
+- **Верификация:** каждый план и review должен содержать явные команды проверки; после code changes сохраняется стандарт проекта: tests → lint → local deploy/health check → docs sync.
+
 ### 1. Код
 - **Python:** PEP 8, строгие type hints (`def foo(bar: str) -> int:`)
 - **FastAPI:** Pydantic v2 для валидации request/response

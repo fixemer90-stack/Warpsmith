@@ -61,11 +61,12 @@ graph TD
 | 8 | **docs/architecture/ADR.md** | ⚖️ 11 архитектурных решений |
 | 9 | **docs/requirements/SRS.md** | 📖 7 разделов требований |
 | 10 | **docs/requirements/UX.md** | 🎨 UX-дизайн |
-| 11 | **docs/requirements/code-review-plan.md** | 🔎 План полной проверки кода: 25 atomic review tasks |
-| 12 | **docs/deployment.md** | ☁️ Деплой: Railway, Dokku, self-host |
-| 13 | **docs/features/Features_index.md** | 📝 Индекс feature-спек (62 specs; roadmap 82+ фич) |
-| 14 | **main.py** | 💻 Точка входа FastAPI |
-| 15 | **pyproject.toml** | 📦 Зависимости + ruff + mypy + pytest |
+| 11 | **docs/requirements/code-review-plan.md** | 🔎 План полной проверки кода: 25 atomic review tasks; index: `docs/requirements/code-review/code-review.md` |
+| 12 | **docs/api/endpoints.md** | 🌐 One-page API endpoint index; Swagger remains canonical |
+| 13 | **docs/deployment.md** | ☁️ Деплой: Railway, Dokku, self-host |
+| 14 | **docs/features/Features_index.md** | 📝 Индекс feature-спек (62 specs; roadmap 82+ фич) |
+| 15 | **main.py** | 💻 Точка входа FastAPI |
+| 16 | **pyproject.toml** | 📦 Зависимости + ruff + mypy + pytest |
 
 ## 🏗 Проект
 
@@ -122,6 +123,7 @@ simulator/
 │   ├── architecture/      C4.md, ADR.md
 │   ├── requirements/      SRS.md, UX.md
 │   ├── features/          62 specs (F1.1–F6.7 + F2.18 terrain requirement)
+│   ├── api/               endpoints.md — one-page API endpoint index
 │   └── deployment.md
 │
 └── wiki/                  480 .md — данные в репозитории (monorepo)
@@ -147,7 +149,7 @@ simulator/
 | Поправить БД | ADR-003, SRS.md | `backend/db/database.py` |
 | Править terrain / cover / LoS | F2.13 → F2.18 + raw Terrain | `backend/state/map.py`, `backend/state/line_of_sight.py`, `backend/engine/combat.py` |
 | Написать тест | AGENTS.md | `tests/test_*.py` |
-| Создать эндпоинт API | C4.md | `web/routes/api.py` (core) или `api_rosters.py`/`api_replays.py`/`api_detachments.py` |
+| Создать/проверить эндпоинт API | C4.md → docs/api/endpoints.md → Swagger | `web/routes/api.py` (core) или `api_rosters.py`/`api_replays.py`/`api_detachments.py` |
 
 ## 🚀 Запуск
 
