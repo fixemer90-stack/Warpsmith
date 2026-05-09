@@ -10,7 +10,7 @@
 | Backend      | Python 3.12+     | FastAPI + Pydantic v2    |
 | HTML-шаблоны | Jinja2           | Tailwind CSS (CDN)       |
 | Интерактив   | JavaScript (ES6) | HTMX 2.x + Alpine.js 3.x |
-| Карта | JavaScript (ES6) | Canvas API (scenario setup, replay) + Leaflet.js F4.10 (mission viz) |
+| Карта | JavaScript (ES6) | Scenario Setup: strategic SVG battlefield_map.js; replay: Canvas |
 | База данных  | SQL (SQLite 3)   | sqlite3 (stdlib)         |
 | Симуляции    | Python           | NumPy 2.x (Monte Carlo)  |
 | Тесты        | Python           | pytest + pytest-cov      |
@@ -109,7 +109,7 @@ simulator/
 │   │   └── partials/         ← HTMX-фрагменты
 │   │       ├── detachment_picker.html
 │   │       ├── synergy_panel.html
-│   │       ├── canvas_map.html
+│   │       ├── battlefield_map.html
 │   │       ├── tooltip_definitions.html
 │   │       ├── unit_card.html
 │   │       └── unit_modal.html
@@ -119,7 +119,7 @@ simulator/
 │       ├── unit_modal.js            ← UnitModal mixin (F4.2)
 │       ├── synergy_hints.js         ← SynergyHints controller (F4.4)
 │       ├── detachment_picker.js     ← DetachmentPicker controller (F4.3)
-│       ├── canvas_map.js            ← CanvasMap controller (F4.5)
+│       ├── battlefield_map.js       ← Strategic SVG map (F4.14)
 │       ├── scenario_setup.js        ← Отправка симуляции
 │       ├── progressive_disclosure.js← B/E mode toggle (F4.6)
 │       ├── my_rosters.js            ← CRUD операции с ростерами
@@ -184,7 +184,7 @@ simulator/
 - **HTMX** — partial updates (hx-post, hx-get, hx-target)
 - **Alpine.js** — реактивное состояние (x-data, x-model, x-init, x-if)
 - **Tailwind** — через CDN, никаких билдов
-- Карта — `<canvas>` с позиционированием (canvas_map.js)
+- Scenario Setup карта — SVG battlefield map с mission objectives, roster units и 6″/12″ scale (`battlefield_map.js`)
 - **Progressive Disclosure** — 2 режима: Beginner (полные названия) / Expert (сокращения M,T,SV,W,LD,OC)
   CSS-классы `.mode-beginner` / `.mode-expert` на body
 - **SVG иконки** — inline через Jinja2 helpers `unit_icon()` и `card_style()`

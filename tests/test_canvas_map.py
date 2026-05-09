@@ -111,6 +111,8 @@ class TestStrategicBattlefieldMapIntegration:
         assert "showUnits" in content
         assert "getMissionObjectives" in content
         assert "drawScaleRuler" in content
+        assert "bottomPadding: 64" in content
+        assert "fieldH + this.padding + this.bottomPadding" in content
         assert "only-war" in content
         assert "take-and-hold" in content
         assert "purge-the-foe" in content

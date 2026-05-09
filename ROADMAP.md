@@ -116,7 +116,7 @@
 ## ✅ Phase 4: Web UI Polish
 
 ```
-[████████████████████] 100% · 10 features
+[████████████████████] 100% · 11 features
 ```
 
 **Цель:** Полноценное веб-приложение, готовое к пользователям. ✅ Верифицировано: все фичи рабочие.
@@ -127,12 +127,13 @@
 | 4.2 | ✅ | Unit modal: squad size, loadout, wargear, full datasheet | 6h |
 | 4.3 | ✅ | Detachment picker with rule preview | 3h |
 | 4.4 | ✅ | Synergy hints: leader compatibility, transport capacity | 4h |
-| 4.5 | ✅ | Canvas map: terrain tiles + deploy zones interactivity | 8h |
+| 4.5 | ✅ | Canvas map: terrain tiles + deploy zones interactivity (superseded by F4.14) | 8h |
 | 4.6 | ✅ | Progressive Disclosure: Beginner / Intermediate / Expert | 4h |
 | 4.7 | ✅ | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h |
 | 4.8 | ✅ | SVG icons integration in unit cards | 2h |
 | 4.9 | ✅ | Generate Random Opponent | 2h |
 | 4.11 | ✅ | Movement Phase (10ed): Normal Move / Advance / Fall Back / Remain Stationary, AI objective distribution | 4h |
+| 4.14 | ✅ | Strategic battlefield map: mission objectives + roster units + true scale | 6h |
 
 ---
 

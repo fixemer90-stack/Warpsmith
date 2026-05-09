@@ -15,6 +15,7 @@ function battlefieldMap() {
         units: [],
         pxPerInch: 10,
         padding: 28,
+        bottomPadding: 64,
 
         initMap(width, height, missionOrObjectives, deployZones, units) {
             this.svg = document.getElementById('battlefield-map-svg');
@@ -77,7 +78,7 @@ function battlefieldMap() {
             const fieldW = this.mapWidth * this.pxPerInch;
             const fieldH = this.mapHeight * this.pxPerInch;
             const viewW = fieldW + this.padding * 2;
-            const viewH = fieldH + this.padding * 2;
+            const viewH = fieldH + this.padding + this.bottomPadding;
             this.svg.setAttribute('viewBox', `0 0 ${viewW} ${viewH}`);
             this.svg.setAttribute('data-width-inches', String(this.mapWidth));
             this.svg.setAttribute('data-height-inches', String(this.mapHeight));
