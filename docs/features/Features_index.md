@@ -3,7 +3,7 @@
 Полный индекс всех feature-спецификаций по фазам разработки.
 Каждый файл содержит: SMART-цель, data model, implementation details, тесты.
 
-Актуально на: 2026-05-07 | v0.7.7
+Актуально на: 2026-05-09 | v0.7.7
 
 ---
 
@@ -94,12 +94,12 @@
 | [F4.7](f4.7-stat-tooltips.md) | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h | ✅ |
 | [F4.8](f4.8-svg-icons.md) | SVG icons integration in unit cards | 2h | ✅ |
 | [F4.9](f4.9-generate-opponent.md) | Generate Random Opponent | 2h | ✅ |
+| [F4.10](f4.10-leaflet-map.md) | Leaflet map: game format + mission visualization | 6h | ✅ |
 | [F4.11](f4.11-movement-phase.md) | Movement Phase (10ed): Normal/Advance/Fall Back/Remain Stationary | 4h | ✅ |
-| [F4.10](f4.10-leaflet-map.md) | Leaflet map: game format + mission visualization | 6h | ⚪ |
 | [F4.12](f4.12-my-rosters.md) | My Rosters — delete, edit, duplicate | 4h | ✅ |
 | [F4.13](f4.13-replays-list.md) | Replays List Page — `/replays` | 1h | ✅ |
 
-**Всего:** 13 features, ~51 часов. ✅ 92%
+**Всего:** 13 features, ~51 часов. ✅ 100%
 
 ---
 
@@ -170,7 +170,7 @@ POST /api/auto-play  (api_replays.py)
 | **Phase 1** — Combat Engine | 13 | ~36h | ✅ 100% |
 | **Phase 2** — Game System | 18 | ~113h | ✅ 72% |
 | **Phase 3** — AI & Automation | 9 | ~46h | 🔧 78% |
-| **Phase 4** — Web UI Polish | 13 | ~51h | ✅ 92% |
+| **Phase 4** — Web UI Polish | 13 | ~51h | ✅ 100% |
 | **Phase 5** — Production | 7 | ~16h | ✅ 100% |
 | **Phase 6** — Monetization | 7 | ~17h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |

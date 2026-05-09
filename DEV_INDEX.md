@@ -1,9 +1,9 @@
 # Developer Index — Warpsmith
 
 Центральный хаб проекта. Отсюда ведут все тропы.
-Обновлён: 2026-05-04 | v0.7.7
+Обновлён: 2026-05-09 | v0.7.7
 
-**Навигация:** [INDEX.md](/mnt/d/Python/Balthier/INDEX.md) ← · → [WIKI_INDEX.md](/mnt/d/Python/Balthier/wiki/WIKI_INDEX.md) · → [Features Index](docs/features/Features_index.md)
+**Навигация:** [INDEX.md](/mnt/d/Python/Balthier/INDEX.md) ← · → [WIKI_INDEX.md](/mnt/d/Python/Balthier/simulator/wiki/WIKI_INDEX.md) · → [Features Index](docs/features/Features_index.md)
 
 ## 📋 Граф документации
 
@@ -11,7 +11,7 @@
 graph TD
     DEV["📌 DEV_INDEX.md<br/>← вы здесь"] --> ROAD["🛣️ ROADMAP.md<br/>дорожная карта"]
     DEV --> AGENTS["🤖 AGENTS.md<br/>правила для AI-агентов"]
-    DEV --> FEAT["📝 Features Index<br/>50+ feature specs"]
+    DEV --> FEAT["📝 Features Index<br/>60 feature specs"]
     DEV --> C4["🏗 C4.md<br/>архитектура (Mermaid)"]
     DEV --> ADR["⚖️ ADR.md<br/>11 архитектурных решений"]
     DEV --> SRS["📖 SRS.md<br/>системные требования"]
@@ -26,8 +26,8 @@ graph TD
 
     FEAT --> F1["Phase 1: Combat (100%)"]
     FEAT --> F2["Phase 2: Game System (100%)"]
-    FEAT --> F3["Phase 3: AI (67%)"]
-    FEAT --> F4["Phase 4: UI (92%)"]
+    FEAT --> F3["Phase 3: AI (78%)"]
+    FEAT --> F4["Phase 4: UI (100%)"]
     FEAT --> F5["Phase 5: Production (100%)"]
 
     C4 --> C4L1["Уровень 1: Контекст"]
@@ -62,7 +62,7 @@ graph TD
 | 9 | **docs/requirements/SRS.md** | 📖 7 разделов требований |
 | 10 | **docs/requirements/UX.md** | 🎨 UX-дизайн |
 | 11 | **docs/deployment.md** | ☁️ Деплой: Railway, Dokku, self-host |
-| 12 | **docs/features/Features_index.md** | 📝 Индекс feature-спек (71 фича) |
+| 12 | **docs/features/Features_index.md** | 📝 Индекс feature-спек (60 specs; roadmap 77+ фич) |
 | 13 | **main.py** | 💻 Точка входа FastAPI |
 | 14 | **pyproject.toml** | 📦 Зависимости + ruff + mypy + pytest |
 
@@ -84,14 +84,14 @@ simulator/
 ├── backend/
 │   ├── auth/              JWT + bcrypt + OAuth (Google, VK)
 │   ├── billing/           Stripe, Feature Gate, Free/Premium
-│   ├── loader/            Wiki парсер + registry (160 units, 23 detachments)
+│   ├── loader/            Wiki парсер + registry (160 загружаемых units, 23 detachments)
 │   │   └── icon_map.py    SVG иконки (18 категорий)
 │   ├── model/             Unit, Weapon dataclasses
 │   ├── engine/
 │   │   ├── combat.py      Combat Sequence: Hit→Wound→Save→FNP
 │   │   ├── dice.py        Dice Pool (NumPy Monte Carlo)
 │   │   ├── modifiers.py   ±1, Sustained, Lethal, Devastating, keywords
-│   │   ├── scenario.py    Game Loop (6 фаз) + Movement Phase (10ed)
+│   │   ├── scenario.py    Game Loop (5 фаз: Command→Movement→Shooting→Charge→Fight)
 │   │   ├── replay.py      ReplayRecorder + SQLite persistence
 │   │   └── ai/
 │   │       ├── decision.py    Greedy decision engine (F3.1)
@@ -115,15 +115,15 @@ simulator/
 │   │   └── partials/      detachment_picker, synergy_panel, canvas_map, unit_card
 │   └── static/            JS (Alpine), SVG icons (18)
 │
-├── tests/                 34 файла, 440 тестов
+├── tests/                 41 файл, 453 теста
 │
 ├── docs/
 │   ├── architecture/      C4.md, ADR.md
 │   ├── requirements/      SRS.md, UX.md
-│   ├── features/          50+ specs (F1.1–F6.7)
+│   ├── features/          60 specs (F1.1–F6.7)
 │   └── deployment.md
 │
-└── wiki/                  ~490 .md — данные в репозитории (monorepo)
+└── wiki/                  480 .md — данные в репозитории (monorepo)
     ├── factions/          orks, tau, adeptus-mechanicus
     ├── units/             даташиты юнитов
     ├── detachments/       правила детачментов
@@ -152,7 +152,7 @@ cd /mnt/d/Python/Balthier/simulator
 python3 -c "import uvicorn; uvicorn.run('main:app', host='127.0.0.1', port=8000, reload=False)"
 # → http://127.0.0.1:8000
 
-# Тесты (440 шт.)
+# Тесты (453 шт.)
 uv run python -m pytest tests/ -q
 ```
 
@@ -185,8 +185,8 @@ curl http://127.0.0.1:8000/api/map/tiles
 | Phase 0: Foundation | ✅ 100% | FastAPI, Auth, Wiki, Icons, Billing |
 | Phase 1: Combat Engine | ✅ 100% | Monte Carlo, 13 keywords, /api/simulate |
 | Phase 2: Game System | ✅ 100% | Game Loop, Map, LoS, Cover, Roster CRUD |
-| Phase 3: AI & Automation | 🔧 67% | Greedy AI, Faction Profiles, Autoplay, Replay, Viewer |
-| Phase 4: Web UI Polish | ✅ 92% | Faction browser, Unit modal, Detachments, Synergy, Map, Movement, My Rosters, Replays |
+| Phase 3: AI & Automation | 🔧 78% | Greedy AI, Faction Profiles, Autoplay, Replay, Viewer |
+| Phase 4: Web UI Polish | ✅ 100% | Faction browser, Unit modal, Detachments, Synergy, Map, Movement, My Rosters, Replays |
 | Phase 5: Production | ✅ 100% | Docker, Railway, Rate limit, CORS, structlog, CI/CD, Backup |
 | Phase 6: Monetization | ⏳ 0% | Stripe, Ads, Premium Trial |
 | Phase 7: Expansion | ⏳ 0% | Import/Export, i18n, Campaigns |

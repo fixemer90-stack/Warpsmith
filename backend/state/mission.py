@@ -537,9 +537,9 @@ def create_mission(mission_name: str, game_state: GameState) -> Mission | None:
             w = game_state.map_width
             h = game_state.map_height
             cx, cy = w // 2, h // 2
-            if config.scoring_rule in ("standard", "progressive"):
-                # 5 objectives for standard (Take and Hold), 3 for progressive (Only War)
-                if config.scoring_rule == "standard":
+            if config.scoring_rule in ("standard", "progressive", "kill_points"):
+                # 5 objectives for standard/Take-and-Hold/kill_points, 3 for progressive/Only War
+                if config.scoring_rule in ("standard", "kill_points"):
                     config.objectives = [
                         MissionObjective(cx, cy, "Center"),
                         MissionObjective(cx // 2, cy, "Flank Left"),

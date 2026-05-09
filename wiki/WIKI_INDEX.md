@@ -1,6 +1,6 @@
 # Warpsmith — Wiki Index
 
-**Версия:** 10th Edition | **Всего файлов:** ~490 `.md` | **Обновлён:** 2026-05-06
+**Версия:** 10th Edition | **Всего файлов:** 480 `.md` | **Обновлён:** 2026-05-09
 
 ---
 
@@ -12,12 +12,12 @@
 wiki/
 ├── factions/           ← общие страницы фракций
 ├── units/              ← даташиты юнитов
-│   ├── orks/             88 файлов (81 загружается парсером)
+│   ├── orks/            88 файлов (81 загружается парсером)
 │   ├── tau/            41 файл  (40 загружаются)
 │   └── mechanicus/     39 файлов (39 загружаются)
 ├── detachments/        ← детачменты
-│   ├── orks/           11
-│   ├── tau/             4
+│   ├── orks/           10
+│   ├── tau/             5
 │   └── mechanicus/      7
 ├── stratagems/         ← стратагемы
 │   ├── core/           13
@@ -34,39 +34,38 @@ wiki/
 ├── concepts/           ← концепты (16 stubs)
 ├── queries/            ← 1 (C4 architecture query)
 ├── comparisons/        ← пусто
-└── raw/                ← 1 (исходные данные)
+└── raw/                ← 2 (исходные данные)
 ```
 
 ## 🧭 Навигация по фракциям
 
 | Фракция | Юнитов | Детачментов | Стратагем | Энхансментов |
 |---------|--------|-------------|-----------|--------------|
-| Orks | 88 | 11 | 42 | 44 |
-| T'au Empire | 41 | 4 | 19 | 16 |
-| Adeptus Mechanicus | 39 | 7 | 42 | 28 |
+| Orks | 88 (81 loaded) | 10 | 42 | 44 |
+| T'au Empire | 41 (40 loaded) | 5 | 19 | 16 |
+| Adeptus Mechanicus | 39 (39 loaded) | 7 | 42 | 28 |
 
 ## 📄 Ключевые файлы
 
 | Файл | Описание |
 |------|----------|
 | `factions/Orks.md` | Общая страница фракции Orks |
-| `factions/Tau.md` | Общая страница фракции T'au |
+| `factions/T'au Empire.md` | Общая страница фракции T'au |
 | `factions/Adeptus Mechanicus.md` | Общая страница AdMech |
-| `stratagems/core/Glossary.md` | Все core стратагемы |
-| `rules/10th/Waaagh.md` | Арми-правило орков |
+| `stratagems/core/stratagem-index.md` | Индекс core стратагем |
+| `rules/10th/Waaagh!.md` | Арми-правило орков |
 | `rules/10th/For The Greater Good.md` | Арми-правило тау |
-| `rules/10th/Doctrina Imperatives.md` | Арми-правило AdMech |
 | `rules/10th/Battle-shock.md` | Battle-shock тесты |
-| `rules/10th/Cover.md` | Правила укрытий |
+| `rules/10th/Benefit of Cover.md` | Правила укрытий |
 
 ## 🔗 Связанные документы
 
 | Документ | Где |
 |----------|-----|
 | Общий индекс проекта | `/mnt/d/Python/Balthier/INDEX.md` |
-| Хаб разработчика | `../simulator/DEV_INDEX.md` |
-| Архитектура | `../simulator/docs/architecture/C4.md` |
-| Feature-спеки | `../simulator/docs/features/` |
+| Хаб разработчика | `../DEV_INDEX.md` |
+| Архитектура | `../docs/architecture/C4.md` |
+| Feature-спеки | `../docs/features/` |
 
 ## ⚠️ Формат файлов
 

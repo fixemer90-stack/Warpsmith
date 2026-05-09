@@ -523,11 +523,25 @@ async def detachment_detail(detachment_name: str):
 
 @router.get("/map/tiles")
 async def get_map_tiles(
+    width: int = 16,
+    height: int = 16,
     map_id: int | None = None,
     scenario: str | None = None,
 ):
     """
-    Вернуть сетку тайлов для отображения на Canvas.
+    Вернуть сетку тайлов для отображения на Canvas или Leaflet карте.
+
+    Принимает width/height для разных форматов игры:
+      - Combat Patrol (500):  44×30
+      - Incursion (1000):     44×44
+      - Strike Force (2000):  44×60
+      - Onslaught (3000):     44×90
+
+    Response: {
+        "width": N, "height": N,
+        "tiles": [[tile_type, ...], ...],
+        "deploy_zones": { "p1": [[x,y], ...], "p2": [[x,y], ...] },
+    }
     Response: {
         "width": 16, "height": 16,
         "tiles": [[tile_type, ...], ...],  # 16×16 matrix of TileType values
@@ -553,29 +567,34 @@ async def get_map_tiles(
         DIFFICULT = 4
         DEPLOY_ZONE = 5
 
-    grid_size = 16
-
-    # Generate a balanced map with central obstacles
     tiles = []
-    for y in range(grid_size):
+    for y in range(height):
         row = []
-        for x in range(grid_size):
+        for x in range(width):
             # Default to open ground
             tile_type = TileType.OPEN.value
 
-            # Central obstacle cluster
-            if 6 <= x <= 9 and 6 <= y <= 9:
+            # Scale terrain features proportionally
+            cx, cy = width // 2, height // 2
+            # Central obstacle cluster (20% of map around center)
+            if (cx - width // 6) <= x <= (cx + width // 6) and (cy - height // 6) <= y <= (
+                cy + height // 6
+            ):
                 tile_type = TileType.OBSTACLE.value
-            # Light cover on flanks
-            elif (x == 3 or x == 12) and 4 <= y <= 11:
+            # Light cover on flanks (at ~20% and ~80% of width, mid-height)
+            elif (x == width // 5 or x == width * 4 // 5) and (height // 4) <= y <= (
+                height * 3 // 4
+            ):
                 tile_type = TileType.LIGHT_COVER.value
-            # Heavy cover in corners
-            elif (x <= 2 or x >= 13) and (y <= 2 or y >= 13):
+            # Heavy cover in corners (10% edge strips)
+            elif (x <= width // 8 or x >= width * 7 // 8) and (
+                y <= height // 8 or y >= height * 7 // 8
+            ):
                 tile_type = TileType.HEAVY_COVER.value
-            # Difficult terrain near obstacles
+            # Difficult terrain near obstacles (scattered)
             elif (
-                5 <= x <= 10
-                and 5 <= y <= 10
+                (cx - width // 4) <= x <= (cx + width // 4)
+                and (cy - height // 4) <= y <= (cy + height // 4)
                 and tile_type == TileType.OPEN.value
                 and (x + y) % 3 == 0
             ):
@@ -584,32 +603,25 @@ async def get_map_tiles(
             row.append(tile_type)
         tiles.append(row)
 
-    # Deploy zones
+    # Deploy zones: player 1 = left 20%, player 2 = right 20%
+    zone_width = max(1, width // 5)
     deploy_zones = {
-        "player1": [],  # left side (x: 0-3)
-        "player2": [],  # right side (x: 12-15)
+        "p1": [[x, y] for x in range(zone_width) for y in range(height)],
+        "p2": [[x, y] for x in range(width - zone_width, width) for y in range(height)],
     }
 
-    for x in range(4):  # player1: x 0-3
-        for y in range(grid_size):
-            deploy_zones["player1"].append([x, y])
-
-    for x in range(12, grid_size):  # player2: x 12-15
-        for y in range(grid_size):
-            deploy_zones["player2"].append([x, y])
-
     # Mark deploy zone tiles
-    for coord in deploy_zones["player1"] + deploy_zones["player2"]:
+    for coord in deploy_zones["p1"] + deploy_zones["p2"]:
         x, y = coord
         if tiles[y][x] == TileType.OPEN.value:
             tiles[y][x] = TileType.DEPLOY_ZONE.value
 
     return {
-        "width": grid_size,
-        "height": grid_size,
+        "width": width,
+        "height": height,
         "tiles": tiles,
         "deploy_zones": deploy_zones,
-        "units": [],  # Empty for now, can be populated from scenario
+        "units": [],
     }
 
 

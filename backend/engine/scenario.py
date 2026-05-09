@@ -218,17 +218,17 @@ class Scenario:
                     else:
                         break
 
-                # Remaining unassigned units → nearest enemy
-                for unit in alive_units:
-                    if unit.unit_id not in unit_targets:
-                        enemy = self._find_closest_enemy(unit, player.player_id)
-                        if enemy:
-                            unit_targets[unit.unit_id] = enemy.position
-                        else:
-                            unit_targets[unit.unit_id] = (
-                                self.state.map_width // 2,
-                                self.state.map_height // 2,
-                            )
+            # Remaining unassigned units → nearest enemy (always, even without objectives)
+            for unit in alive_units:
+                if unit.unit_id not in unit_targets:
+                    enemy = self._find_closest_enemy(unit, player.player_id)
+                    if enemy:
+                        unit_targets[unit.unit_id] = enemy.position
+                    else:
+                        unit_targets[unit.unit_id] = (
+                            self.state.map_width // 2,
+                            self.state.map_height // 2,
+                        )
 
             # ── Execute movement ──
             for unit in alive_units:
@@ -408,7 +408,8 @@ class Scenario:
                 break
 
             # Engagement Range check: stay ≥ 1 cell from any enemy
-            if self._enemy_distance((cx, cy), own_player_id) < 1.5:
+            # (charge phase will move to adjacent cell to engage)
+            if self._enemy_distance((cx, cy), own_player_id) < 1.0:
                 break
 
             # Occupied check
@@ -607,8 +608,22 @@ class Scenario:
                 # Roll 2D6
                 roll = random.randint(1, 6) + random.randint(1, 6)
                 if roll >= dist:
-                    # Charge succeeds — move into engagement
-                    if self.state.move_unit(unit.unit_id, closest.position):
+                    # Charge succeeds — move unit adjacent to closest enemy
+                    # (can't move directly onto enemy's cell — that's occupied)
+                    charge_pos = (
+                        closest.position[0] - 1
+                        if closest.position[0] > unit.position[0]
+                        else closest.position[0] + 1
+                        if closest.position[0] < unit.position[0]
+                        else closest.position[0],
+                        closest.position[1],
+                    )
+                    # Clamp to map bounds
+                    charge_pos = (
+                        max(0, min(charge_pos[0], self.state.map_width - 1)),
+                        max(0, min(charge_pos[1], self.state.map_height - 1)),
+                    )
+                    if self.state.move_unit(unit.unit_id, charge_pos):
                         unit.is_engaged = True
                         self.state.game_log.append(
                             f"{unit.name} charges {closest.name} (rolled {roll} ≥ {dist:.0f}) — engaged!"
@@ -676,14 +691,15 @@ class Scenario:
         """Resolve melee combat for a unit.
         This is a simplified implementation - in reality this would use the combat engine.
         """
-        # Find an enemy unit engaged with this unit
+        # Find an enemy unit engaged with this unit (within 1 cell, i.e. adjacent or same)
         enemy_unit = None
         for player in self.state.players.values():
             for unit in player.units.values():
                 if (
                     unit.is_alive
                     and unit != attacking_unit
-                    and unit.position == attacking_unit.position
+                    and abs(unit.position[0] - attacking_unit.position[0]) <= 1
+                    and abs(unit.position[1] - attacking_unit.position[1]) <= 1
                 ):
                     enemy_unit = unit
                     break
@@ -702,7 +718,7 @@ class Scenario:
         damage_to_enemy = 1  # Simplified: 1 damage per attack
         self.state.deal_damage(enemy_unit.unit_id, damage_to_enemy)
         self.state.game_log.append(
-            f"{attacking_unit.name} hit {enemy_unit.name} for {damage_to_enemy} damage"
+            f"{attacking_unit.name} hits {enemy_unit.name} for {damage_to_enemy} damage"
         )
 
         # Enemy unit damages attacking unit (if still alive)
@@ -710,7 +726,7 @@ class Scenario:
             damage_to_attacker = 1  # Simplified: 1 damage per attack
             self.state.deal_damage(attacking_unit.unit_id, damage_to_attacker)
             self.state.game_log.append(
-                f"{enemy_unit.name} hit {attacking_unit.name} for {damage_to_attacker} damage"
+                f"{enemy_unit.name} hits {attacking_unit.name} for {damage_to_attacker} damage"
             )
 
     def _battle_shock_tests(self) -> None:
