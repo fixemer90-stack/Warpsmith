@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
-<title>Titanic unit class icon</title>
+<title>Beast unit class icon</title>
 <defs>
   <style>
     .bg{fill:#12100e;}
@@ -14,10 +14,9 @@
 <path class="bg" d="M64 6 111 24v38c0 30-19 51-47 60C36 113 17 92 17 62V24L64 6Z"/>
 <path class="ring" d="M64 10 106 27v35c0 27-17 46-42 55-25-9-42-28-42-55V27L64 10Z"/>
 
-<path class="gold" d="M39 94 51 30h26l12 64H39Z"/>
-<path class="dark" d="M56 41h16v15H56z"/>
-<path class="line" d="M42 58 25 47M86 58l17-11M51 94l-13 16M77 94l13 16"/>
-<path class="gold" d="M46 25h36l-6-11H52l-6 11Z"/>
-<path class="line" d="M33 111h22M73 111h22"/>
+<path class="gold" d="M33 77c6-25 20-39 42-38 18 1 26 14 24 30l-15-9-9 29H45L33 77Z"/>
+<path class="dark" d="M77 50l12 7-12 2z"/>
+<path class="line" d="M43 89l-8 14M62 89l-4 14M79 89l8 14"/>
+<path class="gold" d="M42 47 29 34l21 4z"/>
 
 </svg>

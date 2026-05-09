@@ -1,11 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <!-- Mechanical battlesuit legs -->
-  <path d="M8 4v8l-4 10"/>
-  <path d="M16 4v8l4 10"/>
-  <path d="M8 12l4 2 4-2"/>
-  <circle cx="12" cy="4" r="2"/>
-  <rect x="10" y="10" width="4" height="4" rx="1"/>
-  <path d="M3 20h18"/>
-  <path d="M6 16l-2 4"/>
-  <path d="M18 16l2 4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="battlesuit icon">
+<title>battlesuit</title>
+<defs><style>.bg{fill:#151515}.fg{fill:#e8e2d0}.st{stroke:#e8e2d0;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;fill:none}.dark{fill:#151515}.acc{fill:#b8a66a}</style></defs>
+<path class="bg" d="M64 6 112 24v38c0 30-20 50-48 60C36 112 16 92 16 62V24L64 6Z"/>
+<path class="st" d="M64 8 110 25v37c0 28-19 48-46 58-27-10-46-30-46-58V25L64 8Z"/>
+<path class="fg" d="M49 25h30l8 19-8 24H49l-8-24 8-19Zm7 10-5 11 5 12h16l5-12-5-11H56Z"/><path class="fg" d="M33 46h15v38H35l-8-25 6-13Zm47 0h15l6 13-8 25H80V46ZM48 70h10v28H40V86l8-16Zm22 0h10l8 16v12H70V70Z"/><path class="dark" d="M57 39h14v8H57z"/><path class="acc" d="M58 51h12v7H58z"/>
 </svg>

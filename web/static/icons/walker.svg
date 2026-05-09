@@ -1,11 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <!-- Mechanical walker legs -->
-  <path d="M8 4v8l-4 10"/>
-  <path d="M16 4v8l4 10"/>
-  <path d="M8 12l4 2 4-2"/>
-  <circle cx="12" cy="4" r="2"/>
-  <rect x="10" y="10" width="4" height="4" rx="1"/>
-  <path d="M3 20h18"/>
-  <path d="M6 16l-2 4"/>
-  <path d="M18 16l2 4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title>Walker unit class icon</title>
+<defs>
+  <style>
+    .bg{fill:#12100e;}
+    .ring{fill:none;stroke:#d8c27a;stroke-width:6;stroke-linejoin:round;}
+    .gold{fill:#d8c27a;}
+    .dark{fill:#12100e;}
+    .line{fill:none;stroke:#d8c27a;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+    .thin{fill:none;stroke:#d8c27a;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;}
+    .cut{fill:none;stroke:#12100e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;}
+  </style>
+</defs>
+<path class="bg" d="M64 6 111 24v38c0 30-19 51-47 60C36 113 17 92 17 62V24L64 6Z"/>
+<path class="ring" d="M64 10 106 27v35c0 27-17 46-42 55-25-9-42-28-42-55V27L64 10Z"/>
+
+<path class="gold" d="M45 35h38v37H45z"/>
+<path class="dark" d="M54 44h20v12H54z"/>
+<path class="line" d="M45 58 28 50M83 58l17-8M55 73l-12 25M73 73l12 25"/>
+<path class="line" d="M34 100h22M72 100h22"/>
+<path class="gold" d="M57 24h14v11H57z"/>
+
 </svg>

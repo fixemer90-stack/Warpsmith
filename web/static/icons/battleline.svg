@@ -1,10 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <!-- Crossed rifles -->
-  <path d="M6 20l4-8 4 8"/>
-  <path d="M6 12h8"/>
-  <path d="M18 20l-4-8-4 8"/>
-  <path d="M18 12h-8"/>
-  <circle cx="10" cy="8" r="2"/>
-  <circle cx="14" cy="8" r="2"/>
-  <path d="M8 4l2 4h4l2-4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title>Battleline unit class icon</title>
+<defs>
+  <style>
+    .bg{fill:#12100e;}
+    .ring{fill:none;stroke:#d8c27a;stroke-width:6;stroke-linejoin:round;}
+    .gold{fill:#d8c27a;}
+    .dark{fill:#12100e;}
+    .line{fill:none;stroke:#d8c27a;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+    .thin{fill:none;stroke:#d8c27a;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;}
+    .cut{fill:none;stroke:#12100e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;}
+  </style>
+</defs>
+<path class="bg" d="M64 6 111 24v38c0 30-19 51-47 60C36 113 17 92 17 62V24L64 6Z"/>
+<path class="ring" d="M64 10 106 27v35c0 27-17 46-42 55-25-9-42-28-42-55V27L64 10Z"/>
+
+<path class="gold" d="M35 38h58v14H35zM35 57h58v14H35zM35 76h58v14H35z"/>
+<path class="dark" d="M43 43h42v4H43zM43 62h42v4H43zM43 81h42v4H43z"/>
+<path class="line" d="M28 31h72M28 97h72"/>
+
 </svg>

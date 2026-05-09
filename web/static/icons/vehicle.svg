@@ -1,11 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <!-- Tank hull -->
-  <rect x="2" y="12" width="20" height="6" rx="1"/>
-  <path d="M6 10v2"/>
-  <path d="M18 10v2"/>
-  <circle cx="16" cy="15" r="2"/>
-  <circle cx="8" cy="15" r="2"/>
-  <rect x="10" y="8" width="4" height="4" rx="1"/>
-  <path d="M16 8l4 4"/>
-  <circle cx="20" cy="11" r="1.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title>Vehicle unit class icon</title>
+<defs>
+  <style>
+    .bg{fill:#12100e;}
+    .ring{fill:none;stroke:#d8c27a;stroke-width:6;stroke-linejoin:round;}
+    .gold{fill:#d8c27a;}
+    .dark{fill:#12100e;}
+    .line{fill:none;stroke:#d8c27a;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+    .thin{fill:none;stroke:#d8c27a;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;}
+    .cut{fill:none;stroke:#12100e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;}
+  </style>
+</defs>
+<path class="bg" d="M64 6 111 24v38c0 30-19 51-47 60C36 113 17 92 17 62V24L64 6Z"/>
+<path class="ring" d="M64 10 106 27v35c0 27-17 46-42 55-25-9-42-28-42-55V27L64 10Z"/>
+
+<path class="gold" d="M34 48h60l8 30H26l8-30Z"/>
+<path class="gold" d="M50 34h28l8 14H42l8-14Z"/>
+<circle class="dark" cx="43" cy="80" r="8"/><circle class="dark" cx="64" cy="80" r="8"/><circle class="dark" cx="85" cy="80" r="8"/>
+<path class="dark" d="M54 39h20l3 7H51z"/>
+<path class="line" d="M28 91h72"/>
+
 </svg>

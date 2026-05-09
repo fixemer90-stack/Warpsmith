@@ -1,9 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <!-- Helmet + rank chevrons -->
-  <path d="M6 16c0-3.314 2.686-6 6-6s6 2.686 6 6"/>
-  <path d="M4 16h16"/>
-  <path d="M8 16c0-2.21 1.79-4 4-4s4 1.79 4 4"/>
-  <path d="M10 12l2-3 2 3"/>
-  <path d="M12 9V5"/>
-  <circle cx="12" cy="5" r="1.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title>Character unit class icon</title>
+<defs>
+  <style>
+    .bg{fill:#12100e;}
+    .ring{fill:none;stroke:#d8c27a;stroke-width:6;stroke-linejoin:round;}
+    .gold{fill:#d8c27a;}
+    .dark{fill:#12100e;}
+    .line{fill:none;stroke:#d8c27a;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+    .thin{fill:none;stroke:#d8c27a;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;}
+    .cut{fill:none;stroke:#12100e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;}
+  </style>
+</defs>
+<path class="bg" d="M64 6 111 24v38c0 30-19 51-47 60C36 113 17 92 17 62V24L64 6Z"/>
+<path class="ring" d="M64 10 106 27v35c0 27-17 46-42 55-25-9-42-28-42-55V27L64 10Z"/>
+
+<circle class="gold" cx="64" cy="41" r="14"/>
+<path class="gold" d="M38 90c4-22 16-33 26-33s22 11 26 33H38Z"/>
+<path class="dark" d="M52 34h24v8H52z"/>
+<path class="gold" d="M64 17l6 13H58l6-13Z"/>
+<path class="thin" d="M43 94h42"/>
+
 </svg>
