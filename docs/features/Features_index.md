@@ -87,19 +87,20 @@
 |---|------|------|--------|
 | [F4.1](f4.1-faction-browser.md) | Faction browser with category/PTS filter | 4h | ✅ |
 | [F4.2](f4.2-unit-modal.md) | Unit modal: squad size, loadout, wargear | 6h | ✅ |
-| [F4.3](f4.3-detachment-picker.md) | Detachment picker with rule preview | 3h | ✅ |
+| [F4.3](f4.3-detachment-picker.md) | Compact detachment picker: rule preview + stratagem/enhancement badges | 3h | ✅ |
 | [F4.4](f4.4-synergy-hints.md) | Synergy hints: leader compatibility, transport capacity | 4h | ✅ |
-| [F4.5](f4.5-canvas-map.md) | Canvas map: terrain tiles + deploy zones | 8h | ✅ |
+| [F4.5](f4.5-canvas-map.md) | Canvas map: terrain tiles + deploy zones (superseded by F4.14) | 8h | ✅ |
 | [F4.6](f4.6-progressive-disclosure.md) | Progressive Disclosure: Beginner/Expert modes | 4h | ✅ |
 | [F4.7](f4.7-stat-tooltips.md) | Tooltips on every stat (M/T/SV/W/LD/OC) | 3h | ✅ |
 | [F4.8](f4.8-svg-icons.md) | SVG icons integration in unit cards | 2h | ✅ |
-| [F4.9](f4.9-generate-opponent.md) | Generate Random Opponent | 2h | ✅ |
-| [F4.10](f4.10-leaflet-map.md) | Leaflet map: game format + mission visualization | 6h | ✅ |
+| [F4.9](f4.9-generate-opponent.md) | Generate Random Opponent: valid Warlord + squad_size + auto-play redirect | 2h | ✅ |
+| [F4.10](f4.10-leaflet-map.md) | Leaflet map: game format + mission visualization (superseded by F4.14) | 6h | ✅ |
 | [F4.11](f4.11-movement-phase.md) | Movement Phase (10ed): Normal/Advance/Fall Back/Remain Stationary | 4h | ✅ |
-| [F4.12](f4.12-my-rosters.md) | My Rosters — delete, edit, duplicate | 4h | ✅ |
+| [F4.12](f4.12-my-rosters.md) | My Rosters + explicit Warlord persistence in Team Builder | 4h | ✅ |
 | [F4.13](f4.13-replays-list.md) | Replays List Page — `/replays` | 1h | ✅ |
+| [F4.14](f4.14-strategic-battlefield-map.md) | Strategic battlefield map: mission objectives + roster units + scale | 6h | ✅ |
 
-**Всего:** 13 features, ~51 часов. ✅ 100%
+**Всего:** 14 features, ~57 часов. ✅ 100%
 
 ---
 
@@ -170,7 +171,7 @@ POST /api/auto-play  (api_replays.py)
 | **Phase 1** — Combat Engine | 13 | ~36h | ✅ 100% |
 | **Phase 2** — Game System | 18 | ~113h | ✅ 72% |
 | **Phase 3** — AI & Automation | 9 | ~46h | 🔧 78% |
-| **Phase 4** — Web UI Polish | 13 | ~51h | ✅ 100% |
+| **Phase 4** — Web UI Polish | 14 | ~57h | ✅ 100% |
 | **Phase 5** — Production | 7 | ~16h | ✅ 100% |
 | **Phase 6** — Monetization | 7 | ~17h | ⏳ 0% |
 | **Phase 7** — Expansion | 10 | ~40h | ⏳ 0% |

@@ -11,7 +11,7 @@
 graph TD
     DEV["📌 DEV_INDEX.md<br/>← вы здесь"] --> ROAD["🛣️ ROADMAP.md<br/>дорожная карта"]
     DEV --> AGENTS["🤖 AGENTS.md<br/>правила для AI-агентов"]
-    DEV --> FEAT["📝 Features Index<br/>60 feature specs"]
+    DEV --> FEAT["📝 Features Index<br/>61 feature specs"]
     DEV --> C4["🏗 C4.md<br/>архитектура (Mermaid)"]
     DEV --> ADR["⚖️ ADR.md<br/>11 архитектурных решений"]
     DEV --> SRS["📖 SRS.md<br/>системные требования"]
@@ -62,7 +62,7 @@ graph TD
 | 9 | **docs/requirements/SRS.md** | 📖 7 разделов требований |
 | 10 | **docs/requirements/UX.md** | 🎨 UX-дизайн |
 | 11 | **docs/deployment.md** | ☁️ Деплой: Railway, Dokku, self-host |
-| 12 | **docs/features/Features_index.md** | 📝 Индекс feature-спек (60 specs; roadmap 77+ фич) |
+| 12 | **docs/features/Features_index.md** | 📝 Индекс feature-спек (61 specs; roadmap 78+ фич) |
 | 13 | **main.py** | 💻 Точка входа FastAPI |
 | 14 | **pyproject.toml** | 📦 Зависимости + ruff + mypy + pytest |
 
@@ -107,20 +107,20 @@ simulator/
 │   ├── routes/
 │   │   ├── api.py                core: /units, /simulate, /map, /health, /factions
 │   │   ├── api_detachments.py    /detachments
-│   │   ├── api_rosters.py        /rosters, /generate, /synergies
+│   │   ├── api_rosters.py        /rosters, /generate, /synergies (единственный owner roster CRUD)
 │   │   ├── api_replays.py        /auto-play, /replays, /results
 │   │   ├── auth.py               /register, /login, /logout, /api/me
 │   │   └── pages.py              HTML: /, /team-builder, /scenario-setup, ...
 │   ├── templates/         Jinja2 (base, team_builder, scenario_setup, auth, pricing, ...)
-│   │   └── partials/      detachment_picker, synergy_panel, canvas_map, unit_card
-│   └── static/            JS (Alpine), SVG icons (18)
+│   │   └── partials/      battlefield_map, detachment_picker, synergy_panel, unit_card
+│   └── static/            JS (Alpine; battlefield_map, scenario_setup), SVG icons (18)
 │
-├── tests/                 41 файл, 453 теста
+├── tests/                 41 файл, 454 теста
 │
 ├── docs/
 │   ├── architecture/      C4.md, ADR.md
 │   ├── requirements/      SRS.md, UX.md
-│   ├── features/          60 specs (F1.1–F6.7)
+│   ├── features/          61 specs (F1.1–F6.7)
 │   └── deployment.md
 │
 └── wiki/                  480 .md — данные в репозитории (monorepo)
@@ -136,6 +136,8 @@ simulator/
 |----------|-----------|-------------|
 | Добавить юнита | AGENTS.md → wiki-driven | `wiki/units/<faction>/<Name>.md` |
 | Добавить детачмент | AGENTS.md → wiki-driven | `wiki/detachments/<faction>/<Name>.md` |
+| Править Warlord/ростеры | F4.12 + C4 | `web/static/team_builder.js`, `web/routes/api_rosters.py` |
+| Править генератор оппонента | F4.9 + tests | `web/routes/api_rosters.py`, `web/static/scenario_setup.js` |
 | Добавить стратагему | AGENTS.md → wiki-driven | `wiki/stratagems/<faction>/<Name>.md` |
 | Добавить AI-поведение | ADR-005, C4 → AI | `backend/engine/ai/decision.py` |
 | Добавить OAuth-провайдера | ADR-011 | `backend/auth/providers/<name>.py` |
@@ -152,7 +154,7 @@ cd /mnt/d/Python/Balthier/simulator
 python3 -c "import uvicorn; uvicorn.run('main:app', host='127.0.0.1', port=8000, reload=False)"
 # → http://127.0.0.1:8000
 
-# Тесты (453 шт.)
+# Тесты (454 шт.)
 uv run python -m pytest tests/ -q
 ```
 

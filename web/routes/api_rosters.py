@@ -18,6 +18,11 @@ router = APIRouter()
 class RosterUnit(BaseModel):
     unit_name: str
     squad_size: int = 1
+    pts: int | float | None = None
+    loadout: str | None = None
+    nob_option: str | None = None
+    weapons: list[str] | None = None
+    is_warlord: bool = False
 
 
 class RosterCreate(BaseModel):
@@ -27,6 +32,38 @@ class RosterCreate(BaseModel):
     detachment: str | None = None
     units: list[RosterUnit]
     is_public: bool = False
+
+
+def _warlord_validation_errors(units: list[RosterUnit]) -> list[dict]:
+    """Require an explicit Warlord when a roster has multiple Character choices."""
+
+    candidates: list[RosterUnit] = []
+    for roster_unit in units:
+        unit = wiki.get_unit(roster_unit.unit_name)
+        if not unit:
+            continue
+        tags = {str(t).lower() for t in (getattr(unit, "tags", []) or [])}
+        if (
+            unit.can_be_warlord
+            or unit.is_leader
+            or unit.category.lower() == "character"
+            or "character" in tags
+        ):
+            candidates.append(roster_unit)
+
+    if len(candidates) <= 1:
+        return []
+
+    selected = [u for u in candidates if u.is_warlord]
+    if len(selected) == 1:
+        return []
+    return [
+        {
+            "code": "warlord_required",
+            "message": "Roster has multiple Characters. Select exactly one Warlord.",
+            "detail": {"candidates": [u.unit_name for u in candidates]},
+        }
+    ]
 
 
 class RosterUpdate(BaseModel):
@@ -63,13 +100,14 @@ async def create_roster(data: RosterCreate, user: User = Depends(get_current_use
 
     units_list = [(u.unit_name, u.squad_size) for u in data.units]
     validation = validate_roster(units_list, wiki.units, pts_limit=data.pts_limit)
+    warlord_errors = _warlord_validation_errors(data.units)
 
-    if not validation.is_valid:
+    if not validation.is_valid or warlord_errors:
         raise HTTPException(
             400,
             detail={
                 "error": "roster_invalid",
-                "validation_errors": [e.__dict__ for e in validation.errors],
+                "validation_errors": [e.__dict__ for e in validation.errors] + warlord_errors,
             },
         )
 
@@ -146,8 +184,8 @@ async def generate_roster(data: dict | None = None):
         if unit.is_epic_hero:
             candidates.append((name, unit, 1))
         else:
-            min_m, _max_m = unit.model_count
-            candidates.append((name, unit, min_m))
+            sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
+            candidates.append((name, unit, sq["min"]))
 
     if not candidates:
         raise HTTPException(404, detail=f"No valid units for faction '{faction}'")
@@ -174,12 +212,13 @@ async def generate_roster(data: dict | None = None):
                 continue
             epic_heroes.add(name)
 
-        cost = unit.points * squad_size
+        sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
+        cost = round((unit.points / max(sq["min"], 1)) * squad_size)
 
         if total + cost > pts_limit:
             continue
 
-        selected.append({"unit_name": name, "squad_size": squad_size})
+        selected.append({"unit_name": name, "squad_size": squad_size, "is_warlord": False})
         total += cost
         counts[name] = counts.get(name, 0) + 1
 
@@ -187,18 +226,39 @@ async def generate_roster(data: dict | None = None):
             has_warlord = True
 
     if not has_warlord:
-        # Force-add a cheap warlord-capable unit
+        # Force-add the cheapest Warlord-capable unit. If the random roster is full,
+        # remove last non-warlord picks until the Warlord fits; generated rosters must
+        # be directly saveable and runnable.
         warlords = [
             (n, u)
             for n, u in wiki.units.items()
             if u.can_be_warlord and u.points > 0 and (not faction or u.faction == faction)
         ]
         if warlords:
-            n, u = random.choice(warlords)
+            n, u = min(warlords, key=lambda item: item[1].points)
             cost = u.points
-            if total + cost <= pts_limit:  # only if it fits
-                selected.insert(0, {"unit_name": n, "squad_size": 1})
+            while selected and total + cost > pts_limit:
+                removed = selected.pop()
+                removed_unit = wiki.get_unit(removed["unit_name"])
+                if removed_unit:
+                    sq = getattr(removed_unit, "squad_size", None) or {
+                        "min": 1,
+                        "max": 1,
+                        "step": 1,
+                    }
+                    total -= round(
+                        (removed_unit.points / max(sq["min"], 1)) * removed["squad_size"]
+                    )
+            if total + cost <= pts_limit:
+                selected.insert(0, {"unit_name": n, "squad_size": 1, "is_warlord": True})
                 total += cost
+
+    if selected and not any(u.get("is_warlord") for u in selected):
+        for item in selected:
+            unit = wiki.get_unit(item["unit_name"])
+            if unit and unit.can_be_warlord:
+                item["is_warlord"] = True
+                break
 
     return {
         "roster": {
@@ -244,13 +304,14 @@ async def update_roster(roster_id: int, data: RosterCreate, user: User = Depends
 
     units_list = [(u.unit_name, u.squad_size) for u in data.units]
     validation = validate_roster(units_list, wiki.units, pts_limit=data.pts_limit)
+    warlord_errors = _warlord_validation_errors(data.units)
 
-    if not validation.is_valid:
+    if not validation.is_valid or warlord_errors:
         raise HTTPException(
             400,
             detail={
                 "error": "roster_invalid",
-                "validation_errors": [e.__dict__ for e in validation.errors],
+                "validation_errors": [e.__dict__ for e in validation.errors] + warlord_errors,
             },
         )
 

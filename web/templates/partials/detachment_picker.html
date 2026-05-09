@@ -1,6 +1,12 @@
 <!-- web/templates/partials/detachment_picker.html -->
-<div x-data="detachmentPicker()" class="mb-6">
-    <h3 class="text-sm font-semibold text-gray-300 mb-3">Select Detachment</h3>
+<div x-data="detachmentPicker()" class="mb-6 bg-gray-800 rounded-lg p-4">
+    <div class="flex items-center justify-between mb-3">
+        <div>
+            <h3 class="text-sm font-semibold text-gray-200">Select Detachment</h3>
+            <p class="text-xs text-gray-500">Compact cards show the rule, stratagems and enhancements at a glance.</p>
+        </div>
+        <span class="text-xs text-gray-500" x-show="detachments.length" x-text="`${detachments.length} options`"></span>
+    </div>
 
     <template x-if="collapsed && selectedDetachment">
         <div class="bg-gray-700 rounded-lg p-3 flex items-center justify-between">
@@ -43,32 +49,37 @@
                 </div>
             </template>
             <template x-if="!loading && !error && detachments.length > 0">
-                <template x-for="detachment in detachments" :key="detachment.name">
-                    <div @click="selectDetachment(detachment.name)"
-                         class="bg-gray-700 rounded p-3 cursor-pointer hover:bg-gray-600 transition border border-transparent hover:border-gray-500"
-                         :class="selectedDetachment?.name === detachment.name ? 'ring-2 ring-blue-500' : ''">
-                        <div class="flex justify-between items-start mb-1.5">
-                            <h4 class="text-white font-medium text-sm" x-text="detachment.name"></h4>
-                            <span class="text-blue-400 text-xs ml-2 shrink-0" x-text="detachment.faction"></span>
-                        </div>
-                        <template x-if="detachment.rule_name">
-                            <div class="flex items-start gap-1.5 mb-1.5">
-                                <span class="text-blue-300 text-xs font-semibold shrink-0">Rule:</span>
-                                <span class="text-gray-300 text-xs" x-text="detachment.rule_name"></span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-72 overflow-y-auto pr-1">
+                    <template x-for="detachment in detachments" :key="detachment.name">
+                        <button type="button" @click="selectDetachment(detachment.name)"
+                                class="text-left bg-gray-750 rounded p-3 cursor-pointer hover:bg-gray-700 transition border"
+                                :class="selectedDetachment?.name === detachment.name ? 'border-blue-500 ring-1 ring-blue-500' : 'border-gray-700 hover:border-gray-500'">
+                            <div class="flex justify-between items-start gap-2 mb-1">
+                                <h4 class="text-white font-medium text-sm leading-snug" x-text="detachment.name"></h4>
+                                <span class="text-blue-300 text-[10px] uppercase tracking-wide shrink-0" x-text="detachment.faction"></span>
                             </div>
-                        </template>
-                        <div class="flex gap-3">
-                            <span class="text-gray-500 text-xs" x-text="`\u2694 ${detachment.stratagem_count || 0} stratagems`"></span>
-                            <span class="text-gray-500 text-xs" x-text="`\u2726 ${detachment.enhancement_count || 0} enhancements`"></span>
-                        </div>
-                    </div>
-                </template>
+                            <template x-if="detachment.rule_name">
+                                <p class="text-gray-300 text-xs truncate">
+                                    <span class="text-blue-300 font-semibold">Rule:</span>
+                                    <span x-text="detachment.rule_name"></span>
+                                </p>
+                            </template>
+                            <template x-if="detachment.rule_description">
+                                <p class="text-gray-500 text-xs mt-1 line-clamp-2" x-text="detachment.rule_description"></p>
+                            </template>
+                            <div class="flex gap-2 mt-2">
+                                <span class="bg-gray-800 text-gray-400 rounded px-2 py-0.5 text-[11px]" x-text="`⚔ ${detachment.stratagem_count || 0}`"></span>
+                                <span class="bg-gray-800 text-gray-400 rounded px-2 py-0.5 text-[11px]" x-text="`✦ ${detachment.enhancement_count || 0}`"></span>
+                            </div>
+                        </button>
+                    </template>
+                </div>
             </template>
         </div>
     </template>
 
     <template x-if="!collapsed && selectedDetachment">
-        <div class="mt-4 bg-gray-750 border border-gray-600 rounded-lg overflow-hidden">
+        <div class="mt-4 bg-gray-900/50 border border-gray-600 rounded-lg overflow-hidden">
             <div class="bg-gray-700 px-4 py-3 flex justify-between items-center">
                 <div>
                     <h4 class="text-white font-bold" x-text="selectedDetachment.name"></h4>
@@ -76,7 +87,7 @@
                 </div>
                 <button @click="selectedDetachment = null" class="text-gray-400 hover:text-white text-lg">&times;</button>
             </div>
-            <div class="p-4 space-y-4">
+            <div class="p-4 space-y-4 max-h-96 overflow-y-auto">
                 <p class="text-gray-300 text-sm" x-text="selectedDetachment.description"></p>
                 <template x-if="selectedDetachment.detachment_rule">
                     <div class="bg-blue-900/20 border border-blue-800/40 rounded p-3">

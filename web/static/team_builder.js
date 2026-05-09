@@ -61,11 +61,24 @@ function teamBuilder() {
         get unitCount() {
             return this.roster.length;
         },
+        get warlordCandidates() {
+            return this.roster
+                .map((entry, idx) => ({ ...entry, idx }))
+                .filter(entry => entry.can_be_warlord || entry.category === 'Character' || (entry.tags || []).includes('character'));
+        },
+        get warlordRequired() {
+            return this.warlordCandidates.length > 1;
+        },
+        get hasValidWarlordSelection() {
+            if (!this.warlordRequired) return true;
+            return this.warlordCandidates.filter(entry => entry.is_warlord).length === 1;
+        },
         get isValid() {
             return this.totalPts <= this.ptsLimit
                 && this.totalPts > 0
                 && this.faction
-                && this.roster.length > 0;
+                && this.roster.length > 0
+                && this.hasValidWarlordSelection;
         },
 
         // Unit Modal Computed
@@ -147,6 +160,7 @@ function teamBuilder() {
 
         addUnitToRoster() {
             if (!this.unitDetail) return;
+            const wasSingleWarlordCandidate = this.warlordCandidates.length === 1;
             this.roster.push({
                 name: this.unitDetail.name,
                 squad_size: this.squadSize,
@@ -155,9 +169,26 @@ function teamBuilder() {
                 nob_option: this.selectedNobOption,
                 weapons: this.currentWeapons.map(w => w.name),
                 category: this.unitDetail.category,
+                tags: this.unitDetail.icon_tags || [],
+                can_be_warlord: !!(this.unitDetail.can_be_warlord || this.unitDetail.is_leader || this.unitDetail.category === 'Character' || (this.unitDetail.icon_tags || []).includes('character')),
+                is_warlord: false,
             });
+            const newIndex = this.roster.length - 1;
+            if (this.roster[newIndex].can_be_warlord && this.warlordCandidates.length === 1) {
+                this.roster[newIndex].is_warlord = true;
+            }
+            if (wasSingleWarlordCandidate && this.warlordCandidates.length > 1) {
+                this.roster.forEach(entry => {
+                    entry.is_warlord = false;
+                });
+                this.validationErrors = [{
+                    code: 'warlord_required',
+                    message: 'Multiple Characters detected. Click the crown next to exactly one Character to mark the Warlord.'
+                }];
+            } else {
+                this.validationErrors = [];
+            }
             this.showUnitModal = false;
-            this.validationErrors = [];
         },
 
         init() {
@@ -194,8 +225,24 @@ function teamBuilder() {
                     loadout: u.loadout || '',
                     nob_option: u.nob_option || '',
                     weapons: u.weapons || [],
+                    category: u.category || '',
+                    tags: u.tags || [],
+                    can_be_warlord: !!u.can_be_warlord,
+                    is_warlord: !!u.is_warlord,
                 }));
                 await this.loadUnits();
+                this.roster = this.roster.map(entry => {
+                    const unit = this._units.find(u => u.name === entry.name) || {};
+                    return {
+                        ...entry,
+                        category: entry.category || unit.category || '',
+                        tags: entry.tags?.length ? entry.tags : (unit.icon || []),
+                        can_be_warlord: !!(entry.can_be_warlord || unit.can_be_warlord || unit.is_leader || unit.category === 'Character' || (unit.icon || []).includes('character')),
+                    };
+                });
+                if (this.warlordCandidates.length === 1) {
+                    this.roster[this.warlordCandidates[0].idx].is_warlord = true;
+                }
             } catch (e) {
                 console.error('Failed to load roster for edit:', e);
                 alert('Failed to load roster for editing');
@@ -234,6 +281,16 @@ function teamBuilder() {
 
         removeUnit(idx) {
             this.roster.splice(idx, 1);
+            if (this.warlordCandidates.length === 1) {
+                this.roster[this.warlordCandidates[0].idx].is_warlord = true;
+            }
+        },
+
+        setWarlord(idx) {
+            this.roster.forEach((entry, entryIdx) => {
+                entry.is_warlord = entryIdx === idx;
+            });
+            this.validationErrors = this.validationErrors.filter(err => err.code !== 'warlord_required');
         },
 
         async saveRoster() {
@@ -241,6 +298,14 @@ function teamBuilder() {
                 this.validationErrors = [{
                     code: 'missing_field',
                     message: 'Name, faction, and at least one unit are required'
+                }];
+                return;
+            }
+
+            if (!this.hasValidWarlordSelection) {
+                this.validationErrors = [{
+                    code: 'warlord_required',
+                    message: 'This roster has multiple Characters. Select exactly one Warlord.'
                 }];
                 return;
             }
@@ -272,7 +337,10 @@ function teamBuilder() {
                             squad_size: u.squad_size,
                             pts: u.pts,
                             loadout: u.loadout || '',
-                            weapons: u.weapons || []
+                            nob_option: u.nob_option || '',
+                            weapons: u.weapons || [],
+                            pts: u.pts,
+                            is_warlord: !!u.is_warlord
                         }))
                     })
                 });

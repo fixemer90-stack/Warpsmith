@@ -68,6 +68,38 @@ class TestRosterCRUD:
         assert data["name"] == "My Ork Horde"
         assert data["faction"] == "orks"
 
+    def test_create_roster_multiple_characters_requires_explicit_warlord(
+        self, client, auth_headers
+    ):
+        """Multiple Character units require exactly one explicit Warlord flag."""
+        payload = {
+            **self.ROSTER_PAYLOAD,
+            "units": [
+                {"unit_name": "Warboss", "squad_size": 1},
+                {"unit_name": "Big Mek", "squad_size": 1},
+                {"unit_name": "Boyz", "squad_size": 10},
+            ],
+        }
+        resp = client.post("/api/rosters", json=payload, headers=auth_headers)
+        assert resp.status_code == 400, resp.text
+        errors = resp.json()["detail"]["validation_errors"]
+        assert any(e["code"] == "warlord_required" for e in errors)
+
+    def test_create_roster_multiple_characters_accepts_one_warlord(self, client, auth_headers):
+        """Exactly one explicit Warlord is valid when roster has multiple Characters."""
+        payload = {
+            **self.ROSTER_PAYLOAD,
+            "units": [
+                {"unit_name": "Warboss", "squad_size": 1, "is_warlord": True},
+                {"unit_name": "Big Mek", "squad_size": 1, "is_warlord": False},
+                {"unit_name": "Boyz", "squad_size": 10},
+            ],
+        }
+        resp = client.post("/api/rosters", json=payload, headers=auth_headers)
+        assert resp.status_code == 200, resp.text
+        units = resp.json()["units"]
+        assert [u.get("is_warlord", False) for u in units].count(True) == 1
+
     def test_create_empty_roster_rejected(self, client, auth_headers):
         """Roster with no units fails validation."""
         payload = {**self.ROSTER_PAYLOAD, "units": []}
@@ -94,7 +126,10 @@ class TestRosterCRUD:
 
         resp = client.get(f"/api/rosters/{roster_id}", headers=auth_headers)
         assert resp.status_code == 200
-        assert resp.json()["id"] == roster_id
+        data = resp.json()
+        assert data["id"] == roster_id
+        assert isinstance(data["units"], list)
+        assert data["units"][0]["unit_name"] == "Warboss"
 
     def test_get_roster_not_found(self, client, auth_headers):
         """Non-existent id returns 404."""
