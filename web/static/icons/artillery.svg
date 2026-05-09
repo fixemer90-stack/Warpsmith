@@ -1,7 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="artillery icon">
-<title>artillery</title>
-<defs><style>.bg{fill:#151515}.fg{fill:#e8e2d0}.st{stroke:#e8e2d0;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;fill:none}.dark{fill:#151515}.acc{fill:#b8a66a}</style></defs>
-<path class="bg" d="M64 6 112 24v38c0 30-20 50-48 60C36 112 16 92 16 62V24L64 6Z"/>
-<path class="st" d="M64 8 110 25v37c0 28-19 48-46 58-27-10-46-30-46-58V25L64 8Z"/>
-<path class="fg" d="M33 79h62v10H33zM43 69h42v9H43zM55 51h18v18H55z"/><path class="st" d="M36 69 78 42M78 42h16M34 91h60"/><circle class="fg" cx="38" cy="91" r="8"/><circle class="fg" cx="90" cy="91" r="8"/><path class="acc" d="M88 30l8 9-12 3z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title>Artillery unit class icon</title>
+<defs>
+  <style>
+    .bg{fill:#12100e;}
+    .ring{fill:none;stroke:#d8c27a;stroke-width:6;stroke-linejoin:round;}
+    .gold{fill:#d8c27a;}
+    .dark{fill:#12100e;}
+    .line{fill:none;stroke:#d8c27a;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+    .thin{fill:none;stroke:#d8c27a;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;}
+    .cut{fill:none;stroke:#12100e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;}
+  </style>
+</defs>
+<path class="bg" d="M64 6 111 24v38c0 30-19 51-47 60C36 113 17 92 17 62V24L64 6Z"/>
+<path class="ring" d="M64 10 106 27v35c0 27-17 46-42 55-25-9-42-28-42-55V27L64 10Z"/>
+
+<path class="gold" d="M33 78h58v12H33z"/><circle class="dark" cx="44" cy="91" r="7"/><circle class="dark" cx="80" cy="91" r="7"/><path class="gold" d="M39 55 86 35l7 14-47 20z"/><path class="dark" d="M78 39l9-4 7 14-9 4z"/><path class="line" d="M44 79 65 55M82 77 72 57"/><path class="thin" d="M29 100h70"/>
 </svg>

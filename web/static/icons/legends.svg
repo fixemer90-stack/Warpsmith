@@ -1,7 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="legends icon">
-<title>legends</title>
-<defs><style>.bg{fill:#151515}.fg{fill:#e8e2d0}.st{stroke:#e8e2d0;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;fill:none}.dark{fill:#151515}.acc{fill:#b8a66a}</style></defs>
-<path class="bg" d="M64 6 112 24v38c0 30-20 50-48 60C36 112 16 92 16 62V24L64 6Z"/>
-<path class="st" d="M64 8 110 25v37c0 28-19 48-46 58-27-10-46-30-46-58V25L64 8Z"/>
-<path class="fg" d="M38 29h52v70H38z"/><path class="dark" d="M47 39h34v10H47zM47 57h34v7H47zM47 70h27v7H47z"/><path class="acc" d="M64 80l8 5 8-5v20l-8-5-8 5z"/><path class="st" d="M34 29h60M34 99h60M90 37c9 4 13 10 11 18"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title>Legends unit class icon</title>
+<defs>
+  <style>
+    .bg{fill:#12100e;}
+    .ring{fill:none;stroke:#d8c27a;stroke-width:6;stroke-linejoin:round;}
+    .gold{fill:#d8c27a;}
+    .dark{fill:#12100e;}
+    .line{fill:none;stroke:#d8c27a;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+    .thin{fill:none;stroke:#d8c27a;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;}
+    .cut{fill:none;stroke:#12100e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;}
+  </style>
+</defs>
+<path class="bg" d="M64 6 111 24v38c0 30-19 51-47 60C36 113 17 92 17 62V24L64 6Z"/>
+<path class="ring" d="M64 10 106 27v35c0 27-17 46-42 55-25-9-42-28-42-55V27L64 10Z"/>
+
+<path class="gold" d="M39 30h50v66H39z"/><path class="dark" d="M47 39h34v48H47z"/><path class="gold" d="M54 47h20v6H54zM54 60h20v5H54zM54 72h15v5H54z"/><path class="gold" d="M64 17l6 12H58l6-12Z"/><path class="line" d="M37 98h54"/><path class="thin" d="M31 34h13M84 34h13"/>
 </svg>

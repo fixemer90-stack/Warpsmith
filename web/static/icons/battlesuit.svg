@@ -1,7 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="battlesuit icon">
-<title>battlesuit</title>
-<defs><style>.bg{fill:#151515}.fg{fill:#e8e2d0}.st{stroke:#e8e2d0;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;fill:none}.dark{fill:#151515}.acc{fill:#b8a66a}</style></defs>
-<path class="bg" d="M64 6 112 24v38c0 30-20 50-48 60C36 112 16 92 16 62V24L64 6Z"/>
-<path class="st" d="M64 8 110 25v37c0 28-19 48-46 58-27-10-46-30-46-58V25L64 8Z"/>
-<path class="fg" d="M49 25h30l8 19-8 24H49l-8-24 8-19Zm7 10-5 11 5 12h16l5-12-5-11H56Z"/><path class="fg" d="M33 46h15v38H35l-8-25 6-13Zm47 0h15l6 13-8 25H80V46ZM48 70h10v28H40V86l8-16Zm22 0h10l8 16v12H70V70Z"/><path class="dark" d="M57 39h14v8H57z"/><path class="acc" d="M58 51h12v7H58z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title>Battlesuit unit class icon</title>
+<defs>
+  <style>
+    .bg{fill:#12100e;}
+    .ring{fill:none;stroke:#d8c27a;stroke-width:6;stroke-linejoin:round;}
+    .gold{fill:#d8c27a;}
+    .dark{fill:#12100e;}
+    .line{fill:none;stroke:#d8c27a;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+    .thin{fill:none;stroke:#d8c27a;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;}
+    .cut{fill:none;stroke:#12100e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;}
+  </style>
+</defs>
+<path class="bg" d="M64 6 111 24v38c0 30-19 51-47 60C36 113 17 92 17 62V24L64 6Z"/>
+<path class="ring" d="M64 10 106 27v35c0 27-17 46-42 55-25-9-42-28-42-55V27L64 10Z"/>
+
+<path class="gold" d="M45 34h38v34H45z"/><path class="dark" d="M55 43h18v10H55z"/><path class="gold" d="M38 55h15v26H38zM75 55h15v26H75z"/><path class="line" d="M39 72 28 86M89 72l11 14M54 70l-8 29M74 70l8 29"/><path class="line" d="M34 101h22M72 101h22"/><path class="gold" d="M58 23h12l5 11H53z"/><path class="dark" d="M43 60h10v9H43zM75 60h10v9H75z"/>
 </svg>
