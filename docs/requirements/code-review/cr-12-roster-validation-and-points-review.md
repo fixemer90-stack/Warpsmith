@@ -1,7 +1,7 @@
 ---
 title: "CR-12 — Roster validation and points review"
 parent: code-review
-status: pending
+status: request-changes
 source: ../code-review-plan.md#cr-12
 tags: [requirements, code-review, atomic-review]
 ---
@@ -34,30 +34,38 @@ tags: [requirements, code-review, atomic-review]
 
 ## Execution Status
 
-**Status:** Pending
+**Status:** Request Changes
 
-**Review report target:** `docs/reviews/YYYY-MM-DD/CR-12-roster-validation-and-points-review.md`
+**Review report target:** `docs/reviews/2026-05-09/CR-12-roster-validation-and-points-review.md`
 
 ### Status checklist
 
-- [ ] Scope confirmed
-- [ ] Requirements/specs reviewed
-- [ ] Tests reviewed first
-- [ ] Production code reviewed
-- [ ] Correctness checked
-- [ ] Readability checked
-- [ ] Architecture checked
-- [ ] Security checked
-- [ ] Performance checked
-- [ ] Verification commands executed
-- [ ] Findings report written
-- [ ] Triage status updated in `docs/requirements/code-review/code-review.md`
+- [x] Scope confirmed
+- [x] Requirements/specs reviewed
+- [x] Tests reviewed first
+- [x] Production code reviewed
+- [x] Correctness checked
+- [x] Readability checked
+- [x] Architecture checked
+- [x] Security checked
+- [x] Performance checked
+- [x] Verification commands executed
+- [x] Findings report written
+- [x] Triage status updated in `docs/requirements/code-review/code-review.md`
 
 ### Result
 
-- **Verdict:** Not started
-- **Critical:** 0 known before execution
-- **Important:** 0 known before execution
-- **Suggestions:** 0 known before execution
+- **Verdict:** Request Changes
+- **Critical:** 3
+- **Important:** 4
+- **Suggestions:** 0
 - **Blocked by:** —
-- **Completed at:** —
+- **Completed at:** 2026-05-09T22:45:59+03:00
+- **Report:** `docs/reviews/2026-05-09/CR-12-roster-validation-and-points-review.md`
+- **Verification:** `45 passed, 26 warnings in 8.78s` for `tests/test_roster.py tests/test_rosters.py tests/test_generate_roster.py`
+- **Notes:** API accepts client-side points totals that exceed `pts_limit`, generated rosters can return success with no Warlord when no legal roster fits, and core validation cannot represent explicit Warlord selection.
+
+## Triage summary
+
+- [CR-12 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-12)
+- Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.

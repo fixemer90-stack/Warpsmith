@@ -1,7 +1,7 @@
 ---
 title: "CR-00 — Inventory and baseline"
 parent: code-review
-status: pending
+status: approved
 source: ../code-review-plan.md#cr-00
 tags: [requirements, code-review, atomic-review]
 ---
@@ -36,30 +36,36 @@ tags: [requirements, code-review, atomic-review]
 
 ## Execution Status
 
-**Status:** Pending
+**Status:** Approved
 
-**Review report target:** `docs/reviews/YYYY-MM-DD/CR-00-inventory-and-baseline.md`
+**Review report:** `docs/reviews/2026-05-09/CR-00-inventory-and-baseline.md`
 
 ### Status checklist
 
-- [ ] Scope confirmed
-- [ ] Requirements/specs reviewed
-- [ ] Tests reviewed first
-- [ ] Production code reviewed
-- [ ] Correctness checked
-- [ ] Readability checked
-- [ ] Architecture checked
-- [ ] Security checked
-- [ ] Performance checked
-- [ ] Verification commands executed
-- [ ] Findings report written
-- [ ] Triage status updated in `docs/requirements/code-review/code-review.md`
+- [x] Scope confirmed
+- [x] Requirements/specs reviewed
+- [x] Tests reviewed first
+- [x] Production code reviewed
+- [x] Correctness checked
+- [x] Readability checked
+- [x] Architecture checked
+- [x] Security checked
+- [x] Performance checked
+- [x] Verification commands executed
+- [x] Findings report written
+- [x] Triage status updated in `docs/requirements/code-review/code-review.md`
 
 ### Result
 
-- **Verdict:** Not started
-- **Critical:** 0 known before execution
-- **Important:** 0 known before execution
-- **Suggestions:** 0 known before execution
+- **Verdict:** APPROVE / BASELINE CAPTURED
+- **Critical:** 0
+- **Important:** 0
+- **Suggestions:** 4 baseline risks/next-review notes
 - **Blocked by:** —
-- **Completed at:** —
+- **Report:** `docs/reviews/2026-05-09/CR-00-inventory-and-baseline.md`
+- **Completed at:** 2026-05-09
+
+## Triage summary
+
+- [CR-00 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-00)
+- Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.

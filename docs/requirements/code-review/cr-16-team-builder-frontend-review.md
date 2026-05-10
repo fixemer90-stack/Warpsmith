@@ -1,7 +1,7 @@
 ---
 title: "CR-16 — Team Builder frontend review"
 parent: code-review
-status: pending
+status: request-changes
 source: ../code-review-plan.md#cr-16
 tags: [requirements, code-review, atomic-review]
 ---
@@ -15,7 +15,7 @@ tags: [requirements, code-review, atomic-review]
 - Review: `web/static/team_builder.js`
 - Review: `web/static/unit_modal.js`
 - Review: `web/templates/partials/*.html` related to units/rosters
-- Output: `docs/reviews/YYYY-MM-DD/CR-16-team-builder-frontend.md`
+- Output: `docs/reviews/2026-05-10/CR-16-team-builder-frontend-review.md`
 
 **Steps:**
 1. Выполнить `node -c` для involved JS files.
@@ -34,30 +34,36 @@ tags: [requirements, code-review, atomic-review]
 
 ## Execution Status
 
-**Status:** Pending
+**Status:** Request Changes
 
-**Review report target:** `docs/reviews/YYYY-MM-DD/CR-16-team-builder-frontend-review.md`
+**Review report target:** `docs/reviews/2026-05-10/CR-16-team-builder-frontend-review.md`
 
 ### Status checklist
 
-- [ ] Scope confirmed
-- [ ] Requirements/specs reviewed
-- [ ] Tests reviewed first
-- [ ] Production code reviewed
-- [ ] Correctness checked
-- [ ] Readability checked
-- [ ] Architecture checked
-- [ ] Security checked
-- [ ] Performance checked
-- [ ] Verification commands executed
-- [ ] Findings report written
-- [ ] Triage status updated in `docs/requirements/code-review/code-review.md`
+- [x] Scope confirmed
+- [x] Requirements/specs reviewed
+- [x] Tests reviewed first
+- [x] Production code reviewed
+- [x] Correctness checked
+- [x] Readability checked
+- [x] Architecture checked
+- [x] Security checked
+- [x] Performance checked
+- [x] Verification commands executed
+- [x] Findings report written
+- [x] Triage status updated in `docs/requirements/code-review/code-review.md`
 
 ### Result
 
-- **Verdict:** Not started
-- **Critical:** 0 known before execution
-- **Important:** 0 known before execution
-- **Suggestions:** 0 known before execution
+- **Verdict:** Request Changes — current live Team Builder Warlord/PTS smoke passed, but stale duplicate modal code and placeholder modal tests make the CR-16 acceptance unsafe.
+- **Critical:** 0
+- **Important:** 2
+- **Suggestions:** 2
 - **Blocked by:** —
-- **Completed at:** —
+- **Report:** `docs/reviews/2026-05-10/CR-16-team-builder-frontend-review.md`
+- **Completed at:** 2026-05-10
+
+## Triage summary
+
+- [CR-16 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-16)
+- Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.

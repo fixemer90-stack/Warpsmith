@@ -1,7 +1,7 @@
 ---
 title: "CR-21 — Documentation consistency review"
 parent: code-review
-status: pending
+status: request-changes
 source: ../code-review-plan.md#cr-21
 tags: [requirements, code-review, atomic-review]
 ---
@@ -19,7 +19,7 @@ tags: [requirements, code-review, atomic-review]
 - Review: `ROADMAP.html`
 - Review: `docs/architecture/C4.md`
 - Review: `docs/features/*.md`
-- Output: `docs/reviews/YYYY-MM-DD/CR-21-documentation-consistency.md`
+- Output: `docs/reviews/2026-05-10/CR-21-documentation-consistency-review.md`
 
 **Steps:**
 1. Проверить test counts against collect-only/full tests.
@@ -38,30 +38,35 @@ tags: [requirements, code-review, atomic-review]
 
 ## Execution Status
 
-**Status:** Pending
+**Status:** Request Changes
 
-**Review report target:** `docs/reviews/YYYY-MM-DD/CR-21-documentation-consistency-review.md`
+**Review report target:** `docs/reviews/2026-05-10/CR-21-documentation-consistency-review.md`
 
 ### Status checklist
 
-- [ ] Scope confirmed
-- [ ] Requirements/specs reviewed
-- [ ] Tests reviewed first
-- [ ] Production code reviewed
-- [ ] Correctness checked
-- [ ] Readability checked
-- [ ] Architecture checked
-- [ ] Security checked
-- [ ] Performance checked
-- [ ] Verification commands executed
-- [ ] Findings report written
-- [ ] Triage status updated in `docs/requirements/code-review/code-review.md`
+- [x] Scope confirmed
+- [x] Requirements/specs reviewed
+- [x] Tests reviewed first
+- [x] Production code reviewed
+- [x] Correctness checked
+- [x] Readability checked
+- [x] Architecture checked
+- [x] Security checked
+- [x] Performance checked
+- [x] Verification commands executed
+- [x] Findings report written
+- [x] Triage status updated in `docs/requirements/code-review/code-review.md`
 
 ### Result
 
-- **Verdict:** Not started
-- **Critical:** 0 known before execution
-- **Important:** 0 known before execution
-- **Suggestions:** 0 known before execution
+- **Verdict:** Request Changes
+- **Critical:** 0
+- **Important:** 8
+- **Suggestions:** 2
 - **Blocked by:** —
-- **Completed at:** —
+- **Completed at:** 2026-05-10
+
+## Triage summary
+
+- [CR-21 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-21)
+- Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.

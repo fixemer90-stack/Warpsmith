@@ -1,7 +1,7 @@
 ---
 title: "CR-06 — Wiki loader and parser review"
 parent: code-review
-status: pending
+status: request-changes
 source: ../code-review-plan.md#cr-06
 tags: [requirements, code-review, atomic-review]
 ---
@@ -34,7 +34,7 @@ tags: [requirements, code-review, atomic-review]
 
 ## Execution Status
 
-**Status:** Pending
+**Status:** Request Changes
 
 **Review report target:** `docs/reviews/YYYY-MM-DD/CR-06-wiki-loader-and-parser-review.md`
 
@@ -53,11 +53,14 @@ tags: [requirements, code-review, atomic-review]
 - [ ] Findings report written
 - [ ] Triage status updated in `docs/requirements/code-review/code-review.md`
 
-### Result
+#
 
-- **Verdict:** Not started
-- **Critical:** 0 known before execution
-- **Important:** 0 known before execution
-- **Suggestions:** 0 known before execution
-- **Blocked by:** —
-- **Completed at:** —
+## Result
+
+- **Report:** `docs/reviews/2026-05-09/CR-06-wiki-loader-and-parser-review.md`
+- **Outcome:** Verdict: REQUEST CHANGES. Critical 1, Important 4, Suggestions 1. Unsafe pickle cache, 168 unit files vs 160 loaded units, 27 zero-point units, 45 no-weapon units, live content validation gaps.
+
+## Triage summary
+
+- [CR-06 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-06)
+- Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
