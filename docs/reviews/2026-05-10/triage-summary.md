@@ -39,252 +39,234 @@ A quick scan of per-CR artifacts found a mismatch against the tracker because so
 | Review debt gate | Fail | 38 Critical / 112 Important still open |
 | Result VP consistency | Fail | `/result/auto_242424` showed 28/4 while runtime result was 38/14 |
 
-## Immediate P0 blockers
+## Finding groups
 
-These must be fixed before any release-ready verdict.
+Remediation plan: [docs/requirements/code-review/remediation-plan.md](../../requirements/code-review/remediation-plan.md)
 
-| Area | CRs | Why it blocks release | Required action |
-|---|---|---|---|
-| Secrets / auth / ownership | CR-02, CR-03, CR-04, CR-20 | Secret handling, session/auth boundaries, ownership bypass risk, hardcoded JWT fallback. | Remove/rotate secrets as needed, enforce auth/ownership, fail closed in production, add regression tests. |
-| Data loss / persistence | CR-05, CR-14, CR-20 | Replay overwrite/data loss risks and startup migration deleting replay data. | Make replay identity immutable/unique, remove destructive migrations, add persistence regression tests. |
-| Billing / monetization gates | CR-19 | Subscription model is not enforceable: unsigned webhook, stub checkout/portal, unauthenticated/ungated auto-play, roster-limit bypasses. | Implement fail-closed billing boundaries or explicitly disable paid claims until complete. |
-| Core rules correctness | CR-07, CR-08, CR-09, CR-10, CR-11, CR-12 | Combat, game phase, movement/charge/melee, VP, terrain/cover/LoS, and roster validation findings affect simulator correctness. | Fix rule regressions in small batches with focused probes plus full tests. |
-| Replay/result correctness | CR-14, CR-24 | Result page can show stale VP and unreliable summary attribution. | Fix final snapshot/result source of truth, duplicate-name attribution, and result regression coverage. |
-| Test confidence | CR-22 | Test suite passes but misses key commercialization/auth/production/regression paths. | Add regression tests for every P0 fix; remove placeholder/status-only assertions where blocking. |
+All CR findings are triaged into exactly four groups. CR headings remain stable link targets from the execution index and CR artifacts.
 
-## Recommended remediation order
+| Group | CRs | Release meaning |
+|---|---|---|
+| P0 release blocker | CR-02, CR-03, CR-04, CR-05, CR-14, CR-19, CR-20, CR-22, CR-24 | Must be fixed before any release-ready verdict. These findings cover security/auth, ownership, data loss, paid-feature enforcement, production safety, result integrity, and tests for those blockers. |
+| P1 core correctness | CR-06, CR-07, CR-08, CR-09, CR-10, CR-11, CR-12, CR-13, CR-15, CR-16, CR-17, CR-18 | Core product correctness and integration. These can be worked after P0 is stabilized, but they still block a high-confidence simulator release unless explicitly narrowed. |
+| P2 important debt | CR-01, CR-21, CR-23 | Important debt that should be fixed before commercialization scale-up, or accepted with owner/date/guardrail if release scope is intentionally narrowed. |
+| Accepted / postponed | CR-00 | Items not currently blocking release. No Critical or Important finding is accepted as release debt yet; only CR-00 baseline suggestions are postponed as hygiene notes. |
 
-1. P0 security/auth/production fail-closed batch:
-   - CR-02, CR-03, CR-04, CR-20.
-   - Goal: no committed/local secret exposure, no hardcoded production JWT fallback, no ownership bypass, no destructive startup migration.
+## P0 release blocker
 
-2. P0 monetization boundary batch:
-   - CR-19.
-   - Goal: product claims match enforced gates: Free/Premium roster limits, auto-play quota/auth, checkout/portal/webhook behavior, `/api/me` feature exposure.
-
-3. P0 replay/result data integrity batch:
-   - CR-14, CR-24.
-   - Goal: unique replay IDs, no overwrite, final VP source of truth includes Battle Ready, same-name armies attribute events correctly.
-
-4. P1 rules engine correctness batch:
-   - CR-07, CR-08, CR-09, CR-10, CR-11, CR-12, CR-15.
-   - Goal: 10e phase/rules correctness and faction AI integration verified by deterministic probes, not only helper tests.
-
-5. P1 API/frontend integration batch:
-   - CR-13, CR-16, CR-17, CR-18.
-   - Goal: route contracts, Scenario Setup, Team Builder, navigation, and browser-visible behavior match specs.
-
-6. P2 docs/tests/performance hardening batch:
-   - CR-01, CR-21, CR-22, CR-23 plus CR-00 suggestions.
-   - Goal: docs match code, test suite catches real regressions, performance/scalability risks are either fixed or explicitly accepted.
-
-7. Re-run CR-24 final gate:
-   - Full lint/format/JS syntax/pytest/server/browser smoke.
-   - Add a deterministic final-result smoke that asserts API and page VP include Battle Ready.
-
-## Per-CR triage register
-
-Status values below are triage status, not implementation status. Each CR heading is a stable link target from the execution index and from the CR artifact. All Request Changes items remain open until fixed/re-reviewed or explicitly accepted as debt.
-
-### CR-00 — Inventory and baseline
-
-- **Counts:** C0 / I0 / S4
-- **Priority:** P2
-- **Triage status:** Accepted as baseline notes
-- **Report:** [docs/reviews/2026-05-09/CR-00-inventory-and-baseline.md](../2026-05-09/CR-00-inventory-and-baseline.md)
-- **Next action:** Baseline captured. Keep suggestions as follow-up hygiene while fixing later CRs.
-
-### CR-01 — Requirements and spec alignment map
-
-- **Counts:** C0 / I5 / S4
-- **Priority:** P2
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-09/CR-01-requirements-and-spec-alignment-map.md](../2026-05-09/CR-01-requirements-and-spec-alignment-map.md)
-- **Next action:** Fix spec/docs alignment after code fixes; do not let stale specs define release readiness.
+Must be fixed before any release-ready verdict. Critical findings cannot be accepted as debt. Important findings in this group also block release because they protect auth, persistence, billing, production safety, final result integrity, or regression confidence.
 
 ### CR-02 — Static security and secrets scan
 
+- **Group:** P0 release blocker
 - **Counts:** C2 / I7 / S4
-- **Priority:** P0
 - **Triage status:** Open
 - **Report:** [docs/reviews/2026-05-09/CR-02-static-security-and-secrets-scan.md](../2026-05-09/CR-02-static-security-and-secrets-scan.md)
 - **Next action:** Resolve secret/security findings first; rotate anything that may be real.
 
 ### CR-03 — Auth and session review
 
+- **Group:** P0 release blocker
 - **Counts:** C1 / I5 / S3
-- **Priority:** P0
 - **Triage status:** Open
 - **Report:** [docs/reviews/2026-05-09/CR-03-auth-and-session-review.md](../2026-05-09/CR-03-auth-and-session-review.md)
 - **Next action:** Fix auth/session blockers and add regression tests around login/logout/JWT cookie behavior.
 
 ### CR-04 — Authorization and ownership review
 
+- **Group:** P0 release blocker
 - **Counts:** C2 / I3 / S3
-- **Priority:** P0
 - **Triage status:** Open
 - **Report:** [docs/reviews/2026-05-09/CR-04-authorization-and-ownership-review.md](../2026-05-09/CR-04-authorization-and-ownership-review.md)
 - **Next action:** Fix roster/replay/subscription ownership boundaries.
 
 ### CR-05 — Database and persistence review
 
+- **Group:** P0 release blocker
 - **Counts:** C1 / I6 / S4
-- **Priority:** P0
 - **Triage status:** Open
 - **Report:** [docs/reviews/2026-05-09/CR-05-database-and-persistence-review.md](../2026-05-09/CR-05-database-and-persistence-review.md)
 - **Next action:** Fix persistence/data-loss risks before production deploy.
 
-### CR-06 — Wiki loader and parser review
-
-- **Counts:** C1 / I4 / S1
-- **Priority:** P1
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-09/CR-06-wiki-loader-and-parser-review.md](../2026-05-09/CR-06-wiki-loader-and-parser-review.md)
-- **Next action:** Fix unsafe cache/content validation gaps; reconcile unit files vs loaded units and zero/no-weapon data quality findings.
-
-### CR-07 — Combat engine review
-
-- **Counts:** C3 / I4 / S1
-- **Priority:** P0
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-09/CR-07-combat-engine-review.md](../2026-05-09/CR-07-combat-engine-review.md)
-- **Next action:** Fix combat rules: natural 6 auto-wounds without Lethal Hits, Devastating Wounds saves, AP double-apply, Sustained Hits resolution.
-
-### CR-08 — Game state and phase machine review
-
-- **Counts:** C3 / I4 / S1
-- **Priority:** P0
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-09/CR-08-game-state-and-phase-machine-review.md](../2026-05-09/CR-08-game-state-and-phase-machine-review.md)
-- **Next action:** Fix 10e phase/round/CP/battle-shock state-machine blockers with deterministic probes.
-
-### CR-09 — Movement, charge and melee review
-
-- **Counts:** C3 / I3 / S0
-- **Priority:** P0
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-09/CR-09-movement-charge-and-melee-review.md](../2026-05-09/CR-09-movement-charge-and-melee-review.md)
-- **Next action:** Fix melee movement/charge/melee damage integration so units can reliably engage and log damage.
-
-### CR-10 — Mission, objectives and VP review
-
-- **Counts:** C2 / I4 / S0
-- **Priority:** P0
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-09/CR-10-mission-objectives-and-vp-review.md](../2026-05-09/CR-10-mission-objectives-and-vp-review.md)
-- **Next action:** Fix scoring/objective/Battle Ready/winner consistency issues.
-
-### CR-11 — Terrain, cover and LoS review
-
-- **Counts:** C3 / I4 / S0
-- **Priority:** P0
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-09/CR-11-terrain-cover-and-los-review.md](../2026-05-09/CR-11-terrain-cover-and-los-review.md)
-- **Next action:** Fix cover argument order, AP0 cover cap, documented LoS blocking, LoS cache invalidation, and terrain integration tests.
-
-### CR-12 — Roster validation and points review
-
-- **Counts:** C3 / I4 / S0
-- **Priority:** P0
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-09/CR-12-roster-validation-and-points-review.md](../2026-05-09/CR-12-roster-validation-and-points-review.md)
-- **Next action:** Fix PTS/Warlord/squad size/battleline/generated roster validation gaps.
-
-### CR-13 — API route surface review
-
-- **Counts:** C3 / I5 / S0
-- **Priority:** P1
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-09/CR-13-api-route-surface-review.md](../2026-05-09/CR-13-api-route-surface-review.md)
-- **Next action:** Fix route/auth/frontend fetch/status-code contract issues after ownership/auth batch.
-
 ### CR-14 — Autoplay, replay and result review
 
+- **Group:** P0 release blocker
 - **Counts:** C3 / I4 / S0
-- **Priority:** P0
 - **Triage status:** Open
 - **Report:** [docs/reviews/2026-05-09/CR-14-autoplay-replay-and-result-review.md](../2026-05-09/CR-14-autoplay-replay-and-result-review.md)
 - **Next action:** Fix non-unique replay IDs, final VP snapshots, duplicate-name attribution, VP event parsing, result-card charge counts.
 
-### CR-15 — AI decision engine and faction profile review
-
-- **Counts:** C3 / I4 / S0
-- **Priority:** P1
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-09/CR-15-ai-decision-engine-and-faction-profile-review.md](../2026-05-09/CR-15-ai-decision-engine-and-faction-profile-review.md)
-- **Next action:** Wire F3.1/F3.2 decision engine into live phases; verify faction behavior overrides, target priorities, deployment objectives.
-
-### CR-16 — Team Builder frontend review
-
-- **Counts:** C0 / I2 / S2
-- **Priority:** P1
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-10/CR-16-team-builder-frontend-review.md](CR-16-team-builder-frontend-review.md)
-- **Next action:** Remove stale duplicate modal risk and replace placeholder modal tests with browser-visible assertions.
-
-### CR-17 — Scenario Setup and battlefield map frontend review
-
-- **Counts:** C0 / I4 / S1
-- **Priority:** P1
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-10/CR-17-scenario-setup-and-battlefield-map-frontend-review.md](CR-17-scenario-setup-and-battlefield-map-frontend-review.md)
-- **Next action:** Fix Scenario Setup/map/generated-opponent contracts beyond happy-path launch.
-
-### CR-18 — Pages/templates/navigation review
-
-- **Counts:** C0 / I4 / S1
-- **Priority:** P1
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-10/CR-18-pages-templates-navigation-review.md](CR-18-pages-templates-navigation-review.md)
-- **Next action:** Fix broken pricing CTA, shared helper CSS under Tailwind CDN, Progressive Disclosure localStorage failure path, and tests.
-
 ### CR-19 — Billing, feature gate and subscription review
 
+- **Group:** P0 release blocker
 - **Counts:** C3 / I8 / S1
-- **Priority:** P0
 - **Triage status:** Open
 - **Report:** [docs/reviews/2026-05-10/CR-19-billing-feature-gate-and-subscription-review.md](CR-19-billing-feature-gate-and-subscription-review.md)
 - **Next action:** Implement or explicitly disable commercialization promises: webhook signature, user-bound checkout/portal, auto-play gating, roster limits, tier features.
 
 ### CR-20 — Deployment, config and production readiness review
 
+- **Group:** P0 release blocker
 - **Counts:** C2 / I7 / S1
-- **Priority:** P0
 - **Triage status:** Open
 - **Report:** [docs/reviews/2026-05-10/CR-20-deployment-config-and-production-readiness-review.md](CR-20-deployment-config-and-production-readiness-review.md)
 - **Next action:** Fix replay-deleting migration, hardcoded JWT fallback, CSP/sentry/rate-limit/branch deployment risks.
 
-### CR-21 — Documentation consistency review
-
-- **Counts:** C0 / I8 / S2
-- **Priority:** P2
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-10/CR-21-documentation-consistency-review.md](CR-21-documentation-consistency-review.md)
-- **Next action:** Sync docs after fixes: feature specs, C4, indexes, ROADMAP, AGENTS, CHANGELOG.
-
 ### CR-22 — Test suite quality review
 
+- **Group:** P0 release blocker
 - **Counts:** C2 / I9 / S2
-- **Priority:** P0
 - **Triage status:** Open
 - **Report:** [docs/reviews/2026-05-10/CR-22-test-suite-quality-review.md](CR-22-test-suite-quality-review.md)
 - **Next action:** Add tests for blocking security/auth/billing/persistence/result regressions; remove weak/placeholder coverage.
 
+### CR-24 — Final integration regression gate
+
+- **Group:** P0 release blocker
+- **Counts:** C1 / I1 / S1
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-10/CR-24-final-integration-regression-gate.md](CR-24-final-integration-regression-gate.md)
+- **Next action:** Re-run after triage/remediation; current blocker is unresolved CR debt plus stale result VP smoke.
+
+## P1 core correctness
+
+Core simulator and UI/API correctness. Fix after P0 batches, then run focused deterministic probes plus full regression.
+
+### CR-06 — Wiki loader and parser review
+
+- **Group:** P1 core correctness
+- **Counts:** C1 / I4 / S1
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-09/CR-06-wiki-loader-and-parser-review.md](../2026-05-09/CR-06-wiki-loader-and-parser-review.md)
+- **Next action:** Fix unsafe cache/content validation gaps; reconcile unit files vs loaded units and zero/no-weapon data quality findings.
+
+### CR-07 — Combat engine review
+
+- **Group:** P1 core correctness
+- **Counts:** C3 / I4 / S1
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-09/CR-07-combat-engine-review.md](../2026-05-09/CR-07-combat-engine-review.md)
+- **Next action:** Fix combat rules: natural 6 auto-wounds without Lethal Hits, Devastating Wounds saves, AP double-apply, Sustained Hits resolution.
+
+### CR-08 — Game state and phase machine review
+
+- **Group:** P1 core correctness
+- **Counts:** C3 / I4 / S1
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-09/CR-08-game-state-and-phase-machine-review.md](../2026-05-09/CR-08-game-state-and-phase-machine-review.md)
+- **Next action:** Fix 10e phase/round/CP/battle-shock state-machine blockers with deterministic probes.
+
+### CR-09 — Movement, charge and melee review
+
+- **Group:** P1 core correctness
+- **Counts:** C3 / I3 / S0
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-09/CR-09-movement-charge-and-melee-review.md](../2026-05-09/CR-09-movement-charge-and-melee-review.md)
+- **Next action:** Fix melee movement/charge/melee damage integration so units can reliably engage and log damage.
+
+### CR-10 — Mission, objectives and VP review
+
+- **Group:** P1 core correctness
+- **Counts:** C2 / I4 / S0
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-09/CR-10-mission-objectives-and-vp-review.md](../2026-05-09/CR-10-mission-objectives-and-vp-review.md)
+- **Next action:** Fix scoring/objective/Battle Ready/winner consistency issues.
+
+### CR-11 — Terrain, cover and LoS review
+
+- **Group:** P1 core correctness
+- **Counts:** C3 / I4 / S0
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-09/CR-11-terrain-cover-and-los-review.md](../2026-05-09/CR-11-terrain-cover-and-los-review.md)
+- **Next action:** Fix cover argument order, AP0 cover cap, documented LoS blocking, LoS cache invalidation, and terrain integration tests.
+
+### CR-12 — Roster validation and points review
+
+- **Group:** P1 core correctness
+- **Counts:** C3 / I4 / S0
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-09/CR-12-roster-validation-and-points-review.md](../2026-05-09/CR-12-roster-validation-and-points-review.md)
+- **Next action:** Fix PTS/Warlord/squad size/battleline/generated roster validation gaps.
+
+### CR-13 — API route surface review
+
+- **Group:** P1 core correctness
+- **Counts:** C3 / I5 / S0
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-09/CR-13-api-route-surface-review.md](../2026-05-09/CR-13-api-route-surface-review.md)
+- **Next action:** Fix route/auth/frontend fetch/status-code contract issues after ownership/auth batch.
+
+### CR-15 — AI decision engine and faction profile review
+
+- **Group:** P1 core correctness
+- **Counts:** C3 / I4 / S0
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-09/CR-15-ai-decision-engine-and-faction-profile-review.md](../2026-05-09/CR-15-ai-decision-engine-and-faction-profile-review.md)
+- **Next action:** Wire F3.1/F3.2 decision engine into live phases; verify faction behavior overrides, target priorities, deployment objectives.
+
+### CR-16 — Team Builder frontend review
+
+- **Group:** P1 core correctness
+- **Counts:** C0 / I2 / S2
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-10/CR-16-team-builder-frontend-review.md](CR-16-team-builder-frontend-review.md)
+- **Next action:** Remove stale duplicate modal risk and replace placeholder modal tests with browser-visible assertions.
+
+### CR-17 — Scenario Setup and battlefield map frontend review
+
+- **Group:** P1 core correctness
+- **Counts:** C0 / I4 / S1
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-10/CR-17-scenario-setup-and-battlefield-map-frontend-review.md](CR-17-scenario-setup-and-battlefield-map-frontend-review.md)
+- **Next action:** Fix Scenario Setup/map/generated-opponent contracts beyond happy-path launch.
+
+### CR-18 — Pages/templates/navigation review
+
+- **Group:** P1 core correctness
+- **Counts:** C0 / I4 / S1
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-10/CR-18-pages-templates-navigation-review.md](CR-18-pages-templates-navigation-review.md)
+- **Next action:** Fix broken pricing CTA, shared helper CSS under Tailwind CDN, Progressive Disclosure localStorage failure path, and tests.
+
+## P2 important debt
+
+Important but not the first release-stop batch. These items need fix or explicit accepted-debt entries before commercialization scale-up.
+
+### CR-01 — Requirements and spec alignment map
+
+- **Group:** P2 important debt
+- **Counts:** C0 / I5 / S4
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-09/CR-01-requirements-and-spec-alignment-map.md](../2026-05-09/CR-01-requirements-and-spec-alignment-map.md)
+- **Next action:** Fix spec/docs alignment after code fixes; do not let stale specs define release readiness.
+
+### CR-21 — Documentation consistency review
+
+- **Group:** P2 important debt
+- **Counts:** C0 / I8 / S2
+- **Triage status:** Open
+- **Report:** [docs/reviews/2026-05-10/CR-21-documentation-consistency-review.md](CR-21-documentation-consistency-review.md)
+- **Next action:** Sync docs after fixes: feature specs, C4, indexes, ROADMAP, AGENTS, CHANGELOG.
+
 ### CR-23 — Performance and scalability review
 
+- **Group:** P2 important debt
 - **Counts:** C0 / I7 / S3
-- **Priority:** P2
 - **Triage status:** Open
 - **Report:** [docs/reviews/2026-05-10/CR-23-performance-and-scalability-review.md](CR-23-performance-and-scalability-review.md)
 - **Next action:** Fix or accept pagination/indexing/cache/sync-autoplay/telemetry risks before commercialization scale-up.
 
-### CR-24 — Final integration regression gate
+## Accepted / postponed
 
-- **Counts:** C1 / I1 / S1
-- **Priority:** P0
-- **Triage status:** Open
-- **Report:** [docs/reviews/2026-05-10/CR-24-final-integration-regression-gate.md](CR-24-final-integration-regression-gate.md)
-- **Next action:** Re-run after triage/remediation; current blocker is unresolved CR debt plus stale result VP smoke.
+No Critical or Important finding is accepted as release debt yet. Accepted/postponed currently contains only baseline notes and future hygiene.
+
+### CR-00 — Inventory and baseline
+
+- **Group:** Accepted / postponed
+- **Counts:** C0 / I0 / S4
+- **Triage status:** Accepted as baseline notes
+- **Report:** [docs/reviews/2026-05-09/CR-00-inventory-and-baseline.md](../2026-05-09/CR-00-inventory-and-baseline.md)
+- **Next action:** Baseline captured. Keep suggestions as follow-up hygiene while fixing later CRs.
 
 
 ## Accepted debt register
