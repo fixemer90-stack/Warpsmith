@@ -11,7 +11,7 @@ confidence: high
 
 # Making Attacks (10ed)
 
-Процедура атаки в 10-й редакции. Те же 4 шага, но с изменениями.
+Процедура атаки в 10-й редакции. Те же 4 шага, но с изменениями. Использует характеристики из [[Datasheet and Stats (10ed)]]: BS/WS для попадания, S vs T для ранения, SV/AP для спас-броска и D для урона.
 
 ## Последовательность
 
@@ -37,4 +37,4 @@ confidence: high
 - **Feel No Pain:** правила игнорирования ран. Кидай D6, на X+ игнорируется одна рана.
 - **Cover:** +1 к SV если у цели Cover. Стрелок игнорирует Cover если у врага нет Cover или оружие имеет Ignore Cover.
 
-Ссылки: [[Battle Round]], [[Phases Overview]], [[Shooting Phase]], [[Fight Phase]], [[Weapon Keywords (10ed)]]
+Ссылки: [[Battle Round]], [[Phases Overview]], [[Datasheet and Stats (10ed)]], [[Shooting Phase]], [[Fight Phase]], [[Weapon Keywords (10ed)]]

@@ -41,7 +41,7 @@ A quick scan of per-CR artifacts found a mismatch against the tracker because so
 
 ## Finding groups
 
-Remediation plan: [docs/requirements/code-review/remediation-plan.md](../../requirements/code-review/remediation-plan.md)
+Remediation plan: [docs/requirements/code-review/remediation-plan.md](remediation-plan.md)
 
 All CR findings are triaged into exactly four groups. CR headings remain stable link targets from the execution index and CR artifacts.
 
