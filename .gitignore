@@ -26,9 +26,6 @@ venv/
 # Но исходники PDF/txt не коммитим
 wiki/raw/papers/
 
-# Local/generated documentation artifacts
-docs/
-
 # Test credentials (локальная разработка)
 .test-credentials
 
