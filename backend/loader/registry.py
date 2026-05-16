@@ -2,7 +2,6 @@
 
 import logging
 import os
-import pickle
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -56,7 +55,9 @@ class WikiRegistry:
 
     def __init__(self, wiki_path: str = ""):
         self.wiki_path = Path(wiki_path) if wiki_path else self._detect_wiki_path()
-        self.cache_path = Path.home() / ".cache" / "wiki_registry.pkl"
+        self.generated_dir = (
+            Path(__file__).parent.parent.parent / "data" / "generated" / "content"
+        )
         self.units: dict[str, Unit] = {}
         self.detachments: dict[str, Detachment] = {}
         self._file_mtimes: dict[str, float] = {}
@@ -81,14 +82,14 @@ class WikiRegistry:
         if self._loaded:
             return self.units
 
-        if use_cache and self._load_from_cache():
+        if use_cache and self._load_from_json_cache():
             return self.units
 
         self.units = self._scan_and_parse()
         self._loaded = True
 
         if use_cache:
-            self._save_cache()
+            self._save_json_cache()
 
         return self.units
 
@@ -193,39 +194,87 @@ class WikiRegistry:
             enhancements=enhancements,
         )
 
-    def _load_from_cache(self) -> bool:
+    def _load_from_json_cache(self) -> bool:
+        """Load compiled JSON artifacts if present and not stale."""
+        from backend.loader.compiler import is_content_stale, load_manifest
+
+        manifest = load_manifest()
+        if manifest is None:
+            return False
+        if manifest.schema_version != "content.v1":
+            logger.info("Manifest schema version mismatch — recompiling")
+            return False
+        if is_content_stale(manifest, str(self.wiki_path)):
+            logger.info("Wiki content changed since compilation — recompiling")
+            return False
+
         try:
-            with self.cache_path.open("rb") as cache_file:
-                data = pickle.load(cache_file)
-        except (FileNotFoundError, pickle.UnpicklingError, EOFError):
-            return False
-
-        units = data.get("units")
-        mtimes = data.get("mtimes")
-        if not isinstance(units, dict) or not isinstance(mtimes, dict):
-            return False
-
-        for path_str, cached_mtime in mtimes.items():
-            path = Path(path_str)
-            if not path.exists() or path.stat().st_mtime != cached_mtime:
-                return False
-
-        self.units = units
-        self.detachments = data.get("detachments", {})
-        self._file_mtimes = mtimes
-        self._loaded = True
-        logger.info(
-            "Loaded %s units, %s detachments from cache", len(self.units), len(self.detachments)
-        )
-        return True
-
-    def _save_cache(self) -> None:
-        self.cache_path.parent.mkdir(parents=True, exist_ok=True)
-        with self.cache_path.open("wb") as cache_file:
-            pickle.dump(
-                {"units": self.units, "detachments": self.detachments, "mtimes": self._file_mtimes},
-                cache_file,
+            from backend.loader.compiler import (
+                load_detachments_from_json,
+                load_units_from_json,
             )
+
+            units_dict = load_units_from_json()
+            det_dict = load_detachments_from_json()
+
+            # Reconstruct Unit objects from dict
+            self.units = {}
+            for name, data in units_dict.items():
+                try:
+                    unit = Unit(**data)
+                except Exception:
+                    # Fallback: reconstruct with minimal required fields
+                    data.setdefault("category", "Infantry")
+                    data.setdefault("movement", data.get("movement", 5))
+                    data.setdefault("toughness", data.get("toughness", 3))
+                    data.setdefault("save", data.get("save", 4))
+                    data.setdefault("wounds", data.get("wounds", 1))
+                    data.setdefault("leadership", data.get("leadership", 7))
+                    data.setdefault("objective_control", data.get("objective_control", 1))
+                    data.setdefault("points", data.get("points", 0))
+                    data.setdefault("model_count", tuple(data.get("model_count", (1, 1))))
+                    # Remove nested dicts that aren't valid __init__ kwargs
+                    for kw in ("ranged_weapons", "melee_weapons", "wargear_options",
+                               "extended_wargear_options", "nob_options"):
+                        data.pop(kw, None)
+                    try:
+                        unit = Unit(**data)
+                    except Exception as exc:
+                        logger.warning("Failed to load unit %s from JSON: %s", name, exc)
+                        continue
+                self.units[name] = unit
+
+            # Reconstruct Detachment objects from dict
+            self.detachments = {}
+            for name, data in det_dict.items():
+                try:
+                    det_data = dict(data)
+                    rule_data = det_data.pop("detachment_rule", None)
+                    if rule_data and isinstance(rule_data, dict):
+                        det_data["detachment_rule"] = DetachmentRule(**rule_data)
+                    strat_data = det_data.pop("stratagems", [])
+                    det_data["stratagems"] = [Stratagem(**s) for s in strat_data]
+                    enh_data = det_data.pop("enhancements", [])
+                    det_data["enhancements"] = [Enhancement(**e) for e in enh_data]
+                    self.detachments[name] = Detachment(**det_data)
+                except Exception as exc:
+                    logger.warning("Failed to load detachment %s from JSON: %s", name, exc)
+
+            self._loaded = True
+            logger.info(
+                "Loaded %s units, %s detachments from JSON artifacts (manifest %s)",
+                len(self.units), len(self.detachments), manifest.generated_at,
+            )
+            return True
+        except Exception as exc:
+            logger.warning("Failed to load JSON artifacts: %s — falling back to parse", exc)
+            return False
+
+    def _save_json_cache(self) -> None:
+        """Compile content to JSON artifacts."""
+        from backend.loader.compiler import compile_content
+
+        compile_content(str(self.wiki_path))
 
     def get_unit(self, name: str) -> Unit | None:
         return self.units.get(name)

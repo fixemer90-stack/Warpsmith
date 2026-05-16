@@ -88,3 +88,9 @@ Unit snapshots now include `player_id`; VP at top-level only. 478 tests pass.
 ## Regression evidence — Task 0.3 (non-destructive DB/replay)
 
 **2026-05-16.** Non-destructive DB migration. Roster persistence boundaries unchanged. 484 tests pass.
+
+## Regression evidence — Task 1.1 (content contract tests)
+
+**2026-05-16.** Content contract tests validate squad_size, points, model_count for all
+wiki units. content.v1 Pydantic schema validates unit records including roster-relevant
+fields. 14 tests pass.

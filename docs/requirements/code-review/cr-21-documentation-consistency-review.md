@@ -70,3 +70,9 @@ tags: [requirements, code-review, atomic-review]
 
 - [CR-21 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-21)
 - Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
+
+## Regression evidence — Task 1.1 (content contract tests)
+
+**2026-05-16.** Content contract tests + content.v1 schema serve as documentation
+consistency gate — any wiki change that breaks required fields/weapons/squad_size
+is caught. 14 tests cover all 160+ wiki units.

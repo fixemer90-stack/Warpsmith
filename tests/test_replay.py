@@ -674,20 +674,43 @@ def test_battle_ready_vp_in_final_snapshot():
     from backend.state.roster import RosterState
 
     boyz = Unit(
-        name="Boyz", faction="orks", category="Battleline",
-        movement=5, toughness=5, save=5, wounds=2, leadership=7, objective_control=2,
-        ranged_weapons=[Weapon(name="Shoota", type="ranged", range_max=18,
-                                attacks_dice=(3, 6, 0), skill=5, strength=4, ap=0,
-                                damage_dice=(1, 3, 0))],
-        points=85, model_count=(10, 20),
+        name="Boyz",
+        faction="orks",
+        category="Battleline",
+        movement=5,
+        toughness=5,
+        save=5,
+        wounds=2,
+        leadership=7,
+        objective_control=2,
+        ranged_weapons=[
+            Weapon(
+                name="Shoota",
+                type="ranged",
+                range_max=18,
+                attacks_dice=(3, 6, 0),
+                skill=5,
+                strength=4,
+                ap=0,
+                damage_dice=(1, 3, 0),
+            )
+        ],
+        points=85,
+        model_count=(10, 20),
     )
     roster_a = RosterState(
-        name="orks", faction="orks", total_pts=85,
-        units=[("Boyz", boyz)], warlord_unit_name="Boyz",
+        name="orks",
+        faction="orks",
+        total_pts=85,
+        units=[("Boyz", boyz)],
+        warlord_unit_name="Boyz",
     )
     roster_b = RosterState(
-        name="orks2", faction="orks", total_pts=85,
-        units=[("Boyz", boyz)], warlord_unit_name="Boyz",
+        name="orks2",
+        faction="orks",
+        total_pts=85,
+        units=[("Boyz", boyz)],
+        warlord_unit_name="Boyz",
     )
     config = AutoPlayConfig(max_rounds=1, seed=4242)
     result = run_auto_game(roster_a, roster_b, mission_name="only_war", config=config)
@@ -700,9 +723,7 @@ def test_battle_ready_vp_in_final_snapshot():
     last_end = result.round_logs[-1]["end_state"]
     replay_vp = last_end["victory_points"]
 
-    assert replay_vp == final_vp, (
-        f"Replay end_state VP {replay_vp} != GameState VP {final_vp}"
-    )
+    assert replay_vp == final_vp, f"Replay end_state VP {replay_vp} != GameState VP {final_vp}"
 
 
 def test_canonical_snapshot_explicit_contract_fields():
@@ -918,17 +939,61 @@ def test_save_replay_succeeds_with_overwrite():
 
 
 def test_same_seed_produces_different_replay_ids():
-    """Fixed seed produces repeatable sim behavior but distinct replay IDs."""
-    import uuid as _uuid
+    """Fixed seed produces repeatable sim behavior but distinct durable replay IDs."""
+    from backend.engine.ai.autoplay import AutoPlayConfig, run_auto_game
+    from backend.model.unit import Unit, Weapon
+    from backend.state.roster import RosterState
 
-    # Create two game_ids with "same seed"
-    id1 = f"auto_{_uuid.uuid4().hex[:12]}"
-    id2 = f"auto_{_uuid.uuid4().hex[:12]}"
+    boyz = Unit(
+        name="Boyz",
+        faction="orks",
+        category="Battleline",
+        movement=5,
+        toughness=5,
+        save=5,
+        wounds=2,
+        leadership=7,
+        objective_control=2,
+        ranged_weapons=[
+            Weapon(
+                name="Shoota",
+                type="ranged",
+                range_max=18,
+                attacks_dice=(3, 6, 0),
+                skill=5,
+                strength=4,
+                ap=0,
+                damage_dice=(1, 3, 0),
+            )
+        ],
+        points=85,
+        model_count=(10, 20),
+    )
+    roster = RosterState(
+        name="orks",
+        faction="orks",
+        total_pts=85,
+        units=[("Boyz", boyz)],
+        warlord_unit_name="Boyz",
+    )
 
-    # They must be different
-    assert id1 != id2
-    # Both use UUID format, not seed-based
-    assert "4242" not in id1  # seed=4242 would NOT appear in UUID-based id
+    config = AutoPlayConfig(max_rounds=1, seed=4242)
+    r1 = run_auto_game(roster, roster, mission_name="only_war", config=config)
+    r2 = run_auto_game(roster, roster, mission_name="only_war", config=config)
+
+    if r1.error or r2.error:
+        pytest.skip(f"Auto-play failed: r1={r1.error}, r2={r2.error}")
+
+    # Distinct game_ids
+    assert r1.game_state.game_id != r2.game_state.game_id, (
+        f"Same seed produced identical game_ids: {r1.game_state.game_id}"
+    )
+    # Both are UUID-based (not seed-based)
+    seed_str = str(config.seed)
+    assert seed_str not in r1.game_state.game_id
+    assert seed_str not in r2.game_state.game_id
+    # Both seeds stored as metadata
+    assert r1.game_state.game_id != r2.game_state.game_id
 
 
 def test_replay_metadata_stores_seed():

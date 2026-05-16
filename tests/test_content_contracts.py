@@ -321,3 +321,176 @@ def test_content_contract_known_exceptions_are_still_in_registry(all_units):
             f"Known exception '{exc_name}' not found in wiki! "
             f"Remove from exception list or fix the wiki file."
         )
+
+
+# ── content.v1 schema validation (Task 1.1 acceptance) ──────────────────
+
+
+def test_content_contract_units_validate_against_content_v1_schema(all_units):
+    """Every wiki unit validates against the content.v1 Pydantic schema."""
+    from backend.loader.schema import validate_unit_v1
+
+    failures: list[str] = []
+    for unit_name, unit in all_units:
+        if unit_name in KNOWN_ZERO_POINT_UNITS:
+            continue
+        try:
+            validate_unit_v1(unit)
+        except Exception as exc:
+            failures.append(f"{unit_name}: {exc}")
+
+    assert not failures, (
+        f"{len(failures)} unit(s) failed content.v1 schema validation:\n"
+        + "\n".join(failures[:20])
+    )
+
+
+def test_content_contract_squad_size_validated(all_units):
+    """squad_size: min >= 1, max >= min, step >= 1."""
+    failures: list[str] = []
+    for unit_name, unit in all_units:
+        sq = getattr(unit, "squad_size", None)
+        if sq is None:
+            failures.append(f"{unit_name}: squad_size is None")
+            continue
+        if not isinstance(sq, dict):
+            failures.append(f"{unit_name}: squad_size={sq} (expected dict)")
+            continue
+        min_s = sq.get("min", 1)
+        max_s = sq.get("max", 1)
+        step = sq.get("step", 1)
+        if min_s < 1:
+            failures.append(f"{unit_name}: squad_size.min={min_s} < 1")
+        if max_s < min_s:
+            failures.append(f"{unit_name}: squad_size max={max_s} < min={min_s}")
+        if step < 1:
+            failures.append(f"{unit_name}: squad_size.step={step} < 1")
+
+    assert not failures, (
+        f"{len(failures)} unit(s) with invalid squad_size:\n"
+        + "\n".join(failures[:20])
+    )
+
+
+def test_content_contract_tags_and_keywords_deterministic(all_units):
+    """Every unit must have at least tags OR keywords. Exceptions are explicit."""
+    failures: list[str] = []
+    for unit_name, unit in all_units:
+        tags = getattr(unit, "tags", None) or []
+        keywords = getattr(unit, "keywords", None) or []
+        faction_kw = getattr(unit, "faction_keywords", None) or []
+        if not tags and not keywords and not faction_kw:
+            failures.append(unit_name)
+
+    if failures:
+        pytest.fail(
+            f"{len(failures)}/{len(all_units)} units have no tags, keywords, "
+            f"or faction_keywords. Units: {failures[:10]}"
+        )
+
+
+# ── Source-level duplicate detection (Task 1.1 Important 2) ─────────────
+
+
+def test_content_contract_no_source_file_duplicates(wiki):
+    """Duplicate unit names in source files are detected before dict insertion."""
+    from pathlib import Path
+
+    units_dir = wiki.wiki_path / "units"
+    name_to_files: dict[str, list[str]] = {}
+
+    for faction_dir in sorted(units_dir.iterdir()):
+        if not faction_dir.is_dir():
+            continue
+        for file_path in sorted(faction_dir.glob("*.md")):
+            try:
+                import frontmatter
+                post = frontmatter.load(str(file_path))
+                title = post.metadata.get("title")
+                if title:
+                    name_to_files.setdefault(str(title), []).append(str(file_path))
+            except Exception:
+                continue
+
+    duplicates = {k: v for k, v in name_to_files.items() if len(v) > 1}
+    if duplicates:
+        lines = [f"'{k}': {v}" for k, v in duplicates.items()]
+        pytest.fail(
+            f"{len(duplicates)} duplicate canonical unit name(s) across source files:\n"
+            + "\n".join(lines)
+        )
+
+
+# ── Task 1.2 — safe cache tests ─────────────────────────────────────────
+
+
+def test_compiler_produces_manifest():
+    """Compiler generates manifest.json with required fields."""
+    from backend.loader.compiler import GENERATED_DIR, load_manifest
+
+    m = load_manifest()
+    assert m is not None, "Run compile_content() first"
+    assert m.schema_version == "content.v1"
+    assert len(m.artifacts) >= 3
+    assert "generated_at" in m.to_dict()
+
+
+def test_compiler_produces_units_json():
+    """Compiled units.json is valid JSON with expected structure."""
+    from backend.loader.compiler import GENERATED_DIR
+
+    import json
+
+    with (GENERATED_DIR / "units.json").open() as f:
+        data = json.load(f)
+    assert len(data) > 100, f"Expected >100 units, got {len(data)}"
+    # Spot-check a known unit
+    assert "Boyz" in data or any("Boyz" in k for k in data)
+
+
+def test_compiler_produces_detachments_json():
+    """Compiled detachments.json is valid JSON."""
+    from backend.loader.compiler import GENERATED_DIR
+
+    import json
+
+    with (GENERATED_DIR / "detachments.json").open() as f:
+        data = json.load(f)
+    assert len(data) > 0
+
+
+def test_registry_loads_from_json_cache():
+    """WikiRegistry.load() uses JSON cache when present and not stale."""
+    from backend.loader.registry import WikiRegistry
+
+    reg = WikiRegistry()
+    # Clear any existing state
+    reg._loaded = False
+    reg.units = {}
+    reg.detachments = {}
+
+    units = reg.load(use_cache=True)
+    assert len(units) > 100, f"Expected >100 units from JSON cache, got {len(units)}"
+    assert "Boyz" in units or any("Boyz" in k for k in units)
+
+
+def test_no_pickle_import_in_registry():
+    """Registry does not import or call pickle."""
+    from backend.loader.registry import WikiRegistry
+
+    import inspect
+
+    source = inspect.getsource(WikiRegistry)
+    assert "import pickle" not in source, "pickle must not be imported in WikiRegistry"
+    assert "pickle.load" not in source, "pickle.load must not be called in WikiRegistry"
+
+
+def test_compiler_no_pickle_usage():
+    """Compiler does not import or call pickle."""
+    import inspect
+
+    from backend.loader import compiler
+
+    source = inspect.getsource(compiler)
+    assert "import pickle" not in source, "pickle must not be imported in compiler"
+    assert "pickle.load" not in source, "pickle.load must not be called in compiler"

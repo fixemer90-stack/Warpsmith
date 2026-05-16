@@ -8,7 +8,7 @@ task: ../remediation/task-00-03-stop-destructive-db-replay-behavior-before-furth
 
 # Code Review — Task 0.3 stop destructive DB/replay behavior
 
-Verdict: **REQUEST CHANGES**
+Verdict: **REQUEST CHANGES → FIXED 2026-05-16 (see Resolution below)**
 
 Scope reviewed:
 - `backend/db/database.py`
@@ -106,3 +106,19 @@ exit 2
 ## Verdict
 
 Request changes. The destructive replay deletion/overwrite implementation is mostly correct, but acceptance should wait until the failing diff gate is fixed and the fixed-seed replay-id test proves the real autoplay/save path rather than local UUID generation.
+
+## Resolution — 2026-05-16
+
+All findings fixed:
+
+1. **Important 1** — CRLF removed from all touched files (`sed -i 's/\r$//'`).
+   `git diff --check` exits 0 for all touched files.
+
+2. **Important 2** — `test_same_seed_produces_different_replay_ids` rewritten as
+   real integration test: calls `run_auto_game()` twice with seed=4242, asserts
+   distinct UUID game_ids, verifies seed not embedded in id.
+
+3. **Suggestion 1** — Noted explicitly: `code-review.md` intentionally not updated;
+   Phase checkpoint already in `triage-summary.md`, per-task regression in CR artifacts.
+
+Verification: all tests pass.

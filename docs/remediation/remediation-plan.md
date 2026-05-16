@@ -235,7 +235,8 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - new: `backend/loader/schemas.py`
 - `wiki/`
 - target/generated: `data/generated/content/manifest.json`
-- target/generated: `data/generated/content/units.json`
+- target/generated: `data/generated/content/units/index.json`
+- target/generated: `data/generated/content/units/<faction_id>.json` shards
 - target/generated: `data/generated/content/weapons.json`
 - target/generated: `data/generated/content/factions.json`
 - target/generated: `data/generated/content/detachments.json`
@@ -291,18 +292,22 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** build a deterministic canonical-content compilation pipeline that transforms wiki/frontmatter sources into schema-validated runtime JSON artifacts keyed by stable canonical ids and consumable without direct wiki parsing at runtime.
 
 **Acceptance criteria:**
-- [ ] Compiler emits `factions.json`, `units.json`, `weapons.json`, `detachments.json`, `stratagems.json`, `enhancements.json`, and `rules.json` under `data/generated/content/` or an explicitly configured generated-content directory.
+- [ ] Compiler emits canonical artifacts under `data/generated/content/`.
+- [ ] Required top-level artifacts include `manifest.json`, `factions.json`, `weapons.json`, `detachments.json`, `stratagems.json`, `enhancements.json`, and `rules.json`.
+- [ ] Large logical artifact kinds MAY be physically sharded; units MUST be emitted as `units/index.json` plus `units/<faction_id>.json` shards rather than one monolithic `units.json`.
+- [ ] `units/index.json` is a lightweight index keyed by `unit_id` with `faction_id`, shard `file`, `display_name`, and record `hash`.
+- [ ] `manifest.json` lists every emitted top-level artifact and shard with `sha256:<hex>` hash.
 - [ ] Artifacts are keyed by stable canonical ids, not display names.
-- [ ] `manifest.json` includes `schema_version`, `content_hash`, source paths, generated timestamp, all artifact filenames/hashes, and collision/exception report references.
+- [ ] `manifest.json` includes `schema_version`, `content_hash`, source paths, generated timestamp, artifact/shard filenames and hashes, and collision/exception report references.
 - [ ] Unit records include `source_path`, `display_name`, `faction_id`, stats, points, squad_size, keywords, tags, and weapon_ids where applicable.
-- [ ] `CanonicalContentRegistry` loads every canonical object kind from generated JSON: factions, units, weapons, detachments, stratagems, enhancements, and rules.
-- [ ] All generated artifacts validate against strict canonical schemas before write.
+- [ ] `CanonicalContentRegistry` loads every canonical object kind from generated JSON and loads sharded units as one logical `units` collection.
+- [ ] All generated artifacts and shards validate against strict canonical schemas before write.
 - [ ] All cross-artifact references are validated during compilation.
-- [ ] Duplicate canonical ids fail compilation.
+- [ ] Duplicate canonical ids fail compilation across all shards of the same logical object kind.
 - [ ] Duplicate display names emit a collision report but remain valid if canonical ids differ.
 - [ ] Generated JSON output is byte-deterministic for identical source input.
 - [ ] Canonical ids are deterministic, independent from display names and source file paths, and survive display/source-path changes when explicit `canonical_id` is present.
-- [ ] Tests cover duplicate canonical ids, duplicate display names, dangling references, renamed source files, display-name changes, and deterministic rebuild output.
+- [ ] Tests cover duplicate canonical ids across shards, duplicate display names, dangling references, renamed source files, display-name changes, deterministic rebuild output, manifest shard hashes, and registry loading sharded units as one logical collection.
 
 **Canonical id contract:**
 - [ ] Canonical ids use frontmatter `canonical_id` / object-specific id as the authoritative owner.

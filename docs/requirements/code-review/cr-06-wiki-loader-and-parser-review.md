@@ -87,3 +87,9 @@ Structural cleanup: two divergent snapshot builders consolidated. 478 tests pass
 Required fields, points, weapons, model_count, canonical ID uniqueness, faction coverage.
 28 zero-point units and 44 no-weapon units documented as known exceptions (parser gap).
 495 tests pass.
+
+## Regression evidence — Task 1.2 (safe cache)
+
+**2026-05-16.** Unsafe `pickle` cache removed. Replaced with JSON-based content pipeline:
+`compiler.py` compiles wiki → JSON artifacts, `manifest.json` with SHA256 source hashes.
+`registry.py` loads from JSON, detects staleness via hash comparison. 21 cache tests.

@@ -1,0 +1,9 @@
+{
+  "factions": [
+    "adeptus-mechanicus",
+    "orks",
+    "tau"
+  ],
+  "unit_count": 160,
+  "detachment_count": 23
+}

@@ -27,18 +27,59 @@ Build a deterministic canonical-content compilation pipeline that transforms wik
 
 ## Acceptance criteria
 
-- [ ] Compiler emits `factions.json`, `units.json`, `weapons.json`, `detachments.json`, `stratagems.json`, `enhancements.json`, and `rules.json` under `data/generated/content/` or an explicitly configured generated-content directory.
+- [ ] Compiler emits canonical artifacts under `data/generated/content/` or an explicitly configured generated-content directory.
+- [ ] Required top-level artifacts include `manifest.json`, `factions.json`, `weapons.json`, `detachments.json`, `stratagems.json`, `enhancements.json`, and `rules.json`.
+- [ ] Large logical artifact kinds MAY be physically sharded; units MUST be emitted as `units/index.json` plus `units/<faction_id>.json` shards rather than one monolithic `units.json`.
+- [ ] `units/index.json` is a lightweight index keyed by `unit_id` with `faction_id`, shard `file`, `display_name`, and record `hash`.
+- [ ] `units/<faction_id>.json` files contain the real unit records for that faction, keyed by stable canonical unit ids.
+- [ ] `manifest.json` lists every emitted top-level artifact and every emitted shard with `sha256:<hex>` hash, including `units/index.json` and each `units/<faction_id>.json`.
 - [ ] Artifacts are keyed by stable canonical ids, not display names.
-- [ ] `manifest.json` includes `schema_version`, `content_hash`, source paths, generated timestamp, all artifact filenames/hashes, and collision/exception report references.
+- [ ] `manifest.json` includes `schema_version`, `content_hash`, source paths, generated timestamp, artifact/shard filenames and hashes, and collision/exception report references.
 - [ ] Unit records include `source_path`, `display_name`, `faction_id`, stats, points, squad_size, keywords, tags, and weapon_ids where applicable.
 - [ ] `CanonicalContentRegistry` loads every canonical object kind from generated JSON: factions, units, weapons, detachments, stratagems, enhancements, and rules.
-- [ ] All generated artifacts validate against strict canonical schemas before write.
+- [ ] `CanonicalContentRegistry` loads sharded artifacts as one logical object kind, so callers query `units` without caring that records are physically stored by faction shard.
+- [ ] All generated artifacts and shards validate against strict canonical schemas before write.
 - [ ] All cross-artifact references are validated during compilation.
-- [ ] Duplicate canonical ids fail compilation.
+- [ ] Duplicate canonical ids fail compilation across all shards of the same logical object kind.
 - [ ] Duplicate display names emit a collision report but remain valid if canonical ids differ.
 - [ ] Generated JSON output is byte-deterministic for identical source input.
 - [ ] Canonical ids are deterministic, independent from display names and source file paths, and survive display/source-path changes when explicit `canonical_id` is present.
-- [ ] Tests cover duplicate canonical ids, duplicate display names, dangling references, renamed source files, display-name changes, and deterministic rebuild output.
+- [ ] Tests cover duplicate canonical ids across shards, duplicate display names, dangling references, renamed source files, display-name changes, deterministic rebuild output, manifest shard hashes, and registry loading sharded units as one logical collection.
+
+## Artifact layout contract
+
+The logical artifact kind is still `units`, but physical storage MUST be sharded by faction to keep generated JSON reviewable and merge-friendly. Do not emit a single monolithic `units.json` for all units.
+
+```text
+data/generated/content/
+  manifest.json
+  factions.json
+  weapons.json
+  detachments.json
+  stratagems.json
+  enhancements.json
+  rules.json
+  units/
+    index.json
+    orks.json
+    space-marines.json
+    tau-empire.json
+```
+
+`units/index.json` is the lookup/index layer. It MUST be small enough to diff quickly and MUST map each `unit_id` to at least:
+
+```json
+{
+  "unit_id": {
+    "faction_id": "orks",
+    "file": "units/orks.json",
+    "display_name": "Boyz",
+    "hash": "sha256:<record_hash>"
+  }
+}
+```
+
+`units/<faction_id>.json` contains the full canonical unit records for that faction. The compiler MAY later shard other large logical kinds, for example weapons by faction/source, but this task only requires unit sharding. Do not shard one file per unit; that creates too many small files and makes manifest/hash control noisier.
 
 ## Canonical id contract
 
@@ -107,12 +148,13 @@ Deterministic rebuild means identical input content produces byte-identical gene
 - `backend/model/unit.py`
 - `data/generated/content/manifest.json`
 - `data/generated/content/factions.json`
-- `data/generated/content/units.json`
 - `data/generated/content/weapons.json`
 - `data/generated/content/detachments.json`
 - `data/generated/content/stratagems.json`
 - `data/generated/content/enhancements.json`
 - `data/generated/content/rules.json`
+- `data/generated/content/units/index.json`
+- `data/generated/content/units/<faction_id>.json` shards, e.g. `orks.json`, `space-marines.json`, `tau-empire.json`
 - `tests/test_content_contracts.py`
 - `tests/test_registry.py`
 
@@ -124,6 +166,6 @@ Deterministic rebuild means identical input content produces byte-identical gene
 
 - [ ] Implementation/change is complete for this task only; do not batch unrelated fixes.
 - [ ] Regression evidence is recorded in the affected CR artifact(s).
-- [ ] Phase 1 completion artifact states that canonical JSON artifacts are emitted for factions, units, weapons, detachments, stratagems, enhancements, and rules; schema-validated; and keyed by stable ids.
+- [ ] Phase 1 completion artifact states that canonical JSON artifacts are emitted for factions, units (logical kind physically sharded by faction), weapons, detachments, stratagems, enhancements, and rules; schema-validated; manifest-hashed; and keyed by stable ids.
 - [ ] Update `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-XX-*.md`, and `docs/requirements/code-review/code-review.md` with the Phase 1 completion artifact.
 - [ ] `git diff --check` passes for touched files.

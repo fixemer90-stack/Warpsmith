@@ -68,3 +68,9 @@ tags: [requirements, code-review, atomic-review]
 
 - [CR-11 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-11)
 - Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
+
+## Regression evidence — Task 1.1 (content contract tests)
+
+**2026-05-16.** Content contract tests validate all wiki units against content.v1
+Pydantic schema. Terrain/cover/LoS code unchanged; structural content quality gate added.
+14 tests (incl. schema validation, squad_size, source-level duplicates).

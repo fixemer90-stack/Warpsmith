@@ -8,7 +8,7 @@ task: ../remediation/task-01-01-create-content-contract-tests.md
 
 # Code Review — Task 1.1 create content contract tests
 
-Verdict: **REQUEST CHANGES**
+Verdict: **REQUEST CHANGES → FIXED 2026-05-16 (see Resolution below)**
 
 Scope reviewed:
 - `tests/test_content_contracts.py`
@@ -149,3 +149,21 @@ This confirms duplicate unit names are overwritten before the current duplicate-
 ## Verdict
 
 Request changes. Keep the useful unit smoke tests, but do not accept Task 1.1 until schema validation, source-level canonical ID/collision checks, complete required-field validation, CR evidence, and Phase 0 dependency status match the task contract.
+
+## Resolution — 2026-05-16
+
+All findings fixed:
+
+1. **Important 1** — content.v1 Pydantic schema (`UnitV1`, `WeaponV1`) in `backend/loader/schema.py`.
+   `validate_unit_v1()` validates every wiki unit. Test: `test_content_contract_units_validate_against_content_v1_schema`.
+
+2. **Important 2** — `test_content_contract_no_source_file_duplicates` scans wiki/units/*.md
+   frontmatter titles before registry dict insertion. Duplicates fail.
+
+3. **Important 3** — `test_content_contract_squad_size_validated` checks min/max/step.
+   `test_content_contract_tags_and_keywords_deterministic` requires at least one of
+   tags/keywords/faction_keywords per unit.
+
+4. **Important 4** — CR-11, CR-12, CR-21 updated. Phase 0 dependency resolved.
+
+15 tests, 501 total passed. Lint/formatter/diff-check clean.

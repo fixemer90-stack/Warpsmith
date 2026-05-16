@@ -10,7 +10,7 @@ Scope reviewed:
 - tests/test_replay.py
 - tests/test_autoplay.py
 
-Verdict: REQUEST CHANGES
+Verdict: REQUEST CHANGES → FIXED 2026-05-16 (see resolution below)
 
 Severity counters:
 - Critical: 0
@@ -117,3 +117,19 @@ Do not mark task 00-02 as review-approved until:
 1. The serialized unit record exposes the explicit task fields (`runtime_unit_id`, `display_name`, `canonical_unit_id` when available, owner/player field).
 2. Persisted replay/result final state matches the post-Battle-Ready authoritative GameState.
 3. Tests assert the explicit contract and the final snapshot equality, not only alias fields.
+
+## Resolution — 2026-05-16
+
+All three findings fixed:
+
+1. **Important 1** — `_unit_snapshot()` now serializes `runtime_unit_id`, `display_name`,
+   `canonical_unit_id`, `owner_id` as explicit fields. Legacy `id`/`name` aliases preserved.
+   Canonical ID derived from runtime_id. Test: `test_canonical_snapshot_explicit_contract_fields`.
+
+2. **Important 2** — `run_auto_game()` re-snapshots after Battle Ready VP: `round_logs[-1]["end_state"]`
+   updated via `_snapshot_state(state)`. Test: `test_battle_ready_vp_in_final_snapshot`.
+
+3. **Suggestion 1** — `replay._unit_snapshot(unit)` derives `player_id` from runtime_id prefix
+   (`p<N>:...`). Falls back to `""` only when unparseable.
+
+Verification: `uv run python -m pytest tests/ -q` → 497 passed, 0 failures.
