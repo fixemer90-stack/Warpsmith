@@ -411,7 +411,11 @@ async def auto_play_simulation(
             raise HTTPException(status_code=400, detail=result.error)
 
         # Save replay to DB so round-viewer can load it
-        game_id = result.game_state.game_id if result.game_state else f"auto_{seed}"
+        import uuid
+
+        game_id = (
+            result.game_state.game_id if result.game_state else f"auto_{uuid.uuid4().hex[:12]}"
+        )
         replay_rounds = []
         for rl in result.round_logs:
             round_num = rl.get("round", 0)

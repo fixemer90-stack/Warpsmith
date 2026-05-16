@@ -76,3 +76,14 @@ Full test suite: 471 passed, 0 failures.
 
 **2026-05-16.** Canonical `snapshot_game_state()` in `game_state.py`. Wiki loader/parser unchanged.
 Structural cleanup: two divergent snapshot builders consolidated. 478 tests pass.
+
+## Regression evidence — Task 0.3 (non-destructive DB/replay)
+
+**2026-05-16.** Non-destructive DB changes. No impact on wiki loader/parser. 484 tests pass.
+
+## Regression evidence — Task 1.1 (content contract tests)
+
+**2026-05-16.** `tests/test_content_contracts.py` created — 11 tests validating all wiki units.
+Required fields, points, weapons, model_count, canonical ID uniqueness, faction coverage.
+28 zero-point units and 44 no-weapon units documented as known exceptions (parser gap).
+495 tests pass.

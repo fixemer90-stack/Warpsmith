@@ -336,12 +336,42 @@ def snapshot_game_state(state: GameState) -> dict[str, Any]:
 
 
 def _unit_snapshot(unit, player_id: str) -> dict[str, Any]:
-    """Serialize a single UnitState into the canonical unit record shape."""
+    """Serialize a single UnitState into the canonical unit record shape.
+
+    Explicit identity/display contract (Task 0.2 acceptance criteria):
+      - ``runtime_unit_id`` — authoritative identity (e.g. ``p1:Boyz:0``)
+      - ``display_name`` — UI text only; MUST NOT be used as lookup key
+      - ``canonical_unit_id`` — unit name without player/index prefix
+      - ``owner_id`` / ``player_id`` — owning player
+
+    Legacy aliases ``id`` and ``name`` are kept for existing JS consumers
+    (round-viewer, result-chart).  New code MUST use the explicit fields.
+    """
     pos = unit.position if hasattr(unit, "position") else (0, 0)
+    rtid = getattr(unit, "unit_id", "")
+    dname = getattr(unit, "name", str(unit))
+
+    # Derive canonical_unit_id from runtime_id: strip p<num>: prefix and :<idx> suffix
+    canonical = rtid
+    if rtid and ":" in rtid:
+        parts = rtid.split(":")
+        if len(parts) >= 2:
+            canonical = parts[1]  # the unit name part
+        if len(parts) >= 3:
+            # Re-join if name itself contains colons (unlikely but safe)
+            canonical = ":".join(parts[1:-1]) if len(parts) > 3 else parts[1]
+
     return {
-        "id": getattr(unit, "unit_id", ""),
-        "name": getattr(unit, "name", str(unit)),
+        # ── Explicit identity/display contract ──
+        "runtime_unit_id": rtid,
+        "display_name": dname,
+        "canonical_unit_id": canonical,
+        "owner_id": player_id,
         "player_id": player_id,
+        # ── Legacy aliases (keep for JS compatibility) ──
+        "id": rtid,
+        "name": dname,
+        # ── Position & stats ──
         "position": {"x": int(pos[0]), "y": int(pos[1])},
         "models_remaining": getattr(unit, "models_remaining", 1),
         "models_total": getattr(unit, "models_total", 1),

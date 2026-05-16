@@ -80,3 +80,7 @@ Full regression: 471 tests passed, lint/formatter clean.
 
 **2026-05-16.** Canonical snapshot serializer. No deployment/config changes.
 Single source of truth for GameState shape reduces snapshot divergence risk. 478 tests pass.
+
+## Regression evidence — Task 0.3 (non-destructive DB/replay)
+
+**2026-05-16.** Non-destructive DB migration. No deployment/config changes. 484 tests pass.

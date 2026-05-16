@@ -424,8 +424,11 @@ def run_auto_game(
         player_b = _roster_to_player_state(roster_b, "2", config)
 
         # 4. Create GameState — __post_init__ auto-creates Mission from mission_name
+        import uuid
+
+        game_id = f"auto_{uuid.uuid4().hex[:12]}"
         state = GameState(
-            game_id=f"auto_{actual_seed}",
+            game_id=game_id,
             mission_name=mission_name,
             map_width=game_map.width,
             map_height=game_map.height,
@@ -511,6 +514,10 @@ def run_auto_game(
             state.game_log.append(
                 f"{player.name} gains 10 Battle Ready VP (total: {player.victory_points})"
             )
+
+        # Re-snapshot final state so persisted replay/result reflects Battle Ready VP
+        if round_logs:
+            round_logs[-1]["end_state"] = _snapshot_state(state)
 
         # 9. Summary
         summary = _build_summary(state, round_logs, placements)

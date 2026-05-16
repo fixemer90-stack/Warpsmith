@@ -81,3 +81,9 @@ Verification: `uv run python -m pytest tests/ -q` → 471 passed, 3 skipped, 0 f
 **2026-05-16.** Canonical `snapshot_game_state()` added to `backend/state/game_state.py`.
 No schema changes; database boundaries unchanged. Persistence consumers (`replay.py`,
 `autoplay.py`) now delegate to single canonical serializer. 478 tests pass.
+
+## Regression evidence — Task 0.3 (non-destructive DB/replay)
+
+**2026-05-16.** `DROP TABLE IF EXISTS replays` removed from `migrate()`. `save_replay()`
+now INSERT by default (IntegrityError on dup), `overwrite=True` opt-in. `game_id`
+uses UUID instead of seed. 6 new tests. 484 tests pass.

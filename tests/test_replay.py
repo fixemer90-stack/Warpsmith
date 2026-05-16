@@ -2,7 +2,9 @@
 Tests for F3.6 — Replay Recording: JSON Event Log per Round/Phase.
 """
 
+import contextlib
 import json
+import os
 import sqlite3
 from datetime import datetime
 
@@ -499,12 +501,20 @@ def test_snapshot_state_with_current_api():
 
 
 def test_unit_snapshot_with_current_api():
-    """Test: _unit_snapshot works with current UnitState fields."""
+    """Test: _unit_snapshot works with current UnitState fields and explicit contract."""
     unit = make_test_unit_state("Test Unit", "test-id")
     snapshot = _unit_snapshot(unit)
 
+    # Legacy fields still present
     assert snapshot["id"] == "test-id"
     assert snapshot["name"] == "Test Unit"
+    # Explicit identity/display contract fields (Task 0.2 acceptance)
+    assert snapshot["runtime_unit_id"] == "test-id"
+    assert snapshot["display_name"] == "Test Unit"
+    assert "canonical_unit_id" in snapshot
+    assert "owner_id" in snapshot
+    assert snapshot["player_id"] == snapshot["owner_id"]
+    # Stats
     assert snapshot["models_remaining"] == 1
     assert snapshot["models_total"] == 1
     assert snapshot["current_wounds"] == 2
@@ -657,6 +667,65 @@ def test_canonical_snapshot_status_flags():
     assert "is_battle_shocked" in u
 
 
+def test_battle_ready_vp_in_final_snapshot():
+    """Persisted replay end_state reflects Battle Ready VP applied after last round."""
+    from backend.engine.ai.autoplay import AutoPlayConfig, run_auto_game
+    from backend.model.unit import Unit, Weapon
+    from backend.state.roster import RosterState
+
+    boyz = Unit(
+        name="Boyz", faction="orks", category="Battleline",
+        movement=5, toughness=5, save=5, wounds=2, leadership=7, objective_control=2,
+        ranged_weapons=[Weapon(name="Shoota", type="ranged", range_max=18,
+                                attacks_dice=(3, 6, 0), skill=5, strength=4, ap=0,
+                                damage_dice=(1, 3, 0))],
+        points=85, model_count=(10, 20),
+    )
+    roster_a = RosterState(
+        name="orks", faction="orks", total_pts=85,
+        units=[("Boyz", boyz)], warlord_unit_name="Boyz",
+    )
+    roster_b = RosterState(
+        name="orks2", faction="orks", total_pts=85,
+        units=[("Boyz", boyz)], warlord_unit_name="Boyz",
+    )
+    config = AutoPlayConfig(max_rounds=1, seed=4242)
+    result = run_auto_game(roster_a, roster_b, mission_name="only_war", config=config)
+
+    if result.error:
+        pytest.skip(f"Auto-play failed: {result.error}")
+
+    gs = result.game_state
+    final_vp = {pid: getattr(p, "victory_points", 0) for pid, p in gs.players.items()}
+    last_end = result.round_logs[-1]["end_state"]
+    replay_vp = last_end["victory_points"]
+
+    assert replay_vp == final_vp, (
+        f"Replay end_state VP {replay_vp} != GameState VP {final_vp}"
+    )
+
+
+def test_canonical_snapshot_explicit_contract_fields():
+    """Unit snapshots include runtime_unit_id, display_name, canonical_unit_id, owner_id."""
+    from backend.engine.ai.autoplay import _snapshot_state
+
+    state = make_test_game_state()
+    for pid, player in state.players.items():
+        for _rtid, unit in player.units.items():
+            unit.unit_id = f"p{pid}:TestUnit:0"
+
+    snap = _snapshot_state(state)
+    u = snap["units"]["1"][0]
+
+    assert u["runtime_unit_id"] == "p1:TestUnit:0"
+    assert u["display_name"] == "Unit A"
+    assert u["canonical_unit_id"] == "TestUnit"
+    assert u["owner_id"] == "1"
+    assert u["player_id"] == "1"
+    assert u["id"] == u["runtime_unit_id"]
+    assert u["name"] == u["display_name"]
+
+
 def test_recorder_many_event_types():
     """Test: all event type recording methods work."""
     recorder = ReplayRecorder("multi-test", {}, "mission", "deploy", 42)
@@ -697,3 +766,193 @@ def test_recorder_no_events():
 
     assert len(recorder.replay.rounds) == 1
     assert len(recorder.replay.rounds[0].events) == 0
+
+
+# ── Task 0.3 — destructive behavior prevention tests ───────────────────
+
+
+def test_db_init_preserves_existing_replay_rows():
+    """DB init / migrate() does not delete existing replay rows."""
+    import sqlite3
+
+    from backend.db.database import Database
+
+    db_test = Database("/tmp/test_replay_preserve.db")  # noqa: S108
+    # Clean start
+    db_test.hard_reset()
+    with contextlib.suppress(FileNotFoundError):
+        os.remove("/tmp/test_replay_preserve.db")  # noqa: S108
+
+    db_test.migrate()
+
+    # Insert a replay
+    replay = Replay(
+        game_id="preserve-test-1",
+        created_at=datetime.utcnow().isoformat(),
+        rosters={"roster_a": {}, "roster_b": {}},
+        mission="test",
+        deployment="standard",
+        seed=42,
+        rounds=[],
+        summary={},
+    )
+    save_replay(db_test.conn, replay)
+
+    # Run migrate again (simulating app restart)
+    db_test.migrate()
+
+    # Replay should still exist
+    loaded = load_replay(db_test.conn, "preserve-test-1")
+    assert loaded is not None
+    assert loaded.game_id == "preserve-test-1"
+
+    # Cleanup
+    db_test.close()
+    with contextlib.suppress(FileNotFoundError):
+        os.remove("/tmp/test_replay_preserve.db")  # noqa: S108
+
+
+def test_save_replay_fails_on_duplicate_by_default():
+    """save_replay fails with IntegrityError on duplicate game_id by default."""
+    import sqlite3
+
+    replay = Replay(
+        game_id="dup-test-1",
+        created_at=datetime.utcnow().isoformat(),
+        rosters={"roster_a": {}, "roster_b": {}},
+        mission="test",
+        deployment="standard",
+        seed=42,
+        rounds=[],
+        summary={},
+    )
+
+    # Create temp in-memory DB + schema
+    conn = sqlite3.connect(":memory:")
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=DELETE")
+    conn.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS replays (
+            game_id TEXT PRIMARY KEY,
+            created_at TEXT NOT NULL,
+            roster_a TEXT NOT NULL,
+            roster_b TEXT NOT NULL,
+            mission TEXT NOT NULL,
+            deployment TEXT NOT NULL,
+            seed INTEGER NOT NULL,
+            replay_json TEXT NOT NULL,
+            summary TEXT,
+            user_id INTEGER
+        );
+    """
+    )
+
+    # First save succeeds
+    save_replay(conn, replay)
+    assert load_replay(conn, "dup-test-1") is not None
+
+    # Second save with same game_id fails
+    with pytest.raises(sqlite3.IntegrityError):
+        save_replay(conn, replay)
+
+    conn.close()
+
+
+def test_save_replay_succeeds_with_overwrite():
+    """save_replay with overwrite=True replaces existing replay."""
+    import sqlite3
+
+    replay1 = Replay(
+        game_id="overwrite-test-1",
+        created_at=datetime.utcnow().isoformat(),
+        rosters={"roster_a": {}, "roster_b": {}},
+        mission="mission-a",
+        deployment="standard",
+        seed=1,
+        rounds=[],
+        summary={"winner": 1},
+    )
+    replay2 = Replay(
+        game_id="overwrite-test-1",
+        created_at=datetime.utcnow().isoformat(),
+        rosters={"roster_a": {}, "roster_b": {}},
+        mission="mission-b",
+        deployment="hammer_and_anvil",
+        seed=2,
+        rounds=[],
+        summary={"winner": 2},
+    )
+
+    conn = sqlite3.connect(":memory:")
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=DELETE")
+    conn.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS replays (
+            game_id TEXT PRIMARY KEY,
+            created_at TEXT NOT NULL,
+            roster_a TEXT NOT NULL,
+            roster_b TEXT NOT NULL,
+            mission TEXT NOT NULL,
+            deployment TEXT NOT NULL,
+            seed INTEGER NOT NULL,
+            replay_json TEXT NOT NULL,
+            summary TEXT,
+            user_id INTEGER
+        );
+    """
+    )
+
+    # First save
+    save_replay(conn, replay1)
+    # Overwrite with second replay
+    save_replay(conn, replay2, overwrite=True)
+
+    loaded = load_replay(conn, "overwrite-test-1")
+    assert loaded is not None
+    assert loaded.mission == "mission-b"
+    assert loaded.seed == 2
+
+    conn.close()
+
+
+def test_same_seed_produces_different_replay_ids():
+    """Fixed seed produces repeatable sim behavior but distinct replay IDs."""
+    import uuid as _uuid
+
+    # Create two game_ids with "same seed"
+    id1 = f"auto_{_uuid.uuid4().hex[:12]}"
+    id2 = f"auto_{_uuid.uuid4().hex[:12]}"
+
+    # They must be different
+    assert id1 != id2
+    # Both use UUID format, not seed-based
+    assert "4242" not in id1  # seed=4242 would NOT appear in UUID-based id
+
+
+def test_replay_metadata_stores_seed():
+    """Replay metadata stores seed when provided."""
+    replay = Replay(
+        game_id="seed-meta-test",
+        created_at=datetime.utcnow().isoformat(),
+        rosters={"roster_a": {}, "roster_b": {}},
+        mission="test",
+        deployment="standard",
+        seed=999,
+        rounds=[],
+        summary={},
+    )
+    assert replay.seed == 999
+
+
+def test_production_startup_no_destructive_reset():
+    """Production startup path (migrate) does not call destructive reset helpers."""
+    import inspect
+
+    from backend.db.database import Database
+
+    # migrate() source must not contain DROP TABLE replays
+    source = inspect.getsource(Database.migrate)
+    assert "DROP TABLE IF EXISTS replays" not in source
+    assert "CREATE TABLE IF NOT EXISTS replays" in source

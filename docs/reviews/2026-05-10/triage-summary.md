@@ -295,3 +295,15 @@ For each remediation batch:
 4. Update the relevant CR report/artifact with fixed/re-reviewed status.
 5. Update this triage summary and `docs/requirements/code-review/code-review.md` counts.
 6. After all P0/P1 release blockers are closed or explicitly accepted where allowed, re-run CR-24.
+
+## Phase 0 — Canonical Data + Runtime State Stabilization — COMPLETE
+
+**2026-05-16.** All three Phase 0 remediation tasks done:
+
+| Task | Status | Key change |
+|------|--------|------------|
+| 0.1 — Runtime unit identity contract | ✅ | `RosterState.units` list-based, `_build_summary`/`_parse_log_events` runtime-ID aware |
+| 0.2 — Canonical GameState serializer | ✅ | Single `snapshot_game_state()` in `game_state.py`, autoplay+replay delegate |
+| 0.3 — Stop destructive DB/replay | ✅ | No DROP TABLE, INSERT-not-REPLACE, UUID game_id |
+
+Verification: 484 tests pass, lint/formatter clean. CR regression evidence in CR-05/06/12/14/20.

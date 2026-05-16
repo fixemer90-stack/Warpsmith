@@ -84,3 +84,7 @@ Verification: `uv run python -m pytest tests/ -q` → 471 passed, 3 skipped, 0 f
 
 **2026-05-16.** Canonical snapshot serializer in `game_state.py`. Roster validation unchanged.
 Unit snapshots now include `player_id`; VP at top-level only. 478 tests pass.
+
+## Regression evidence — Task 0.3 (non-destructive DB/replay)
+
+**2026-05-16.** Non-destructive DB migration. Roster persistence boundaries unchanged. 484 tests pass.

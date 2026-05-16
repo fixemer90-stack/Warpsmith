@@ -101,3 +101,8 @@ shape. Unit records include `runtime_unit_id` as authoritative `id`, `player_id`
 7 new tests: identical shape autoplay/replay, runtime_id keys, display_name preserved,
 player_id per unit, mirrored-name distinct IDs, VP consistency, status flags.
 Full suite: 478 passed, 0 failures.
+
+## Regression evidence — Task 0.3 (non-destructive DB/replay)
+
+**2026-05-16.** `DROP TABLE IF EXISTS replays` removed. `save_replay()` non-destructive by default.
+`game_id` UUID-based. 6 new tests. 484 passed.

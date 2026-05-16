@@ -259,10 +259,20 @@ def _snapshot_state(state: GameState) -> dict[str, Any]:
 
 
 def _unit_snapshot(unit: UnitState) -> dict[str, Any]:
-    """Canonical unit snapshot — delegates to backend.state.game_state."""
+    """Canonical unit snapshot — delegates to backend.state.game_state.
+
+    Derives player_id from the unit's runtime_id prefix (``p<N>:...``).
+    Falls back to ``""`` when runtime_id is missing or unparseable.
+    """
     from backend.state.game_state import _unit_snapshot as _canonical_unit_snapshot
 
-    return _canonical_unit_snapshot(unit, player_id="")
+    rtid = getattr(unit, "unit_id", "")
+    pid = ""
+    if rtid.startswith("p") and ":" in rtid:
+        player_num = rtid[1:].split(":", 1)[0]
+        if player_num.isdigit():
+            pid = player_num
+    return _canonical_unit_snapshot(unit, player_id=pid)
 
 
 def _pos_dict(pos) -> dict[str, int]:
@@ -336,13 +346,23 @@ def _replay_from_dict(raw: dict[str, Any]) -> Replay:
     )
 
 
-def save_replay(db: sqlite3.Connection, replay: Replay, user_id: int | None = None):
-    """Сохранить реплей в SQLite."""
-    db.execute(
-        """INSERT OR REPLACE INTO replays
-           (game_id, created_at, roster_a, roster_b,
+def save_replay(
+    db: sqlite3.Connection,
+    replay: Replay,
+    user_id: int | None = None,
+    overwrite: bool = False,
+):
+    """Сохранить реплей в SQLite.
+
+    By default uses INSERT — fails with sqlite3.IntegrityError on duplicate
+    game_id.  Pass ``overwrite=True`` to use INSERT OR REPLACE instead.
+    """
+    sql = "INSERT OR REPLACE INTO replays" if overwrite else "INSERT INTO replays"
+    sql += """ (game_id, created_at, roster_a, roster_b,
             mission, deployment, seed, replay_json, summary, user_id)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+    db.execute(
+        sql,
         (
             replay.game_id,
             replay.created_at,

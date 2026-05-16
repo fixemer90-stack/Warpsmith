@@ -1,7 +1,7 @@
 ---
 title: "Task 0.2 — Normalize GameState serialization boundaries"
 parent: remediation-plan
-status: completed
+status: request-changes
 phase: "0 — Canonical Data + Runtime State Stabilization"
 task_id: "0.2"
 source: remediation-plan.md
@@ -30,12 +30,12 @@ make snapshots, replay payloads, and API payloads use one state shape.
 - [x] Round snapshots and final snapshots are generated through the same serialization function/schema.
 - [x] Round snapshots and final snapshots MUST NOT be assembled by separate ad-hoc dict builders.
 - [x] Replay payloads and API payloads reuse the same serializer or canonical schema.
-- [x] Snapshot unit records include `runtime_unit_id`, `display_name`, `owner_id`/`player_id`, `canonical_unit_id` if available, position, wounds, models, status flags, and VP-relevant state.
-- [x] Unit entries are keyed by `runtime_unit_id` or include `runtime_unit_id` as the authoritative id field.
-- [x] VP fields use the same names and nesting in round and final snapshots.
-- [x] Existing UI consumers still receive display names, but legacy UI compatibility is preserved by keeping `display_name` fields, not by preserving display-name-keyed maps.
+- [ ] Snapshot unit records include `runtime_unit_id`, `display_name`, `owner_id`/`player_id`, `canonical_unit_id` if available, position, wounds, models, status flags, and VP-relevant state.
+- [ ] Unit entries are keyed by `runtime_unit_id` or include `runtime_unit_id` as the authoritative id field.
+- [ ] VP fields use the same names and nesting in round and final snapshots.
+- [ ] Existing UI consumers still receive display names, but legacy UI compatibility is preserved by keeping `display_name` fields, not by preserving display-name-keyed maps.
 - [x] No consumer requires `display_name` as a lookup key.
-- [x] Tests cover round snapshot and final snapshot having identical top-level/unit keys, result screen reading the same shape as round viewer, mirrored same-name units serializing as distinct runtime ids, replay payload round snapshots and final snapshot not diverging, and `display_name` remaining present for UI text.
+- [ ] Tests cover round snapshot and final snapshot having identical top-level/unit keys, result screen reading the same shape as round viewer, mirrored same-name units serializing as distinct runtime ids, replay payload round snapshots and final snapshot not diverging, and `display_name` remaining present for UI text.
 
 ## Canonical serialized GameState contract
 
@@ -65,7 +65,7 @@ make snapshots, replay payloads, and API payloads use one state shape.
 - [x] `uv run ruff check backend/state/game_state.py backend/engine/ai/autoplay.py backend/engine/replay.py tests/test_replay.py` — All checks passed.
 - [x] `uv run ruff format --check backend/state/game_state.py backend/engine/ai/autoplay.py backend/engine/replay.py tests/test_replay.py` — 4 files already formatted.
 
-## Review result
+## Implementation result
 
 **Completed 2026-05-16.** Two divergent `_snapshot_state` implementations consolidated:
 
@@ -88,3 +88,13 @@ make snapshots, replay payloads, and API payloads use one state shape.
 - [x] Regression evidence is recorded in the affected CR artifact(s).
 - [ ] If this task completes a phase checkpoint, update `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-XX-*.md`, and `docs/requirements/code-review/code-review.md` with the phase completion artifact. *(N/A — Phase 0 has 1 more task: 00-03)*
 - [x] `git diff --check` passes for touched files.
+
+## Code review — 2026-05-16
+
+**Verdict:** request changes.
+**Report:** [../reviews/2026-05-16/task-00-02-normalize-gamestate-serialization-boundaries-review.md](../reviews/2026-05-16/task-00-02-normalize-gamestate-serialization-boundaries-review.md)
+
+Findings:
+- Important: canonical unit records expose only `id`/`name`; the explicit task fields `runtime_unit_id`, `display_name`, and `canonical_unit_id` are not serialized or asserted by tests.
+- Important: final persisted replay/result snapshots diverge from authoritative `GameState` after Battle Ready VP is applied; last round `end_state.victory_points` remains pre-Battle-Ready.
+- Suggestion: `replay._unit_snapshot(unit)` compatibility wrapper emits `player_id=""`.
