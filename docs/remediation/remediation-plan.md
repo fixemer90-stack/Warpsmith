@@ -236,7 +236,9 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - `wiki/`
 - target/generated: `data/generated/content/manifest.json`
 - target/generated: `data/generated/content/units/index.json`
-- target/generated: `data/generated/content/units/<faction_id>.json` shards
+- target/generated: `data/generated/content/units/<owning_or_source_faction_id>.json` definition shards
+- target/generated: `data/generated/content/faction_units/index.json`
+- target/generated: `data/generated/content/faction_units/<faction_id>.json` availability/link shards
 - target/generated: `data/generated/content/weapons.json`
 - target/generated: `data/generated/content/factions.json`
 - target/generated: `data/generated/content/detachments.json`
@@ -293,9 +295,12 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 **Acceptance criteria:**
 - [ ] Compiler emits canonical artifacts under `data/generated/content/`.
-- [ ] Required top-level artifacts include `manifest.json`, `factions.json`, `weapons.json`, `detachments.json`, `stratagems.json`, `enhancements.json`, and `rules.json`.
-- [ ] Large logical artifact kinds MAY be physically sharded; units MUST be emitted as `units/index.json` plus `units/<faction_id>.json` shards rather than one monolithic `units.json`.
-- [ ] `units/index.json` is a lightweight index keyed by `unit_id` with `faction_id`, shard `file`, `display_name`, and record `hash`.
+- [ ] Required top-level artifacts include `manifest.json`, `factions.json`, `weapons.json`, `detachments.json`, `stratagems.json`, `enhancements.json`, `rules.json`, `units/`, and `faction_units/`.
+- [ ] Large logical artifact kinds MAY be physically sharded; canonical unit definitions MUST be emitted as `units/index.json` plus `units/<owning_or_source_faction_id>.json` shards rather than one monolithic `units.json`.
+- [ ] Unit definition availability MUST be emitted separately as `faction_units/index.json` plus `faction_units/<faction_id>.json` shards.
+- [ ] `units/index.json` is a lightweight index keyed by `unit_id` with source/owning `faction_id`, shard `file`, `display_name`, and record `hash`.
+- [ ] `faction_units/<faction_id>.json` files contain availability/link records, not duplicated unit definitions.
+- [ ] Shared/common units MUST be represented once as canonical unit definitions and exposed to multiple factions through faction availability/link artifacts, not duplicated per faction.
 - [ ] `manifest.json` lists every emitted top-level artifact and shard with `sha256:<hex>` hash.
 - [ ] Artifacts are keyed by stable canonical ids, not display names.
 - [ ] `manifest.json` includes `schema_version`, `content_hash`, source paths, generated timestamp, artifact/shard filenames and hashes, and collision/exception report references.
@@ -308,6 +313,23 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - [ ] Generated JSON output is byte-deterministic for identical source input.
 - [ ] Canonical ids are deterministic, independent from display names and source file paths, and survive display/source-path changes when explicit `canonical_id` is present.
 - [ ] Tests cover duplicate canonical ids across shards, duplicate display names, dangling references, renamed source files, display-name changes, deterministic rebuild output, manifest shard hashes, and registry loading sharded units as one logical collection.
+
+**Artifact layout:**
+- [ ] Physical layout under `data/generated/content/` is:
+  - `manifest.json`
+  - `factions.json`
+  - `weapons.json`
+  - `detachments.json`
+  - `stratagems.json`
+  - `enhancements.json`
+  - `rules.json`
+  - `units/index.json`
+  - `units/<owning_or_source_faction_id>.json`, for example `units/space-marines.json`, `units/orks.json`, `units/tau-empire.json`.
+  - `faction_units/index.json`
+  - `faction_units/<faction_id>.json`, for example `faction_units/blood-angels.json`, `faction_units/dark-angels.json`.
+- [ ] Unit definition != faction availability: common units are stored once in `units/` and linked from every eligible faction/subfaction through `faction_units/`.
+- [ ] Do not shard one file per unit; shard unit definitions by source/owning faction and shard availability by faction to keep git diffs, merge conflicts, and manifest/hash control manageable.
+- [ ] The logical object kind `units` remains canonical definitions; availability is a separate logical object kind `faction_units`.
 
 **Canonical id contract:**
 - [ ] Canonical ids use frontmatter `canonical_id` / object-specific id as the authoritative owner.
@@ -338,7 +360,7 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 ### Checkpoint 1
 
 - [ ] Wiki content compiles with explicit errors.
-- [ ] Canonical JSON artifacts are emitted, schema-validated, and keyed by stable ids.
+- [ ] Canonical JSON artifacts are emitted, schema-validated, manifest-hashed, and keyed by stable ids; unit definitions may be physically sharded while remaining one registry object kind, and faction availability is represented by separate `faction_units` links.
 - [ ] No unsafe/stale cache risk.
 - [ ] Runtime loaders can rely on `CanonicalContentRegistry`/generated JSON instead of raw wiki reads for factions, units, weapons, detachments, stratagems, enhancements, and rules.
 - [ ] Roster validator can rely on canonical metadata.

@@ -39,7 +39,7 @@ one canonical squad metadata shape feeds roster validation and UI.
 - new: `backend/loader/compiler.py`
 - new: `backend/loader/schemas.py`
 - `wiki/`
-- target/generated: `data/generated/content/units.json`
+- target/generated: `data/generated/content/units/index.json`, `data/generated/content/units/<owning_or_source_faction_id>.json` definition shards, and `data/generated/content/faction_units/<faction_id>.json` availability shards
 - `tests/test_parser.py`
 - `tests/test_registry.py`
 - new: `tests/test_content_contracts.py`

@@ -2,13 +2,14 @@
 confidence: medium
 created: 2026-04-30
 edition: 10e
-points: 90
+points: 65
 sources:
 - https://wahapedia.ru/wh40k10ed/factions/orks/
 tags:
 - orks
 - infantry
-squad_size: {'min': 2, 'max': 5, 'step': 1}
+squad_size: {'min': 2, 'max': 6, 'step': 1}
+model_count: [1, 1]
 title: Meganobz
 type: entity
 updated: 2026-04-30

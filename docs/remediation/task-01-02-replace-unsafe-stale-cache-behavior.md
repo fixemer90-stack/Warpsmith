@@ -50,17 +50,20 @@ registry cache must not load unsafe pickle or stale content after wiki changes.
 
 **Completed 2026-05-16.** Pickle cache replaced with safe JSON-based content pipeline:
 
-1. **`backend/loader/compiler.py`** — Compiles wiki markdown → JSON artifacts.
+1. **`backend/loader/compiler.py`** — Compiles wiki markdown → interim JSON artifacts.
    `compile_content()` scans wiki/units/, wiki/detachments/, parses, serializes to
-   `data/generated/content/units.json`, `detachments.json`, `factions.json`.
-   Generates `manifest.json` with `schema_version`, `source_hashes`, `generated_at`.
+   generated content files for units, detachments, factions, and `manifest.json`.
+   Task 1.4 supersedes the interim monolithic unit artifact with the canonical
+   `units/index.json` + `units/<owning_or_source_faction_id>.json` definition shards
+   and separate `faction_units/<faction_id>.json` availability/link shards.
 
 2. **`backend/loader/registry.py`** — `_load_from_json_cache()` replaces `_load_from_cache()`.
    Loads JSON artifacts when present and not stale. `_save_json_cache()` calls compiler.
    `import pickle` removed. Staleness detected via SHA256 comparison of source files.
 
-3. **Tests** — 6 new tests: manifest structure, units.json validity, detachments.json,
-   JSON cache loading, no pickle import in registry, no pickle usage in compiler.
+3. **Tests** — 6 new tests: manifest structure, interim unit artifact validity,
+   detachment artifact validity, JSON cache loading, no pickle import in registry,
+   no pickle usage in compiler. Task 1.4 adds canonical shard-specific tests.
 
 ## Completion requirements
 
