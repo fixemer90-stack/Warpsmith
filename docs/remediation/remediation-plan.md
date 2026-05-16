@@ -492,7 +492,7 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - [ ] Devastating Wounds bypasses normal armor saves once triggered.
 - [ ] Feel No Pain and other post-damage defenses still apply if supported elsewhere by the engine.
 
-**Non-goals:** Invulnerable save redesign, full terrain-system rewrite, and damage spillover/allocation redesign are not in scope.
+**Non-goals:** Invulnerable save redesign, full terrain-system rewrite, and Damage spillover/allocation redesign are not in scope.
 
 **Verification:**
 - `uv run python -m pytest tests/test_combat*.py tests/test_terrain*.py -q`
@@ -504,6 +504,24 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Acceptance criteria:**
 - [ ] Sustained Hits adds correct additional hits.
 - [ ] Downstream wound/save/damage counts include the extra hits.
+- [ ] Hit resolution output includes both original hits and Sustained Hits extra hits.
+- [ ] Downstream wound pool consumes the expanded hit count.
+- [ ] Combat trace/log, if present, distinguishes original hits from Sustained Hits extra hits.
+- [ ] Sustained Hits and Lethal Hits can coexist without dropping either effect.
+- [ ] Do not represent Sustained Hits only as metadata; the extra hits must become downstream-resolvable hit entries or counts.
+- [ ] Tests cover no Critical Hits producing no extra hits, one Critical Hit with Sustained Hits 1 producing two total hits, one Critical Hit with Sustained Hits 2 producing three total hits, extra hits rolling to wound normally, extra hits not being treated as auto-wounds from Lethal Hits, a mixed pool with normal hits/Critical Hits/misses, and Sustained Hits + Lethal Hits on the same natural 6 where the original Critical Hit can auto-wound via Lethal Hits while extra Sustained Hits roll to wound normally.
+
+**Sustained Hits contract:**
+- [ ] Sustained Hits triggers only on Critical Hits.
+- [ ] Sustained Hits X adds X additional hit results for each triggering Critical Hit.
+- [ ] Additional hits are normal successful hits, not Critical Hits.
+- [ ] Additional hits continue into wound/save/damage resolution.
+- [ ] Additional hits do not recursively trigger Sustained Hits or other Critical Hit effects.
+
+**Non-goals:**
+- [ ] Changing Lethal Hits semantics is not in scope.
+- [ ] Changing Devastating Wounds/AP/save behavior is not in scope.
+- [ ] Full combat log redesign is not in scope.
 
 **Verification:**
 - `uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q`
@@ -537,31 +555,110 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - [ ] GamePhase has exactly 5 members.
 - [ ] Battle-shock runs in Command, not separate Morale.
 - [ ] Round increments after Fight only.
+- [ ] Phase progression uses one canonical ordered phase list.
+- [ ] Autoplay/scenario code consumes the same phase order, not duplicated hardcoded lists.
+- [ ] Replay/snapshot phase names match the canonical GamePhase values.
+- [ ] No tests or UI paths expect a separate Morale phase.
+- [ ] Do not fix this by aliasing Morale/Battle-shock to Command while keeping them as phase enum members.
+- [ ] Tests cover GamePhase having exactly five members, phase order being Command -> Movement -> Shooting -> Charge -> Fight, advancing from Fight moving to the next player/round boundary as designed, battle-shock hooks running during Command phase, no separate Morale phase appearing in snapshots/replay/scenario progression, and autoplay completing a full turn using only the five phases.
+
+**Phase loop contract:**
+- [ ] GamePhase MUST contain exactly `COMMAND`, `MOVEMENT`, `SHOOTING`, `CHARGE`, and `FIGHT`.
+- [ ] GamePhase MUST NOT contain `MORALE`, `BATTLESHOCK`, `PSYCHIC`, or `END` as runtime phase loop enum members.
+- [ ] Battle-shock is resolved as a Command phase step.
+- [ ] Round advances only after both players complete Fight phase, or after the engine's existing full-round boundary if turns are modeled differently.
+
+**Non-goals:**
+- [ ] Full battle-shock rules implementation is not in scope.
+- [ ] Mission scoring redesign is not in scope.
+- [ ] Turn/round persistence redesign is not in scope unless required to remove invalid phase states.
 
 **Verification:**
 - `uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q`
 
 ### Task 4.2 — Lock CP and battle-shock reset semantics
 
-**Objective:** CP starts at 0, +1/round, relevant flags reset at correct times.
+**Objective:** CP starts at 0, each player gains CP only at the start of their own Command phase, and reset semantics are split across explicit turn and round boundaries.
+
+**CP / reset semantics contract:**
+- [ ] Both players start the game with 0 CP.
+- [ ] Each player gains exactly +1 CP at the start of their own Command phase unless a future explicit rule modifies this.
+- [ ] CP gain happens once per player turn, not once per phase transition and not once per full battle round.
+- [ ] Repeated Command phase processing is idempotent for CP unless the call explicitly advances turn state.
+- [ ] The opponent does not gain CP during the active player’s Command phase.
+- [ ] There is no Warlord-based starting CP and no Warlord-based bonus CP.
+- [ ] `is_battle_shocked` is cleared only during that unit owner’s Command phase reset step.
+- [ ] Battle-shock reset does not occur during Movement, Shooting, Charge, or Fight.
+- [ ] `has_advanced` is cleared at the start of a new battle round before any unit acts.
+- [ ] Round-level flags and turn-level flags are reset at separate explicit boundaries.
+- [ ] Do not hide old Warlord CP behavior behind default config or compatibility paths.
 
 **Acceptance criteria:**
-- [ ] No Warlord CP bonus.
-- [ ] `is_battle_shocked` clears in Command only.
-- [ ] `has_advanced` resets at new round.
+- [ ] Both players start with 0 CP.
+- [ ] Active player gains +1 CP on their own Command phase.
+- [ ] Opponent does not gain CP during active player Command phase.
+- [ ] No Warlord CP bonus is applied.
+- [ ] CP gain happens once per player turn, not once per phase transition or full round.
+- [ ] Repeated Command phase processing is idempotent for CP unless explicitly advancing turn state.
+- [ ] `is_battle_shocked` clears in Command only, during that unit owner’s Command phase reset step.
+- [ ] `is_battle_shocked` remains set through Movement, Shooting, Charge, and Fight.
+- [ ] `has_advanced` resets at the new battle-round boundary before any unit acts.
+- [ ] Round-level flags and turn-level flags are reset at separate explicit boundaries.
+
+**Tests:**
+- [ ] Both players start with 0 CP.
+- [ ] Player gains +1 CP on own Command phase.
+- [ ] Opponent does not gain CP during active player Command phase.
+- [ ] No Warlord CP bonus is applied.
+- [ ] Battle-shock clears in Command only.
+- [ ] Battle-shock remains set through non-Command phases.
+- [ ] `has_advanced` clears at new round boundary.
+- [ ] CP is not double-awarded when snapshots, replay, or autoplay touch Command logic.
+
+**Non-goals:**
+- [ ] Stratagem CP spending/refund rules are not in scope.
+- [ ] Faction-specific CP generation is not in scope.
+- [ ] Full battle-shock test/rules implementation is not in scope.
 
 **Verification:**
 - `uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q`
 
 ### Task 4.3 — Lock VP, objectives, mission normalization, Battle Ready
 
-**Objective:** VP source is deterministic and 10e-aligned.
+**Objective:** VP source is deterministic, 10e-aligned, and shared by runtime, replay, result screen, and autoplay.
+
+**VP / mission scoring contract:**
+- [ ] Primary/dynamic VP scoring uses one canonical scoring pipeline shared by runtime, replay, result screen, and autoplay.
+- [ ] Mission names are normalized before lookup/comparison using a deterministic normalization function.
+- [ ] Battle Ready is a post-game bonus applied exactly once to the final authoritative VP state.
+- [ ] Intermediate snapshots MAY omit Battle Ready, but final authoritative state MUST include it.
+- [ ] Final authoritative VP state is the single source of truth for result screens and replay summaries.
+- [ ] Do not solve mission normalization by duplicating alias maps independently across runtime/UI/replay layers.
 
 **Acceptance criteria:**
-- [ ] Mission names normalize spaces and hyphens.
-- [ ] Dynamic objectives: Only War 3, Take and Hold/Purge the Foe 5.
-- [ ] Battle Ready +10 VP applied exactly once and visible in final authoritative state.
-- [ ] Game ends by rounds/wipe/mission cap, not early VP>=10.
+- [ ] Mission normalization treats whitespace, casing, underscores, and hyphens consistently.
+- [ ] Objective scoring values are sourced from normalized mission definitions, not hardcoded ad-hoc comparisons.
+- [ ] Dynamic objectives: Only War 3 VP, Take and Hold 5 VP, Purge the Foe 5 VP.
+- [ ] Battle Ready +10 VP is applied exactly once and visible in final authoritative state.
+- [ ] Replay, result screen, and final snapshot display the same final VP totals.
+- [ ] Game termination is driven by round cap, army wipe/table state, and explicit mission-end conditions, not arbitrary VP thresholds.
+- [ ] Game does not end early at `VP >= 10`.
+
+**Tests:**
+- [ ] Mission name normalization with spaces, hyphens, underscores, and case variants.
+- [ ] Only War dynamic objective awards 3 VP.
+- [ ] Take and Hold awards 5 VP.
+- [ ] Purge the Foe awards 5 VP.
+- [ ] Battle Ready applies exactly once.
+- [ ] Repeated finalization does not duplicate Battle Ready.
+- [ ] Final replay/result snapshot includes Battle Ready VP.
+- [ ] Game does not end at `VP >= 10`.
+- [ ] Game ends correctly by round cap or wipe condition.
+
+**Non-goals:**
+- [ ] Secondary objective system redesign is not in scope.
+- [ ] Tournament scoring variants are not in scope.
+- [ ] UI redesign for result presentation is not in scope.
 
 **Verification:**
 - `uv run python -m pytest tests/test_mission*.py tests/test_autoplay.py tests/test_result_screen.py -q`

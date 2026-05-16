@@ -29,6 +29,26 @@ extra hits are resolved as real hit results, not dropped/no-op metadata.
 
 - [ ] Sustained Hits adds correct additional hits.
 - [ ] Downstream wound/save/damage counts include the extra hits.
+- [ ] Hit resolution output includes both original hits and Sustained Hits extra hits.
+- [ ] Downstream wound pool consumes the expanded hit count.
+- [ ] Combat trace/log, if present, distinguishes original hits from Sustained Hits extra hits.
+- [ ] Sustained Hits and Lethal Hits can coexist without dropping either effect.
+- [ ] Do not represent Sustained Hits only as metadata; the extra hits must become downstream-resolvable hit entries or counts.
+- [ ] Tests cover no Critical Hits producing no extra hits, one Critical Hit with Sustained Hits 1 producing two total hits, one Critical Hit with Sustained Hits 2 producing three total hits, extra hits rolling to wound normally, extra hits not being treated as auto-wounds from Lethal Hits, a mixed pool with normal hits/Critical Hits/misses, and Sustained Hits + Lethal Hits on the same natural 6 where the original Critical Hit can auto-wound via Lethal Hits while extra Sustained Hits roll to wound normally.
+
+## Sustained Hits contract
+
+- [ ] Sustained Hits triggers only on Critical Hits.
+- [ ] Sustained Hits X adds X additional hit results for each triggering Critical Hit.
+- [ ] Additional hits are normal successful hits, not Critical Hits.
+- [ ] Additional hits continue into wound/save/damage resolution.
+- [ ] Additional hits do not recursively trigger Sustained Hits or other Critical Hit effects.
+
+## Non-goals
+
+- [ ] Changing Lethal Hits semantics is not in scope.
+- [ ] Changing Devastating Wounds/AP/save behavior is not in scope.
+- [ ] Full combat log redesign is not in scope.
 
 ## Files likely touched
 

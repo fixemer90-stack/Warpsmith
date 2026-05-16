@@ -22,6 +22,7 @@ dependencies = [
     "structlog",
     "sentry-sdk[fastapi]",
     "slowapi",
+    "requests>=2.34.2",
 ]
 
 [project.optional-dependencies]

@@ -23,14 +23,44 @@ source: remediation-plan.md
 
 ## Objective
 
-VP source is deterministic and 10e-aligned.
+VP source is deterministic, 10e-aligned, and shared by runtime, replay, result screen, and autoplay.
+
+## VP / mission scoring contract
+
+- [ ] Primary/dynamic VP scoring uses one canonical scoring pipeline shared by runtime, replay, result screen, and autoplay.
+- [ ] Mission names are normalized before lookup/comparison using a deterministic normalization function.
+- [ ] Battle Ready is a post-game bonus applied exactly once to the final authoritative VP state.
+- [ ] Intermediate snapshots MAY omit Battle Ready, but final authoritative state MUST include it.
+- [ ] Final authoritative VP state is the single source of truth for result screens and replay summaries.
+- [ ] Do not solve mission normalization by duplicating alias maps independently across runtime/UI/replay layers.
 
 ## Acceptance criteria
 
-- [ ] Mission names normalize spaces and hyphens.
-- [ ] Dynamic objectives: Only War 3, Take and Hold/Purge the Foe 5.
-- [ ] Battle Ready +10 VP applied exactly once and visible in final authoritative state.
-- [ ] Game ends by rounds/wipe/mission cap, not early VP>=10.
+- [ ] Mission normalization treats whitespace, casing, underscores, and hyphens consistently.
+- [ ] Objective scoring values are sourced from normalized mission definitions, not hardcoded ad-hoc comparisons.
+- [ ] Dynamic objectives: Only War 3 VP, Take and Hold 5 VP, Purge the Foe 5 VP.
+- [ ] Battle Ready +10 VP is applied exactly once and visible in final authoritative state.
+- [ ] Replay, result screen, and final snapshot display the same final VP totals.
+- [ ] Game termination is driven by round cap, army wipe/table state, and explicit mission-end conditions, not arbitrary VP thresholds.
+- [ ] Game does not end early at `VP >= 10`.
+
+## Tests
+
+- [ ] Mission name normalization with spaces, hyphens, underscores, and case variants.
+- [ ] Only War dynamic objective awards 3 VP.
+- [ ] Take and Hold awards 5 VP.
+- [ ] Purge the Foe awards 5 VP.
+- [ ] Battle Ready applies exactly once.
+- [ ] Repeated finalization does not duplicate Battle Ready.
+- [ ] Final replay/result snapshot includes Battle Ready VP.
+- [ ] Game does not end at `VP >= 10`.
+- [ ] Game ends correctly by round cap or wipe condition.
+
+## Non-goals
+
+- [ ] Secondary objective system redesign is not in scope.
+- [ ] Tournament scoring variants are not in scope.
+- [ ] UI redesign for result presentation is not in scope.
 
 ## Files likely touched
 

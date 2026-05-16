@@ -30,6 +30,25 @@ Command -> Movement -> Shooting -> Charge -> Fight only.
 - [ ] GamePhase has exactly 5 members.
 - [ ] Battle-shock runs in Command, not separate Morale.
 - [ ] Round increments after Fight only.
+- [ ] Phase progression uses one canonical ordered phase list.
+- [ ] Autoplay/scenario code consumes the same phase order, not duplicated hardcoded lists.
+- [ ] Replay/snapshot phase names match the canonical GamePhase values.
+- [ ] No tests or UI paths expect a separate Morale phase.
+- [ ] Do not fix this by aliasing Morale/Battle-shock to Command while keeping them as phase enum members.
+- [ ] Tests cover GamePhase having exactly five members, phase order being Command -> Movement -> Shooting -> Charge -> Fight, advancing from Fight moving to the next player/round boundary as designed, battle-shock hooks running during Command phase, no separate Morale phase appearing in snapshots/replay/scenario progression, and autoplay completing a full turn using only the five phases.
+
+## Phase loop contract
+
+- [ ] GamePhase MUST contain exactly `COMMAND`, `MOVEMENT`, `SHOOTING`, `CHARGE`, and `FIGHT`.
+- [ ] GamePhase MUST NOT contain `MORALE`, `BATTLESHOCK`, `PSYCHIC`, or `END` as runtime phase loop enum members.
+- [ ] Battle-shock is resolved as a Command phase step.
+- [ ] Round advances only after both players complete Fight phase, or after the engine's existing full-round boundary if turns are modeled differently.
+
+## Non-goals
+
+- [ ] Full battle-shock rules implementation is not in scope.
+- [ ] Mission scoring redesign is not in scope.
+- [ ] Turn/round persistence redesign is not in scope unless required to remove invalid phase states.
 
 ## Files likely touched
 
