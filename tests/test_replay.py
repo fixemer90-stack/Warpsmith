@@ -25,6 +25,7 @@ from backend.engine.replay import (
 )
 from backend.model.unit import Unit, Weapon
 from backend.state.game_state import GamePhase, GameState, PlayerState, UnitState
+from web.routes.api_replays import _parse_log_events
 
 
 def make_test_unit(name: str = "Test Unit") -> Unit:
@@ -130,6 +131,24 @@ def test_replay_event_creation():
     assert event.event_type == "shoot"
     assert event.actor_name == "Test Unit"
     assert event.dice_rolled == [4, 5, 6]
+
+
+def test_parse_log_events_uses_runtime_ids_when_metadata_present():
+    """Parsed replay events keep runtime IDs separate from display labels."""
+    events = _parse_log_events(
+        [
+            "Boyz hits Boyz for 3 damage [actor_id=p1:Boyz:0; target_id=p2:Boyz:0]",
+            "Boyz was destroyed [target_id=p2:Boyz:0]",
+        ],
+        round_num=1,
+    )
+
+    assert events[0].actor_id == "p1:Boyz:0"
+    assert events[0].actor_name == "Boyz"
+    assert events[0].target_id == "p2:Boyz:0"
+    assert events[0].target_name == "Boyz"
+    assert events[1].target_id == "p2:Boyz:0"
+    assert events[1].target_name == "Boyz"
 
 
 def test_replay_round_creation():
@@ -492,6 +511,150 @@ def test_unit_snapshot_with_current_api():
     assert snapshot["max_wounds"] == 2
     assert snapshot["position"]["x"] == 10
     assert snapshot["position"]["y"] == 20
+
+
+# ── Task 0.2 — canonical snapshot tests ────────────────────────────────
+
+
+def test_canonical_snapshot_round_and_final_identical_shape():
+    """Round and final snapshots have identical top-level and unit keys."""
+    from backend.engine.ai.autoplay import _snapshot_state as autoplay_snapshot
+    from backend.engine.replay import _snapshot_state as replay_snapshot
+
+    state = make_test_game_state()
+    snap_a = autoplay_snapshot(state)
+    snap_r = replay_snapshot(state)
+
+    # Same top-level keys
+    assert set(snap_a.keys()) == set(snap_r.keys())
+    assert "round" in snap_a and "phase" in snap_a
+    assert "victory_points" in snap_a and "units" in snap_a
+    assert "map_width" in snap_a and "map_height" in snap_a
+
+    # Same unit-level keys for first player's first unit
+    ua = snap_a["units"]["1"][0]
+    ur = snap_r["units"]["1"][0]
+    assert set(ua.keys()) == set(ur.keys())
+
+
+def test_canonical_snapshot_runtime_id_keys():
+    """Unit entries include runtime_unit_id as authoritative id field."""
+    from backend.engine.ai.autoplay import _snapshot_state
+
+    state = make_test_game_state()
+    # Give units proper runtime IDs
+    for pid, player in state.players.items():
+        for _rtid, unit in player.units.items():
+            unit.unit_id = f"p{pid}:TestUnit:0"
+
+    snap = _snapshot_state(state)
+    for pid in ("1", "2"):
+        for unit in snap["units"][pid]:
+            assert unit["id"].startswith(f"p{pid}:")
+            assert unit["name"]  # display_name still present
+
+
+def test_canonical_snapshot_display_name_present():
+    """display_name remains present for UI text even with runtime_id as key."""
+    from backend.engine.ai.autoplay import _snapshot_state
+
+    state = make_test_game_state()
+    snap = _snapshot_state(state)
+
+    for pid in ("1", "2"):
+        for unit in snap["units"][pid]:
+            assert "name" in unit
+            assert len(unit["name"]) > 0
+
+
+def test_canonical_snapshot_player_id_per_unit():
+    """Each unit record includes owner player_id."""
+    from backend.engine.ai.autoplay import _snapshot_state
+
+    state = make_test_game_state()
+    snap = _snapshot_state(state)
+
+    for pid in ("1", "2"):
+        for unit in snap["units"][pid]:
+            assert unit["player_id"] == pid
+
+
+def test_canonical_snapshot_mirrored_names_distinct_ids():
+    """Same display name across players → distinct runtime IDs in snapshot."""
+    from backend.engine.ai.autoplay import _snapshot_state
+    from backend.state.game_state import UnitState
+
+    state = make_test_game_state()
+    # Force same display name for both players
+    state.players["1"].units = {
+        "p1:Boyz:0": UnitState(
+            unit_id="p1:Boyz:0",
+            name="Boyz",
+            faction="orks",
+            position=(0, 0),
+            current_wounds=2,
+            max_wounds=2,
+            models_remaining=1,
+            models_total=1,
+            leadership=7,
+            objective_control=2,
+        )
+    }
+    state.players["2"].units = {
+        "p2:Boyz:0": UnitState(
+            unit_id="p2:Boyz:0",
+            name="Boyz",
+            faction="orks",
+            position=(10, 10),
+            current_wounds=2,
+            max_wounds=2,
+            models_remaining=1,
+            models_total=1,
+            leadership=7,
+            objective_control=2,
+        )
+    }
+
+    snap = _snapshot_state(state)
+    ids = {u["id"] for pid in snap["units"] for u in snap["units"][pid]}
+    assert ids == {"p1:Boyz:0", "p2:Boyz:0"}
+    # Display names identical but IDs distinct
+    names = {u["name"] for pid in snap["units"] for u in snap["units"][pid]}
+    assert names == {"Boyz"}
+
+
+def test_canonical_snapshot_vp_consistency():
+    """VP fields use same names and nesting in all snapshots."""
+    from backend.engine.ai.autoplay import _snapshot_state
+
+    state = make_test_game_state()
+    state.players["1"].victory_points = 15
+    state.players["2"].victory_points = 10
+
+    snap = _snapshot_state(state)
+    assert snap["victory_points"]["1"] == 15
+    assert snap["victory_points"]["2"] == 10
+    # VP is at top level only, not embedded per-unit
+    for pid in ("1", "2"):
+        for unit in snap["units"][pid]:
+            assert "victory_points" not in unit
+
+
+def test_canonical_snapshot_status_flags():
+    """Snapshot includes wounds, models, and status flags."""
+    from backend.engine.ai.autoplay import _snapshot_state
+
+    state = make_test_game_state()
+    snap = _snapshot_state(state)
+
+    u = snap["units"]["1"][0]
+    assert "current_wounds" in u
+    assert "max_wounds" in u
+    assert "models_remaining" in u
+    assert "models_total" in u
+    assert "is_alive" in u
+    assert "is_engaged" in u
+    assert "is_battle_shocked" in u
 
 
 def test_recorder_many_event_types():

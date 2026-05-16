@@ -26,7 +26,7 @@ class RosterState:
     name: str
     faction: str
     total_pts: int
-    units: dict[str, "Unit"] = field(default_factory=dict)
+    units: list[tuple[str, "Unit"]] = field(default_factory=list)
     warlord_unit_name: str | None = None
     detachment: str = ""
 

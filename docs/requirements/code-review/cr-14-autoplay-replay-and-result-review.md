@@ -69,3 +69,35 @@ tags: [requirements, code-review, atomic-review]
 
 - [CR-14 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-14)
 - Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
+
+## Regression evidence — Task 0.1 (runtime unit identity)
+
+**2026-05-16.** Fixed "duplicate-name summary attribution" finding:
+
+1. **`_build_summary()`** — Now uses `strip_event_identity()` to extract authoritative
+   `actor_id`/`target_id` from the `[actor_id=p1:Boyz:0; target_id=p2:Boyz:0]`
+   suffix in log lines. Builds `runtime_id → player_id` map. Correct attribution
+   even when both players have identically-named units (e.g. both field "Boyz").
+   Fallback to display-name lookup for log lines without identity suffix.
+
+2. **`_parse_log_events()`** — Updated all 17 patterns to strip identity suffix
+   and use `meta.get("actor_id"/"target_id", …)` for `ReplayEvent` construction.
+   Replay events now carry stable runtime IDs alongside display names.
+
+3. **`RosterState.units`** — `dict[str, Unit]` → `list[tuple[str, Unit]]`.
+   Duplicate unit names within a roster are representable end-to-end.
+
+Verification: `uv run python -m pytest tests/ -q` → 471 passed, 3 skipped, 0 failures.
+`ruff check` → All checks passed.
+
+## Regression evidence — Task 0.2 (canonical GameState serializer)
+
+**2026-05-16.** Two divergent `_snapshot_state` implementations consolidated into single
+canonical `snapshot_game_state()` in `backend/state/game_state.py`. Both `autoplay.py`
+and `replay.py` now delegate to it. Round snapshots and final snapshots share identical
+shape. Unit records include `runtime_unit_id` as authoritative `id`, `player_id`,
+`current_wounds`/`max_wounds`, and all status flags. VP at top-level only (not per-unit).
+
+7 new tests: identical shape autoplay/replay, runtime_id keys, display_name preserved,
+player_id per unit, mirrored-name distinct IDs, VP consistency, status flags.
+Full suite: 478 passed, 0 failures.

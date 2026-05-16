@@ -66,3 +66,18 @@ tags: [requirements, code-review, atomic-review]
 
 - [CR-05 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-05)
 - Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
+
+## Regression evidence — Task 0.1 (runtime unit identity)
+
+**2026-05-16.** `RosterState.units` type changed from `dict[str, Unit]` to `list[tuple[str, Unit]]`
+to support duplicate unit entries in a single roster (CR-12 roster-duplicate finding).
+Persistence boundaries (`units_from_db` in `api_replays.py`) updated accordingly.
+Database schema unchanged — runtime IDs are generated at conversion time.
+
+Verification: `uv run python -m pytest tests/ -q` → 471 passed, 3 skipped, 0 failures.
+
+## Regression evidence — Task 0.2 (canonical GameState serializer)
+
+**2026-05-16.** Canonical `snapshot_game_state()` added to `backend/state/game_state.py`.
+No schema changes; database boundaries unchanged. Persistence consumers (`replay.py`,
+`autoplay.py`) now delegate to single canonical serializer. 478 tests pass.

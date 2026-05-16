@@ -69,3 +69,18 @@ tags: [requirements, code-review, atomic-review]
 
 - [CR-12 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-12)
 - Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
+
+## Regression evidence — Task 0.1 (runtime unit identity)
+
+**2026-05-16.** `RosterState.units` changed from `dict[str, Unit]` → `list[tuple[str, Unit]]`.
+Duplicate unit names within a single roster are now representable. Updated consumers:
+`_roster_to_player_state`, `_build_unit_models`, `units_from_db`, `make_test_roster`,
+`test_roster_to_player_state_preserves_two_identical_units`. Runtime IDs (`p1:Boyz:0`,
+`p1:Boyz:1`) ensure stable uniqueness even when display names collide.
+
+Verification: `uv run python -m pytest tests/ -q` → 471 passed, 3 skipped, 0 failures.
+
+## Regression evidence — Task 0.2 (canonical GameState serializer)
+
+**2026-05-16.** Canonical snapshot serializer in `game_state.py`. Roster validation unchanged.
+Unit snapshots now include `player_id`; VP at top-level only. 478 tests pass.

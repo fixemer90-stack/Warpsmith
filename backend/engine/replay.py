@@ -252,38 +252,17 @@ class ReplayRecorder:
 
 
 def _snapshot_state(state: GameState) -> dict[str, Any]:
-    """Создать снимок GameState для реплея."""
-    units_by_player: dict[str, list[dict]] = {}
-    for pid, player in getattr(state, "players", {}).items():
-        units_by_player[pid] = [_unit_snapshot(u) for u in player.units.values()]
+    """Canonical GameState snapshot — delegates to backend.state.game_state."""
+    from backend.state.game_state import snapshot_game_state
 
-    return {
-        "round": getattr(state, "current_round", 0),
-        "phase": getattr(state, "current_phase", "").value
-        if hasattr(getattr(state, "current_phase", None), "value")
-        else str(getattr(state, "current_phase", "")),
-        "victory_points": {
-            pid: getattr(player, "victory_points", 0)
-            for pid, player in getattr(state, "players", {}).items()
-        },
-        "units": units_by_player,
-    }
+    return snapshot_game_state(state)
 
 
 def _unit_snapshot(unit: UnitState) -> dict[str, Any]:
-    pos = unit.position if hasattr(unit, "position") else (0, 0)
-    return {
-        "id": getattr(unit, "unit_id", ""),
-        "name": getattr(unit, "name", str(unit)),
-        "models_remaining": getattr(unit, "models_remaining", 1),
-        "models_total": getattr(unit, "models_total", 1),
-        "current_wounds": getattr(unit, "current_wounds", getattr(unit, "wounds", 1)),
-        "max_wounds": getattr(unit, "max_wounds", getattr(unit, "wounds", 1)),
-        "position": {"x": pos[0], "y": pos[1]},
-        "is_engaged": getattr(unit, "is_engaged", False),
-        "is_battle_shocked": getattr(unit, "is_battle_shocked", False),
-        "is_alive": getattr(unit, "is_alive", True),
-    }
+    """Canonical unit snapshot — delegates to backend.state.game_state."""
+    from backend.state.game_state import _unit_snapshot as _canonical_unit_snapshot
+
+    return _canonical_unit_snapshot(unit, player_id="")
 
 
 def _pos_dict(pos) -> dict[str, int]:

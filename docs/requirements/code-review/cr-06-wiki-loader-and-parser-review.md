@@ -64,3 +64,15 @@ tags: [requirements, code-review, atomic-review]
 
 - [CR-06 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-06)
 - Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
+
+## Regression evidence — Task 0.1 (runtime unit identity)
+
+**2026-05-16.** No direct findings fixed in CR-06 scope. Structural change: `RosterState.units`
+type changed (`dict` → `list`) — downstream consumers in `backend/engine/ai/autoplay.py`
+and `web/routes/api_replays.py` updated. Wiki loader/parser/registry unchanged.
+Full test suite: 471 passed, 0 failures.
+
+## Regression evidence — Task 0.2 (canonical GameState serializer)
+
+**2026-05-16.** Canonical `snapshot_game_state()` in `game_state.py`. Wiki loader/parser unchanged.
+Structural cleanup: two divergent snapshot builders consolidated. 478 tests pass.

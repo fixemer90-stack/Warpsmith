@@ -69,3 +69,14 @@ tags: [requirements, code-review, atomic-review]
 
 - [CR-20 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-20)
 - Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
+
+## Regression evidence — Task 0.1 (runtime unit identity)
+
+**2026-05-16.** No direct findings fixed in CR-20 scope. Runtime unit identity contract
+established in `backend/state/runtime_id.py`; no deployment/config changes.
+Full regression: 471 tests passed, lint/formatter clean.
+
+## Regression evidence — Task 0.2 (canonical GameState serializer)
+
+**2026-05-16.** Canonical snapshot serializer. No deployment/config changes.
+Single source of truth for GameState shape reduces snapshot divergence risk. 478 tests pass.

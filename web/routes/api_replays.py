@@ -21,21 +21,28 @@ router = APIRouter()
 def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
     """Parse game_log text entries into structured ReplayEvent dicts.
 
-    Converts plain-text log lines (e.g. "X hits Y for N damage") into
-    ReplayEvent objects so the round-viewer and result screen have data.
+    Strips the identity suffix (``[actor_id=...; target_id=...]``) from each
+    log line and uses runtime IDs for ``actor_id``/``target_id`` while keeping
+    display names in ``actor_name``/``target_name``.
     """
+    from backend.state.runtime_id import strip_event_identity
+
     events: list = []
 
+    # Patterns match on human-readable text AFTER identity suffix is stripped.
+    # They use `$` anchor to avoid partial matches.
     patterns = [
         # "X was destroyed"
         (
             r"^(.+?)\s+was\s+destroyed$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 turn=0,
                 event_type="kill",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("target_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
+                target_id=meta.get("target_id", ""),
+                target_name=m.group(1).strip(),
                 result_value=1.0,
                 detail="destroyed",
                 phase="shooting",
@@ -44,14 +51,14 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "X shoots Y — expected N dmg"
         (
             r"^(.+?)\s+shoots\s+(.+?)\s+[-—]\s+expected\s+([\d.]+)\s+dmg$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="shooting",
                 turn=0,
                 event_type="shoot",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
-                target_id=m.group(2).strip(),
+                target_id=meta.get("target_id", m.group(2).strip()),
                 target_name=m.group(2).strip(),
                 result_value=float(m.group(3)),
             ),
@@ -59,14 +66,14 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "X hits Y for N damage"
         (
             r"^(.+?)\s+hits\s+(.+?)\s+for\s+([\d.]+)\s+damage$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="shooting",
                 turn=0,
                 event_type="shoot",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
-                target_id=m.group(2).strip(),
+                target_id=meta.get("target_id", m.group(2).strip()),
                 target_name=m.group(2).strip(),
                 result_value=float(m.group(3)),
             ),
@@ -74,14 +81,14 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # 'X charges Y (rolled N ≥ D") – engaged!'
         (
             r"^(.+?)\s+charges\s+(.+?)\s+\(rolled\s+(\d+)\s+[≥>=]\s+[\d.]+",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="charge",
                 turn=0,
                 event_type="charge",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
-                target_id=m.group(2).strip(),
+                target_id=meta.get("target_id", m.group(2).strip()),
                 target_name=m.group(2).strip(),
                 result_value=1.0,
                 dice_rolled=[int(m.group(3))],
@@ -91,12 +98,12 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # 'X fails charge (rolled N < D")'
         (
             r"^(.+?)\s+fails\s+charge\s+\(rolled\s+(\d+)\s+<",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="charge",
                 turn=0,
                 event_type="charge",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
                 result_value=0.0,
                 dice_rolled=[int(m.group(2))],
@@ -106,12 +113,12 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # 'X Advances (M+N=D")'
         (
             r'^(.+?)\s+Advances\s+\(M\+(\d+)=(\d+)"',
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="movement",
                 turn=0,
                 event_type="move",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
                 detail=f'Advance M+{m.group(2)}={m.group(3)}"',
             ),
@@ -119,12 +126,12 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "X remains stationary"
         (
             r"^(.+?)\s+remains\s+stationary$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="movement",
                 turn=0,
                 event_type="move",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
                 detail="Remain Stationary",
             ),
@@ -132,12 +139,12 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "X falls back"
         (
             r"^(.+?)\s+falls\s+back$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="movement",
                 turn=0,
                 event_type="move",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
                 detail="Fall Back",
             ),
@@ -145,12 +152,12 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "X is already at target Y"
         (
             r"^(.+?)\s+is\s+already\s+at\s+target\s+(.+)$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="movement",
                 turn=0,
                 event_type="move",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
                 target_id=m.group(2).strip(),
                 target_name=m.group(2).strip(),
@@ -160,24 +167,24 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "X fought in melee"
         (
             r"^(.+?)\s+fought\s+in\s+melee$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="fight",
                 turn=0,
                 event_type="fight",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
             ),
         ),
         # "X moved to (a, b)"
         (
             r"^(.+?)\s+moved\s+to\s+\((\d+),\s*(\d+)\)",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="movement",
                 turn=0,
                 event_type="move",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
                 position_after={"x": int(m.group(2)), "y": int(m.group(3))},
             ),
@@ -185,12 +192,12 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "X took N damage"
         (
             r"^(.+?)\s+took\s+([\d.]+)\s+damage$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="",
                 turn=0,
                 event_type="damage",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("target_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
                 result_value=float(m.group(2)),
             ),
@@ -198,7 +205,7 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "PlayerName gained N VP"
         (
             r"^(.+?)\s+gained\s+([\d.]+)\s+VP$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="command",
                 turn=0,
@@ -211,12 +218,12 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "X found no valid path toward Y"
         (
             r"^(.+?)\s+found\s+no\s+valid\s+path\s+toward\s+(.+)$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="movement",
                 turn=0,
                 event_type="move",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
                 target_id=m.group(2).strip(),
                 target_name=m.group(2).strip(),
@@ -226,12 +233,12 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "X could not move to (a, b)"
         (
             r"^(.+?)\s+could\s+not\s+move\s+to\s+\((\d+),\s*(\d+)\)",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="movement",
                 turn=0,
                 event_type="move",
-                actor_id=m.group(1).strip(),
+                actor_id=meta.get("actor_id", m.group(1).strip()),
                 actor_name=m.group(1).strip(),
                 detail=f"Could not move to ({m.group(2)}, {m.group(3)})",
             ),
@@ -239,7 +246,7 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # Phase banner: "Movement phase: units may move", "Shooting phase: ..."
         (
             r"^([A-Z][a-z]+)\s+phase:\s*",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase=m.group(1).lower(),
                 turn=0,
@@ -252,7 +259,7 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "Phase: command" etc
         (
             r"^Phase:\s*(.+)$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase=m.group(1).strip().lower(),
                 turn=0,
@@ -265,7 +272,7 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # "Starting round N"
         (
             r"^Starting\s+round\s+\d+$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="",
                 turn=0,
@@ -278,7 +285,7 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
         # Generic fallback — any non-empty line becomes an "info" event
         (
             r"^(.+)$",
-            lambda m, r: ReplayEvent(
+            lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="",
                 turn=0,
@@ -293,15 +300,16 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
     for log_line in phase_logs:
         if not isinstance(log_line, str) or not log_line.strip():
             continue
-        line = log_line.strip()
-        # Strip trailing quotes/em-dashes
-        line = re.sub(r"[\"\'—–]+$", "", line).strip()
+        # Strip identity suffix → human text + runtime-ID metadata
+        human_text, meta = strip_event_identity(log_line.strip())
+        if not human_text:
+            continue
 
         for pattern, factory in patterns:
-            m = re.match(pattern, line)
+            m = re.match(pattern, human_text)
             if m:
                 with contextlib.suppress(Exception):
-                    events.append(factory(m, round_num))
+                    events.append(factory(m, round_num, meta))
                 break
 
     return events
@@ -338,7 +346,7 @@ async def auto_play_simulation(
         from backend.state.roster import RosterState
 
         def units_from_db(units_json):
-            units_dict = {}
+            units_list = []
             units_data = json.loads(units_json)
             for u_data in units_data:
                 unit = wiki.get_unit(u_data["unit_name"])
@@ -367,8 +375,8 @@ async def auto_play_simulation(
                         is_leader=unit.is_leader,
                         leader_for=unit.leader_for,
                     )
-                    units_dict[unit.name] = unit_copy
-            return units_dict
+                    units_list.append((unit.name, unit_copy))
+            return units_list
 
         roster_a = RosterState(
             name=roster_a_row["name"],
