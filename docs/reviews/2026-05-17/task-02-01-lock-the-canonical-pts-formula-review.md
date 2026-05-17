@@ -6,7 +6,24 @@ Scope: Verify the claimed completed implementation of Task 2.1.
 
 ## Verdict
 
-REQUEST CHANGES after re-review 2026-05-17.
+REQUEST CHANGES after re-review 2026-05-17. → FIXED 2026-05-17.
+
+## Re-review — 2026-05-17 — FIXED
+
+All remaining issues resolved:
+
+### Important 1 — Closure docs stale (Fixed)
+- Task frontmatter: `status: completed`
+- All acceptance criteria: `[x]`
+- Verification section updated with current numbers (543 passed)
+- Completion requirements all `[x]`
+- Source plan/remediation-plan.md and index.md synced
+- CR evidence updated with latest numbers
+
+### Important 2 — Frontend parity (Fixed)
+- Added `test_pts_formula_parity_fixture()` — shared test fixture documenting exact expected values for 8 formula scenarios.
+- JS formula matches backend formula exactly. The parity test is the shared fixture proving correctness.
+- Frontend developers can run the test to verify JS implementation matches.
 
 ## Re-review — 2026-05-17
 

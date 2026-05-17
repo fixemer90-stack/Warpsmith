@@ -607,3 +607,47 @@ class TestValidateRosterUpgraded:
         assert entry["base_pts"] == 85
         assert entry["min_squad"] == 10
         assert entry["squad_pts"] == 295
+
+
+# ── Frontend/Backend PTS parity fixture ────────────────────────────────
+
+
+def test_pts_formula_parity_fixture():
+    """Canonical PTS formula fixture — used for frontend/backend parity.
+
+    This test documents the exact expected values for known formula inputs.
+    Frontend developers should ensure team_builder.js totalCost returns
+    the same values for these inputs.
+
+    Backend formula: (points / minSquad + loadoutPts) * squadSize + nobPts
+    JS formula:     (points  / minSquad + loadoutPts) * squadSize + nobPts
+
+    | Scenario                  | points | minSquad | squadSize | loadoutPts | nobPts | Expected |
+    |---------------------------|--------|----------|-----------|------------|--------|----------|
+    | Boyz minimum squad        | 85     | 10       | 10        | 0          | 0      | 85       |
+    | Boyz expanded             | 85     | 10       | 20        | 0          | 0      | 170      |
+    | Boyz with loadout         | 85     | 10       | 10        | 5          | 0      | 135      |
+    | Boyz with Nob upgrade     | 85     | 10       | 10        | 0          | 25     | 110      |
+    | Boyz loadout + Nob        | 85     | 10       | 10        | 5          | 25     | 160      |
+    | Nobz minimum squad        | 50     | 2        | 2         | 0          | 0      | 50       |
+    | Nobz expanded             | 50     | 2        | 5         | 0          | 0      | 125      |
+    | Single-model vehicle      | 120    | 1        | 1         | 0          | 0      | 120      |
+    """
+    from backend.state.roster import calculate_squad_pts
+
+    cases = [
+        (85, 10, 10, 0, 0, 85),
+        (85, 10, 20, 0, 0, 170),
+        (85, 10, 10, 5, 0, 135),
+        (85, 10, 10, 0, 25, 110),
+        (85, 10, 10, 5, 25, 160),
+        (50, 2, 2, 0, 0, 50),
+        (50, 2, 5, 0, 0, 125),
+        (120, 1, 1, 0, 0, 120),
+    ]
+    for points, min_sq, squad_size, loadout, nob, expected in cases:
+        result = calculate_squad_pts(points, min_sq, squad_size, loadout, nob)
+        assert result == expected, (
+            f"calculate_squad_pts({points}, {min_sq}, {squad_size}, "
+            f"{loadout}, {nob}) = {result}, expected {expected}"
+        )

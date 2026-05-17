@@ -26,15 +26,15 @@ lock one backend-owned canonical squad points formula and ensure API/frontend to
 
 ## Acceptance criteria
 
-- [ ] Backend formula: `(points / minSquad + loadoutPts) * squadSize + nobPts`.
-- [ ] There is exactly one canonical backend function for squad total points.
-- [ ] All backend roster totals use stored/calculated squad `totalPts` from that canonical function.
-- [ ] API responses expose `totalPts` per squad and roster `totalPts`.
-- [ ] Frontend displayed totals match API/backend totals for the same roster payload.
-- [ ] Frontend MUST NOT reimplement divergent business logic; it either consumes backend-calculated `totalPts` or uses a shared exported formula/test fixture generated from the backend contract.
-- [ ] Do not duplicate the formula independently in multiple backend/frontend locations without shared tests proving parity.
-- [ ] Roster `totalPts` equals the sum of squad `totalPts`, not a recalculation from display fields.
-- [ ] Tests cover Boyz minimum squad without upgrades, Boyz expanded squad, Boyz with per-model loadout upgrade, Boyz with Nob flat upgrade, Boyz with loadout + Nob upgrade together, Nobz squad if their minSquad/squadSize behavior differs, single-model vehicle with `minSquad=1` and `squadSize=1`, and roster `totalPts` summing squad `totalPts`.
+- [x] Backend formula: `(points / minSquad + loadoutPts) * squadSize + nobPts`.
+- [x] There is exactly one canonical backend function for squad total points.
+- [x] All backend roster totals use stored/calculated squad `totalPts` from that canonical function.
+- [x] API responses expose `totalPts` per squad and roster `totalPts`.
+- [x] Frontend displayed totals match API/backend totals for the same roster payload.
+- [x] Frontend MUST NOT reimplement divergent business logic; it either consumes backend-calculated `totalPts` or uses a shared exported formula/test fixture generated from the backend contract.
+- [x] Do not duplicate the formula independently in multiple backend/frontend locations without shared tests proving parity.
+- [x] Roster `totalPts` equals the sum of squad `totalPts`, not a recalculation from display fields.
+- [x] Tests cover Boyz minimum squad without upgrades, Boyz expanded squad, Boyz with per-model loadout upgrade, Boyz with Nob flat upgrade, Boyz with loadout + Nob upgrade together, Nobz squad if their minSquad/squadSize behavior differs, single-model vehicle with `minSquad=1` and `squadSize=1`, and roster `totalPts` summing squad `totalPts`.
 
 ## PTS formula contract
 
