@@ -1,14 +1,17 @@
-"""Validation and coercion helpers for wiki frontmatter.
+"""Strict content.v1 schemas — Task 1.4.
 
-Includes content.v1 canonical schema contracts (Task 1.1).
+All artifact kinds validated before write: factions, units, weapons,
+detachments, stratagems, enhancements, rules.  Undeclared extra fields
+are rejected (``extra="forbid"``).  Unknown enum values rejected.
 """
+
+from __future__ import annotations
 
 from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 
-
-# ── Coercion helpers ────────────────────────────────────────────────────
+# ── Coercion helpers (legacy) ───────────────────────────────────────────
 
 
 def parse_optional_int(value: Any) -> int | None:
@@ -52,11 +55,19 @@ def ensure_list(value: Any) -> list[Any]:
     return [value]
 
 
-# ── content.v1 canonical schema (Task 1.1) ─────────────────────────────
+# ── Helper: canonical ID validator ──────────────────────────────────────
+
+
+_CANONICAL_ID_PATTERN = r"^[a-z][a-z0-9_-]*(:[a-z][a-z0-9_-]*)*$"
+
+_SQUAD_SIZE_ERR = "squad_size min/max/step must be >= 1"
+
+
+# ── content.v1 strict schemas ───────────────────────────────────────────
 
 
 class WeaponV1(BaseModel):
-    """Canonical weapon record — content.v1 schema."""
+    """Canonical weapon record — content.v1 strict schema."""
 
     name: str = Field(min_length=1)
     type: str = Field(pattern="^(ranged|melee)$")
@@ -69,16 +80,80 @@ class WeaponV1(BaseModel):
     tags: list[str] = Field(default_factory=list)
     abilities: list[str] = Field(default_factory=list)
 
+    model_config = {"extra": "forbid"}
 
-class UnitV1(BaseModel):
-    """Canonical unit record — content.v1 schema.
 
-    All required gameplay fields are present.  Missing/zero values must
-    be explicit in the source, not silently defaulted by the parser.
-    """
+class StratagemV1(BaseModel):
+    """Canonical stratagem record."""
 
     name: str = Field(min_length=1)
-    faction: str = Field(min_length=1)
+    cost: int = Field(ge=0)
+    when: str | None = ""
+    effect: str | None = ""
+
+    model_config = {"extra": "forbid"}
+
+    @field_validator("when", "effect")
+    @classmethod
+    def none_to_empty(cls, v: str | None) -> str:
+        return v or ""
+
+
+class EnhancementV1(BaseModel):
+    """Canonical enhancement record."""
+
+    name: str = Field(min_length=1)
+    points: int = Field(ge=0)
+    effect: str | None = ""
+
+    model_config = {"extra": "forbid"}
+
+    @field_validator("effect")
+    @classmethod
+    def effect_not_none(cls, v: str | None) -> str:
+        return v or ""
+
+
+class DetachmentRuleV1(BaseModel):
+    """Canonical detachment rule record."""
+
+    name: str = Field(min_length=1)
+    description: str = ""
+
+    model_config = {"extra": "forbid"}
+
+
+class DetachmentV1(BaseModel):
+    """Canonical detachment record."""
+
+    name: str = Field(min_length=1)
+    faction_id: str = Field(pattern=_CANONICAL_ID_PATTERN)
+    description: str = ""
+    detachment_rule: DetachmentRuleV1 | None = None
+    stratagems: list[StratagemV1] = Field(default_factory=list)
+    enhancements: list[EnhancementV1] = Field(default_factory=list)
+
+    model_config = {"extra": "forbid"}
+
+
+class FactionV1(BaseModel):
+    """Canonical faction record."""
+
+    faction_id: str = Field(pattern=_CANONICAL_ID_PATTERN)
+    display_name: str = Field(min_length=1)
+    unit_count: int = Field(ge=0)
+    detachment_count: int = Field(ge=0)
+
+    model_config = {"extra": "forbid"}
+
+
+class UnitV1Strict(BaseModel):
+    """Canonical unit definition — strict content.v1 schema."""
+
+    unit_id: str = Field(pattern=_CANONICAL_ID_PATTERN)
+    display_name: str = Field(min_length=1)
+    faction_id: str = Field(pattern=_CANONICAL_ID_PATTERN)
+    source_path: str = ""
     category: str = Field(min_length=1)
     movement: int = Field(ge=0)
     toughness: int = Field(ge=1)
@@ -88,9 +163,7 @@ class UnitV1(BaseModel):
     objective_control: int = Field(ge=0)
     points: int = Field(ge=0)
     model_count: tuple[int, int] = Field(default=(1, 1))
-    squad_size: dict[str, int] = Field(
-        default_factory=lambda: {"min": 1, "max": 1, "step": 1}
-    )
+    squad_size: dict[str, int] = Field(default_factory=lambda: {"min": 1, "max": 1, "step": 1})
     ranged_weapons: list[WeaponV1] = Field(default_factory=list)
     melee_weapons: list[WeaponV1] = Field(default_factory=list)
     abilities: list[str] = Field(default_factory=list)
@@ -104,6 +177,8 @@ class UnitV1(BaseModel):
     is_leader: bool = False
     leader_for: list[str] = Field(default_factory=list)
     edition: str = "10e"
+
+    model_config = {"extra": "forbid"}
 
     @field_validator("model_count")
     @classmethod
@@ -121,27 +196,47 @@ class UnitV1(BaseModel):
         max_s = v.get("max", 1)
         step = v.get("step", 1)
         if min_s < 1 or max_s < 1 or step < 1:
-            raise ValueError("squad_size min/max/step must be >= 1")
+            raise ValueError(_SQUAD_SIZE_ERR)
         if min_s > max_s:
             raise ValueError(f"squad_size min={min_s} > max={max_s}")
         return v
 
 
-def validate_unit_v1(unit: Any) -> UnitV1:
-    """Validate a runtime Unit object against the content.v1 schema.
+class UnitIndexEntryV1(BaseModel):
+    """Entry in ``units/index.json``."""
 
-    Returns a validated UnitV1 record or raises ValidationError.
+    faction_id: str = Field(pattern=_CANONICAL_ID_PATTERN)
+    file: str = Field(min_length=1)
+    display_name: str = Field(min_length=1)
+    hash: str = Field(pattern=r"^sha256:[a-f0-9]{64}$")
+
+    model_config = {"extra": "forbid"}
+
+
+class FactionUnitAvailabilityV1(BaseModel):
+    """Entry in a faction_units shard."""
+
+    faction_id: str = Field(pattern=_CANONICAL_ID_PATTERN)
+    available_unit_ids: list[str] = Field(default_factory=list)
+
+    model_config = {"extra": "forbid"}
+
+
+# ── Backward-compat: convert runtime Unit to UnitV1Strict ──────────────
+
+
+def validate_unit_v1(unit: Any) -> UnitV1Strict:
+    """Validate a runtime Unit object against the content.v1 strict schema.
+
+    Returns a validated UnitV1Strict record or raises ValidationError.
     """
+    from backend.model.unit import Unit
+
     weapons_ranged = [
         WeaponV1(
-            name=w.name,
-            type=w.type,
-            range_max=w.range_max,
-            attacks_dice=w.attacks_dice,
-            skill=w.skill,
-            strength=w.strength,
-            ap=w.ap,
-            damage_dice=w.damage_dice,
+            name=w.name, type=w.type, range_max=w.range_max,
+            attacks_dice=w.attacks_dice, skill=w.skill,
+            strength=w.strength, ap=w.ap, damage_dice=w.damage_dice,
             tags=getattr(w, "tags", []) or [],
             abilities=getattr(w, "abilities", []) or [],
         )
@@ -149,35 +244,30 @@ def validate_unit_v1(unit: Any) -> UnitV1:
     ]
     weapons_melee = [
         WeaponV1(
-            name=w.name,
-            type=w.type,
-            range_max=w.range_max,
-            attacks_dice=w.attacks_dice,
-            skill=w.skill,
-            strength=w.strength,
-            ap=w.ap,
-            damage_dice=w.damage_dice,
+            name=w.name, type=w.type, range_max=w.range_max,
+            attacks_dice=w.attacks_dice, skill=w.skill,
+            strength=w.strength, ap=w.ap, damage_dice=w.damage_dice,
             tags=getattr(w, "tags", []) or [],
             abilities=getattr(w, "abilities", []) or [],
         )
         for w in (getattr(unit, "melee_weapons", []) or [])
     ]
+    sq = getattr(unit, "squad_size", {"min": 1, "max": 1, "step": 1})
 
-    return UnitV1(
-        name=unit.name,
-        faction=unit.faction,
+    return UnitV1Strict(
+        unit_id="unit:{}:{}".format(
+            unit.faction.lower().replace(" ", "-"),
+            unit.name.lower().replace(" ", "-").replace("!", "").replace("'", "").replace(".", "").replace(",", ""),
+        ),
+        display_name=unit.name,
+        faction_id=f"faction:{unit.faction}",
         category=unit.category,
-        movement=unit.movement,
-        toughness=unit.toughness,
-        save=unit.save,
-        wounds=unit.wounds,
-        leadership=unit.leadership,
-        objective_control=unit.objective_control,
-        points=unit.points,
-        model_count=unit.model_count,
-        squad_size=getattr(unit, "squad_size", {"min": 1, "max": 1, "step": 1}),
-        ranged_weapons=weapons_ranged,
-        melee_weapons=weapons_melee,
+        movement=unit.movement, toughness=unit.toughness,
+        save=unit.save, wounds=unit.wounds,
+        leadership=unit.leadership, objective_control=unit.objective_control,
+        points=unit.points, model_count=unit.model_count,
+        squad_size=sq,
+        ranged_weapons=weapons_ranged, melee_weapons=weapons_melee,
         abilities=getattr(unit, "abilities", []) or [],
         keywords=getattr(unit, "keywords", []) or [],
         faction_keywords=getattr(unit, "faction_keywords", []) or [],
@@ -188,5 +278,4 @@ def validate_unit_v1(unit: Any) -> UnitV1:
         can_be_warlord=getattr(unit, "can_be_warlord", False),
         is_leader=getattr(unit, "is_leader", False),
         leader_for=getattr(unit, "leader_for", []) or [],
-        edition=getattr(unit, "edition", "10e"),
     )

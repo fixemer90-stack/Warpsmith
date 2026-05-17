@@ -224,9 +224,12 @@ def validate_squad_size(
 ) -> RosterValidationError | None:
     """Check that squad size is within the unit's allowed range.
 
-    Returns an error if out of range, None if valid.
+    Uses ``unit.squad_size`` from YAML frontmatter (authoritative),
+    NOT ``model_count``.  ``model_count`` describes per-model grouping
+    (e.g. swarms), not roster min/max.
     """
-    min_size, max_size = unit.model_count
+    sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
+    min_size, max_size = sq["min"], sq["max"]
     if squad_size < min_size:
         return RosterValidationError(
             "squad_too_small",

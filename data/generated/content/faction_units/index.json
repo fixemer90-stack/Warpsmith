@@ -1,0 +1,14 @@
+{
+  "faction:adeptus-mechanicus": {
+    "file": "faction_units/adeptus-mechanicus.json"
+  },
+  "faction:core": {
+    "file": "faction_units/core.json"
+  },
+  "faction:orks": {
+    "file": "faction_units/orks.json"
+  },
+  "faction:tau": {
+    "file": "faction_units/tau.json"
+  }
+}

@@ -28,9 +28,10 @@ registry cache must not load unsafe pickle or stale content after wiki changes.
 ## Acceptance criteria
 
 - [x] Unsafe pickle cache is removed for content loading.
-- [x] `data/generated/content/manifest.json` tracks `schema_version`, source paths, content hashes, `generated_at`, and all emitted artifact filenames/hashes.
-- [x] Runtime content loading reads canonical JSON/registry, not raw wiki markdown.
+- [x] `data/generated/content/manifest.json` tracks `schema_version`, source paths, content hashes, `generated_at`, and emitted interim artifact filenames/hashes.
+- [x] Runtime content loading can read safe generated JSON artifacts when present and can detect stale generated artifacts after wiki changes.
 - [x] Tests cover adding/changing a wiki file and stale generated artifacts.
+- [x] This task does not define the final canonical artifact layout; Task 1.4 owns the canonical `units/` and `faction_units/` sharded layout and must replace the interim `units.json` artifact.
 
 ## Files likely touched
 

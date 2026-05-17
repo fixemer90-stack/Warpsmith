@@ -1,5 +1,6 @@
 """Wiki registry for loading unit datasheets from markdown files."""
 
+import json
 import logging
 import os
 from dataclasses import dataclass, field
@@ -55,9 +56,7 @@ class WikiRegistry:
 
     def __init__(self, wiki_path: str = ""):
         self.wiki_path = Path(wiki_path) if wiki_path else self._detect_wiki_path()
-        self.generated_dir = (
-            Path(__file__).parent.parent.parent / "data" / "generated" / "content"
-        )
+        self.generated_dir = Path(__file__).parent.parent.parent / "data" / "generated" / "content"
         self.units: dict[str, Unit] = {}
         self.detachments: dict[str, Detachment] = {}
         self._file_mtimes: dict[str, float] = {}
@@ -210,38 +209,34 @@ class WikiRegistry:
 
         try:
             from backend.loader.compiler import (
+                load_all_units,
                 load_detachments_from_json,
-                load_units_from_json,
             )
 
-            units_dict = load_units_from_json()
-            det_dict = load_detachments_from_json()
+            units_dict = load_all_units(str(self.generated_dir))
+            det_dict = load_detachments_from_json(str(self.generated_dir))
 
             # Reconstruct Unit objects from dict
             self.units = {}
             for name, data in units_dict.items():
                 try:
-                    unit = Unit(**data)
-                except Exception:
-                    # Fallback: reconstruct with minimal required fields
-                    data.setdefault("category", "Infantry")
-                    data.setdefault("movement", data.get("movement", 5))
-                    data.setdefault("toughness", data.get("toughness", 3))
-                    data.setdefault("save", data.get("save", 4))
-                    data.setdefault("wounds", data.get("wounds", 1))
-                    data.setdefault("leadership", data.get("leadership", 7))
-                    data.setdefault("objective_control", data.get("objective_control", 1))
-                    data.setdefault("points", data.get("points", 0))
-                    data.setdefault("model_count", tuple(data.get("model_count", (1, 1))))
-                    # Remove nested dicts that aren't valid __init__ kwargs
-                    for kw in ("ranged_weapons", "melee_weapons", "wargear_options",
+                    # Map canonical fields to Unit dataclass fields
+                    ud = dict(data)
+                    if "unit_id" in ud and "name" not in ud:
+                        ud["name"] = ud.pop("unit_id")
+                    if "display_name" in ud:
+                        ud["name"] = ud.pop("display_name")
+                    if "faction_id" in ud and "faction" not in ud:
+                        ud["faction"] = ud.pop("faction_id")
+                    # Remove canonical-only fields not in Unit.__init__
+                    for kw in ("unit_id", "display_name", "faction_id", "source_path",
+                               "ranged_weapons", "melee_weapons", "wargear_options",
                                "extended_wargear_options", "nob_options"):
-                        data.pop(kw, None)
-                    try:
-                        unit = Unit(**data)
-                    except Exception as exc:
-                        logger.warning("Failed to load unit %s from JSON: %s", name, exc)
-                        continue
+                        ud.pop(kw, None)
+                    unit = Unit(**ud)
+                except Exception as exc:
+                    logger.warning("Failed to load unit %s from JSON: %s", name, exc)
+                    continue
                 self.units[name] = unit
 
             # Reconstruct Detachment objects from dict
@@ -249,6 +244,9 @@ class WikiRegistry:
             for name, data in det_dict.items():
                 try:
                     det_data = dict(data)
+                    # Map canonical field names to Detachment dataclass fields
+                    if "faction_id" in det_data and "faction" not in det_data:
+                        det_data["faction"] = det_data.pop("faction_id")
                     rule_data = det_data.pop("detachment_rule", None)
                     if rule_data and isinstance(rule_data, dict):
                         det_data["detachment_rule"] = DetachmentRule(**rule_data)
@@ -263,7 +261,9 @@ class WikiRegistry:
             self._loaded = True
             logger.info(
                 "Loaded %s units, %s detachments from JSON artifacts (manifest %s)",
-                len(self.units), len(self.detachments), manifest.generated_at,
+                len(self.units),
+                len(self.detachments),
+                manifest.generated_at,
             )
             return True
         except Exception as exc:
@@ -301,6 +301,110 @@ class WikiRegistry:
     def list_factions(self) -> list[str]:
         """List all available factions (from units only)."""
         return sorted(set(unit.faction for unit in self.units.values()))
+
+
+# ── CanonicalContentRegistry (Task 1.4) ─────────────────────────────────
+
+
+class CanonicalContentRegistry:
+    """Immutable registry loaded from generated JSON artifacts.
+
+    Loads every canonical object kind: factions, units (sharded),
+    faction_units, weapons, detachments, stratagems, enhancements, rules.
+    All records are keyed by stable canonical IDs.
+    """
+
+    def __init__(self, output_dir: str | None = None):
+        from backend.loader.compiler import GENERATED_DIR
+
+        self._dir = Path(output_dir) if output_dir else GENERATED_DIR
+        self.factions: dict[str, dict] = {}
+        self.units: dict[str, dict] = {}
+        self.faction_units: dict[str, dict] = {}
+        self.weapons: dict[str, dict] = {}
+        self.detachments: dict[str, dict] = {}
+        self.stratagems: dict[str, dict] = {}
+        self.enhancements: dict[str, dict] = {}
+        self.rules: dict[str, dict] = {}
+        self._loaded = False
+
+    def load(self) -> bool:
+        """Load all artifacts. Returns False if artifacts are missing."""
+        try:
+            from backend.loader.compiler import (
+                load_all_units,
+                load_faction_units_index,
+                load_units_index,
+            )
+
+            # Factions
+            with (self._dir / "factions.json").open("r", encoding="utf-8") as f:
+                self.factions = json.load(f)
+
+            # Weapons
+            with (self._dir / "weapons.json").open("r", encoding="utf-8") as f:
+                self.weapons = json.load(f)
+
+            # Detachments
+            with (self._dir / "detachments.json").open("r", encoding="utf-8") as f:
+                self.detachments = json.load(f)
+
+            # Stratagems
+            with (self._dir / "stratagems.json").open("r", encoding="utf-8") as f:
+                self.stratagems = json.load(f)
+
+            # Enhancements
+            with (self._dir / "enhancements.json").open("r", encoding="utf-8") as f:
+                self.enhancements = json.load(f)
+
+            # Rules
+            with (self._dir / "rules.json").open("r", encoding="utf-8") as f:
+                self.rules = json.load(f)
+
+            # Units (sharded — load all shards via compiler helper)
+            self.units = load_all_units(str(self._dir))
+
+            # Faction units (availability)
+            fu_index = load_faction_units_index(str(self._dir))
+            for fid, entry in fu_index.items():
+                # entry["file"] is like "faction_units/orks.json" — resolve relative to self._dir
+                shard_rel = Path(entry["file"])
+                if shard_rel.parent == Path("faction_units"):
+                    shard_path = self._dir / shard_rel
+                else:
+                    shard_path = self._dir / "faction_units" / shard_rel
+                with shard_path.open("r", encoding="utf-8") as f:
+                    self.faction_units[fid] = json.load(f)
+
+            self._loaded = True
+            logger.info(
+                "CanonicalContentRegistry loaded: %d factions, %d units, "
+                "%d detachments, %d weapons, %d faction_units",
+                len(self.factions),
+                len(self.units),
+                len(self.detachments),
+                len(self.weapons),
+                len(self.faction_units),
+            )
+            return True
+        except (FileNotFoundError, KeyError, json.JSONDecodeError) as exc:
+            logger.warning("Failed to load canonical content: %s", exc)
+            return False
+
+    def get_unit(self, unit_id: str) -> dict | None:
+        return self.units.get(unit_id)
+
+    def get_units_by_faction(self, faction_id: str) -> list[dict]:
+        """Resolve available units for a faction via faction_units links."""
+        avail = self.faction_units.get(faction_id, {})
+        unit_ids = avail.get("available_unit_ids", [])
+        return [self.units[uid] for uid in unit_ids if uid in self.units]
+
+    def get_faction(self, faction_id: str) -> dict | None:
+        return self.factions.get(faction_id)
+
+    def get_weapon(self, weapon_id: str) -> dict | None:
+        return self.weapons.get(weapon_id)
 
 
 registry: WikiRegistry | None = None

@@ -137,26 +137,26 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** every runtime unit has a stable unique id independent of display name.
 
 **Acceptance criteria:**
-- [ ] Runtime unit ids are the only authoritative keys for runtime state maps, replay events, AI action selection, and persistence boundaries.
-- [ ] Display names are UI/log metadata only; display name remains available separately and MUST NOT be used as a state-map key.
-- [ ] Runtime ids are unique within a game.
-- [ ] Runtime ids are stable across serialization, deserialization, save/load, and replay reconstruction.
-- [ ] Runtime ids are not derived from `display_name` alone.
-- [ ] Runtime ids include player/roster scope, canonical unit id or roster slot id, and occurrence index, e.g. `p1:<canonical_unit_id>:<index>` or equivalent documented format.
-- [ ] State maps are keyed by `runtime_unit_id`, not `display_name`.
-- [ ] Replay events reference `runtime_unit_id`, with display labels included only as denormalized readable metadata where needed.
-- [ ] AI/autoplay selects and acts on units by `runtime_unit_id`.
-- [ ] Database persistence preserves `runtime_unit_id` across save/load.
-- [ ] Duplicate unit names across players no longer collide in state maps.
-- [ ] Tests cover same display name in both armies, two identical units in one roster, save/load preserving runtime ids, replay using runtime ids instead of display names, and AI/autoplay not collapsing same-name units.
+- [x] Runtime unit ids are the only authoritative keys for runtime state maps, replay events, AI action selection, and persistence boundaries.
+- [x] Display names are UI/log metadata only; display name remains available separately and MUST NOT be used as a state-map key.
+- [x] Runtime ids are unique within a game.
+- [x] Runtime ids are stable across serialization, deserialization, save/load, and replay reconstruction.
+- [x] Runtime ids are not derived from `display_name` alone.
+- [x] Runtime ids include player/roster scope, canonical unit id or roster slot id, and occurrence index, e.g. `p1:<canonical_unit_id>:<index>` or equivalent documented format.
+- [x] State maps are keyed by `runtime_unit_id`, not `display_name`.
+- [x] Replay events reference `runtime_unit_id`, with display labels included only as denormalized readable metadata where needed.
+- [x] AI/autoplay selects and acts on units by `runtime_unit_id`.
+- [x] Database persistence preserves `runtime_unit_id` across save/load.
+- [x] Duplicate unit names across players no longer collide in state maps.
+- [x] Tests cover same display name in both armies, two identical units in one roster, save/load preserving runtime ids, replay using runtime ids instead of display names, and AI/autoplay not collapsing same-name units.
 
 **Runtime unit id contract:**
-- [ ] Runtime unit id MUST be unique within a game.
-- [ ] Runtime unit id MUST be stable across serialization/deserialization/replay.
-- [ ] Runtime unit id MUST NOT be derived from `display_name` alone.
-- [ ] Runtime unit id SHOULD be composed from player scope, canonical unit id or roster slot id, and occurrence index.
-- [ ] Runtime unit id format MUST be documented in code/tests, for example `p1:<canonical_unit_id>:<index>`.
-- [ ] Display name MUST remain separate and MUST NOT be used as map key.
+- [x] Runtime unit id MUST be unique within a game.
+- [x] Runtime unit id MUST be stable across serialization/deserialization/replay.
+- [x] Runtime unit id MUST NOT be derived from `display_name` alone.
+- [x] Runtime unit id SHOULD be composed from player scope, canonical unit id or roster slot id, and occurrence index.
+- [x] Runtime unit id format MUST be documented in code/tests, for example `p1:<canonical_unit_id>:<index>`.
+- [x] Display name MUST remain separate and MUST NOT be used as map key.
 
 **Verification:**
 - `uv run python -m pytest tests/test_game_state.py tests/test_autoplay.py -q`
@@ -166,21 +166,21 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** make snapshots, replay payloads, and API payloads use one state shape.
 
 **Acceptance criteria:**
-- [ ] Round snapshots and final snapshots are generated through the same serialization function/schema.
-- [ ] Round snapshots and final snapshots MUST NOT be assembled by separate ad-hoc dict builders.
-- [ ] Replay payloads and API payloads reuse the same serializer or canonical schema.
-- [ ] Snapshot unit records include `runtime_unit_id`, `display_name`, `owner_id`/`player_id`, `canonical_unit_id` if available, position, wounds, models, status flags, and VP-relevant state.
-- [ ] Unit entries are keyed by `runtime_unit_id` or include `runtime_unit_id` as the authoritative id field.
-- [ ] VP fields use the same names and nesting in round and final snapshots.
-- [ ] Existing UI consumers still receive display names, but legacy UI compatibility is preserved by keeping `display_name` fields, not by preserving display-name-keyed maps.
-- [ ] No consumer requires `display_name` as a lookup key.
-- [ ] Tests cover round snapshot and final snapshot having identical top-level/unit keys, result screen reading the same shape as round viewer, mirrored same-name units serializing as distinct runtime ids, replay payload round snapshots and final snapshot not diverging, and `display_name` remaining present for UI text.
+- [x] Round snapshots and final snapshots are generated through the same serialization function/schema.
+- [x] Round snapshots and final snapshots MUST NOT be assembled by separate ad-hoc dict builders.
+- [x] Replay payloads and API payloads reuse the same serializer or canonical schema.
+- [x] Snapshot unit records include `runtime_unit_id`, `display_name`, `owner_id`/`player_id`, `canonical_unit_id` if available, position, wounds, models, status flags, and VP-relevant state.
+- [x] Unit entries are keyed by `runtime_unit_id` or include `runtime_unit_id` as the authoritative id field.
+- [x] VP fields use the same names and nesting in round and final snapshots.
+- [x] Existing UI consumers still receive display names, but legacy UI compatibility is preserved by keeping `display_name` fields, not by preserving display-name-keyed maps.
+- [x] No consumer requires `display_name` as a lookup key.
+- [x] Tests cover round snapshot and final snapshot having identical top-level/unit keys, result screen reading the same shape as round viewer, mirrored same-name units serializing as distinct runtime ids, replay payload round snapshots and final snapshot not diverging, and `display_name` remaining present for UI text.
 
 **Canonical serialized GameState contract:**
-- [ ] Serialized GameState MUST have one canonical shape used by round snapshots, final snapshots, replay payloads, and API payloads consumed by result/round viewer screens.
-- [ ] Unit entries MUST be keyed by `runtime_unit_id` or include `runtime_unit_id` as the authoritative id field.
-- [ ] Display name MUST be included only as display metadata.
-- [ ] No consumer may require `display_name` as a lookup key.
+- [x] Serialized GameState MUST have one canonical shape used by round snapshots, final snapshots, replay payloads, and API payloads consumed by result/round viewer screens.
+- [x] Unit entries MUST be keyed by `runtime_unit_id` or include `runtime_unit_id` as the authoritative id field.
+- [x] Display name MUST be included only as display metadata.
+- [x] No consumer may require `display_name` as a lookup key.
 
 **Verification:**
 - `uv run python -m pytest tests/test_replay.py tests/test_round_viewer.py tests/test_result_screen.py -q`
@@ -190,25 +190,25 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** remove data-loss risks that can hide later regressions.
 
 **Acceptance criteria:**
-- [ ] Existing replay rows survive app startup and DB initialization.
-- [ ] Startup and migration code are additive/non-destructive by default.
-- [ ] No startup path deletes, truncates, or recreates replay tables containing existing data unless running an explicit isolated test reset path.
-- [ ] Replay identity is generated independently from simulation seed.
-- [ ] Simulation seed may be stored as replay metadata, but MUST NOT be reused as durable `replay_id` by default.
-- [ ] Replay save fails with a controlled error on duplicate `replay_id` by default.
-- [ ] Replay overwrite is allowed only when caller passes explicit `overwrite=True` / `replace=True`.
-- [ ] Fixed seed produces repeatable simulation behavior but distinct durable replay ids across separate save attempts unless `replay_id` is explicitly provided.
-- [ ] Test fixtures may reset DB only through isolated test setup helpers, not production startup/migration code.
-- [ ] Do not solve this by disabling tests or by changing tests to accept replay deletion.
-- [ ] Tests cover database initialization preserving existing replay rows, duplicate `replay_id` save failing by default, duplicate `replay_id` save succeeding only with explicit overwrite, same fixed seed creating different replay ids across separate save attempts, replay metadata storing seed when provided, and production startup path not calling destructive reset helpers.
+- [x] Existing replay rows survive app startup and DB initialization.
+- [x] Startup and migration code are additive/non-destructive by default.
+- [x] No startup path deletes, truncates, or recreates replay tables containing existing data unless running an explicit isolated test reset path.
+- [x] Replay identity is generated independently from simulation seed.
+- [x] Simulation seed may be stored as replay metadata, but MUST NOT be reused as durable `replay_id` by default.
+- [x] Replay save fails with a controlled error on duplicate `replay_id` by default.
+- [x] Replay overwrite is allowed only when caller passes explicit `overwrite=True` / `replace=True`.
+- [x] Fixed seed produces repeatable simulation behavior but distinct durable replay ids across separate save attempts unless `replay_id` is explicitly provided.
+- [x] Test fixtures may reset DB only through isolated test setup helpers, not production startup/migration code.
+- [x] Do not solve this by disabling tests or by changing tests to accept replay deletion.
+- [x] Tests cover database initialization preserving existing replay rows, duplicate `replay_id` save failing by default, duplicate `replay_id` save succeeding only with explicit overwrite, same fixed seed creating different replay ids across separate save attempts, replay metadata storing seed when provided, and production startup path not calling destructive reset helpers.
 
 **Replay persistence contract:**
-- [ ] Replay identity MUST be generated independently from simulation seed.
-- [ ] Simulation seed MAY be stored as replay metadata.
-- [ ] Replay save MUST fail on duplicate `replay_id` by default.
-- [ ] Replay overwrite is allowed only when caller passes explicit `overwrite=True` / `replace=True`.
-- [ ] Startup and migration code MUST be additive/non-destructive by default.
-- [ ] No startup path may delete, truncate, or recreate replay tables containing existing data unless running an explicit test reset path.
+- [x] Replay identity MUST be generated independently from simulation seed.
+- [x] Simulation seed MAY be stored as replay metadata.
+- [x] Replay save MUST fail on duplicate `replay_id` by default.
+- [x] Replay overwrite is allowed only when caller passes explicit `overwrite=True` / `replace=True`.
+- [x] Startup and migration code MUST be additive/non-destructive by default.
+- [x] No startup path may delete, truncate, or recreate replay tables containing existing data unless running an explicit test reset path.
 
 **Non-goals:** Replay schema redesign is not in scope; replay playback logic changes are not in scope except where required to preserve/load existing replay ids.
 
@@ -217,9 +217,9 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 ### Checkpoint 0
 
-- [ ] Runtime unit identity is unique and tested.
-- [ ] No replay overwrite/data-loss regression.
-- [ ] Full tests pass.
+- [x] Runtime unit identity is unique and tested.
+- [x] No replay overwrite/data-loss regression.
+- [x] Full tests pass.
 
 ## Phase 1 — Content compiler / schemas
 
@@ -270,9 +270,10 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 **Acceptance criteria:**
 - [ ] Unsafe pickle cache is removed for content loading.
-- [ ] `data/generated/content/manifest.json` tracks `schema_version`, source paths, content hashes, `generated_at`, and all emitted artifact filenames/hashes.
-- [ ] Runtime content loading reads canonical JSON/registry, not raw wiki markdown.
+- [ ] `data/generated/content/manifest.json` tracks `schema_version`, source paths, content hashes, `generated_at`, and emitted interim artifact filenames/hashes.
+- [ ] Runtime content loading can read safe generated JSON artifacts when present and can detect stale generated artifacts after wiki changes.
 - [ ] Tests cover adding/changing a wiki file and stale generated artifacts.
+- [ ] This task does not define the final canonical artifact layout; Task 1.4 owns the canonical `units/` and `faction_units/` sharded layout and must replace the interim `units.json` artifact.
 
 **Verification:**
 - `uv run python -m pytest tests/test_registry.py tests/test_content_contracts.py -q`
@@ -305,14 +306,14 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - [ ] Artifacts are keyed by stable canonical ids, not display names.
 - [ ] `manifest.json` includes `schema_version`, `content_hash`, source paths, generated timestamp, artifact/shard filenames and hashes, and collision/exception report references.
 - [ ] Unit records include `source_path`, `display_name`, `faction_id`, stats, points, squad_size, keywords, tags, and weapon_ids where applicable.
-- [ ] `CanonicalContentRegistry` loads every canonical object kind from generated JSON and loads sharded units as one logical `units` collection.
+- [ ] `CanonicalContentRegistry` loads every canonical object kind from generated JSON and loads sharded unit definitions as one logical `units` collection, with faction availability exposed through `faction_units` links.
 - [ ] All generated artifacts and shards validate against strict canonical schemas before write.
 - [ ] All cross-artifact references are validated during compilation.
 - [ ] Duplicate canonical ids fail compilation across all shards of the same logical object kind.
 - [ ] Duplicate display names emit a collision report but remain valid if canonical ids differ.
 - [ ] Generated JSON output is byte-deterministic for identical source input.
 - [ ] Canonical ids are deterministic, independent from display names and source file paths, and survive display/source-path changes when explicit `canonical_id` is present.
-- [ ] Tests cover duplicate canonical ids across shards, duplicate display names, dangling references, renamed source files, display-name changes, deterministic rebuild output, manifest shard hashes, and registry loading sharded units as one logical collection.
+- [ ] Tests cover duplicate canonical ids across shards, duplicate display names, dangling references, renamed source files, display-name changes, deterministic rebuild output, manifest shard hashes, registry loading sharded unit definitions as one logical collection, faction availability resolving shared units, and shared/common units not being duplicated into subfaction unit-definition shards.
 
 **Artifact layout:**
 - [ ] Physical layout under `data/generated/content/` is:
@@ -343,7 +344,7 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - [ ] Deterministic rebuild means identical input content produces byte-identical generated artifacts: sorted object keys, deterministic collection ordering, normalized whitespace, and documented `sha256:<hex>` hashes.
 - [ ] Deterministic rebuild tests use an injected/frozen clock for `generated_at`, or exclude `generated_at` from byte-determinism assertions.
 - [ ] Duplicate canonical ids fail compilation; duplicate display names do not fail if ids differ, but emit a manifest-linked collision report.
-- [ ] Dangling cross-artifact references fail compilation, including `unit.weapon_ids -> weapons.json`, `unit.faction_id -> factions.json`, detachment faction links, and stratagem/enhancement/rule references.
+- [ ] Dangling cross-artifact references fail compilation, including `unit.weapon_ids -> weapons.json`, `unit.faction_id -> factions.json`, `faction_units.available_unit_ids -> units`, `faction_units` keys -> `factions.json`, detachment faction links, and stratagem/enhancement/rule references.
 - [ ] Compiler writes generated artifacts atomically: validate everything first, then replace generated files; failed compilation must not leave partially updated generated artifacts.
 
 **Registry semantics:**

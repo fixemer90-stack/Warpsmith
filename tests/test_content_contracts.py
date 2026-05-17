@@ -436,23 +436,26 @@ def test_compiler_produces_manifest():
 
 
 def test_compiler_produces_units_json():
-    """Compiled units.json is valid JSON with expected structure."""
-    from backend.loader.compiler import GENERATED_DIR
+    """Compiled units/index.json is valid JSON with expected structure."""
+    from backend.loader.compiler import GENERATED_DIR, load_units_index
 
-    import json
-
-    with (GENERATED_DIR / "units.json").open() as f:
-        data = json.load(f)
+    data = load_units_index()
     assert len(data) > 100, f"Expected >100 units, got {len(data)}"
     # Spot-check a known unit
-    assert "Boyz" in data or any("Boyz" in k for k in data)
+    assert any("boyz" in k.lower() for k in data), f"No expected unit in keys: {list(data.keys())[:5]}"
+    # Verify index has the right structure
+    for uid, entry in list(data.items())[:3]:
+        assert "faction_id" in entry
+        assert "file" in entry
+        assert "display_name" in entry
+        assert "hash" in entry
 
 
 def test_compiler_produces_detachments_json():
     """Compiled detachments.json is valid JSON."""
-    from backend.loader.compiler import GENERATED_DIR
-
     import json
+
+    from backend.loader.compiler import GENERATED_DIR
 
     with (GENERATED_DIR / "detachments.json").open() as f:
         data = json.load(f)
@@ -471,14 +474,14 @@ def test_registry_loads_from_json_cache():
 
     units = reg.load(use_cache=True)
     assert len(units) > 100, f"Expected >100 units from JSON cache, got {len(units)}"
-    assert "Boyz" in units or any("Boyz" in k for k in units)
+    assert any("boyz" in k.lower() for k in units)
 
 
 def test_no_pickle_import_in_registry():
     """Registry does not import or call pickle."""
-    from backend.loader.registry import WikiRegistry
-
     import inspect
+
+    from backend.loader.registry import WikiRegistry
 
     source = inspect.getsource(WikiRegistry)
     assert "import pickle" not in source, "pickle must not be imported in WikiRegistry"
@@ -494,3 +497,47 @@ def test_compiler_no_pickle_usage():
     source = inspect.getsource(compiler)
     assert "import pickle" not in source, "pickle must not be imported in compiler"
     assert "pickle.load" not in source, "pickle.load must not be called in compiler"
+
+
+# ── Task 1.3 — squad_size authority tests ───────────────────────────────
+
+
+def test_squad_size_is_authoritative_not_model_count(all_units):
+    """validate_squad_size uses squad_size from frontmatter, not model_count."""
+    from backend.state.roster import validate_squad_size
+
+    failures: list[str] = []
+    for unit_name, unit in all_units:
+        sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
+        # Validate min squad size passes
+        err = validate_squad_size(unit_name, sq["min"], unit)
+        if err and sq["min"] >= 1:
+            failures.append(f"{unit_name}: min={sq['min']} rejected: {err.message}")
+        # Validate max squad size passes
+        if sq["max"] > sq["min"]:
+            err = validate_squad_size(unit_name, sq["max"], unit)
+            if err:
+                failures.append(f"{unit_name}: max={sq['max']} rejected: {err.message}")
+
+    assert not failures, (
+        f"{len(failures)} unit(s) fail squad_size validation:\n"
+        + "\n".join(failures[:20])
+    )
+
+
+def test_squad_size_step_valid(all_units):
+    """squad_size.step divides (max - min) evenly."""
+    failures: list[str] = []
+    for unit_name, unit in all_units:
+        sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
+        if sq["max"] > sq["min"] and sq["step"] > 0:
+            if (sq["max"] - sq["min"]) % sq["step"] != 0:
+                failures.append(
+                    f"{unit_name}: step={sq['step']} does not divide "
+                    f"({sq['max']} - {sq['min']}) = {sq['max'] - sq['min']}"
+                )
+
+    assert not failures, (
+        f"{len(failures)} unit(s) with invalid squad_size step:\n"
+        + "\n".join(failures[:20])
+    )

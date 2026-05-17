@@ -182,10 +182,9 @@ def _roster_to_player_state(
     # Track occurrence indices for duplicate unit names within a roster
     name_counts: dict[str, int] = {}
     for unit_name, unit_model in roster.units:
-        # Infer squad size from model_count
-        min_size, _ = unit_model.model_count
-        # Use min size for test simplicity; could be parameterized
-        squad_size = min_size
+        # Use squad_size from frontmatter (authoritative), not model_count
+        sq = getattr(unit_model, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
+        squad_size = sq["min"]
 
         # Generate stable runtime unit ID
         idx = name_counts.get(unit_name, 0)

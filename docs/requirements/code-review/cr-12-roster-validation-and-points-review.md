@@ -94,3 +94,9 @@ Unit snapshots now include `player_id`; VP at top-level only. 478 tests pass.
 **2026-05-16.** Content contract tests validate squad_size, points, model_count for all
 wiki units. content.v1 Pydantic schema validates unit records including roster-relevant
 fields. 14 tests pass.
+
+## Regression evidence — Task 1.3 (squad_size authority)
+
+**2026-05-17.** `validate_squad_size()` and `_roster_to_player_state()` now use
+`unit.squad_size` from frontmatter (not `model_count`). `model_count` is per-model
+grouping only (e.g. swarms). 2 new tests: squad_size validation + step divisibility.

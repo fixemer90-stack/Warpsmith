@@ -1,1449 +1,1449 @@
 {
-  "Detachments Index": {
-    "name": "Detachments Index",
-    "faction": "core",
+  "detachment:adeptus-mechanicus:cohort-cybernetica": {
+    "description": "",
+    "detachment_rule": {
+      "description": "В начале каждой фазы боя выберите один Protocol для всех дружественных KASTELAN ROBOTS юнитов. Эффект длится до начала вашей следующей фазы:\n- **Aegis Protocol** — юнит получает 4+ invulnerable save. - **Accelerate Protocol** — юнит получает +1' к Move и +1' к Charge. - **Annihilate Protocol** — юнит получает +1 к Armour Penetration для всех атак.",
+      "name": "Cyber-Psalm Programming"
+    },
+    "enhancements": [
+      {
+        "effect": "один дружественный KASTELAN ROBOT юнит получает +1 к характеристикам Weapon Skill и Ballistic Skill.",
+        "name": "Cybernetic Controller",
+        "points": 0
+      },
+      {
+        "effect": "один раз за бой, в начале любой фазы вы можете сменить текущий Protocol на другой без ожидания следующей фазы.",
+        "name": "Override Command",
+        "points": 0
+      },
+      {
+        "effect": "в вашей Command Phase выберите одну вражескую модель в 12\" от носителя. Она теряет все auras и abilities до начала вашей следующей Command Phase.",
+        "name": "Blackout-key",
+        "points": 0
+      },
+      {
+        "effect": "дружественные KASTELAN ROBOTS юниты получают Feel No Pain 5+.",
+        "name": "Machine-Spirit Node",
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:adeptus-mechanicus",
+    "name": "Cohort Cybernetica",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один KASTELAN ROBOTS юнит получает [SUSTAINED HITS 1]. (CP1)",
+        "name": "Automated Defences",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Fight Phase один KASTELAN ROBOTS юнит атакует с +1 AP в ближнем бою. (CP1)",
+        "name": "Tectonic Stomp",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в начале вашей Command Phase один KASTELAN ROBOTS юнит может игнорировать штрафы к Move за Difficult Terrain до вашей следующей Command Phase. (CP1)",
+        "name": "Override Sentinels",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "до начала вашей следующей Command Phase один KASTELAN ROBOTS юнит получает -1 к урону от всех атак (минимально 1). (CP1)",
+        "name": "Data-ward",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в любой фазе, когда KASTELAN ROBOTS юнит получает урон от ranged-атаки, вы можете дать ему +1 к Save до конца фазы. (CP1)",
+        "name": "Reactive Reprogramming",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Charge Phase один KASTELAN ROBOTS юнит может перебрасывать Charge. (CP1)",
+        "name": "Crushing Advance",
+        "when": ""
+      }
+    ]
+  },
+  "detachment:adeptus-mechanicus:data-psalm-conclave": {
+    "description": "",
+    "detachment_rule": {
+      "description": "В начале каждой Command Phase выберите один из следующих Canticle для всех дружественных DATA-PSALM CONCLAVE юнитов. Эффект длится до начала вашей следующей Command Phase:\n- **Canticle of the Machine's Wrath** — +1 к Strength для ranged-атак. - **Canticle of the Soul's Vengeance** — +1 к Armour Penetration для melee-атак. - **Canticle of the Iron Soul** — Feel No Pain 5+. - **Canticle of the Shifting World** — переброс 1 to Hit для всех атак.",
+      "name": "Benedictions Of The Omnissiah"
+    },
+    "enhancements": [
+      {
+        "effect": "пока носитель и его юнит находятся под эффектом Canticle, их ranged-оружие также получает [ASSAULT] и [IGNORES COVER].",
+        "name": "Belicosa-class Capacitor Vanes",
+        "points": 0
+      },
+      {
+        "effect": "в начале вашей Command Phase вы можете выбрать два разных Canticle вместо одного. Они действуют одновременно.",
+        "name": "Data-blessed Autosermon",
+        "points": 0
+      },
+      {
+        "effect": "ranged-оружие носителя получает +1 к Strength.",
+        "name": "Scribed Munitions",
+        "points": 0
+      },
+      {
+        "effect": "один дружественный DATA-PSALM CONCLAVE юнит, находящийся под эффектом Canticle, может совершить атаку (стрельбу или ближний бой) сразу после того, как он уничтожен, до своего удаления.",
+        "name": "Templar Fervour",
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:adeptus-mechanicus",
+    "name": "Data-Psalm Conclave",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один DATA-PSALM CONCLAVE юнит получает [LETHAL HITS]. (CP1)",
+        "name": "Chant of the Remorseless Fist",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один DATA-PSALM CONCLAVE юнит получает +1 to Hit против целей на 12' и ближе. (CP1)",
+        "name": "Psalm of the Clear Sight",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "до вашей следующей Command Phase один DATA-PSALM CONCLAVE юнит получает 4+ invulnerable save против ranged-атак. (CP1)",
+        "name": "Hymn of the Ferrous Ward",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "когда вражеский юнит совершает Charge против DATA-PSALM CONCLAVE юнита, нападающий получает -1 to Hit в ближнем бою до конца фазы. (CP1)",
+        "name": "Litany of the Electromancer",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Command Phase один DATA-PSALM CONCLAVE INFANTRY юнит восстанавливает D3 ран. (CP1)",
+        "name": "Canticle of the Hearth",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один DATA-PSALM CONCLAVE юнит может атаковать выбранное вражеское оружие: до конца фазы оно получает [HAZARDOUS] и +1 S. (CP1)",
+        "name": "Doxology of Ruin",
+        "when": ""
+      }
+    ]
+  },
+  "detachment:adeptus-mechanicus:eradication-cohort": {
+    "description": "",
+    "detachment_rule": {
+      "description": "Дружественные ERADICATION юниты получают +1 к броскам Wound, когда атакуют цели, чьи характеристики Strength или Toughness меньше половины от их собственных (округляя вниз).",
+      "name": "Murderous Imperative"
+    },
+    "enhancements": [
+      {
+        "effect": "носитель и его юнит получают +1\" к Move и +1\" к Charge.",
+        "name": "Patient's Folly",
+        "points": 0
+      },
+      {
+        "effect": "носитель и его юнит получают Feel No Pain 5+ против Mortal Wounds.",
+        "name": "Unmatched Tenacity",
+        "points": 0
+      },
+      {
+        "effect": "носитель может быть выбран для выполнения Heroic Intervention. Все дружественные ERADICATION юниты в 6\" от него после Heroic Intervention перебрасывают Charge в этой фазе.",
+        "name": "Zealous Devotion",
+        "points": 0
+      },
+      {
+        "effect": "один раз за бой в любой фазе носитель может активировать: +1 к Hit, +1 к Wound и +1 к Save до конца фазы.",
+        "name": "Paragon of the Imperative",
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:adeptus-mechanicus",
+    "name": "Eradication Cohort",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один ERADICATION юнит получает [SUSTAINED HITS 1] (или [SUSTAINED HITS 2] если цель — MONSTER или VEHICLE). (CP1)",
+        "name": "Controlled Fire",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один ERADICATION INFANTRY юнит может игнорировать штраф за Heavy при стрельбе после Advance. (CP1)",
+        "name": "Marksman's Focus",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase, после уничтожения вражеского юнита огнём, один ERADICATION юнит может совершить Normal Move на D6'. (CP1)",
+        "name": "Execute and Purge",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Fight Phase один ERADICATION юнит получает +1 AP в ближнем бою. (CP1)",
+        "name": "Calculated Aggression",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в любой фазе, когда вражеский юнит совершает Charge, один ERADICATION юнит может выполнить Overwatch, стреляя на 5+. (CP1)",
+        "name": "Precision Overwatch",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "до конца фазы один ERADICATION VEHICLE юнит получает -1 к урону от всех атак (минимально 1), но не может стрелять Pistol. (CP1)",
+        "name": "Armoured Advance",
+        "when": ""
+      }
+    ]
+  },
+  "detachment:adeptus-mechanicus:explorator-maniple": {
+    "description": "",
+    "detachment_rule": {
+      "description": "Дружественные EXPLORATOR юниты получают +1 к Objectivity Control. Кроме того, когда такой юнит контролирует objective marker, вы получаете 1 дополнительное VP за каждый такой маркер (вместо обычного скорринга). Это не суммируется с другими бонусами к VP.",
+      "name": "Acquisition At Any Cost"
+    },
+    "enhancements": [
+      {
+        "effect": "вражеские юниты теряют способность Objective Secured, находясь на objective marker в радиусе 3\" от носителя.",
+        "name": "Arch-negator",
+        "points": 0
+      },
+      {
+        "effect": "один раз за бой, в вашей Command Phase, носитель может восстановить D3 потерянных ран одному дружественному VEHICLE юниту в 3\".",
+        "name": "Necromechanic",
+        "points": 0
+      },
+      {
+        "effect": "один дружественный EXPLORATOR INFANTRY юнит получает +1 к Toughness.",
+        "name": "Genetor Upgrade",
+        "points": 0
+      },
+      {
+        "effect": "один раз за бой, после любого броска кубиков дружественным юнитом вы можете перебросить этот бросок.",
+        "name": "Logis-Master",
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:adeptus-mechanicus",
+    "name": "Explorator Maniple",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "в конце вашей Command Phase один EXPLORATOR INFANTRY юнит на objective marker восстанавливает D3 ран. (CP1)",
+        "name": "Reclaim Resources",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "до вашей следующей Command Phase один EXPLORATOR юнит не может быть целью ranged-атак дальше 18'. (CP1)",
+        "name": "Servo-skull Cloud",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один EXPLORATOR юнит получает [IGNORES COVER]. (CP1)",
+        "name": "Divine Augury",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase выберите одну вражескую единицу в 24' от EXPLORATOR CHARACTER — дружественные EXPLORATOR юниты получают +1 to Hit против неё. (CP1)",
+        "name": "Marked Prior Target",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в любой фазе, когда вражеский юнит совершает Charge против EXPLORATOR INFANTRY, этот юнит может совершить Overwatch на 5+. (CP1)",
+        "name": "Predictive Logic",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "когда EXPLORATOR VEHICLE уничтожен, выберите один дружественный EXPLORATOR INFANTRY юнит в 6' — он восстанавливает D3 ран. (CP1)",
+        "name": "Salvage Protocols",
+        "when": ""
+      }
+    ]
+  },
+  "detachment:adeptus-mechanicus:haloscreed-battle-clade": {
+    "description": "",
+    "detachment_rule": {
+      "description": "В начале каждой фазы боя выберите один бонус для CORPUSCARY юнита на эту фазу: +1 к Strength, +1 к Armour Penetration, +1' к Move или Feel No Pain 5+.",
+      "name": "Noospheric Transference"
+    },
+    "enhancements": [
+      {
+        "effect": "один дружественный CORPUSCARY юнит получает +1 AP ко всем атакам на время боя.",
+        "name": "Artisan",
+        "points": 0
+      },
+      {
+        "effect": "один дружественный CORPUSCARY юнит игнорирует все модификаторы характеристик Ballistic Skill и Weapon Skill.",
+        "name": "Emotionless Clarity",
+        "points": 0
+      },
+      {
+        "effect": "один дружественный юнит может перебрасывать один кубик To Hit за фазу.",
+        "name": "Cognitive Reinforcement",
+        "points": 0
+      },
+      {
+        "effect": "оружие носителя получает [DEVASTATING WOUNDS] и +2 к Strength.",
+        "name": "Transdimensional Annihilator",
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:adeptus-mechanicus",
+    "name": "Haloscreed Battle Clade",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "в начале первой боевой раунда один CORPUSCARY INFANTRY юнит может совершить Normal Move на D6'. (CP1)",
+        "name": "Accelerated Scans",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один CORPUSCARY юнит может игнорировать штрафы к попаданию за Heavy и Assault. (CP1)",
+        "name": "Neural Override",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один CORPUSCARY юнит получает +1 to Hit против ближайшей вражеской цели. (CP1)",
+        "name": "Empathic Sight",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Fight Phase один CORPUSCARY юнит атакует с +1 AP в ближнем бою. (CP1)",
+        "name": "Transsonic Blades",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "когда вражеский юнит заканчивает Normal/Advance/Charge Move в 9' от CORPUSCARY INFANTRY, этот юнит может совершить Normal Move на D6'. (CP1)",
+        "name": "Reactive Circuits",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "один CORPUSCARY юнит, уничтоженный вражеской атакой, может до момента удаления совершить атаку, как если бы он был в своей Shooting Phase. (CP1)",
+        "name": "Fervent Incantation",
+        "when": ""
+      }
+    ]
+  },
+  "detachment:adeptus-mechanicus:rad-zone-corps": {
+    "description": "",
+    "detachment_rule": {
+      "description": "В начале каждой Command Phase выберите один objective marker в радиусе 18' от вашего RAD-ZONE CORPS CHARACTER. Вражеские юниты, находящиеся на этом objective marker, теряют -1 к характеристике Toughness до начала вашей следующей Command Phase.",
+      "name": "Rad-bombardment"
+    },
+    "enhancements": [
+      {
+        "effect": "когда носитель погибает, радиус эффекта Rad-bombardment расширяется на 6\" до конца игры (действует на все objective markers в радиусе).",
+        "name": "Autoclavic Denunciation",
+        "points": 0
+      },
+      {
+        "effect": "вокруг носителя создаётся постоянная радиационная зона радиусом 3\". Вражеские юниты в этой зоне теряют -1 T.",
+        "name": "Rad-Ordinance",
+        "points": 0
+      },
+      {
+        "effect": "ranged-оружие носителя получает правило [HAZARDOUS] и +1 к Strength.",
+        "name": "Irradiated Payload",
+        "points": 0
+      },
+      {
+        "effect": "вражеские PSYKER-юниты в пределах rad-zone (от Rad-bombardment или Rad-Ordinance) теряют все свои Psychic-способности.",
+        "name": "Mechanicus Arcanus",
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:adeptus-mechanicus",
+    "name": "Rad-Zone Corps",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один дружественный RAD-ZONE CORPS юнит получает [LETHAL HITS] для всех ranged-атак до конца фазы. (CP1)",
+        "name": "Irradiated Munitions",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "выберите один objective marker в 12' от дружественного RAD-ZONE CORPS CHARACTER. Вражеские юниты на нём не могут восстанавливать раны до начала вашей следующей Command Phase. (CP1)",
+        "name": "Contaminated Ruination",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один дружественный RAD-ZONE CORPS юнит атакует с +1 AP против целей, которые уже находятся под эффектом Rad-bombardment. (CP1)",
+        "name": "Soul-scouring Irradiation",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "до конца фазы дружественный RAD-ZONE CORPS INFANTRY юнит получает Feel No Pain 5+ против атак из огнестрельного оружия. (CP1)",
+        "name": "Rad-saturation",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "до вашей следующей Command Phase один RAD-ZONE CORPS юнит получает -1 к урону от всех атак (минимально 1). (CP1)",
+        "name": "Atomic Hardening",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "когда дружественный RAD-ZONE CORPS юнит уничтожен вражеским юнитом в ближнем бою, этот вражеский юнит получает -1 WS до конца фазы. (CP1)",
+        "name": "Toxic Transference",
+        "when": ""
+      }
+    ]
+  },
+  "detachment:adeptus-mechanicus:skitarii-hunter-cohort": {
+    "description": "",
+    "detachment_rule": {
+      "description": "Юниты Skitarii Infantry получают +1 к спасброскам, находясь в укрытии, и игнорируют модификатор -1 AP при получении урона в укрытии.",
+      "name": "Stealth Optimisation"
+    },
+    "enhancements": [
+      {
+        "effect": "носитель может быть выставлен в резерв за пределами зоны высадки противника (Infiltrators).",
+        "name": "Clandestine Infiltrator",
+        "points": 0
+      },
+      {
+        "effect": "пока носитель находится на поле боя, дружественные юниты SKITARII в радиусе 36\" получают +1 к своей характеристике Ballistic Skill.",
+        "name": "Battle-sphere Uplink",
+        "points": 0
+      },
+      {
+        "effect": "вражеские юниты не могут быть выставлены с Deep Strike или Strategic Reserves в радиусе 12\" от носителя.",
+        "name": "Cantic Thrallnet",
+        "points": 0
+      },
+      {
+        "effect": "носитель получает способность Feel No Pain 5+ против Psychic-атак.",
+        "name": "Neurotransience Auspice",
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:adeptus-mechanicus",
+    "name": "Skitarii Hunter Cohort",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один дружественный SKITARII юнит может атаковать с [IGNORES COVER] до конца фазы. (CP1)",
+        "name": "Suppressing Fire",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в начале вашей Command Phase один SKITARII INFANTRY юнит в 24' от вражеского objective marker считается контролирующим этот маркер. (CP1)",
+        "name": "Acquisition Radius",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Shooting Phase один SKITARII юнит может перебрасывать 1 to Wound. (CP1)",
+        "name": "Wrathful Fusillade",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в начале любой фазы один SKITARII BATTLELINE юнит может совершить Normal Move на D6' в любую фазу (но не в фазе, в которой уже двигался). (CP1)",
+        "name": "Battleline Recalibration",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "в вашей Fight Phase один SKITARII INFANTRY юнит, получивший чардж, может атаковать первым, даже если не имеет First Strike. (CP1)",
+        "name": "Hunter's Instincts",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "до начала вашей следующей Command Phase один SKITARII INFANTRY юнит получает -1 к попаданию по нему ranged-атаками. (CP1)",
+        "name": "Shroud Protocol",
+        "when": ""
+      }
+    ]
+  },
+  "detachment:core:detachments-index": {
     "description": "",
     "detachment_rule": null,
-    "stratagems": [],
-    "enhancements": []
+    "enhancements": [],
+    "faction_id": "faction:core",
+    "name": "Detachments Index",
+    "stratagems": []
   },
-  "Cohort Cybernetica": {
-    "name": "Cohort Cybernetica",
-    "faction": "adeptus-mechanicus",
-    "description": "",
-    "detachment_rule": {
-      "name": "Cyber-Psalm Programming",
-      "description": "В начале каждой фазы боя выберите один Protocol для всех дружественных KASTELAN ROBOTS юнитов. Эффект длится до начала вашей следующей фазы:\n- **Aegis Protocol** — юнит получает 4+ invulnerable save. - **Accelerate Protocol** — юнит получает +1' к Move и +1' к Charge. - **Annihilate Protocol** — юнит получает +1 к Armour Penetration для всех атак."
-    },
-    "stratagems": [
-      {
-        "name": "Automated Defences",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один KASTELAN ROBOTS юнит получает [SUSTAINED HITS 1]. (CP1)"
-      },
-      {
-        "name": "Tectonic Stomp",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Fight Phase один KASTELAN ROBOTS юнит атакует с +1 AP в ближнем бою. (CP1)"
-      },
-      {
-        "name": "Override Sentinels",
-        "cost": 1,
-        "when": "",
-        "effect": "в начале вашей Command Phase один KASTELAN ROBOTS юнит может игнорировать штрафы к Move за Difficult Terrain до вашей следующей Command Phase. (CP1)"
-      },
-      {
-        "name": "Data-ward",
-        "cost": 1,
-        "when": "",
-        "effect": "до начала вашей следующей Command Phase один KASTELAN ROBOTS юнит получает -1 к урону от всех атак (минимально 1). (CP1)"
-      },
-      {
-        "name": "Reactive Reprogramming",
-        "cost": 1,
-        "when": "",
-        "effect": "в любой фазе, когда KASTELAN ROBOTS юнит получает урон от ranged-атаки, вы можете дать ему +1 к Save до конца фазы. (CP1)"
-      },
-      {
-        "name": "Crushing Advance",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Charge Phase один KASTELAN ROBOTS юнит может перебрасывать Charge. (CP1)"
-      }
-    ],
-    "enhancements": [
-      {
-        "name": "Cybernetic Controller",
-        "points": 0,
-        "effect": "один дружественный KASTELAN ROBOT юнит получает +1 к характеристикам Weapon Skill и Ballistic Skill."
-      },
-      {
-        "name": "Override Command",
-        "points": 0,
-        "effect": "один раз за бой, в начале любой фазы вы можете сменить текущий Protocol на другой без ожидания следующей фазы."
-      },
-      {
-        "name": "Blackout-key",
-        "points": 0,
-        "effect": "в вашей Command Phase выберите одну вражескую модель в 12\" от носителя. Она теряет все auras и abilities до начала вашей следующей Command Phase."
-      },
-      {
-        "name": "Machine-Spirit Node",
-        "points": 0,
-        "effect": "дружественные KASTELAN ROBOTS юниты получают Feel No Pain 5+."
-      }
-    ]
-  },
-  "Data-Psalm Conclave": {
-    "name": "Data-Psalm Conclave",
-    "faction": "adeptus-mechanicus",
-    "description": "",
-    "detachment_rule": {
-      "name": "Benedictions Of The Omnissiah",
-      "description": "В начале каждой Command Phase выберите один из следующих Canticle для всех дружественных DATA-PSALM CONCLAVE юнитов. Эффект длится до начала вашей следующей Command Phase:\n- **Canticle of the Machine's Wrath** — +1 к Strength для ranged-атак. - **Canticle of the Soul's Vengeance** — +1 к Armour Penetration для melee-атак. - **Canticle of the Iron Soul** — Feel No Pain 5+. - **Canticle of the Shifting World** — переброс 1 to Hit для всех атак."
-    },
-    "stratagems": [
-      {
-        "name": "Chant of the Remorseless Fist",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один DATA-PSALM CONCLAVE юнит получает [LETHAL HITS]. (CP1)"
-      },
-      {
-        "name": "Psalm of the Clear Sight",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один DATA-PSALM CONCLAVE юнит получает +1 to Hit против целей на 12' и ближе. (CP1)"
-      },
-      {
-        "name": "Hymn of the Ferrous Ward",
-        "cost": 1,
-        "when": "",
-        "effect": "до вашей следующей Command Phase один DATA-PSALM CONCLAVE юнит получает 4+ invulnerable save против ranged-атак. (CP1)"
-      },
-      {
-        "name": "Litany of the Electromancer",
-        "cost": 1,
-        "when": "",
-        "effect": "когда вражеский юнит совершает Charge против DATA-PSALM CONCLAVE юнита, нападающий получает -1 to Hit в ближнем бою до конца фазы. (CP1)"
-      },
-      {
-        "name": "Canticle of the Hearth",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Command Phase один DATA-PSALM CONCLAVE INFANTRY юнит восстанавливает D3 ран. (CP1)"
-      },
-      {
-        "name": "Doxology of Ruin",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один DATA-PSALM CONCLAVE юнит может атаковать выбранное вражеское оружие: до конца фазы оно получает [HAZARDOUS] и +1 S. (CP1)"
-      }
-    ],
-    "enhancements": [
-      {
-        "name": "Belicosa-class Capacitor Vanes",
-        "points": 0,
-        "effect": "пока носитель и его юнит находятся под эффектом Canticle, их ranged-оружие также получает [ASSAULT] и [IGNORES COVER]."
-      },
-      {
-        "name": "Data-blessed Autosermon",
-        "points": 0,
-        "effect": "в начале вашей Command Phase вы можете выбрать два разных Canticle вместо одного. Они действуют одновременно."
-      },
-      {
-        "name": "Scribed Munitions",
-        "points": 0,
-        "effect": "ranged-оружие носителя получает +1 к Strength."
-      },
-      {
-        "name": "Templar Fervour",
-        "points": 0,
-        "effect": "один дружественный DATA-PSALM CONCLAVE юнит, находящийся под эффектом Canticle, может совершить атаку (стрельбу или ближний бой) сразу после того, как он уничтожен, до своего удаления."
-      }
-    ]
-  },
-  "Eradication Cohort": {
-    "name": "Eradication Cohort",
-    "faction": "adeptus-mechanicus",
-    "description": "",
-    "detachment_rule": {
-      "name": "Murderous Imperative",
-      "description": "Дружественные ERADICATION юниты получают +1 к броскам Wound, когда атакуют цели, чьи характеристики Strength или Toughness меньше половины от их собственных (округляя вниз)."
-    },
-    "stratagems": [
-      {
-        "name": "Controlled Fire",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один ERADICATION юнит получает [SUSTAINED HITS 1] (или [SUSTAINED HITS 2] если цель — MONSTER или VEHICLE). (CP1)"
-      },
-      {
-        "name": "Marksman's Focus",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один ERADICATION INFANTRY юнит может игнорировать штраф за Heavy при стрельбе после Advance. (CP1)"
-      },
-      {
-        "name": "Execute and Purge",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase, после уничтожения вражеского юнита огнём, один ERADICATION юнит может совершить Normal Move на D6'. (CP1)"
-      },
-      {
-        "name": "Calculated Aggression",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Fight Phase один ERADICATION юнит получает +1 AP в ближнем бою. (CP1)"
-      },
-      {
-        "name": "Precision Overwatch",
-        "cost": 1,
-        "when": "",
-        "effect": "в любой фазе, когда вражеский юнит совершает Charge, один ERADICATION юнит может выполнить Overwatch, стреляя на 5+. (CP1)"
-      },
-      {
-        "name": "Armoured Advance",
-        "cost": 1,
-        "when": "",
-        "effect": "до конца фазы один ERADICATION VEHICLE юнит получает -1 к урону от всех атак (минимально 1), но не может стрелять Pistol. (CP1)"
-      }
-    ],
-    "enhancements": [
-      {
-        "name": "Patient's Folly",
-        "points": 0,
-        "effect": "носитель и его юнит получают +1\" к Move и +1\" к Charge."
-      },
-      {
-        "name": "Unmatched Tenacity",
-        "points": 0,
-        "effect": "носитель и его юнит получают Feel No Pain 5+ против Mortal Wounds."
-      },
-      {
-        "name": "Zealous Devotion",
-        "points": 0,
-        "effect": "носитель может быть выбран для выполнения Heroic Intervention. Все дружественные ERADICATION юниты в 6\" от него после Heroic Intervention перебрасывают Charge в этой фазе."
-      },
-      {
-        "name": "Paragon of the Imperative",
-        "points": 0,
-        "effect": "один раз за бой в любой фазе носитель может активировать: +1 к Hit, +1 к Wound и +1 к Save до конца фазы."
-      }
-    ]
-  },
-  "Explorator Maniple": {
-    "name": "Explorator Maniple",
-    "faction": "adeptus-mechanicus",
-    "description": "",
-    "detachment_rule": {
-      "name": "Acquisition At Any Cost",
-      "description": "Дружественные EXPLORATOR юниты получают +1 к Objectivity Control. Кроме того, когда такой юнит контролирует objective marker, вы получаете 1 дополнительное VP за каждый такой маркер (вместо обычного скорринга). Это не суммируется с другими бонусами к VP."
-    },
-    "stratagems": [
-      {
-        "name": "Reclaim Resources",
-        "cost": 1,
-        "when": "",
-        "effect": "в конце вашей Command Phase один EXPLORATOR INFANTRY юнит на objective marker восстанавливает D3 ран. (CP1)"
-      },
-      {
-        "name": "Servo-skull Cloud",
-        "cost": 1,
-        "when": "",
-        "effect": "до вашей следующей Command Phase один EXPLORATOR юнит не может быть целью ranged-атак дальше 18'. (CP1)"
-      },
-      {
-        "name": "Divine Augury",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один EXPLORATOR юнит получает [IGNORES COVER]. (CP1)"
-      },
-      {
-        "name": "Marked Prior Target",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase выберите одну вражескую единицу в 24' от EXPLORATOR CHARACTER — дружественные EXPLORATOR юниты получают +1 to Hit против неё. (CP1)"
-      },
-      {
-        "name": "Predictive Logic",
-        "cost": 1,
-        "when": "",
-        "effect": "в любой фазе, когда вражеский юнит совершает Charge против EXPLORATOR INFANTRY, этот юнит может совершить Overwatch на 5+. (CP1)"
-      },
-      {
-        "name": "Salvage Protocols",
-        "cost": 1,
-        "when": "",
-        "effect": "когда EXPLORATOR VEHICLE уничтожен, выберите один дружественный EXPLORATOR INFANTRY юнит в 6' — он восстанавливает D3 ран. (CP1)"
-      }
-    ],
-    "enhancements": [
-      {
-        "name": "Arch-negator",
-        "points": 0,
-        "effect": "вражеские юниты теряют способность Objective Secured, находясь на objective marker в радиусе 3\" от носителя."
-      },
-      {
-        "name": "Necromechanic",
-        "points": 0,
-        "effect": "один раз за бой, в вашей Command Phase, носитель может восстановить D3 потерянных ран одному дружественному VEHICLE юниту в 3\"."
-      },
-      {
-        "name": "Genetor Upgrade",
-        "points": 0,
-        "effect": "один дружественный EXPLORATOR INFANTRY юнит получает +1 к Toughness."
-      },
-      {
-        "name": "Logis-Master",
-        "points": 0,
-        "effect": "один раз за бой, после любого броска кубиков дружественным юнитом вы можете перебросить этот бросок."
-      }
-    ]
-  },
-  "Haloscreed Battle Clade": {
-    "name": "Haloscreed Battle Clade",
-    "faction": "adeptus-mechanicus",
-    "description": "",
-    "detachment_rule": {
-      "name": "Noospheric Transference",
-      "description": "В начале каждой фазы боя выберите один бонус для CORPUSCARY юнита на эту фазу: +1 к Strength, +1 к Armour Penetration, +1' к Move или Feel No Pain 5+."
-    },
-    "stratagems": [
-      {
-        "name": "Accelerated Scans",
-        "cost": 1,
-        "when": "",
-        "effect": "в начале первой боевой раунда один CORPUSCARY INFANTRY юнит может совершить Normal Move на D6'. (CP1)"
-      },
-      {
-        "name": "Neural Override",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один CORPUSCARY юнит может игнорировать штрафы к попаданию за Heavy и Assault. (CP1)"
-      },
-      {
-        "name": "Empathic Sight",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один CORPUSCARY юнит получает +1 to Hit против ближайшей вражеской цели. (CP1)"
-      },
-      {
-        "name": "Transsonic Blades",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Fight Phase один CORPUSCARY юнит атакует с +1 AP в ближнем бою. (CP1)"
-      },
-      {
-        "name": "Reactive Circuits",
-        "cost": 1,
-        "when": "",
-        "effect": "когда вражеский юнит заканчивает Normal/Advance/Charge Move в 9' от CORPUSCARY INFANTRY, этот юнит может совершить Normal Move на D6'. (CP1)"
-      },
-      {
-        "name": "Fervent Incantation",
-        "cost": 1,
-        "when": "",
-        "effect": "один CORPUSCARY юнит, уничтоженный вражеской атакой, может до момента удаления совершить атаку, как если бы он был в своей Shooting Phase. (CP1)"
-      }
-    ],
-    "enhancements": [
-      {
-        "name": "Artisan",
-        "points": 0,
-        "effect": "один дружественный CORPUSCARY юнит получает +1 AP ко всем атакам на время боя."
-      },
-      {
-        "name": "Emotionless Clarity",
-        "points": 0,
-        "effect": "один дружественный CORPUSCARY юнит игнорирует все модификаторы характеристик Ballistic Skill и Weapon Skill."
-      },
-      {
-        "name": "Cognitive Reinforcement",
-        "points": 0,
-        "effect": "один дружественный юнит может перебрасывать один кубик To Hit за фазу."
-      },
-      {
-        "name": "Transdimensional Annihilator",
-        "points": 0,
-        "effect": "оружие носителя получает [DEVASTATING WOUNDS] и +2 к Strength."
-      }
-    ]
-  },
-  "Rad-Zone Corps": {
-    "name": "Rad-Zone Corps",
-    "faction": "adeptus-mechanicus",
-    "description": "",
-    "detachment_rule": {
-      "name": "Rad-bombardment",
-      "description": "В начале каждой Command Phase выберите один objective marker в радиусе 18' от вашего RAD-ZONE CORPS CHARACTER. Вражеские юниты, находящиеся на этом objective marker, теряют -1 к характеристике Toughness до начала вашей следующей Command Phase."
-    },
-    "stratagems": [
-      {
-        "name": "Irradiated Munitions",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один дружественный RAD-ZONE CORPS юнит получает [LETHAL HITS] для всех ranged-атак до конца фазы. (CP1)"
-      },
-      {
-        "name": "Contaminated Ruination",
-        "cost": 1,
-        "when": "",
-        "effect": "выберите один objective marker в 12' от дружественного RAD-ZONE CORPS CHARACTER. Вражеские юниты на нём не могут восстанавливать раны до начала вашей следующей Command Phase. (CP1)"
-      },
-      {
-        "name": "Soul-scouring Irradiation",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один дружественный RAD-ZONE CORPS юнит атакует с +1 AP против целей, которые уже находятся под эффектом Rad-bombardment. (CP1)"
-      },
-      {
-        "name": "Rad-saturation",
-        "cost": 1,
-        "when": "",
-        "effect": "до конца фазы дружественный RAD-ZONE CORPS INFANTRY юнит получает Feel No Pain 5+ против атак из огнестрельного оружия. (CP1)"
-      },
-      {
-        "name": "Atomic Hardening",
-        "cost": 1,
-        "when": "",
-        "effect": "до вашей следующей Command Phase один RAD-ZONE CORPS юнит получает -1 к урону от всех атак (минимально 1). (CP1)"
-      },
-      {
-        "name": "Toxic Transference",
-        "cost": 1,
-        "when": "",
-        "effect": "когда дружественный RAD-ZONE CORPS юнит уничтожен вражеским юнитом в ближнем бою, этот вражеский юнит получает -1 WS до конца фазы. (CP1)"
-      }
-    ],
-    "enhancements": [
-      {
-        "name": "Autoclavic Denunciation",
-        "points": 0,
-        "effect": "когда носитель погибает, радиус эффекта Rad-bombardment расширяется на 6\" до конца игры (действует на все objective markers в радиусе)."
-      },
-      {
-        "name": "Rad-Ordinance",
-        "points": 0,
-        "effect": "вокруг носителя создаётся постоянная радиационная зона радиусом 3\". Вражеские юниты в этой зоне теряют -1 T."
-      },
-      {
-        "name": "Irradiated Payload",
-        "points": 0,
-        "effect": "ranged-оружие носителя получает правило [HAZARDOUS] и +1 к Strength."
-      },
-      {
-        "name": "Mechanicus Arcanus",
-        "points": 0,
-        "effect": "вражеские PSYKER-юниты в пределах rad-zone (от Rad-bombardment или Rad-Ordinance) теряют все свои Psychic-способности."
-      }
-    ]
-  },
-  "Skitarii Hunter Cohort": {
-    "name": "Skitarii Hunter Cohort",
-    "faction": "adeptus-mechanicus",
-    "description": "",
-    "detachment_rule": {
-      "name": "Stealth Optimisation",
-      "description": "Юниты Skitarii Infantry получают +1 к спасброскам, находясь в укрытии, и игнорируют модификатор -1 AP при получении урона в укрытии."
-    },
-    "stratagems": [
-      {
-        "name": "Suppressing Fire",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один дружественный SKITARII юнит может атаковать с [IGNORES COVER] до конца фазы. (CP1)"
-      },
-      {
-        "name": "Acquisition Radius",
-        "cost": 1,
-        "when": "",
-        "effect": "в начале вашей Command Phase один SKITARII INFANTRY юнит в 24' от вражеского objective marker считается контролирующим этот маркер. (CP1)"
-      },
-      {
-        "name": "Wrathful Fusillade",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Shooting Phase один SKITARII юнит может перебрасывать 1 to Wound. (CP1)"
-      },
-      {
-        "name": "Battleline Recalibration",
-        "cost": 1,
-        "when": "",
-        "effect": "в начале любой фазы один SKITARII BATTLELINE юнит может совершить Normal Move на D6' в любую фазу (но не в фазе, в которой уже двигался). (CP1)"
-      },
-      {
-        "name": "Hunter's Instincts",
-        "cost": 1,
-        "when": "",
-        "effect": "в вашей Fight Phase один SKITARII INFANTRY юнит, получивший чардж, может атаковать первым, даже если не имеет First Strike. (CP1)"
-      },
-      {
-        "name": "Shroud Protocol",
-        "cost": 1,
-        "when": "",
-        "effect": "до начала вашей следующей Command Phase один SKITARII INFANTRY юнит получает -1 к попаданию по нему ranged-атаками. (CP1)"
-      }
-    ],
-    "enhancements": [
-      {
-        "name": "Clandestine Infiltrator",
-        "points": 0,
-        "effect": "носитель может быть выставлен в резерв за пределами зоны высадки противника (Infiltrators)."
-      },
-      {
-        "name": "Battle-sphere Uplink",
-        "points": 0,
-        "effect": "пока носитель находится на поле боя, дружественные юниты SKITARII в радиусе 36\" получают +1 к своей характеристике Ballistic Skill."
-      },
-      {
-        "name": "Cantic Thrallnet",
-        "points": 0,
-        "effect": "вражеские юниты не могут быть выставлены с Deep Strike или Strategic Reserves в радиусе 12\" от носителя."
-      },
-      {
-        "name": "Neurotransience Auspice",
-        "points": 0,
-        "effect": "носитель получает способность Feel No Pain 5+ против Psychic-атак."
-      }
-    ]
-  },
-  "Blitz Brigade": {
-    "name": "Blitz Brigade",
-    "faction": "orks",
+  "detachment:orks:blitz-brigade": {
     "description": "Штурмовой детачмент с упором на десант из транспортов.",
     "detachment_rule": {
-      "name": "Eager for the Fight",
-      "description": "Each time an Orks unit from your army disembarks from a Transport, until the end of the turn, you can re-roll Advance and Charge rolls made for that Orks unit."
+      "description": "Each time an Orks unit from your army disembarks from a Transport, until the end of the turn, you can re-roll Advance and Charge rolls made for that Orks unit.",
+      "name": "Eager for the Fight"
     },
-    "stratagems": [
-      {
-        "name": "Mount Up, Ladz",
-        "cost": 1,
-        "when": "End of the Fight phase",
-        "effect": "Target: One Orks Infantry unit not within Engagement Range, and one friendly Transport it can embark within. If your Orks Infantry unit is wholly within 6\" of that Transport, it can embark within it"
-      },
-      {
-        "name": "Mekanised Brutality",
-        "cost": 1,
-        "when": "Your Movement phase",
-        "effect": "Target: One Battlewagon, Kill Rig or Hunta Rig that has not been selected to move. Until end of turn, each time a unit disembarks from your unit after it makes a Normal move, that disembarked unit is still eligible to declare a charge"
-      },
-      {
-        "name": "Run 'Em Down",
-        "cost": 1,
-        "when": "Your Movement phase",
-        "effect": "Target: One Battlewagon, Kill Rig or Hunta Rig that has not been selected to move. Select up to two other friendly Orks Vehicle or Orks Monster units within 6\". Until end of turn, your unit and selected units are eligible to declare a charge in a turn in which they Advanced"
-      },
-      {
-        "name": "Armoured Duellists",
-        "cost": 1,
-        "when": "Your Shooting phase",
-        "effect": "Target: One Orks Vehicle unit that has not been selected to shoot. Until end of phase, each time your unit makes an attack that targets a Monster or Vehicle unit, +1 to Hit and +1 to Wound"
-      },
-      {
-        "name": "Impervious",
-        "cost": 1,
-        "when": "Opponent's Shooting phase, just after enemy selects targets",
-        "effect": "Target: One Battlewagon, Kill Rig or Hunta Rig selected as target. Until end of phase, each time an attack targets your unit, if S > T, subtract 1 from the Wound roll"
-      },
-      {
-        "name": "Yooz in Trouble Now",
-        "cost": 1,
-        "when": "Opponent's Shooting phase, just after enemy has shot",
-        "effect": "Target: One Battlewagon, Hunta Rig or Kill Rig hit by the attacking unit's attacks. One Orks Infantry unit embarked within can disembark and make a Surge move (D6\"), ending as close as possible to closest enemy unit, can move within Engagement Range"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "Each time you make a Charge roll for the bearer's unit, if that unit disembarked from a Transport this turn, add 1 to the result.",
         "name": "Runnin' Boots",
-        "points": 0,
-        "effect": "Each time you make a Charge roll for the bearer's unit, if that unit disembarked from a Transport this turn, add 1 to the result."
+        "points": 0
       },
       {
+        "effect": "After both players have deployed their armies, if the bearer's unit (or any Transport it is embarked within) is on the battlefield, select up to three Orks Vehicle units from your army and redeploy them. When doing so, you can set those units up in Strategic Reserves, regardless of how many units are already in Strategic Reserves.",
         "name": "Blitzkaptin",
-        "points": 0,
-        "effect": "After both players have deployed their armies, if the bearer's unit (or any Transport it is embarked within) is on the battlefield, select up to three Orks Vehicle units from your army and redeploy them. When doing so, you can set those units up in Strategic Reserves, regardless of how many units are already in Strategic Reserves."
+        "points": 0
       },
       {
+        "effect": "Each time the bearer uses its Mekaniak ability, until the end of the turn, you can re-roll Charge rolls for the selected Vehicle model's unit.",
         "name": "Supercharged Squig Oil",
-        "points": 0,
-        "effect": "Each time the bearer uses its Mekaniak ability, until the end of the turn, you can re-roll Charge rolls for the selected Vehicle model's unit."
+        "points": 0
       },
       {
+        "effect": "At the end of a phase in which the bearer's unit disembarked from a Transport, if that unit is Battle-shocked, it is no longer Battle-shocked.",
         "name": "Tuff Git",
-        "points": 0,
-        "effect": "At the end of a phase in which the bearer's unit disembarked from a Transport, if that unit is Battle-shocked, it is no longer Battle-shocked."
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:orks",
+    "name": "Blitz Brigade",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "Target: One Orks Infantry unit not within Engagement Range, and one friendly Transport it can embark within. If your Orks Infantry unit is wholly within 6\" of that Transport, it can embark within it",
+        "name": "Mount Up, Ladz",
+        "when": "End of the Fight phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Battlewagon, Kill Rig or Hunta Rig that has not been selected to move. Until end of turn, each time a unit disembarks from your unit after it makes a Normal move, that disembarked unit is still eligible to declare a charge",
+        "name": "Mekanised Brutality",
+        "when": "Your Movement phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Battlewagon, Kill Rig or Hunta Rig that has not been selected to move. Select up to two other friendly Orks Vehicle or Orks Monster units within 6\". Until end of turn, your unit and selected units are eligible to declare a charge in a turn in which they Advanced",
+        "name": "Run 'Em Down",
+        "when": "Your Movement phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Orks Vehicle unit that has not been selected to shoot. Until end of phase, each time your unit makes an attack that targets a Monster or Vehicle unit, +1 to Hit and +1 to Wound",
+        "name": "Armoured Duellists",
+        "when": "Your Shooting phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Battlewagon, Kill Rig or Hunta Rig selected as target. Until end of phase, each time an attack targets your unit, if S > T, subtract 1 from the Wound roll",
+        "name": "Impervious",
+        "when": "Opponent's Shooting phase, just after enemy selects targets"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Battlewagon, Hunta Rig or Kill Rig hit by the attacking unit's attacks. One Orks Infantry unit embarked within can disembark and make a Surge move (D6\"), ending as close as possible to closest enemy unit, can move within Engagement Range",
+        "name": "Yooz in Trouble Now",
+        "when": "Opponent's Shooting phase, just after enemy has shot"
       }
     ]
   },
-  "Bully Boyz": {
-    "name": "Bully Boyz",
-    "faction": "orks",
+  "detachment:orks:bully-boyz": {
     "description": "Детачмент для MEGA ARMOUR элиты (Meganobz).",
     "detachment_rule": {
-      "name": "Da Boss Is Watchin'",
-      "description": "Отряды MEGA ARMOUR в этом детачменте получают +1 к стрельбе Heavy оружием и могут игнорировать -1 к попаданию при движении с Heavy."
+      "description": "Отряды MEGA ARMOUR в этом детачменте получают +1 к стрельбе Heavy оружием и могут игнорировать -1 к попаданию при движении с Heavy.",
+      "name": "Da Boss Is Watchin'"
     },
-    "stratagems": [
-      {
-        "name": "Charging Beast",
-        "cost": 1,
-        "when": "",
-        "effect": "заряд +D3'"
-      },
-      {
-        "name": "Crush Them",
-        "cost": 1,
-        "when": "",
-        "effect": "+1 to wound"
-      },
-      {
-        "name": "Ere We Go",
-        "cost": 1,
-        "when": "",
-        "effect": "переброс заряда"
-      },
-      {
-        "name": "We'll Be Back",
-        "cost": 1,
-        "when": "",
-        "effect": "D3 ран восстановления"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "+1 S, AP на атаках",
         "name": "Boss Cybork Arm",
-        "points": 0,
-        "effect": "+1 S, AP на атаках"
+        "points": 0
       },
       {
+        "effect": "4+ invuln",
         "name": "Da Supa Cybork Body",
-        "points": 0,
-        "effect": "4+ invuln"
+        "points": 0
       },
       {
+        "effect": "4+ FNP (один раз)",
         "name": "Hard as Nails",
-        "points": 0,
-        "effect": "4+ FNP (один раз)"
+        "points": 0
       },
       {
+        "effect": "+1 W",
         "name": "Mega Armour",
-        "points": 0,
-        "effect": "+1 W"
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:orks",
+    "name": "Bully Boyz",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "заряд +D3'",
+        "name": "Charging Beast",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "+1 to wound",
+        "name": "Crush Them",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "переброс заряда",
+        "name": "Ere We Go",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "D3 ран восстановления",
+        "name": "We'll Be Back",
+        "when": ""
       }
     ]
   },
-  "Da Big Hunt": {
-    "name": "Da Big Hunt",
-    "faction": "orks",
+  "detachment:orks:da-big-hunt": {
     "description": "Детачмент для охоты на крупные цели (Monsters, Vehicles).",
     "detachment_rule": {
-      "name": "Da Hunt Is On",
-      "description": "Когда отряд **ORKS** из этого детачмента объявляет заряд, до конца фазы его атаки ближнего боя получают **Anti-Monster/Vehicle 5+** (рана на 5+ против этих целей)."
+      "description": "Когда отряд **ORKS** из этого детачмента объявляет заряд, до конца фазы его атаки ближнего боя получают **Anti-Monster/Vehicle 5+** (рана на 5+ против этих целей).",
+      "name": "Da Hunt Is On"
     },
-    "stratagems": [
-      {
-        "name": "Bellowing Charge",
-        "cost": 1,
-        "when": "",
-        "effect": "заряд +2'"
-      },
-      {
-        "name": "Carnage and Mayhem",
-        "cost": 1,
-        "when": "",
-        "effect": "переброс 1 wound"
-      },
-      {
-        "name": "Ferocious Charge",
-        "cost": 1,
-        "when": "",
-        "effect": "+1 AP в заряде"
-      },
-      {
-        "name": "Hunt 'Em Down",
-        "cost": 1,
-        "when": "",
-        "effect": "+1 to wound vs monster/vehicle"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "+1 to Wound vs Monsters/Vehicles",
         "name": "Big Game Boss",
-        "points": 0,
-        "effect": "+1 to Wound vs Monsters/Vehicles"
+        "points": 0
       },
       {
+        "effect": "Beast Snagga character in the unit",
         "name": "Kunnin' an' Brutal",
-        "points": 0,
-        "effect": "Beast Snagga character in the unit"
+        "points": 0
       },
       {
+        "effect": "4+ invuln",
         "name": "Supa Cybork Body",
-        "points": 0,
-        "effect": "4+ invuln"
+        "points": 0
       },
       {
+        "effect": "+1 S, AP на оружии ближнего боя",
         "name": "The Big Tusk",
-        "points": 0,
-        "effect": "+1 S, AP на оружии ближнего боя"
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:orks",
+    "name": "Da Big Hunt",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "заряд +2'",
+        "name": "Bellowing Charge",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "переброс 1 wound",
+        "name": "Carnage and Mayhem",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "+1 AP в заряде",
+        "name": "Ferocious Charge",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "+1 to wound vs monster/vehicle",
+        "name": "Hunt 'Em Down",
+        "when": ""
       }
     ]
   },
-  "Dread Mob": {
-    "name": "Dread Mob",
-    "faction": "orks",
+  "detachment:orks:dread-mob": {
     "description": "Детачмент для армий из ходячей техники (Dreadnoughts, Walkers).",
     "detachment_rule": {
-      "name": "Try Dat Button!",
-      "description": "WALKER отряды в этом детачменте в начале фазы сражения могут перегрузить реактор. Бросок D6: - **1–2** — D3 mortal wounds - **3–5** — +1 S и +1 A - **6** — +2 S, +2 A и 4+ invuln"
+      "description": "WALKER отряды в этом детачменте в начале фазы сражения могут перегрузить реактор. Бросок D6: - **1–2** — D3 mortal wounds - **3–5** — +1 S и +1 A - **6** — +2 S, +2 A и 4+ invuln",
+      "name": "Try Dat Button!"
     },
-    "stratagems": [
-      {
-        "name": "Big Killin' Time",
-        "cost": 1,
-        "when": null,
-        "effect": "WALKER получает +1 к wound до конца фазы"
-      },
-      {
-        "name": "Ere We Go",
-        "cost": 1,
-        "when": null,
-        "effect": "переброс броска заряда для WALKER"
-      },
-      {
-        "name": "Kannon Fodder",
-        "cost": 1,
-        "when": null,
-        "effect": "infantry в 6\" может прикрывать WALKER (look out, sir)"
-      },
-      {
-        "name": "Lob On In",
-        "cost": 1,
-        "when": null,
-        "effect": "один WALKER может высадиться с Deep Strike"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "при перегрузке на результате 6 эффект удваивается",
         "name": "Sparkly Jubbly",
-        "points": 0,
-        "effect": "при перегрузке на результате 6 эффект удваивается"
+        "points": 0
       },
       {
+        "effect": "WALKER получает +3' к движению",
         "name": "Blastajet Engine",
-        "points": 0,
-        "effect": "WALKER получает +3' к движению"
+        "points": 0
       },
       {
+        "effect": "в фазе командования WALKER восстанавливает D3 wounds",
         "name": "Kustom Job",
-        "points": 0,
-        "effect": "в фазе командования WALKER восстанавливает D3 wounds"
+        "points": 0
       },
       {
+        "effect": "+1' к броску заряда (Charge roll)",
         "name": "Rokkit Boosta",
-        "points": 0,
-        "effect": "+1' к броску заряда (Charge roll)"
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:orks",
+    "name": "Dread Mob",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "WALKER получает +1 к wound до конца фазы",
+        "name": "Big Killin' Time",
+        "when": null
+      },
+      {
+        "cost": 1,
+        "effect": "переброс броска заряда для WALKER",
+        "name": "Ere We Go",
+        "when": null
+      },
+      {
+        "cost": 1,
+        "effect": "infantry в 6\" может прикрывать WALKER (look out, sir)",
+        "name": "Kannon Fodder",
+        "when": null
+      },
+      {
+        "cost": 1,
+        "effect": "один WALKER может высадиться с Deep Strike",
+        "name": "Lob On In",
+        "when": null
       }
     ]
   },
-  "Freebooter Krew": {
-    "name": "Freebooter Krew",
-    "faction": "orks",
+  "detachment:orks:freebooter-krew": {
     "description": "Пиратский детачмент (Freebooterz и Flash Gitz) с упором на захват целей и loot.",
     "detachment_rule": {
-      "name": "Here Be Loot",
-      "description": "At the start of your Command phase, select one objective marker. Until the start of your next Command phase, that objective marker is your **loot objective**. Each time a model in an **Orks Infantry**, **Orks Mounted** or **Orks Walker** unit from your army makes an attack, that attack has the [SUSTAINED HITS 1] ability if either or both of the following are true: - That model's unit is within range of your loot objective. - That attack targets a unit within range of your loot objective."
+      "description": "At the start of your Command phase, select one objective marker. Until the start of your next Command phase, that objective marker is your **loot objective**. Each time a model in an **Orks Infantry**, **Orks Mounted** or **Orks Walker** unit from your army makes an attack, that attack has the [SUSTAINED HITS 1] ability if either or both of the following are true: - That model's unit is within range of your loot objective. - That attack targets a unit within range of your loot objective.",
+      "name": "Here Be Loot"
     },
-    "stratagems": [
-      {
-        "name": "Bash and Grab",
-        "cost": 1,
-        "when": "Fight phase",
-        "effect": "Target: One Orks unit not selected to fight. Until end of phase, each time a model makes an attack targeting a unit within range of loot objective, re-roll Wound roll"
-      },
-      {
-        "name": "Grab and Bash",
-        "cost": 1,
-        "when": "Your Command phase",
-        "effect": "Target: One Orks unit (excluding Gretchin) within range of loot objective. Until start of your next Command phase, the Waaagh! is active for your unit, even if you have already called a Waaagh!"
-      },
-      {
-        "name": "Boardin' Rush",
-        "cost": 1,
-        "when": "Your Movement phase",
-        "effect": "Target: One Orks unit not selected to move. Until end of phase, each time your unit Advances, do not make an Advance roll. Instead, +6\" Move"
-      },
-      {
-        "name": "Deck Fraggers",
-        "cost": 1,
-        "when": "Your Shooting phase",
-        "effect": "Target: One Orks unit not selected to shoot. Until end of phase, each time a model targets an Infantry unit with a ranged weapon, that weapon has [BLAST]"
-      },
-      {
-        "name": "Rolling Loot-Heap",
-        "cost": 1,
-        "when": "Your Shooting phase",
-        "effect": "Target: One Flash Gitz unit not selected to shoot. Until end of phase, ranged weapons have [ANTI-VEHICLE 4+]"
-      },
-      {
-        "name": "Krump and Run",
-        "cost": 1,
-        "when": "Opponent's Movement phase, just after enemy Falls Back",
-        "effect": "Target: One Orks unit that was within Engagement Range of that enemy at start of phase and is not within range of enemy units. Your unit can make a Normal move of up to 6\""
-      }
-    ],
     "enhancements": [
       {
+        "effect": "Once per battle round, at the start of any phase, you can select one friendly Orks unit that is Battle-shocked and within 12\" of the bearer. That unit suffers D3 mortal wounds and it is no longer Battle-shocked.",
         "name": "Da Kaptin",
-        "points": 0,
-        "effect": "Once per battle round, at the start of any phase, you can select one friendly Orks unit that is Battle-shocked and within 12\" of the bearer. That unit suffers D3 mortal wounds and it is no longer Battle-shocked."
+        "points": 0
       },
       {
+        "effect": "Ranged weapons equipped by models in the bearer's unit have the [IGNORES COVER] ability.",
         "name": "Git-Spotter Squig",
-        "points": 0,
-        "effect": "Ranged weapons equipped by models in the bearer's unit have the [IGNORES COVER] ability."
+        "points": 0
       },
       {
+        "effect": "At the start of the battle, roll one D3. Until end of battle, models in bearer's unit have:\n  - 1. Bionik Legs: +2\" Move\n  - 2. Bionik Arms: +1 S on melee weapons\n  - 3. Bionik Bonce: Improve WS by 1",
         "name": "Bionik Workshop",
-        "points": 0,
-        "effect": "At the start of the battle, roll one D3. Until end of battle, models in bearer's unit have:\n  - 1. Bionik Legs: +2\" Move\n  - 2. Bionik Arms: +1 S on melee weapons\n  - 3. Bionik Bonce: Improve WS by 1"
+        "points": 0
       },
       {
+        "effect": "After both players have deployed their armies, select up to three Orks Infantry units from your army and redeploy them. When doing so, you can set those units up in Strategic Reserves, regardless of how many units are already in Strategic Reserves.",
         "name": "Razgit's Magik Map",
-        "points": 0,
-        "effect": "After both players have deployed their armies, select up to three Orks Infantry units from your army and redeploy them. When doing so, you can set those units up in Strategic Reserves, regardless of how many units are already in Strategic Reserves."
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:orks",
+    "name": "Freebooter Krew",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit not selected to fight. Until end of phase, each time a model makes an attack targeting a unit within range of loot objective, re-roll Wound roll",
+        "name": "Bash and Grab",
+        "when": "Fight phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit (excluding Gretchin) within range of loot objective. Until start of your next Command phase, the Waaagh! is active for your unit, even if you have already called a Waaagh!",
+        "name": "Grab and Bash",
+        "when": "Your Command phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit not selected to move. Until end of phase, each time your unit Advances, do not make an Advance roll. Instead, +6\" Move",
+        "name": "Boardin' Rush",
+        "when": "Your Movement phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit not selected to shoot. Until end of phase, each time a model targets an Infantry unit with a ranged weapon, that weapon has [BLAST]",
+        "name": "Deck Fraggers",
+        "when": "Your Shooting phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Flash Gitz unit not selected to shoot. Until end of phase, ranged weapons have [ANTI-VEHICLE 4+]",
+        "name": "Rolling Loot-Heap",
+        "when": "Your Shooting phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit that was within Engagement Range of that enemy at start of phase and is not within range of enemy units. Your unit can make a Normal move of up to 6\"",
+        "name": "Krump and Run",
+        "when": "Opponent's Movement phase, just after enemy Falls Back"
       }
     ]
   },
-  "Green Tide": {
-    "name": "Green Tide",
-    "faction": "orks",
+  "detachment:orks:green-tide": {
     "description": "Детачмент для пехотных орд.",
     "detachment_rule": {
-      "name": "Mob Mentality",
-      "description": "GREEN TIDE отряды получают +1 OC и +1 LD, когда в отряде 10+ моделей. Также могут перевыставлять полностью уничтоженный отряд Boyz (стратагема)."
+      "description": "GREEN TIDE отряды получают +1 OC и +1 LD, когда в отряде 10+ моделей. Также могут перевыставлять полностью уничтоженный отряд Boyz (стратагема).",
+      "name": "Mob Mentality"
     },
-    "stratagems": [
-      {
-        "name": "Da Biggest an' da Best",
-        "cost": 1,
-        "when": "",
-        "effect": "revive a dead unit"
-      },
-      {
-        "name": "Endless Green Tide",
-        "cost": 1,
-        "when": "",
-        "effect": "возврат уничтоженного BOYZ отряда"
-      },
-      {
-        "name": "Get Da Stikk",
-        "cost": 1,
-        "when": "",
-        "effect": "+4' к Waaagh!"
-      },
-      {
-        "name": "Mob Rule",
-        "cost": 1,
-        "when": "",
-        "effect": "переброс LD"
-      },
-      {
-        "name": "Rise Up",
-        "cost": 1,
-        "when": "",
-        "effect": "+3 модели в отряд"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "Waaagh! banner",
         "name": "Da One Who Leads",
-        "points": 0,
-        "effect": "Waaagh! banner"
+        "points": 0
       },
       {
+        "effect": "бонус к лидерству",
         "name": "Mob Boss",
-        "points": 0,
-        "effect": "бонус к лидерству"
+        "points": 0
       },
       {
+        "effect": "5+ FNP",
         "name": "Squig Hide",
-        "points": 0,
-        "effect": "5+ FNP"
+        "points": 0
       },
       {
+        "effect": "+1 S в ближнем бою",
         "name": "Snagga Handle",
-        "points": 0,
-        "effect": "+1 S в ближнем бою"
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:orks",
+    "name": "Green Tide",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "revive a dead unit",
+        "name": "Da Biggest an' da Best",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "возврат уничтоженного BOYZ отряда",
+        "name": "Endless Green Tide",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "+4' к Waaagh!",
+        "name": "Get Da Stikk",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "переброс LD",
+        "name": "Mob Rule",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "+3 модели в отряд",
+        "name": "Rise Up",
+        "when": ""
       }
     ]
   },
-  "Kult of Speed": {
-    "name": "Kult of Speed",
-    "faction": "orks",
+  "detachment:orks:kult-of-speed": {
     "description": "Механизированный детачмент для SPEED FREEK армий.",
     "detachment_rule": {
-      "name": "Adrenaline Junkies",
-      "description": "SPEED FREEK отряды в этом детачменте получают +1 to Hit при стрельбе если двигались 6'+ в этом ходу. Также они могут Advance и стрелять без штрафа."
+      "description": "SPEED FREEK отряды в этом детачменте получают +1 to Hit при стрельбе если двигались 6'+ в этом ходу. Также они могут Advance и стрелять без штрафа.",
+      "name": "Adrenaline Junkies"
     },
-    "stratagems": [
-      {
-        "name": "Biker Boss",
-        "cost": 1,
-        "when": "",
-        "effect": "байк-герой"
-      },
-      {
-        "name": "Dakka Dakka Dakka!",
-        "cost": 1,
-        "when": "",
-        "effect": "Sustained Hits 2"
-      },
-      {
-        "name": "Full Throttle",
-        "cost": 1,
-        "when": "",
-        "effect": "+4' движения"
-      },
-      {
-        "name": "Mob Up",
-        "cost": 1,
-        "when": "",
-        "effect": "объединение отрядов"
-      },
-      {
-        "name": "Scratch 'Em",
-        "cost": 1,
-        "when": "",
-        "effect": "+1 to wound"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "пистолет получает +1 S, AP, D",
         "name": "Kwik-Klik Gun",
-        "points": 0,
-        "effect": "пистолет получает +1 S, AP, D"
+        "points": 0
       },
       {
+        "effect": "Warlord trait",
         "name": "Rippa's Snazzwagon",
-        "points": 0,
-        "effect": "Warlord trait"
+        "points": 0
       },
       {
+        "effect": "3+ SV на Warlord-пехоте",
         "name": "Shiny Armour",
-        "points": 0,
-        "effect": "3+ SV на Warlord-пехоте"
+        "points": 0
       },
       {
+        "effect": "+1' движения",
         "name": "Spinning Plates",
-        "points": 0,
-        "effect": "+1' движения"
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:orks",
+    "name": "Kult of Speed",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "байк-герой",
+        "name": "Biker Boss",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "Sustained Hits 2",
+        "name": "Dakka Dakka Dakka!",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "+4' движения",
+        "name": "Full Throttle",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "объединение отрядов",
+        "name": "Mob Up",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "+1 to wound",
+        "name": "Scratch 'Em",
+        "when": ""
       }
     ]
   },
-  "More Dakka!": {
-    "name": "More Dakka!",
-    "faction": "orks",
+  "detachment:orks:more-dakka": {
     "description": "Стрелковый детачмент с упором на дальний бой и огневую мощь.",
     "detachment_rule": {
-      "name": "Dakka! Dakka! Dakka!",
-      "description": "- Ranged weapons equipped by **Orks Infantry** and **Orks Walker** models from your army have the [ASSAULT] ability. - While the **Waaagh!** is active for your army, during your Shooting phase, ranged weapons equipped by **Orks Infantry** and **Orks Walker** models from your army have the [SUSTAINED HITS 1] ability."
+      "description": "- Ranged weapons equipped by **Orks Infantry** and **Orks Walker** models from your army have the [ASSAULT] ability. - While the **Waaagh!** is active for your army, during your Shooting phase, ranged weapons equipped by **Orks Infantry** and **Orks Walker** models from your army have the [SUSTAINED HITS 1] ability.",
+      "name": "Dakka! Dakka! Dakka!"
     },
-    "stratagems": [
-      {
-        "name": "Orks Is Still Orks",
-        "cost": 1,
-        "when": "Fight phase",
-        "effect": "Target: One Orks unit not selected to fight. Until end of phase, re-roll Wound roll of 1. If target is within range of an objective marker, re-roll the Wound roll instead"
-      },
-      {
-        "name": "Get Stuck In, Ladz!",
-        "cost": 1,
-        "when": "Your Command phase",
-        "effect": "Target: One Orks unit (excluding Gretchin). Until start of your next Command phase, the Waaagh! is active for your unit, even if you have already called a Waaagh! this battle"
-      },
-      {
-        "name": "Huge Show-Offs",
-        "cost": 2,
-        "when": "Your Command phase",
-        "effect": "Target: One Orks Walker unit (excluding Killa Kans). Until start of your next Command phase, improve M, LD and OC by 1, and each time a model in your unit makes an attack, +1 to Hit"
-      },
-      {
-        "name": "Long, Uncontrolled Bursts",
-        "cost": 1,
-        "when": "Your Shooting phase",
-        "effect": "Target: One Orks unit not selected to shoot. Until end of phase, ranged weapons have the [IGNORES COVER] ability"
-      },
-      {
-        "name": "Speshul Shells",
-        "cost": 1,
-        "when": "Your Shooting phase",
-        "effect": "Target: One Orks unit not selected to shoot. Until end of phase, each time a model makes a ranged attack targeting the closest eligible target within 18\", improve AP by 1"
-      },
-      {
-        "name": "Call Dat Dakka?",
-        "cost": 1,
-        "when": "Opponent's Shooting phase, just after enemy has shot",
-        "effect": "Target: One Orks unit that had one or more models destroyed by those attacks. Your unit can shoot as if it were your Shooting phase, but must target only that enemy unit"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "Ranged weapons equipped by the bearer have the [DEVASTATING WOUNDS] and [HAZARDOUS] abilities.",
         "name": "Da Gobshot Thunderbuss",
-        "points": 0,
-        "effect": "Ranged weapons equipped by the bearer have the [DEVASTATING WOUNDS] and [HAZARDOUS] abilities."
+        "points": 0
       },
       {
+        "effect": "Ranged weapons equipped by models in the bearer's unit have the [RAPID FIRE 1] ability.",
         "name": "Dead Shiny Shootas",
-        "points": 0,
-        "effect": "Ranged weapons equipped by models in the bearer's unit have the [RAPID FIRE 1] ability."
+        "points": 0
       },
       {
+        "effect": "Each time a model in the bearer's unit makes a ranged attack, add 1 to the Hit roll.",
         "name": "Targetin' Squigs",
-        "points": 0,
-        "effect": "Each time a model in the bearer's unit makes a ranged attack, add 1 to the Hit roll."
+        "points": 0
       },
       {
+        "effect": "The bearer's unit is eligible to shoot in a turn in which it Fell Back.",
         "name": "Zog Off and Eat Dakka!",
-        "points": 0,
-        "effect": "The bearer's unit is eligible to shoot in a turn in which it Fell Back."
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:orks",
+    "name": "More Dakka!",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit not selected to fight. Until end of phase, re-roll Wound roll of 1. If target is within range of an objective marker, re-roll the Wound roll instead",
+        "name": "Orks Is Still Orks",
+        "when": "Fight phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit (excluding Gretchin). Until start of your next Command phase, the Waaagh! is active for your unit, even if you have already called a Waaagh! this battle",
+        "name": "Get Stuck In, Ladz!",
+        "when": "Your Command phase"
+      },
+      {
+        "cost": 2,
+        "effect": "Target: One Orks Walker unit (excluding Killa Kans). Until start of your next Command phase, improve M, LD and OC by 1, and each time a model in your unit makes an attack, +1 to Hit",
+        "name": "Huge Show-Offs",
+        "when": "Your Command phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit not selected to shoot. Until end of phase, ranged weapons have the [IGNORES COVER] ability",
+        "name": "Long, Uncontrolled Bursts",
+        "when": "Your Shooting phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit not selected to shoot. Until end of phase, each time a model makes a ranged attack targeting the closest eligible target within 18\", improve AP by 1",
+        "name": "Speshul Shells",
+        "when": "Your Shooting phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit that had one or more models destroyed by those attacks. Your unit can shoot as if it were your Shooting phase, but must target only that enemy unit",
+        "name": "Call Dat Dakka?",
+        "when": "Opponent's Shooting phase, just after enemy has shot"
       }
     ]
   },
-  "Taktikal Brigade": {
-    "name": "Taktikal Brigade",
-    "faction": "orks",
+  "detachment:orks:taktikal-brigade": {
     "description": "Комбинированный детачмент Blood Axe с тактической гибкостью (Taktiks).",
     "detachment_rule": {
-      "name": "Lissen 'Ere",
-      "description": "Once per battle round, in your Command phase or after being set up on the battlefield in your Movement phase, each **Boss Snikrot**, **Mek** and **Warboss** model in your army can issue Taktiks abilities. To do so, select one of the Taktiks abilities below and select one friendly Orks unit within 6' of that model to issue them to. That model must take a Leadership test: if failed, the selected unit suffers 1 mortal wound. Until the start of your next Command phase, the selected unit is affected by the selected Taktik. A unit cannot have Taktiks issued to it in this way more than once per battle round. Taktiks abilities cannot be issued to Battle-shocked units, and if a unit affected by Taktiks becomes Battle-shocked, all Taktiks cease to affect that unit while it is Battle-shocked.\n**Taktiks abilities:** - **Get Stuck In:** You can re-roll Charge rolls made for this unit. - **Get On Wiv It:** Add 1 to the Strength characteristic of melee weapons equipped by models in this unit. - **Sneaky Stalkin':** Infantry and Mounted models (excluding Meganobz) in this unit have the Stealth ability and each time a ranged attack targets this unit, those models have the Benefit of Cover against that attack. - **Shoota Drills:** Each time an Infantry or Mounted model in this unit makes a ranged attack, add 1 to the Hit roll.\n**Keywords:** Stormboyz units from your army gain the **Battleline** keyword.\n"
+      "description": "Once per battle round, in your Command phase or after being set up on the battlefield in your Movement phase, each **Boss Snikrot**, **Mek** and **Warboss** model in your army can issue Taktiks abilities. To do so, select one of the Taktiks abilities below and select one friendly Orks unit within 6' of that model to issue them to. That model must take a Leadership test: if failed, the selected unit suffers 1 mortal wound. Until the start of your next Command phase, the selected unit is affected by the selected Taktik. A unit cannot have Taktiks issued to it in this way more than once per battle round. Taktiks abilities cannot be issued to Battle-shocked units, and if a unit affected by Taktiks becomes Battle-shocked, all Taktiks cease to affect that unit while it is Battle-shocked.\n**Taktiks abilities:** - **Get Stuck In:** You can re-roll Charge rolls made for this unit. - **Get On Wiv It:** Add 1 to the Strength characteristic of melee weapons equipped by models in this unit. - **Sneaky Stalkin':** Infantry and Mounted models (excluding Meganobz) in this unit have the Stealth ability and each time a ranged attack targets this unit, those models have the Benefit of Cover against that attack. - **Shoota Drills:** Each time an Infantry or Mounted model in this unit makes a ranged attack, add 1 to the Hit roll.\n**Keywords:** Stormboyz units from your army gain the **Battleline** keyword.\n",
+      "name": "Lissen 'Ere"
     },
-    "stratagems": [
-      {
-        "name": "Dat's Ours",
-        "cost": 1,
-        "when": "Command phase",
-        "effect": "Target: One Orks unit within Engagement Range of enemy units. Until start of next Command phase, +1 OC"
-      },
-      {
-        "name": "Fight Proppa",
-        "cost": 1,
-        "when": "Fight phase",
-        "effect": "Target: One Orks Infantry or Mounted unit not selected to fight. Select [SUSTAINED HITS 1] or [LETHAL HITS] for melee weapons until end of phase"
-      },
-      {
-        "name": "Taktikal Retreat",
-        "cost": 1,
-        "when": "Your Movement phase, just after an Orks unit Falls Back",
-        "effect": "Target: That Orks unit. Until end of turn, unit eligible to shoot and declare charge in a turn it Fell Back"
-      },
-      {
-        "name": "Krunchn' Descent",
-        "cost": 1,
-        "when": "Your Charge phase, just after a Stormboyz unit ends a Charge move",
-        "effect": "Target: That Stormboyz unit. Select one enemy unit within Engagement Range, roll 1 D6 per model in Engagement Range: each 4+ = 1 mortal wound (max 6)"
-      },
-      {
-        "name": "On to da Next",
-        "cost": 1,
-        "when": "Opponent's Movement phase, just after enemy Falls Back",
-        "effect": "Target: One Orks unit that was within Engagement Range of that enemy at start of phase. Your unit can make a Normal move of up to 6\""
-      },
-      {
-        "name": "Ded Sneaky",
-        "cost": 1,
-        "when": "End of opponent's Fight phase",
-        "effect": "Target: One Kommandos or Stormboyz unit not within Engagement Range. Remove unit from battlefield and place it into Strategic Reserves"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "During the Declare Battle Formations step, the bearer can be attached to a Kommandos unit. While leading a Kommandos unit, it has the Infiltrators and Stealth abilities.",
         "name": "Skwad Leader",
-        "points": 0,
-        "effect": "During the Declare Battle Formations step, the bearer can be attached to a Kommandos unit. While leading a Kommandos unit, it has the Infiltrators and Stealth abilities."
+        "points": 0
       },
       {
+        "effect": "During the Declare Battle Formations step, the bearer can be attached to a Flash Gitz unit. Each time a model in the bearer's unit makes a ranged attack, you can re-roll the Hit roll.",
         "name": "Mek Kaptin",
-        "points": 0,
-        "effect": "During the Declare Battle Formations step, the bearer can be attached to a Flash Gitz unit. Each time a model in the bearer's unit makes a ranged attack, you can re-roll the Hit roll."
+        "points": 0
       },
       {
+        "effect": "After both players have deployed their armies, select up to three Orks units from your army and redeploy them. When doing so, you can set those units up in Strategic Reserves, regardless of how many units are already in Strategic Reserves.",
         "name": "Mork's Kunnin'",
-        "points": 0,
-        "effect": "After both players have deployed their armies, select up to three Orks units from your army and redeploy them. When doing so, you can set those units up in Strategic Reserves, regardless of how many units are already in Strategic Reserves."
+        "points": 0
       },
       {
+        "effect": "Each time the bearer issues Taktiks, it can do so to a friendly Orks Infantry or Orks Mounted unit within 18\", instead of 6\".",
         "name": "Gob Boomer",
-        "points": 0,
-        "effect": "Each time the bearer issues Taktiks, it can do so to a friendly Orks Infantry or Orks Mounted unit within 18\", instead of 6\"."
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:orks",
+    "name": "Taktikal Brigade",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit within Engagement Range of enemy units. Until start of next Command phase, +1 OC",
+        "name": "Dat's Ours",
+        "when": "Command phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Orks Infantry or Mounted unit not selected to fight. Select [SUSTAINED HITS 1] or [LETHAL HITS] for melee weapons until end of phase",
+        "name": "Fight Proppa",
+        "when": "Fight phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: That Orks unit. Until end of turn, unit eligible to shoot and declare charge in a turn it Fell Back",
+        "name": "Taktikal Retreat",
+        "when": "Your Movement phase, just after an Orks unit Falls Back"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: That Stormboyz unit. Select one enemy unit within Engagement Range, roll 1 D6 per model in Engagement Range: each 4+ = 1 mortal wound (max 6)",
+        "name": "Krunchn' Descent",
+        "when": "Your Charge phase, just after a Stormboyz unit ends a Charge move"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Orks unit that was within Engagement Range of that enemy at start of phase. Your unit can make a Normal move of up to 6\"",
+        "name": "On to da Next",
+        "when": "Opponent's Movement phase, just after enemy Falls Back"
+      },
+      {
+        "cost": 1,
+        "effect": "Target: One Kommandos or Stormboyz unit not within Engagement Range. Remove unit from battlefield and place it into Strategic Reserves",
+        "name": "Ded Sneaky",
+        "when": "End of opponent's Fight phase"
       }
     ]
   },
-  "War Horde": {
-    "name": "War Horde",
-    "faction": "orks",
+  "detachment:orks:war-horde": {
     "description": "Универсальный детачмент орков, подходящий для любой армии.",
     "detachment_rule": {
-      "name": "Get Stuck In",
-      "description": "Когда отряд орков из этого детачмента объявляет заряд (Charge), атаки ближнего боя этого отряда получают +1 к силе (S) до конца фазы."
+      "description": "Когда отряд орков из этого детачмента объявляет заряд (Charge), атаки ближнего боя этого отряда получают +1 к силе (S) до конца фазы.",
+      "name": "Get Stuck In"
     },
-    "stratagems": [
-      {
-        "name": "Careen!",
-        "cost": 1,
-        "when": "",
-        "effect": "когда VEHICLE орков уничтожен, может двигаться D6' и наносить D3 mortals"
-      },
-      {
-        "name": "'Ere We Go",
-        "cost": 1,
-        "when": "",
-        "effect": "переброс заряда"
-      },
-      {
-        "name": "Insane Bravery",
-        "cost": 1,
-        "when": "",
-        "effect": "авто-успех теста морали"
-      },
-      {
-        "name": "Just A Scratch",
-        "cost": 1,
-        "when": "",
-        "effect": "восстанавливает D3 ран дружественному ORKS VEHICLE"
-      },
-      {
-        "name": "More Dakka!",
-        "cost": 1,
-        "when": "",
-        "effect": "отряд получает Sustained Hits 1"
-      },
-      {
-        "name": "Unbridled Carnage",
-        "cost": 1,
-        "when": "",
-        "effect": "отряд получает +1 to Wound в ближнем бою"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "когда этот персонаж совершает Heroic Intervention, дружественные ORKS в 6' могут сделать то же самое",
         "name": "Follow Me Ladz",
-        "points": 0,
-        "effect": "когда этот персонаж совершает Heroic Intervention, дружественные ORKS в 6' могут сделать то же самое"
+        "points": 0
       },
       {
+        "effect": "оружие ближнего боя: S+2, AP-2, D3, каждый раз при убийстве модели, этот персонаж может совершить ещё одну атаку",
         "name": "Headwoppa's Killchoppa",
-        "points": 0,
-        "effect": "оружие ближнего боя: S+2, AP-2, D3, каждый раз при убийстве модели, этот персонаж может совершить ещё одну атаку"
+        "points": 0
       },
       {
+        "effect": "пока этот персонаж жив, дружественные ORKS в 6' перебрасывают 1 to Wound",
         "name": "Mightiest of Bosses",
-        "points": 0,
-        "effect": "пока этот персонаж жив, дружественные ORKS в 6' перебрасывают 1 to Wound"
+        "points": 0
       },
       {
+        "effect": "4+ Feel No Pain, но только один раз за бой",
         "name": "'Ard as Nails",
-        "points": 0,
-        "effect": "4+ Feel No Pain, но только один раз за бой"
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:orks",
+    "name": "War Horde",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "когда VEHICLE орков уничтожен, может двигаться D6' и наносить D3 mortals",
+        "name": "Careen!",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "переброс заряда",
+        "name": "'Ere We Go",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "авто-успех теста морали",
+        "name": "Insane Bravery",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "восстанавливает D3 ран дружественному ORKS VEHICLE",
+        "name": "Just A Scratch",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "отряд получает Sustained Hits 1",
+        "name": "More Dakka!",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "отряд получает +1 to Wound в ближнем бою",
+        "name": "Unbridled Carnage",
+        "when": ""
       }
     ]
   },
-  "Auxiliary Cadre": {
-    "name": "Auxiliary Cadre",
-    "faction": "tau",
+  "detachment:tau:auxiliary-cadre": {
     "description": "Детачмент для смешанной армии Тау с Kroot и Vespid.",
     "detachment_rule": {
-      "name": "United In Purpose",
-      "description": "Kroot и Vespid отряды в этом детачменте считаются T'AU EMPIRE для целей FTGG (For The Greater Good). Также они могут быть Spotter и Guided unit."
+      "description": "Kroot и Vespid отряды в этом детачменте считаются T'AU EMPIRE для целей FTGG (For The Greater Good). Также они могут быть Spotter и Guided unit.",
+      "name": "United In Purpose"
     },
-    "stratagems": [
-      {
-        "name": "Deadly Hunter",
-        "cost": 1,
-        "when": "",
-        "effect": "Kroot/Farstalkers получают Precision"
-      },
-      {
-        "name": "Feeder Tendrils",
-        "cost": 1,
-        "when": "",
-        "effect": "+1 to wound vs wounded"
-      },
-      {
-        "name": "Hidden Hunter",
-        "cost": 1,
-        "when": "",
-        "effect": "Kroot не могут быть целью стрельбы >18'"
-      },
-      {
-        "name": "Savage Maw",
-        "cost": 1,
-        "when": "",
-        "effect": "Kroot в ближнем бою +1 S"
-      },
-      {
-        "name": "Stimm Surge",
-        "cost": 1,
-        "when": "",
-        "effect": "+1 to charge"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "Kroot отряды получают +1 OC",
         "name": "Brooding Tyranny",
-        "points": 0,
-        "effect": "Kroot отряды получают +1 OC"
+        "points": 0
       },
       {
+        "effect": "Kroot Carnivores получают Scouts 7'",
         "name": "Greater Good Adaptations",
-        "points": 0,
-        "effect": "Kroot Carnivores получают Scouts 7'"
+        "points": 0
       },
       {
+        "effect": "+1 to Hit для Kroot при движении",
         "name": "Master of the Hunt",
-        "points": 0,
-        "effect": "+1 to Hit для Kroot при движении"
+        "points": 0
       },
       {
+        "effect": "Vespid восстанавливает D3 ран",
         "name": "Reprocessor Swarm",
-        "points": 0,
-        "effect": "Vespid восстанавливает D3 ран"
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:tau",
+    "name": "Auxiliary Cadre",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "Kroot/Farstalkers получают Precision",
+        "name": "Deadly Hunter",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "+1 to wound vs wounded",
+        "name": "Feeder Tendrils",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "Kroot не могут быть целью стрельбы >18'",
+        "name": "Hidden Hunter",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "Kroot в ближнем бою +1 S",
+        "name": "Savage Maw",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "+1 to charge",
+        "name": "Stimm Surge",
+        "when": ""
       }
     ]
   },
-  "Kauyon": {
-    "name": "Kauyon",
-    "faction": "tau",
+  "detachment:tau:kauyon": {
     "description": "Детачмент засадной тактики Тау — Patient Hunter.",
     "detachment_rule": {
-      "name": "Patient Hunter",
-      "description": "В 1-2 раундах битвы ничего не даёт. Начиная с 3-го раунда, guided отряды получают Sustained Hits 1. Если Spotter — это отряд с Markerlight, Sustained Hits 2."
+      "description": "В 1-2 раундах битвы ничего не даёт. Начиная с 3-го раунда, guided отряды получают Sustained Hits 1. Если Spotter — это отряд с Markerlight, Sustained Hits 2.",
+      "name": "Patient Hunter"
     },
-    "stratagems": [
-      {
-        "name": "Coordinate to Engage",
-        "cost": 1,
-        "when": "",
-        "effect": "дополнительная наводка"
-      },
-      {
-        "name": "Counterfire Defence System",
-        "cost": 1,
-        "when": "",
-        "effect": "Overwatch на 5+ (вместо 6)"
-      },
-      {
-        "name": "Fire and Fade",
-        "cost": 1,
-        "when": "",
-        "effect": "движение после стрельбы D6'"
-      },
-      {
-        "name": "Grav-Inhibitor Field",
-        "cost": 1,
-        "when": "",
-        "effect": "-2' к заряду врага"
-      },
-      {
-        "name": "Photon Grenades",
-        "cost": 1,
-        "when": "",
-        "effect": "-1 to hit врагам в зоне поражения"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "+1 to Hit в первый раз при стрельбе",
         "name": "Precision of the Patient Hunter",
-        "points": 0,
-        "effect": "+1 to Hit в первый раз при стрельбе"
+        "points": 0
       },
       {
+        "effect": "после убийства отряда, получи CP на 2+",
         "name": "Puretide Engram Neurochip",
-        "points": 0,
-        "effect": "после убийства отряда, получи CP на 2+"
+        "points": 0
       },
       {
+        "effect": "дополнительная защита",
         "name": "Shield Drone",
-        "points": 0,
-        "effect": "дополнительная защита"
+        "points": 0
       },
       {
+        "effect": "2+ invuln против стрельбы, один раз за бой",
         "name": "Solid-image Projection Unit",
-        "points": 0,
-        "effect": "2+ invuln против стрельбы, один раз за бой"
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:tau",
+    "name": "Kauyon",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "дополнительная наводка",
+        "name": "Coordinate to Engage",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "Overwatch на 5+ (вместо 6)",
+        "name": "Counterfire Defence System",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "движение после стрельбы D6'",
+        "name": "Fire and Fade",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "-2' к заряду врага",
+        "name": "Grav-Inhibitor Field",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "-1 to hit врагам в зоне поражения",
+        "name": "Photon Grenades",
+        "when": ""
       }
     ]
   },
-  "Kroot Hunting Pack": {
-    "name": "Kroot Hunting Pack",
-    "faction": "tau",
+  "detachment:tau:kroot-hunting-pack": {
     "description": "Охотничья стая Kroot — детачмент, усиливающий войска Kroot: скорость, ближний бой и контроль целей.",
     "detachment_rule": {
-      "name": "Hunting Pack",
-      "description": "Kroot units from your army gain the following benefits: +1 to Advance and Charge rolls. Each time a Kroot model makes a melee attack, add 1 to the Strength characteristic of that attack."
+      "description": "Kroot units from your army gain the following benefits: +1 to Advance and Charge rolls. Each time a Kroot model makes a melee attack, add 1 to the Strength characteristic of that attack.",
+      "name": "Hunting Pack"
     },
-    "stratagems": [
-      {
-        "name": "Feasting on Fear",
-        "cost": 1,
-        "when": "Fight phase, just after a friendly Kroot unit has fought",
-        "effect": "If one or more enemy models were destroyed by that unit's melee attacks this phase, that unit can fight again."
-      },
-      {
-        "name": "Pack Hunters",
-        "cost": 1,
-        "when": "Your Shooting phase or Fight phase",
-        "effect": "Select one friendly Kroot unit that has not yet been selected to shoot or fight this phase. Until the end of the phase, improve the Armour Penetration characteristic of melee and ranged weapons equipped by models in that unit by 1."
-      },
-      {
-        "name": "Lurking in the Shadows",
-        "cost": 1,
-        "when": "Your opponent's Shooting phase",
-        "effect": "Select one friendly Kroot unit that was selected as the target of an attack. Until the end of the phase, each time a model in that unit would lose a wound as the result of a ranged attack, on a 5+ that wound is not lost."
-      },
-      {
-        "name": "Rapid Regroup",
-        "cost": 1,
-        "when": "Your Command phase",
-        "effect": "Select one friendly Kroot unit that is Battle-shocked. That unit is no longer Battle-shocked."
-      },
-      {
-        "name": "Unbound Ferocity",
-        "cost": 1,
-        "when": "Your Charge phase",
-        "effect": "Select one friendly Kroot unit that declared a charge this phase. That unit can declare a charge even if it Advanced this turn."
-      }
-    ],
     "enhancements": [
       {
+        "effect": "Kroot Character only. While this model is leading a unit, that unit can ignore any or all modifiers to its Advance and Charge rolls.",
         "name": "Predator's Instincts",
-        "points": 15,
-        "effect": "Kroot Character only. While this model is leading a unit, that unit can ignore any or all modifiers to its Advance and Charge rolls."
+        "points": 15
       },
       {
+        "effect": "Kroot Character only. At the start of the battle round, select one objective marker on the battlefield that is not within your deployment zone. While a friendly Kroot unit from your army is within range of that objective marker, that unit can ignore any or all modifiers to its Objective Control characteristic.",
         "name": "Nomadic Hunter",
-        "points": 10,
-        "effect": "Kroot Character only. At the start of the battle round, select one objective marker on the battlefield that is not within your deployment zone. While a friendly Kroot unit from your army is within range of that objective marker, that unit can ignore any or all modifiers to its Objective Control characteristic."
+        "points": 10
       },
       {
+        "effect": "Kroot Character only. Each time a friendly Kroot unit within 6\" of this model makes an attack, re-roll a Hit roll of 1.",
         "name": "Alpha Leader",
-        "points": 20,
-        "effect": "Kroot Character only. Each time a friendly Kroot unit within 6\" of this model makes an attack, re-roll a Hit roll of 1."
+        "points": 20
       },
       {
+        "effect": "Kroot Character only. The unit this model is leading is eligible to shoot and declare a charge in a turn in which it Advanced.",
         "name": "Stealthy Stalker",
-        "points": 25,
-        "effect": "Kroot Character only. The unit this model is leading is eligible to shoot and declare a charge in a turn in which it Advanced."
+        "points": 25
+      }
+    ],
+    "faction_id": "faction:tau",
+    "name": "Kroot Hunting Pack",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "If one or more enemy models were destroyed by that unit's melee attacks this phase, that unit can fight again.",
+        "name": "Feasting on Fear",
+        "when": "Fight phase, just after a friendly Kroot unit has fought"
+      },
+      {
+        "cost": 1,
+        "effect": "Select one friendly Kroot unit that has not yet been selected to shoot or fight this phase. Until the end of the phase, improve the Armour Penetration characteristic of melee and ranged weapons equipped by models in that unit by 1.",
+        "name": "Pack Hunters",
+        "when": "Your Shooting phase or Fight phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Select one friendly Kroot unit that was selected as the target of an attack. Until the end of the phase, each time a model in that unit would lose a wound as the result of a ranged attack, on a 5+ that wound is not lost.",
+        "name": "Lurking in the Shadows",
+        "when": "Your opponent's Shooting phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Select one friendly Kroot unit that is Battle-shocked. That unit is no longer Battle-shocked.",
+        "name": "Rapid Regroup",
+        "when": "Your Command phase"
+      },
+      {
+        "cost": 1,
+        "effect": "Select one friendly Kroot unit that declared a charge this phase. That unit can declare a charge even if it Advanced this turn.",
+        "name": "Unbound Ferocity",
+        "when": "Your Charge phase"
       }
     ]
   },
-  "Mont'ka": {
-    "name": "Mont'ka",
-    "faction": "tau",
+  "detachment:tau:montka": {
     "description": "Агрессивный детачмент Тау для раннего давления.",
     "detachment_rule": {
-      "name": "Strike Swiftly",
-      "description": "В 1-2 раундах битвы: всё оружие дальнего боя отрядов T'AU EMPIRE получает Assault. В 1-2 раундах, находясь в 9' от врага, получают +1 AP."
+      "description": "В 1-2 раундах битвы: всё оружие дальнего боя отрядов T'AU EMPIRE получает Assault. В 1-2 раундах, находясь в 9' от врага, получают +1 AP.",
+      "name": "Strike Swiftly"
     },
-    "stratagems": [
-      {
-        "name": "Automated Turret",
-        "cost": 1,
-        "when": "",
-        "effect": "SMS стреляет как Spotter"
-      },
-      {
-        "name": "Breaching Radius",
-        "cost": 1,
-        "when": "",
-        "effect": "рукопашное оружие получает AP-1"
-      },
-      {
-        "name": "Focused Fire",
-        "cost": 1,
-        "when": "",
-        "effect": "+1 to wound по одной цели"
-      },
-      {
-        "name": "Pulse Accelerator",
-        "cost": 1,
-        "when": "",
-        "effect": "+3' к Pulse-оружию"
-      },
-      {
-        "name": "Stimulant Injectors",
-        "cost": 1,
-        "when": "",
-        "effect": "5+ FNP на фазу"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "переброс 1 to Wound в 1-2 раундах",
         "name": "Exemplar of the Mont'ka",
-        "points": 0,
-        "effect": "переброс 1 to Wound в 1-2 раундах"
+        "points": 0
       },
       {
+        "effect": "враги в 12' не могут использовать перебросы попадания",
         "name": "Neuroweb System Jammer",
-        "points": 0,
-        "effect": "враги в 12' не могут использовать перебросы попадания"
+        "points": 0
       },
       {
+        "effect": "+1 to wound при стрельбе по ближайшей цели",
         "name": "Precision of the Hunter",
-        "points": 0,
-        "effect": "+1 to wound при стрельбе по ближайшей цели"
+        "points": 0
       },
       {
+        "effect": "Deep Strike + перевыставление",
         "name": "Starflare Ignition System",
-        "points": 0,
-        "effect": "Deep Strike + перевыставление"
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:tau",
+    "name": "Mont'ka",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "SMS стреляет как Spotter",
+        "name": "Automated Turret",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "рукопашное оружие получает AP-1",
+        "name": "Breaching Radius",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "+1 to wound по одной цели",
+        "name": "Focused Fire",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "+3' к Pulse-оружию",
+        "name": "Pulse Accelerator",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "5+ FNP на фазу",
+        "name": "Stimulant Injectors",
+        "when": ""
       }
     ]
   },
-  "Retaliation Cadre": {
-    "name": "Retaliation Cadre",
-    "faction": "tau",
+  "detachment:tau:retaliation-cadre": {
     "description": "Детачмент для армии из баттлсьютов (Crisis, Broadside, Riptide, Ghostkeel).",
     "detachment_rule": {
-      "name": "Deadly Precision",
-      "description": "BATTLESUIT отряды в 9' от ближайшего врага получают +1 к силе (S) оружия. Также могут перебрасывать 1 to Wound в ближнем бою."
+      "description": "BATTLESUIT отряды в 9' от ближайшего врага получают +1 к силе (S) оружия. Также могут перебрасывать 1 to Wound в ближнем бою.",
+      "name": "Deadly Precision"
     },
-    "stratagems": [
-      {
-        "name": "Command and Control Node",
-        "cost": 1,
-        "when": "",
-        "effect": "+1 BS для BATTLESUIT"
-      },
-      {
-        "name": "Dropzone Clear",
-        "cost": 1,
-        "when": "",
-        "effect": "после Deep Strike +1 to hit"
-      },
-      {
-        "name": "Fury of the Ancients",
-        "cost": 1,
-        "when": "",
-        "effect": "переброс 1 to Hit для BROADSIDE"
-      },
-      {
-        "name": "Seismic Swarm",
-        "cost": 1,
-        "when": "",
-        "effect": "-2 M врагам"
-      },
-      {
-        "name": "Stimulant Injectors",
-        "cost": 1,
-        "when": "",
-        "effect": "FNP 5+"
-      }
-    ],
     "enhancements": [
       {
+        "effect": "+1 to wound vs MONSTERS/VEHICLES",
         "name": "Destroyer of Empires",
-        "points": 0,
-        "effect": "+1 to wound vs MONSTERS/VEHICLES"
+        "points": 0
       },
       {
+        "effect": "враги не могут стрелять по другим целям пока этот командир жив",
         "name": "Neuroweb Commander",
-        "points": 0,
-        "effect": "враги не могут стрелять по другим целям пока этот командир жив"
+        "points": 0
       },
       {
+        "effect": "одно оружие получает +1 D",
         "name": "Prototype Weapon System",
-        "points": 0,
-        "effect": "одно оружие получает +1 D"
+        "points": 0
       },
       {
+        "effect": "4+ invuln для отряда",
         "name": "Shield Matrix",
-        "points": 0,
-        "effect": "4+ invuln для отряда"
+        "points": 0
+      }
+    ],
+    "faction_id": "faction:tau",
+    "name": "Retaliation Cadre",
+    "stratagems": [
+      {
+        "cost": 1,
+        "effect": "+1 BS для BATTLESUIT",
+        "name": "Command and Control Node",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "после Deep Strike +1 to hit",
+        "name": "Dropzone Clear",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "переброс 1 to Hit для BROADSIDE",
+        "name": "Fury of the Ancients",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "-2 M врагам",
+        "name": "Seismic Swarm",
+        "when": ""
+      },
+      {
+        "cost": 1,
+        "effect": "FNP 5+",
+        "name": "Stimulant Injectors",
+        "when": ""
       }
     ]
   }
