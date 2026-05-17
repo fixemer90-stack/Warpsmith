@@ -410,7 +410,10 @@ def test_content_contract_no_source_file_duplicates(wiki):
                 title = post.metadata.get("title")
                 if title:
                     name_to_files.setdefault(str(title), []).append(str(file_path))
-            except Exception:
+            except Exception as exc:
+                import logging
+
+                logging.getLogger(__name__).debug("Skipping %s: %s", file_path, exc)
                 continue
 
     duplicates = {k: v for k, v in name_to_files.items() if len(v) > 1}
@@ -532,12 +535,11 @@ def test_squad_size_step_valid(all_units):
     failures: list[str] = []
     for unit_name, unit in all_units:
         sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
-        if sq["max"] > sq["min"] and sq["step"] > 0:
-            if (sq["max"] - sq["min"]) % sq["step"] != 0:
-                failures.append(
-                    f"{unit_name}: step={sq['step']} does not divide "
-                    f"({sq['max']} - {sq['min']}) = {sq['max'] - sq['min']}"
-                )
+        if sq["max"] > sq["min"] and sq["step"] > 0 and (sq["max"] - sq["min"]) % sq["step"] != 0:
+            failures.append(
+                f"{unit_name}: step={sq['step']} does not divide "
+                f"({sq['max']} - {sq['min']}) = {sq['max'] - sq['min']}"
+            )
 
     assert not failures, f"{len(failures)} unit(s) with invalid squad_size step:\n" + "\n".join(
         failures[:20]
@@ -603,14 +605,14 @@ points: 110
     (units_dir / "Nobz.md").write_text(yaml2)
 
     out_dir = tmp / "generated"
-    try:
+    import contextlib
+
+    with contextlib.suppress(RuntimeError):
         compile_content(
             wiki_path=str(wiki_dir),
             output_dir=str(out_dir),
             freeze_clock="2026-01-01T00:00:00+00:00",
         )
-    except RuntimeError:
-        pass  # May have collisions from missing weapons; that's fine
 
     if (out_dir / "factions.json").exists():
         import json
@@ -815,37 +817,52 @@ def test_15_duplicate_explicit_id_fails_before_write(tmp_path):
 
 def test_15_duplicate_display_names_non_fatal_if_ids_differ(tmp_path):
     """Duplicate display names produce non-fatal collision if ids differ."""
-    from backend.loader.compiler import BuildContext
+    from backend.loader.compiler import compile_content
 
-    # Test _deduplicate_units directly: add two records with same display_name
-    # but different IDs into the BuildContext units dict
-    ctx = BuildContext(str(tmp_path))
-    # Manually add two units with same display_name but different IDs
-    ctx.units["unit:faction-a:warboss"] = {
-        "unit_id": "unit:faction-a:warboss",
-        "display_name": "Warboss",
-        "faction_id": "faction:faction-a",
-        "source_path": str(tmp_path / "WarbossA.md"),
-    }
-    ctx.units["unit:faction-b:warboss"] = {
-        "unit_id": "unit:faction-b:warboss",
-        "display_name": "Warboss",
-        "faction_id": "faction:faction-b",
-        "source_path": str(tmp_path / "WarbossB.md"),
-    }
+    # Two temp wiki files with same display name but different explicit canonical IDs
+    wiki_dir = tmp_path / "wiki"
+    units_dir = wiki_dir / "units" / "test-faction"
+    units_dir.mkdir(parents=True, exist_ok=True)
 
-    ctx._deduplicate_units()
-
-    collision_kinds = {c["kind"] for c in ctx.collisions}
-    assert "duplicate_display_name" in collision_kinds, (
-        f"Expected duplicate_display_name collision, got: {ctx.collisions}"
+    unit1 = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Warboss",
+        extra="canonical_id: unit:test-faction:warboss-explicit-a",
+    )
+    unit2 = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Warboss",
+        extra="canonical_id: unit:test-faction:warboss-explicit-b",
     )
 
-    # Verify the collision entry has expected structure
-    dup_collisions = [c for c in ctx.collisions if c["kind"] == "duplicate_display_name"]
-    assert len(dup_collisions) == 1
-    assert dup_collisions[0]["display_name"] == "Warboss"
-    assert len(dup_collisions[0]["unit_ids"]) == 2
+    (units_dir / "WarbossA.md").write_text(unit1)
+    (units_dir / "WarbossB.md").write_text(unit2)
+
+    out_dir = tmp_path / "generated"
+
+    # Duplicate display names with different IDs should NOT raise (non-fatal)
+    manifest = compile_content(
+        wiki_path=str(wiki_dir),
+        output_dir=str(out_dir),
+        freeze_clock="2026-01-01T00:00:00+00:00",
+    )
+
+    # Both units should be present
+    import json
+
+    with (out_dir / "units" / "index.json").open() as f:
+        index = json.load(f)
+
+    assert "unit:test-faction:warboss-explicit-a" in index, (
+        f"Expected first unit in index, got keys: {list(index.keys())}"
+    )
+    assert "unit:test-faction:warboss-explicit-b" in index, (
+        f"Expected second unit in index, got keys: {list(index.keys())}"
+    )
+
+    # Collisions should include duplicate_display_name
+    collision_kinds = {c["kind"] for c in manifest.collisions}
+    assert "duplicate_display_name" in collision_kinds, (
+        f"Expected duplicate_display_name collision, got: {manifest.collisions}"
+    )
 
 
 def test_15_source_path_in_unit_records(tmp_path):
@@ -1059,4 +1076,61 @@ def test_15_runtime_ids_distinct_from_canonical_ids(tmp_path):
     # Runtime identity is just unit.name — not the canonical_id
     assert unit.name == "Runtime Test", (
         f"Runtime unit name should not be replaced by canonical_id: {unit.name}"
+    )
+
+
+# ── Registry/API regression tests (Task 1.5 review Critical 1) ──────────
+
+
+def test_15_canonical_content_registry_still_uses_canonical_ids(tmp_path):
+    """CanonicalContentRegistry still uses canonical ids — only WikiRegistry changes."""
+    from backend.loader.compiler import compile_content
+    from backend.loader.registry import CanonicalContentRegistry
+
+    unit_yaml = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Coldstar",
+        extra="canonical_id: unit:test-faction:coldstar-explicit",
+    )
+    wiki_dir, out_dir = _make_test_wiki(tmp_path, [("Coldstar.md", unit_yaml)])
+
+    compile_content(
+        wiki_path=str(wiki_dir),
+        output_dir=str(out_dir),
+        freeze_clock="2026-01-01T00:00:00+00:00",
+    )
+
+    ccr = CanonicalContentRegistry(str(out_dir))
+    loaded = ccr.load()
+    assert loaded, "CanonicalContentRegistry should load"
+
+    # CanonicalContentRegistry still keys by canonical id
+    unit = ccr.get_unit("unit:test-faction:coldstar-explicit")
+    assert unit is not None, "CanonicalContentRegistry should find unit by canonical id"
+    assert unit.get("display_name") == "Coldstar", (
+        f"Expected display_name 'Coldstar', got '{unit.get('display_name')}'"
+    )
+
+
+def test_15_registry_scan_parse_preserves_display_name_lookup(tmp_path):
+    """WikiRegistry raw scan preserves display-name lookup (no JSON cache side effect)."""
+    from backend.loader.registry import WikiRegistry
+
+    unit_yaml = _MINIMAL_UNIT_TEMPLATE.format(title="Flash Gitz Test", extra="")
+    wiki_dir = tmp_path / "wiki"
+    units_dir = wiki_dir / "units" / "test-faction"
+    units_dir.mkdir(parents=True, exist_ok=True)
+    (units_dir / "FlashGitz.md").write_text(unit_yaml)
+
+    reg = WikiRegistry(str(wiki_dir))
+    reg.load(use_cache=False)
+
+    unit = reg.get_unit("Flash Gitz Test")
+    assert unit is not None, "get_unit('Flash Gitz Test') returned None"
+    assert unit.name == "Flash Gitz Test"
+    assert unit.faction == "test-faction"
+    assert "test-faction" in reg.list_factions()
+
+    factions = reg.list_factions()
+    assert not any(f.startswith("faction:") for f in factions), (
+        f"Factions should not contain 'faction:' prefix, got: {factions}"
     )

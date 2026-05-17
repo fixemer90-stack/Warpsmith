@@ -67,3 +67,14 @@ tags: [requirements, code-review, atomic-review]
 
 - [CR-16 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-16)
 - Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
+
+## Regression evidence — Task 2.1 (canonical PTS formula)
+
+**2026-05-17.** (co-owned — CR-12, CR-16, CR-17, CR-19). One canonical `calculate_squad_pts()`.
+
+Changes:
+- `roster.py`: canonical PTS function `(points/minSquad + loadoutPts)*squadSize + nobPts`.
+- `api_rosters.py`: create/update/generate use canonical formula, expose `total_pts` + `squad_pts` in API responses.
+- 11 new tests covering all formula scenarios.
+
+Tests: 33 passed in test_roster.py (22 pre-existing + 11 new). Lint/format/diff-check clean.

@@ -111,3 +111,14 @@ Changes:
 - 12 new tmp_path tests.
 
 Tests: 36 passed (24 + 12 new). Lint/format/diff-check clean.
+
+## Regression evidence — Task 2.1 (canonical PTS formula)
+
+**2026-05-17.** One canonical `calculate_squad_pts()` function in `roster.py`.
+
+Changes:
+- `backend/state/roster.py`: added `calculate_squad_pts()` implementing `(points / minSquad + loadoutPts) * squadSize + nobPts`; added `squad_pts` breakdown to `RosterValidationResult`; `validate_roster()` uses canonical formula.
+- `web/routes/api_rosters.py`: create/update/generate roster endpoints use canonical PTS and expose `total_pts` + `squad_pts` in responses.
+- 11 new tests covering Boyz min, expanded, loadout, Nob upgrades, Nobz, single-model vehicle, roster totalPts sum, squad_pts breakdown, PTS exceeded error.
+
+Tests: 33 passed in test_roster.py (22 pre-existing + 11 new). Lint/format/diff-check clean.

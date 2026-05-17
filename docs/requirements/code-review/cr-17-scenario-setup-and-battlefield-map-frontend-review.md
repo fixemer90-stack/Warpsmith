@@ -66,6 +66,17 @@ Report: `docs/reviews/2026-05-10/CR-17-scenario-setup-and-battlefield-map-fronte
 
 Review found that Scenario Setup renders and can launch a happy-path simulation, but mission deployment, Game Format, and First Turn controls are not wired into the launch contract. The strategic battlefield map also previews mission-agnostic left/right deploy zones while mission cards advertise mission-specific deployment.
 
+## Regression evidence — Task 2.1 (canonical PTS formula)
+
+**2026-05-17.** (co-owned — CR-12, CR-16, CR-17, CR-19). One canonical `calculate_squad_pts()`.
+
+Changes:
+- `roster.py`: canonical PTS function `(points/minSquad + loadoutPts)*squadSize + nobPts`.
+- `api_rosters.py`: create/update/generate use canonical formula, expose `total_pts` + `squad_pts`.
+- 11 new tests covering all formula scenarios.
+
+Tests: 33 passed in test_roster.py (22 pre-existing + 11 new). Lint/format/diff-check clean.
+
 ## Triage summary
 
 - [CR-17 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-17)

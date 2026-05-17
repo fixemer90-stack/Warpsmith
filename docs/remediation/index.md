@@ -40,13 +40,13 @@ flowchart LR
 
 ### Phase 1 — Content compiler / schemas
 
-| Task | File | Primary CRs | Depends on | Verification |
-| --- | --- | --- | --- | --- |
-| 1.1 — Create content contract tests | [task-01-01-create-content-contract-tests.md](task-01-01-create-content-contract-tests.md) | CR-06, CR-11, CR-12, CR-21. | Phase 0 checkpoint | `uv run python -m pytest tests/test_content_contracts.py -q` |
-| 1.2 — Replace unsafe/stale cache behavior | [task-01-02-replace-unsafe-stale-cache-behavior.md](task-01-02-replace-unsafe-stale-cache-behavior.md) | CR-06, CR-11, CR-12, CR-21. | [1.1 — Create content contract tests](task-01-01-create-content-contract-tests.md) | `uv run python -m pytest tests/test_registry.py tests/test_content_contracts.py -q` |
-| 1.3 — Compile squad/points metadata consistently | [task-01-03-compile-squad-points-metadata-consistently.md](task-01-03-compile-squad-points-metadata-consistently.md) | CR-06, CR-11, CR-12, CR-21. | [1.2 — Replace unsafe/stale cache behavior](task-01-02-replace-unsafe-stale-cache-behavior.md) | `uv run python -m pytest tests/test_parser.py tests/test_roster*.py -q` |
-| 1.4 — Emit canonical JSON artifacts | [task-01-04-emit-canonical-json-artifacts.md](task-01-04-emit-canonical-json-artifacts.md) | CR-06, CR-11, CR-12, CR-21. | [1.3 — Compile squad/points metadata consistently](task-01-03-compile-squad-points-metadata-consistently.md) | `uv run python -m pytest tests/test_content_contracts.py tests/test_registry.py -q` |
-| 1.5 — Adopt frontmatter canonical IDs | [task-01-05-adopt-frontmatter-canonical-ids.md](task-01-05-adopt-frontmatter-canonical-ids.md) | CR-06, CR-11, CR-12, CR-21. | [1.4 — Emit canonical JSON artifacts](task-01-04-emit-canonical-json-artifacts.md) | `uv run python -m pytest tests/test_content_contracts.py -q` |
+| Done | Task | File | Primary CRs | Depends on | Verification |
+| --- | --- | --- | --- | --- | --- |
+| [x] | 1.1 — Create content contract tests | [task-01-01-create-content-contract-tests.md](task-01-01-create-content-contract-tests.md) | CR-06, CR-11, CR-12, CR-21. | Phase 0 checkpoint | `uv run python -m pytest tests/test_content_contracts.py -q` |
+| [x] | 1.2 — Replace unsafe/stale cache behavior | [task-01-02-replace-unsafe-stale-cache-behavior.md](task-01-02-replace-unsafe-stale-cache-behavior.md) | CR-06, CR-11, CR-12, CR-21. | [1.1 — Create content contract tests](task-01-01-create-content-contract-tests.md) | `uv run python -m pytest tests/test_content_contracts.py -q` |
+| [x] | 1.3 — Compile squad/points metadata consistently | [task-01-03-compile-squad-points-metadata-consistently.md](task-01-03-compile-squad-points-metadata-consistently.md) | CR-06, CR-11, CR-12, CR-21. | [1.2 — Replace unsafe/stale cache behavior](task-01-02-replace-unsafe-stale-cache-behavior.md) | `uv run python -m pytest tests/test_parser.py tests/test_roster*.py -q` |
+| [x] | 1.4 — Emit canonical JSON artifacts | [task-01-04-emit-canonical-json-artifacts.md](task-01-04-emit-canonical-json-artifacts.md) | CR-06, CR-11, CR-12, CR-21. | [1.3 — Compile squad/points metadata consistently](task-01-03-compile-squad-points-metadata-consistently.md) | `uv run python -m pytest tests/test_content_contracts.py -q` |
+| [x] | 1.5 — Adopt frontmatter canonical IDs | [task-01-05-adopt-frontmatter-canonical-ids.md](task-01-05-adopt-frontmatter-canonical-ids.md) | CR-06, CR-11, CR-12, CR-21. | [1.4 — Emit canonical JSON artifacts](task-01-04-emit-canonical-json-artifacts.md) | `uv run python -m pytest tests/test_content_contracts.py -q` |
 
 ### Phase 2 — Roster validator
 

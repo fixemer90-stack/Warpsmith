@@ -227,7 +227,14 @@ class WikiRegistry:
                     if "display_name" in ud:
                         ud["name"] = ud.pop("display_name")
                     if "faction_id" in ud and "faction" not in ud:
-                        ud["faction"] = ud.pop("faction_id")
+                        # Strip "faction:" prefix for runtime compatibility
+                        raw_faction = ud.pop("faction_id")
+                        ud["faction"] = (
+                            raw_faction.split(":", 1)[1] if ":" in raw_faction else raw_faction
+                        )
+                    # Preserve canonical_id metadata on Unit if present in JSON
+                    if "canonical_id" in ud:
+                        ud["canonical_id"] = ud["canonical_id"]
                     # Remove canonical-only fields not in Unit.__init__
                     for kw in (
                         "unit_id",
@@ -245,7 +252,8 @@ class WikiRegistry:
                 except Exception as exc:
                     logger.warning("Failed to load unit %s from JSON: %s", name, exc)
                     continue
-                self.units[name] = unit
+                # Key by display name (unit.name), not canonical id (dict key)
+                self.units[unit.name] = unit
 
             # Reconstruct Detachment objects from dict
             self.detachments = {}
@@ -254,7 +262,10 @@ class WikiRegistry:
                     det_data = dict(data)
                     # Map canonical field names to Detachment dataclass fields
                     if "faction_id" in det_data and "faction" not in det_data:
-                        det_data["faction"] = det_data.pop("faction_id")
+                        raw_faction = det_data.pop("faction_id")
+                        det_data["faction"] = (
+                            raw_faction.split(":", 1)[1] if ":" in raw_faction else raw_faction
+                        )
                     rule_data = det_data.pop("detachment_rule", None)
                     if rule_data and isinstance(rule_data, dict):
                         det_data["detachment_rule"] = DetachmentRule(**rule_data)
@@ -262,9 +273,12 @@ class WikiRegistry:
                     det_data["stratagems"] = [Stratagem(**s) for s in strat_data]
                     enh_data = det_data.pop("enhancements", [])
                     det_data["enhancements"] = [Enhancement(**e) for e in enh_data]
-                    self.detachments[name] = Detachment(**det_data)
+                    det = Detachment(**det_data)
                 except Exception as exc:
                     logger.warning("Failed to load detachment %s from JSON: %s", name, exc)
+                    continue
+                # Key by detachment name (det.name), not canonical id (dict key)
+                self.detachments[det.name] = det
 
             self._loaded = True
             logger.info(

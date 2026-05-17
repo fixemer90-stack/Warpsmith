@@ -93,10 +93,39 @@ class RosterValidationResult:
     errors: list[RosterValidationError] = field(default_factory=list)
     total_pts: int = 0
     total_models: int = 0
+    squad_pts: list[dict] = field(default_factory=list)  # per-squad PTS breakdown
 
     def add_error(self, code: str, message: str, **detail) -> None:
         self.errors.append(RosterValidationError(code, message, detail or None))
         self.is_valid = False
+
+
+# ── Canonical PTS formula ──────────────────────────────────────────────────
+
+
+def calculate_squad_pts(
+    points: int,
+    min_squad: int,
+    squad_size: int,
+    loadout_pts: int = 0,
+    nob_pts: int = 0,
+) -> int:
+    """Canonical squad total points formula.
+
+    Formula: (points / minSquad + loadoutPts) * squadSize + nobPts
+
+    Args:
+        points: Base points for minimum squad size (unit.points).
+        min_squad: Minimum squad model count (squad_size.min).
+        squad_size: Selected model count.
+        loadout_pts: Per-model upgrade/loadout points. Default 0.
+        nob_pts: Flat squad-level Nob upgrade cost. Default 0.
+
+    Returns:
+        Total points for the squad (integer).
+    """
+    pts_per_model = points / max(min_squad, 1)
+    return round((pts_per_model + loadout_pts) * squad_size + nob_pts)
 
 
 def validate_roster(
@@ -104,6 +133,8 @@ def validate_roster(
     unit_registry: dict[str, "Unit"],
     pts_limit: int | None = None,
     game_size: GameSize = GameSize.STRIKE_FORCE,
+    loadout_pts: list[int] | None = None,
+    nob_pts: list[int] | None = None,
 ) -> RosterValidationResult:
     """Validate a roster against 10th edition rules.
 
@@ -113,6 +144,8 @@ def validate_roster(
         pts_limit: Maximum points allowed. Overrides game_size if set.
         game_size: Named game size (default Strike Force = 2000pts).
                   Ignored when pts_limit is explicitly provided.
+        loadout_pts: Optional per-unit loadout/upgrade points, same order as units.
+        nob_pts: Optional per-unit flat Nob upgrade cost, same order as units.
 
     Returns:
         RosterValidationResult with errors if any violations found.
@@ -126,7 +159,7 @@ def validate_roster(
     total_models = 0
     epic_heroes_seen: set[str] = set()
 
-    for unit_name, squad_size in units:
+    for i, (unit_name, squad_size) in enumerate(units):
         unit = unit_registry.get(unit_name)
         if unit is None:
             result.add_error(
@@ -184,13 +217,29 @@ def validate_roster(
         if unit.can_be_warlord:
             has_warlord = True
 
-        # Points — use squad_size from frontmatter for ptsPerModel
+        # Points — use canonical formula with per-unit upgrades
         sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
         min_sq = sq["min"]
-        pts_per_model = unit.points / max(min_sq, 1)
-        unit_pts = round(pts_per_model * squad_size)
+        unit_loadout = loadout_pts[i] if loadout_pts and i < len(loadout_pts) else 0
+        unit_nob = nob_pts[i] if nob_pts and i < len(nob_pts) else 0
+        unit_pts = calculate_squad_pts(
+            points=unit.points,
+            min_squad=min_sq,
+            squad_size=squad_size,
+            loadout_pts=unit_loadout,
+            nob_pts=unit_nob,
+        )
         total_pts += unit_pts
         total_models += squad_size * unit.model_count[1]
+        result.squad_pts.append(
+            {
+                "unit_name": unit_name,
+                "squad_size": squad_size,
+                "base_pts": unit.points,
+                "min_squad": min_sq,
+                "squad_pts": unit_pts,
+            }
+        )
 
     # PTS limit
     if total_pts > pts_limit:

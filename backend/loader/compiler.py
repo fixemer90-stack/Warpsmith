@@ -208,21 +208,58 @@ class BuildContext:
             }
 
     def _collect_units(self):
-        for name, unit in self.registry.units.items():
+        """Scan wiki source files directly to detect duplicate display names.
+
+        Iterates source files rather than ``self.registry.units`` (which is
+        flattened by unit name), so duplicate display names with different
+        explicit canonical IDs are caught before registry collapse.
+        """
+        source_entries: list[tuple[str, Any, str]] = []  # (_filepath, unit_obj, source_path)
+
+        units_dir = self.wiki_path / "units"
+        if not units_dir.exists():
+            logger.warning("No units directory at %s", units_dir)
+            return
+
+        for faction_dir in sorted(units_dir.iterdir()):
+            if not faction_dir.is_dir():
+                continue
+            for file_path in sorted(faction_dir.glob("*.md")):
+                unit = parse_unit(file_path)
+                if unit is None:
+                    continue
+                source_entries.append((str(file_path), unit, str(file_path)))
+
+        # Track display name duplicates across source files
+        seen_display_names: dict[str, str] = {}
+
+        for _filepath, unit, source_path in source_entries:
+            display_name = unit.name
             fid = self._make_faction_id(unit.faction)
-            source_path = getattr(unit, "source_path", "")
+
+            # Detect duplicate display names before they get collapsed
+            if display_name in seen_display_names:
+                self.collisions.append(
+                    {
+                        "kind": "duplicate_display_name",
+                        "display_name": display_name,
+                        "unit_ids": [],
+                        "sources": [seen_display_names[display_name], source_path],
+                    }
+                )
+                # Continue processing both units — they have different source files
+            seen_display_names.setdefault(display_name, source_path)
 
             # Determine unit id: explicit canonical_id or generated fallback
             cid = getattr(unit, "canonical_id", None)
             if cid:
-                # Validate format before using
                 err = _validate_unit_canonical_id(cid, source_path)
                 if err:
                     raise RuntimeError(err)
                 uid = cid
                 id_kind = "explicit"
             else:
-                uid = self._make_unit_id(name, unit.faction)
+                uid = self._make_unit_id(display_name, unit.faction)
                 id_kind = "fallback"
 
             if uid in self.units:
@@ -232,7 +269,7 @@ class BuildContext:
                         "kind": "unit_id",
                         "id": uid,
                         "id_kind": id_kind,
-                        "display_names": [name, self.units[uid].get("display_name", "")],
+                        "display_names": [display_name, self.units[uid].get("display_name", "")],
                         "sources": [source_path, existing_source],
                     }
                 )
@@ -244,10 +281,10 @@ class BuildContext:
 
             record = {
                 "unit_id": uid,
-                "display_name": name,
+                "display_name": display_name,
                 "faction_id": fid,
                 "source_path": source_path,
-                "_id_kind": id_kind,  # internal tracking, stripped before JSON
+                "_id_kind": id_kind,
                 "category": getattr(unit, "category", "Infantry"),
                 "movement": getattr(unit, "movement", 5),
                 "toughness": getattr(unit, "toughness", 3),

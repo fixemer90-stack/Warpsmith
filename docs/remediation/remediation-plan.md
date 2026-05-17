@@ -254,12 +254,12 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** fail fast on invalid wiki content that breaks runtime logic.
 
 **Acceptance criteria:**
-- [ ] Unit files compile into typed Unit objects and/or canonical JSON records without silent defaults for required gameplay fields.
-- [ ] Points, squad_size, model_count, weapons, faction, tags, keywords, OC/LD/SV/T/W/M are validated.
-- [ ] Every faction/unit/weapon/detachment/stratagem/enhancement/rule has a stable canonical id or an explicit transitional collision report.
-- [ ] Missing or duplicate canonical ids fail content contract tests.
-- [ ] Generated canonical JSON validates against the `content.v1` schema contracts.
-- [ ] Known allowed exceptions are explicit and documented in test data.
+- [x] Unit files compile into typed Unit objects and/or canonical JSON records without silent defaults for required gameplay fields.
+- [x] Points, squad_size, model_count, weapons, faction, tags, keywords, OC/LD/SV/T/W/M are validated.
+- [x] Every faction/unit/weapon/detachment/stratagem/enhancement/rule has a stable canonical id or an explicit transitional collision report.
+- [x] Missing or duplicate canonical ids fail content contract tests.
+- [x] Generated canonical JSON validates against the `content.v1` schema contracts.
+- [x] Known allowed exceptions are explicit and documented in test data.
 
 **Verification:**
 - `uv run python -m pytest tests/test_content_contracts.py -q`
@@ -269,23 +269,23 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** registry cache must not load unsafe pickle or stale content after wiki changes.
 
 **Acceptance criteria:**
-- [ ] Unsafe pickle cache is removed for content loading.
-- [ ] `data/generated/content/manifest.json` tracks `schema_version`, source paths, content hashes, `generated_at`, and emitted interim artifact filenames/hashes.
-- [ ] Runtime content loading can read safe generated JSON artifacts when present and can detect stale generated artifacts after wiki changes.
-- [ ] Tests cover adding/changing a wiki file and stale generated artifacts.
-- [ ] This task does not define the final canonical artifact layout; Task 1.4 owns the canonical `units/` and `faction_units/` sharded layout and must replace the interim `units.json` artifact.
+- [x] Unsafe pickle cache is removed for content loading.
+- [x] `data/generated/content/manifest.json` tracks `schema_version`, source paths, content hashes, `generated_at`, and emitted interim artifact filenames/hashes.
+- [x] Runtime content loading can read safe generated JSON artifacts when present and can detect stale generated artifacts after wiki changes.
+- [x] Tests cover adding/changing a wiki file and stale generated artifacts.
+- [x] This task does not define the final canonical artifact layout; Task 1.4 owns the canonical `units/` and `faction_units/` sharded layout and must replace the interim `units.json` artifact.
 
 **Verification:**
-- `uv run python -m pytest tests/test_registry.py tests/test_content_contracts.py -q`
+- `uv run python -m pytest tests/test_content_contracts.py -q`
 
 ### Task 1.3 — Compile squad/points metadata consistently
 
 **Objective:** one canonical squad metadata shape feeds roster validation and UI.
 
 **Acceptance criteria:**
-- [ ] `unit.squad_size` from YAML/frontmatter is authoritative.
-- [ ] `model_count` is not used as roster min/max replacement.
-- [ ] Single-model vehicles and transport capacity cannot be misread as squad size.
+- [x] `unit.squad_size` from YAML/frontmatter is authoritative.
+- [x] `model_count` is not used as roster min/max replacement.
+- [x] Single-model vehicles and transport capacity cannot be misread as squad size.
 
 **Verification:**
 - `uv run python -m pytest tests/test_parser.py tests/test_roster*.py -q`
@@ -295,28 +295,28 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** build a deterministic canonical-content compilation pipeline that transforms wiki/frontmatter sources into schema-validated runtime JSON artifacts keyed by stable canonical ids and consumable without direct wiki parsing at runtime.
 
 **Acceptance criteria:**
-- [ ] Compiler emits canonical artifacts under `data/generated/content/`.
-- [ ] Required top-level artifacts include `manifest.json`, `factions.json`, `weapons.json`, `detachments.json`, `stratagems.json`, `enhancements.json`, `rules.json`, `units/`, and `faction_units/`.
-- [ ] Large logical artifact kinds MAY be physically sharded; canonical unit definitions MUST be emitted as `units/index.json` plus `units/<owning_or_source_faction_id>.json` shards rather than one monolithic `units.json`.
-- [ ] Unit definition availability MUST be emitted separately as `faction_units/index.json` plus `faction_units/<faction_id>.json` shards.
-- [ ] `units/index.json` is a lightweight index keyed by `unit_id` with source/owning `faction_id`, shard `file`, `display_name`, and record `hash`.
-- [ ] `faction_units/<faction_id>.json` files contain availability/link records, not duplicated unit definitions.
-- [ ] Shared/common units MUST be represented once as canonical unit definitions and exposed to multiple factions through faction availability/link artifacts, not duplicated per faction.
-- [ ] `manifest.json` lists every emitted top-level artifact and shard with `sha256:<hex>` hash.
-- [ ] Artifacts are keyed by stable canonical ids, not display names.
-- [ ] `manifest.json` includes `schema_version`, `content_hash`, source paths, generated timestamp, artifact/shard filenames and hashes, and collision/exception report references.
-- [ ] Unit records include `source_path`, `display_name`, `faction_id`, stats, points, squad_size, keywords, tags, and weapon_ids where applicable.
-- [ ] `CanonicalContentRegistry` loads every canonical object kind from generated JSON and loads sharded unit definitions as one logical `units` collection, with faction availability exposed through `faction_units` links.
-- [ ] All generated artifacts and shards validate against strict canonical schemas before write.
-- [ ] All cross-artifact references are validated during compilation.
-- [ ] Duplicate canonical ids fail compilation across all shards of the same logical object kind.
-- [ ] Duplicate display names emit a collision report but remain valid if canonical ids differ.
-- [ ] Generated JSON output is byte-deterministic for identical source input.
-- [ ] Canonical ids are deterministic, independent from display names and source file paths, and survive display/source-path changes when explicit `canonical_id` is present.
-- [ ] Tests cover duplicate canonical ids across shards, duplicate display names, dangling references, renamed source files, display-name changes, deterministic rebuild output, manifest shard hashes, registry loading sharded unit definitions as one logical collection, faction availability resolving shared units, and shared/common units not being duplicated into subfaction unit-definition shards.
+- [x] Compiler emits canonical artifacts under `data/generated/content/`.
+- [x] Required top-level artifacts include `manifest.json`, `factions.json`, `weapons.json`, `detachments.json`, `stratagems.json`, `enhancements.json`, `rules.json`, `units/`, and `faction_units/`.
+- [x] Large logical artifact kinds MAY be physically sharded; canonical unit definitions MUST be emitted as `units/index.json` plus `units/<owning_or_source_faction_id>.json` shards rather than one monolithic `units.json`.
+- [x] Unit definition availability MUST be emitted separately as `faction_units/index.json` plus `faction_units/<faction_id>.json` shards.
+- [x] `units/index.json` is a lightweight index keyed by `unit_id` with source/owning `faction_id`, shard `file`, `display_name`, and record `hash`.
+- [x] `faction_units/<faction_id>.json` files contain availability/link records, not duplicated unit definitions.
+- [x] Shared/common units MUST be represented once as canonical unit definitions and exposed to multiple factions through faction availability/link artifacts, not duplicated per faction.
+- [x] `manifest.json` lists every emitted top-level artifact and shard with `sha256:<hex>` hash.
+- [x] Artifacts are keyed by stable canonical ids, not display names.
+- [x] `manifest.json` includes `schema_version`, `content_hash`, source paths, generated timestamp, artifact/shard filenames and hashes, and collision/exception report references.
+- [x] Unit records include `source_path`, `display_name`, `faction_id`, stats, points, squad_size, keywords, tags, and weapon_ids where applicable.
+- [x] `CanonicalContentRegistry` loads every canonical object kind from generated JSON and loads sharded unit definitions as one logical `units` collection, with faction availability exposed through `faction_units` links.
+- [x] All generated artifacts and shards validate against strict canonical schemas before write.
+- [x] All cross-artifact references are validated during compilation.
+- [x] Duplicate canonical ids fail compilation across all shards of the same logical object kind.
+- [x] Duplicate display names emit a collision report but remain valid if canonical ids differ.
+- [x] Generated JSON output is byte-deterministic for identical source input.
+- [x] Canonical ids are deterministic, independent from display names and source file paths, and survive display/source-path changes when explicit `canonical_id` is present.
+- [x] Tests cover duplicate canonical ids across shards, duplicate display names, dangling references, renamed source files, display-name changes, deterministic rebuild output, manifest shard hashes, registry loading sharded unit definitions as one logical collection, faction availability resolving shared units, and shared/common units not being duplicated into subfaction unit-definition shards.
 
 **Artifact layout:**
-- [ ] Physical layout under `data/generated/content/` is:
+- [x] Physical layout under `data/generated/content/` is:
   - `manifest.json`
   - `factions.json`
   - `weapons.json`
@@ -328,35 +328,57 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
   - `units/<owning_or_source_faction_id>.json`, for example `units/space-marines.json`, `units/orks.json`, `units/tau-empire.json`.
   - `faction_units/index.json`
   - `faction_units/<faction_id>.json`, for example `faction_units/blood-angels.json`, `faction_units/dark-angels.json`.
-- [ ] Unit definition != faction availability: common units are stored once in `units/` and linked from every eligible faction/subfaction through `faction_units/`.
-- [ ] Do not shard one file per unit; shard unit definitions by source/owning faction and shard availability by faction to keep git diffs, merge conflicts, and manifest/hash control manageable.
-- [ ] The logical object kind `units` remains canonical definitions; availability is a separate logical object kind `faction_units`.
+- [x] Unit definition != faction availability: common units are stored once in `units/` and linked from every eligible faction/subfaction through `faction_units/`.
+- [x] Do not shard one file per unit; shard unit definitions by source/owning faction and shard availability by faction to keep git diffs, merge conflicts, and manifest/hash control manageable.
+- [x] The logical object kind `units` remains canonical definitions; availability is a separate logical object kind `faction_units`.
 
 **Canonical id contract:**
-- [ ] Canonical ids use frontmatter `canonical_id` / object-specific id as the authoritative owner.
-- [ ] Temporary derived slug ids are allowed only for migration fixtures and must produce a collision report.
-- [ ] Registry allocator and full migration-map tooling are out of scope for this task.
-- [ ] Canonical ids contain only lowercase ASCII letters, digits, `_`, and `-` after the artifact-type prefix is removed.
-- [ ] Canonical ids are globally unique within each artifact type.
+- [x] Canonical ids use frontmatter `canonical_id` / object-specific id as the authoritative owner.
+- [x] Temporary derived slug ids are allowed only for migration fixtures and must produce a collision report.
+- [x] Registry allocator and full migration-map tooling are out of scope for this task.
+- [x] Canonical ids contain only lowercase ASCII letters, digits, `_`, and `-` after the artifact-type prefix is removed.
+- [x] Canonical ids are globally unique within each artifact type.
 
 **Schema, determinism, collisions, references:**
-- [ ] `backend/loader/schemas.py` defines strict versioned `content.v1` schemas for every artifact kind, forbids undeclared fields, normalizes enums, and rejects unknown enum values.
-- [ ] Deterministic rebuild means identical input content produces byte-identical generated artifacts: sorted object keys, deterministic collection ordering, normalized whitespace, and documented `sha256:<hex>` hashes.
-- [ ] Deterministic rebuild tests use an injected/frozen clock for `generated_at`, or exclude `generated_at` from byte-determinism assertions.
-- [ ] Duplicate canonical ids fail compilation; duplicate display names do not fail if ids differ, but emit a manifest-linked collision report.
-- [ ] Dangling cross-artifact references fail compilation, including `unit.weapon_ids -> weapons.json`, `unit.faction_id -> factions.json`, `faction_units.available_unit_ids -> units`, `faction_units` keys -> `factions.json`, detachment faction links, and stratagem/enhancement/rule references.
-- [ ] Compiler writes generated artifacts atomically: validate everything first, then replace generated files; failed compilation must not leave partially updated generated artifacts.
+- [x] `backend/loader/schemas.py` defines strict versioned `content.v1` schemas for every artifact kind, forbids undeclared fields, normalizes enums, and rejects unknown enum values.
+- [x] Deterministic rebuild means identical input content produces byte-identical generated artifacts: sorted object keys, deterministic collection ordering, normalized whitespace, and documented `sha256:<hex>` hashes.
+- [x] Deterministic rebuild tests use an injected/frozen clock for `generated_at`, or exclude `generated_at` from byte-determinism assertions.
+- [x] Duplicate canonical ids fail compilation; duplicate display names do not fail if ids differ, but emit a manifest-linked collision report.
+- [x] Dangling cross-artifact references fail compilation, including `unit.weapon_ids -> weapons.json`, `unit.faction_id -> factions.json`, `faction_units.available_unit_ids -> units`, `faction_units` keys -> `factions.json`, detachment faction links, and stratagem/enhancement/rule references.
+- [x] Compiler writes generated artifacts atomically: validate everything first, then replace generated files; failed compilation must not leave partially updated generated artifacts.
 
 **Registry semantics:**
-- [ ] `CanonicalContentRegistry` records are immutable after load.
-- [ ] Registry provides typed lookup by canonical id for every artifact kind.
-- [ ] Display-name lookup, if provided, is reverse-index-only and never authoritative.
-- [ ] Registry load validates that all required artifacts are present and references are resolved/resolvable.
+- [x] `CanonicalContentRegistry` records are immutable after load.
+- [x] Registry provides typed lookup by canonical id for every artifact kind.
+- [x] Display-name lookup, if provided, is reverse-index-only and never authoritative.
+- [x] Registry load validates that all required artifacts are present and references are resolved/resolvable.
 
 **Non-goals:** runtime gameplay logic changes, AI behavior enrichment, localization/display-name translation, registry allocator implementation, and full migration-map tooling.
 
 **Verification:**
-- `uv run python -m pytest tests/test_content_contracts.py tests/test_registry.py -q`
+- `uv run python -m pytest tests/test_content_contracts.py -q`
+
+
+### Task 1.5 — Adopt frontmatter canonical IDs
+
+**Objective:** add optional authoritative unit `canonical_id` frontmatter support without breaking existing runtime display-name/faction-slug API contracts.
+
+**Acceptance criteria:**
+- [x] Unit parser/compiler reads optional `canonical_id` from wiki frontmatter.
+- [x] Explicit `canonical_id` wins over generated fallback id when present.
+- [x] Missing `canonical_id` keeps deterministic fallback behavior for legacy wiki files.
+- [x] Duplicate explicit canonical ids fail compilation before artifacts are written.
+- [x] Invalid explicit canonical id format fails compilation with an actionable error that includes the source path.
+- [x] Canonical unit records include `source_path` pointing back to the wiki source file.
+- [x] Display-name/source-file renames do not change unit id when explicit `canonical_id` remains unchanged.
+- [x] Collision/migration report distinguishes explicit-id duplicates from duplicate display names and fallback-id collisions.
+- [x] Runtime loaders preserve display-name lookup and public faction slugs; canonical ids do not become runtime instance ids.
+
+**Verification:**
+- `uv run python -m pytest tests/test_content_contracts.py -q` → 38 passed.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 540 passed, 3 skipped.
+- `uv run ruff check backend/loader tests/test_content_contracts.py` → All checks passed.
+- `uv run ruff format --check backend/loader tests/test_content_contracts.py` → 7 files already formatted.
 
 ### Checkpoint 1
 

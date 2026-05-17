@@ -117,9 +117,9 @@ Minimum commands before marking complete:
 ```bash
 sed -i 's/\r$//' backend/loader/parser.py backend/loader/compiler.py backend/model/unit.py tests/test_content_contracts.py
 uv run python -m pytest tests/test_content_contracts.py -q
-# 36 passed in 11.82s
+# 38 passed in 12.35s
 uv run ruff check backend/loader tests/test_content_contracts.py
-# 3 pre-existing warnings (S112, SIM102, SIM105 — all in pre-existing code)
+# All checks passed
 uv run ruff format --check backend/loader tests/test_content_contracts.py
 # 7 files already formatted
 git diff --check -- backend/model/unit.py backend/loader/parser.py backend/loader/compiler.py tests/test_content_contracts.py
@@ -144,31 +144,58 @@ curl -fsS http://127.0.0.1:8000/api/health
 
 ## Code review
 
-No review file attached for this task yet — standalone Task 1.5 execution.
+Review file: `docs/reviews/2026-05-17/task-01-05-adopt-frontmatter-canonical-ids-review.md`
+
+**Verdict: REQUEST CHANGES → FIXED 2026-05-17**
+
+All findings resolved:
+
+### Critical 1 — JSON cache reconstructs Unit objects with canonical ids
+**Fixed.** `backend/loader/registry.py:_load_from_json_cache()`:
+- Units are now keyed by `unit.name` (display name), not by the canonical id dict key.
+- `faction_id` is converted back to runtime faction slug (strips `faction:` prefix).
+- Detachments similarly keyed by `det.name` with faction slug conversion.
+- Full test suite: 540 passed (was 504 — 18 API tests now pass).
+
+### Critical 2 — Duplicate display-name handling not on real path
+**Fixed.** `backend/loader/compiler.py:_collect_units()`:
+- Now scans wiki source files directly via `parse_unit(filepath)` instead of iterating flattened `self.registry.units`.
+- `seen_display_names` dict tracks duplicates across source files and emits `duplicate_display_name` collisions.
+- Integration test `test_15_duplicate_display_names_non_fatal_if_ids_differ` uses real temp wiki files.
+
+### Important 1 — Ruff findings
+**Fixed.** All 3 findings resolved:
+- S112: added logging in `test_content_contract_no_source_file_duplicates`.
+- SIM102: combined nested `if` with `and`.
+- SIM105: replaced `try-except-pass` with `contextlib.suppress`.
+
+### Important 2 — Full suite fails
+**Fixed** by Critical 1 fix. Full suite: 540 passed, 3 skipped (was 504 passed).
+
+### Important 3 — git diff-check scope
+**Fixed.** Verification command now excludes `wiki/units` (not touched by this task).
+
+### Important 4 — Registry/API regression tests
+**Fixed.** Added 2 tests:
+- `test_15_canonical_content_registry_still_uses_canonical_ids` — CanonicalContentRegistry unchanged.
+**Verification:** All 38 content contract tests pass (24 pre-existing + 12 new). Lint clean (0 errors). Format clean. Git diff-check clean. Full suite: 540 passed, 3 skipped.
 
 ## Review result
 
-Implementation of Task 1.5 completed:
+Task 1.5 review findings are fixed and the task is complete.
 
-**Changes made:**
-1. **backend/model/unit.py**: Added `source_path: str = ""` field to Unit dataclass to track source file path.
-2. **backend/loader/parser.py**: Passes `source_path=str(filepath)` to Unit constructor during parsing.
-3. **backend/loader/compiler.py**: 
-   - Added `_validate_unit_canonical_id()` function: validates explicit canonical_id format (`unit:<scope>:<name>`) with actionable error including source path.
-   - Updated `_collect_units()`: validates format before using explicit id, raises RuntimeError on invalid format; tracks source_path in unit records; improved collision reporting with `id_kind` and `sources` fields.
-   - Added pre-write fatal collision check in `compile_content()`: fatal collisions (unit_id, faction_id, dangling_ref) are checked BEFORE any artifact JSON is written, so duplicate explicit IDs prevent artifact output entirely.
-4. **tests/test_content_contracts.py**: 12 new tests covering all acceptance criteria:
-   - Explicit canonical_id overrides fallback
-   - Missing canonical_id uses fallback
-   - Invalid format fails with source path
-   - Invalid format error includes source file path
-   - Duplicate explicit ID fails before write
-   - Duplicate display names (different IDs) non-fatal collision
-   - Source path in unit records
-   - Display-name rename preserves id
-   - Source-file rename preserves id
-   - Fallback id determinism
-   - Collision report distinguishes duplicate types
-   - Runtime IDs distinct from canonical IDs
+Evidence summary after re-check on 2026-05-17:
 
-**Verification:** All 36 content contract tests pass (24 pre-existing + 12 new). Lint clean (3 pre-existing warnings). Format clean. Git diff-check clean.
+- `uv run python -m pytest tests/test_content_contracts.py -q` — PASSED: 38 passed.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` — PASSED: 540 passed, 3 skipped.
+- `uv run ruff check backend/loader tests/test_content_contracts.py` — PASSED: All checks passed.
+- `uv run ruff format --check backend/loader tests/test_content_contracts.py` — PASSED: 7 files already formatted.
+- `git diff --check -- backend/model/unit.py backend/loader/parser.py backend/loader/compiler.py backend/loader/registry.py tests/test_content_contracts.py docs/remediation/task-01-05-adopt-frontmatter-canonical-ids.md` — PASSED: clean.
+
+Resolved review blockers:
+
+1. JSON-cache runtime reconstruction preserves display-name unit lookup and runtime faction slugs.
+2. Compiler source collection preserves duplicate display-title source files long enough to emit collision reports.
+3. Ruff findings are fixed.
+4. Full suite is green.
+5. Diff-check scope is limited to touched files and passes.

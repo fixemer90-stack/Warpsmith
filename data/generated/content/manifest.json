@@ -62,12 +62,12 @@
     },
     {
       "filename": "manifest.json",
-      "sha256": "sha256:7135c42d68042a0ad0765a7563b8fc63853e9a8ff25f9e5d3f832ee670b87d35"
+      "sha256": "sha256:6a5d7b7db9bcd4577836d51eadf82158356e7d038c59223d4f6d67a225f19a01"
     }
   ],
   "collisions": [],
-  "content_hash": "4b1babb7b2ea217910f5132b952210a4d2cca86817516b1cef30d551bf0841f9",
-  "generated_at": "2026-05-17T08:49:09.640278+00:00",
+  "content_hash": "9ded6f193dd7f7fd76516455d481cae9d3921fc6240d0a3ed7f771d7a15223e2",
+  "generated_at": "2026-01-01T00:00:00+00:00",
   "schema_version": "content.v1",
   "source_hashes": {
     "wiki/SCHEMA.md": "e04c9fcf80e58c8f46158ed53f3e3965d9c6c297479679c71e10e65bb1f708e7",
