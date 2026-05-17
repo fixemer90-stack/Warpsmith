@@ -1,6 +1,6 @@
 [project]
 name = "warpsmith"
-version = "0.7.7"
+version = "0.7.9"
 description = "Warhammer 40,000 Battle Simulator"
 requires-python = ">=3.12"
 
