@@ -446,13 +446,13 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - [x] Validator rejects `is_warlord: true` on a non-Character unit.
 - [x] API save path uses the same backend validator as generated roster validation.
 - [x] Generated rosters always persist exactly one valid Warlord when eligible Characters exist.
-- [x] Team Builder disables or warns on save when Warlord state is invalid.
+- [ ] Team Builder disables or warns on save when Warlord state is invalid. *(Request changes: zero eligible Characters are invalid by the task contract, but frontend treats `warlordCandidates.length <= 1` as valid.)*
 - [x] Team Builder UI visibly exposes Warlord selection and warnings.
-- [x] Tests cover zero Characters, one Character auto/valid Warlord, multiple Characters with no Warlord invalid, multiple Characters with exactly one Warlord valid, two Warlords invalid, non-Character marked as Warlord invalid, generated roster setting exactly one valid Warlord, and API rejecting invalid Warlord payload.
+- [ ] Tests cover zero Characters, one Character auto/valid Warlord, multiple Characters with no Warlord invalid, multiple Characters with exactly one Warlord valid, two Warlords invalid, non-Character marked as Warlord invalid, generated roster setting exactly one valid Warlord, and API rejecting invalid Warlord payload. *(Request changes: missing keyword-only CHARACTER eligibility and Team Builder zero-eligible regression coverage.)*
 
 **Warlord validation contract:**
 - [x] Roster MUST have exactly one Warlord when at least one eligible Character exists.
-- [x] Only units with `CHARACTER` keyword/tag are eligible to be Warlord.
+- [ ] Only units with `CHARACTER` keyword/tag are eligible to be Warlord. *(Request changes: shared helper currently ignores `unit.keywords`, so keyword-only Characters are not eligible.)*
 - [x] If roster has exactly one eligible Character, generated rosters MAY auto-select it.
 - [x] If roster has multiple eligible Characters, saved/user-created rosters MUST explicitly select exactly one.
 - [x] If roster has zero eligible Characters, the roster is invalid — every army must include at least one Character to be Warlord (core WH40k 10e rules).
@@ -481,8 +481,8 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 ### Checkpoint 2
 
-- [x] Roster validation is shared and test-covered.
-- [x] UI/API/generated roster behavior matches.
+- [ ] Roster validation is shared and test-covered. *(Request changes: Task 2.2 regression coverage missing keyword-only CHARACTER and frontend zero-eligible cases.)*
+- [ ] UI/API/generated roster behavior matches. *(Request changes: Team Builder zero-eligible behavior does not match backend invalid contract.)*
 
 ## Phase 3 — Combat math
 
@@ -502,88 +502,92 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** natural 6 auto-wounds only when Lethal Hits applies.
 
 **Acceptance criteria:**
-- [ ] Plain natural 6 to hit does not auto-wound.
-- [ ] Lethal Hits natural 6 does auto-wound.
-- [ ] Critical Hit detection is separate from Lethal Hits resolution.
-- [ ] Plain Critical Hits do not increment wound count unless another rule explicitly says so.
-- [ ] Lethal Hits applies per attack/weapon/profile, not globally to the attacker unless sourced that way.
-- [ ] Automatic wounds from Lethal Hits bypass the wound roll but still proceed to save/damage steps normally.
-- [ ] Do not implement this as “natural 6 always auto-wounds”; Lethal Hits must be an explicit active rule on the attack.
-- [ ] Tests cover plain hit roll of natural 6 still requiring a wound roll, failed wound roll after plain natural 6 producing no wound, Lethal Hits natural 6 skipping wound roll and creating one wound, non-6 successful hit with Lethal Hits rolling to wound normally, and a mixed attack pool with one natural 6 and one normal hit resolving correctly.
+- [x] Plain natural 6 to hit does not auto-wound.
+- [x] Lethal Hits natural 6 does auto-wound.
+- [x] Critical Hit detection is separate from Lethal Hits resolution.
+- [x] Plain Critical Hits do not increment wound count unless another rule explicitly says so.
+- [x] Lethal Hits applies per attack/weapon/profile, not globally to the attacker unless sourced that way.
+- [x] Automatic wounds from Lethal Hits bypass the wound roll but still proceed to save/damage steps normally.
+- [x] Do not implement this as “natural 6 always auto-wounds”; Lethal Hits must be an explicit active rule on the attack.
+- [x] Tests cover plain hit roll of natural 6 still requiring a wound roll, failed wound roll after plain natural 6 producing no wound, Lethal Hits natural 6 skipping wound roll and creating one wound, non-6 successful hit with Lethal Hits rolling to wound normally, and a mixed attack pool with one natural 6 and one normal hit resolving correctly.
 
 **Combat semantics contract:**
-- [ ] A natural 6 to Hit is still only a successful Hit unless the attack has Lethal Hits.
-- [ ] Only attacks with active Lethal Hits convert Critical Hits into automatic wounds.
-- [ ] Automatic wounds from Lethal Hits bypass the wound roll but still proceed to save/damage steps normally.
+- [x] A natural 6 to Hit is still only a successful Hit unless the attack has Lethal Hits.
+- [x] Only attacks with active Lethal Hits convert Critical Hits into automatic wounds.
+- [x] Automatic wounds from Lethal Hits bypass the wound roll but still proceed to save/damage steps normally.
 
 **Non-goals:** Devastating Wounds, AP/save behavior, Feel No Pain, Sustained Hits, and wound allocation changes are not in scope.
 
 **Verification:**
-- `uv run python -m pytest tests/test_combat*.py tests/test_modifiers.py -q`
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_combat*.py tests/test_modifiers.py -q` → 50 passed, 0 failures
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 583 passed, 3 skipped, 60 warnings in 56.40s
+- `git diff --check -- backend/engine/combat.py backend/engine/modifiers.py backend/engine/scenario.py tests/test_combat.py tests/test_modifiers.py tests/test_weapon_keywords_phase2.py` → clean
 
 ### Task 3.2 — Fix AP/save application and Devastating Wounds
 
 **Objective:** AP and Devastating Wounds follow one consistent 10e-compatible path.
 
 **Acceptance criteria:**
-- [ ] AP is applied exactly once regardless of terrain/modifier combinations.
-- [ ] Cover bonuses are not double-applied with save modifiers.
-- [ ] Cover/save modifiers are applied at the correct stage according to the canonical modifier pipeline.
-- [ ] Normal save path and Devastating Wounds path are separated and tested independently.
-- [ ] Combat logs/debug state clearly identify when Devastating Wounds triggered if combat logging exists.
-- [ ] Do not solve AP duplication by suppressing later save modifiers globally.
-- [ ] Tests cover AP modifying save exactly once, cover modifying save at the correct stage, AP and cover interaction producing expected effective save, normal wound using standard save path, Critical Wound without Devastating Wounds using standard save path, Critical Wound with Devastating Wounds bypassing normal save path, and Devastating Wounds damage reaching post-damage mitigation/FNP layers if implemented.
+- [x] AP is applied exactly once regardless of terrain/modifier combinations.
+- [x] Cover bonuses are not double-applied with save modifiers.
+- [x] Cover/save modifiers are applied at the correct stage according to the canonical modifier pipeline.
+- [x] Normal save path and Devastating Wounds path are separated and tested independently.
+- [x] Combat logs/debug state clearly identify when Devastating Wounds triggered if combat logging exists.
+- [x] Do not solve AP duplication by suppressing later save modifiers globally.
+- [x] Tests cover AP modifying save exactly once, cover modifying save at the correct stage, AP and cover interaction producing expected effective save, normal wound using standard save path, Critical Wound without Devastating Wounds using standard save path, Critical Wound with Devastating Wounds bypassing normal save path, and Devastating Wounds damage reaching post-damage mitigation/FNP layers if implemented.
 
 **Save/AP resolution contract:**
-- [ ] AP modifies the defender save characteristic exactly once during save resolution.
-- [ ] Cover and other save modifiers apply after AP according to the canonical modifier pipeline.
-- [ ] Modified saves respect system caps/floor rules implemented by the engine.
-- [ ] Save characteristic modification and save-roll modification are treated as separate stages if both exist.
+- [x] AP modifies the defender save characteristic exactly once during save resolution.
+- [x] Cover and other save modifiers apply after AP according to the canonical modifier pipeline.
+- [x] Modified saves respect system caps/floor rules implemented by the engine.
+- [x] Save characteristic modification and save-roll modification are treated as separate stages if both exist.
 
 **Devastating Wounds contract:**
-- [ ] Devastating Wounds only triggers on Critical Wounds.
-- [ ] Devastating Wounds converts damage from the triggering attack into mortal wounds according to current supported 10e semantics.
-- [ ] Devastating Wounds bypasses normal armor saves once triggered.
-- [ ] Feel No Pain and other post-damage defenses still apply if supported elsewhere by the engine.
+- [x] Devastating Wounds only triggers on Critical Wounds.
+- [x] Devastating Wounds converts damage from the triggering attack into mortal wounds according to current supported 10e semantics.
+- [x] Devastating Wounds bypasses normal armor saves once triggered.
+- [x] Feel No Pain and other post-damage defenses still apply if supported elsewhere by the engine.
 
 **Non-goals:** Invulnerable save redesign, full terrain-system rewrite, and Damage spillover/allocation redesign are not in scope.
 
 **Verification:**
-- `uv run python -m pytest tests/test_combat*.py tests/test_terrain*.py -q`
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_combat*.py tests/test_modifiers.py -q` → 50 passed, 0 failures
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 583 passed, 3 skipped, 60 warnings in 56.40s
 
 ### Task 3.3 — Fix Sustained Hits resolution
 
 **Objective:** extra hits are resolved as real hit results, not dropped/no-op metadata.
 
 **Acceptance criteria:**
-- [ ] Sustained Hits adds correct additional hits.
-- [ ] Downstream wound/save/damage counts include the extra hits.
-- [ ] Hit resolution output includes both original hits and Sustained Hits extra hits.
-- [ ] Downstream wound pool consumes the expanded hit count.
-- [ ] Combat trace/log, if present, distinguishes original hits from Sustained Hits extra hits.
-- [ ] Sustained Hits and Lethal Hits can coexist without dropping either effect.
-- [ ] Do not represent Sustained Hits only as metadata; the extra hits must become downstream-resolvable hit entries or counts.
-- [ ] Tests cover no Critical Hits producing no extra hits, one Critical Hit with Sustained Hits 1 producing two total hits, one Critical Hit with Sustained Hits 2 producing three total hits, extra hits rolling to wound normally, extra hits not being treated as auto-wounds from Lethal Hits, a mixed pool with normal hits/Critical Hits/misses, and Sustained Hits + Lethal Hits on the same natural 6 where the original Critical Hit can auto-wound via Lethal Hits while extra Sustained Hits roll to wound normally.
+- [x] Sustained Hits adds correct additional hits.
+- [x] Downstream wound/save/damage counts include the extra hits.
+- [x] Hit resolution output includes both original hits and Sustained Hits extra hits.
+- [x] Downstream wound pool consumes the expanded hit count.
+- [x] Combat trace/log, if present, distinguishes original hits from Sustained Hits extra hits.
+- [x] Sustained Hits and Lethal Hits can coexist without dropping either effect.
+- [x] Do not represent Sustained Hits only as metadata; the extra hits must become downstream-resolvable hit entries or counts.
+- [x] Tests cover no Critical Hits producing no extra hits, one Critical Hit with Sustained Hits 1 producing two total hits, one Critical Hit with Sustained Hits 2 producing three total hits, extra hits rolling to wound normally, extra hits not being treated as auto-wounds from Lethal Hits, a mixed pool with normal hits/Critical Hits/misses, and Sustained Hits + Lethal Hits on the same natural 6 where the original Critical Hit can auto-wound via Lethal Hits while extra Sustained Hits roll to wound normally.
 
 **Sustained Hits contract:**
-- [ ] Sustained Hits triggers only on Critical Hits.
-- [ ] Sustained Hits X adds X additional hit results for each triggering Critical Hit.
-- [ ] Additional hits are normal successful hits, not Critical Hits.
-- [ ] Additional hits continue into wound/save/damage resolution.
-- [ ] Additional hits do not recursively trigger Sustained Hits or other Critical Hit effects.
+- [x] Sustained Hits triggers only on Critical Hits.
+- [x] Sustained Hits X adds X additional hit results for each triggering Critical Hit.
+- [x] Additional hits are normal successful hits, not Critical Hits.
+- [x] Additional hits continue into wound/save/damage resolution.
+- [x] Additional hits do not recursively trigger Sustained Hits or other Critical Hit effects.
 
 **Non-goals:**
-- [ ] Changing Lethal Hits semantics is not in scope.
-- [ ] Changing Devastating Wounds/AP/save behavior is not in scope.
-- [ ] Full combat log redesign is not in scope.
+- [x] Changing Lethal Hits semantics is not in scope.
+- [x] Changing Devastating Wounds/AP/save behavior is not in scope.
+- [x] Full combat log redesign is not in scope.
 
 **Verification:**
-- `uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q`
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q` → 50 passed, 0 failures
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 583 passed, 3 skipped, 60 warnings in 56.40s
 
 ### Checkpoint 3
 
-- [ ] Focused combat tests pass.
-- [ ] Existing scenario tests still pass.
+- [x] Focused combat tests pass: `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_combat*.py tests/test_modifiers.py -q` → 50 passed, 0 failures.
+- [x] Existing scenario/full regression tests still pass: `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 583 passed, 3 skipped, 60 warnings in 56.40s.
 
 ## Phase 4 — Game state / VP / phase invariants
 
@@ -606,29 +610,33 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** Command -> Movement -> Shooting -> Charge -> Fight only.
 
 **Acceptance criteria:**
-- [ ] GamePhase has exactly 5 members.
-- [ ] Battle-shock runs in Command, not separate Morale.
-- [ ] Round increments after Fight only.
-- [ ] Phase progression uses one canonical ordered phase list.
-- [ ] Autoplay/scenario code consumes the same phase order, not duplicated hardcoded lists.
-- [ ] Replay/snapshot phase names match the canonical GamePhase values.
-- [ ] No tests or UI paths expect a separate Morale phase.
-- [ ] Do not fix this by aliasing Morale/Battle-shock to Command while keeping them as phase enum members.
-- [ ] Tests cover GamePhase having exactly five members, phase order being Command -> Movement -> Shooting -> Charge -> Fight, advancing from Fight moving to the next player/round boundary as designed, battle-shock hooks running during Command phase, no separate Morale phase appearing in snapshots/replay/scenario progression, and autoplay completing a full turn using only the five phases.
+- [x] GamePhase has exactly 5 members.
+- [x] Battle-shock runs in Command, not separate Morale.
+- [x] Round increments after Fight only.
+- [x] Phase progression uses one canonical ordered phase list.
+- [x] Autoplay/scenario code consumes the same phase order, not duplicated hardcoded lists.
+- [x] Replay/snapshot phase names match the canonical GamePhase values.
+- [x] No tests or UI paths expect a separate Morale phase.
+- [x] Do not fix this by aliasing Morale/Battle-shock to Command while keeping them as phase enum members.
+- [x] Tests cover GamePhase having exactly five members, phase order being Command -> Movement -> Shooting -> Charge -> Fight, advancing from Fight moving to the next player/round boundary as designed, battle-shock hooks running during Command phase, no separate Morale phase appearing in snapshots/replay/scenario progression, and autoplay completing a full turn using only the five phases.
 
 **Phase loop contract:**
-- [ ] GamePhase MUST contain exactly `COMMAND`, `MOVEMENT`, `SHOOTING`, `CHARGE`, and `FIGHT`.
-- [ ] GamePhase MUST NOT contain `MORALE`, `BATTLESHOCK`, `PSYCHIC`, or `END` as runtime phase loop enum members.
-- [ ] Battle-shock is resolved as a Command phase step.
-- [ ] Round advances only after both players complete Fight phase, or after the engine's existing full-round boundary if turns are modeled differently.
+- [x] GamePhase MUST contain exactly `COMMAND`, `MOVEMENT`, `SHOOTING`, `CHARGE`, and `FIGHT`.
+- [x] GamePhase MUST NOT contain `MORALE`, `BATTLESHOCK`, `PSYCHIC`, or `END` as runtime phase loop enum members.
+- [x] Battle-shock is resolved as a Command phase step.
+- [x] Round advances only after both players complete Fight phase, or after the engine's existing full-round boundary if turns are modeled differently.
 
 **Non-goals:**
-- [ ] Full battle-shock rules implementation is not in scope.
-- [ ] Mission scoring redesign is not in scope.
-- [ ] Turn/round persistence redesign is not in scope unless required to remove invalid phase states.
+- [x] Full battle-shock rules implementation is not in scope.
+- [x] Mission scoring redesign is not in scope.
+- [x] Turn/round persistence redesign is not in scope unless required to remove invalid phase states.
 
 **Verification:**
-- `uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q`
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_autoplay.py tests/test_replay.py -q` → 80 passed, 12 warnings in 8.20s.
+- `uv run python -m pytest tests/ -q` → 593 passed, 3 skipped, 60 warnings in 53.49s.
+- `uv run ruff check backend/state/game_state.py backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_autoplay.py tests/test_replay.py` → All checks passed.
+- `uv run ruff format --check backend/state/game_state.py backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_autoplay.py tests/test_replay.py` → 6 files already formatted.
+- `git diff --check -- backend/state/game_state.py backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_autoplay.py tests/test_replay.py` → clean.
 
 ### Task 4.2 — Lock CP and battle-shock reset semantics
 

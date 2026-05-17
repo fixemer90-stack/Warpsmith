@@ -1,8 +1,8 @@
 ---
-title: "Task 3.1 — Fix natural 6 / Lethal Hits semantics"
+title: Task 3.1 — Fix natural 6 / Lethal Hits semantics
 parent: remediation-plan
-status: complete
-phase: "3 — Combat math"
+status: completed
+phase: 3 — Combat math
 task_id: "3.1"
 source: remediation-plan.md
 ---

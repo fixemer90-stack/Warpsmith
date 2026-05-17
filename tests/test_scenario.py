@@ -3,7 +3,13 @@
 import pytest
 
 from backend.engine.scenario import Scenario
-from backend.state.game_state import GameState, PlayerState, UnitState, create_empty_game
+from backend.state.game_state import (
+    GAME_PHASE_ORDER,
+    GameState,
+    PlayerState,
+    UnitState,
+    create_empty_game,
+)
 
 
 def test_scenario_creation():
@@ -33,8 +39,11 @@ def test_run_round():
     # Should have advanced to round 2
     assert game_state.current_round == initial_round + 1
 
-    # Should have gone through all phases and ended on COMMAND
+    # Should have gone through all canonical phases and ended on COMMAND
     assert game_state.current_phase == game_state.current_phase.COMMAND
+    phase_logs = [entry for entry in game_state.game_log if entry.startswith("Phase: ")]
+    assert phase_logs == [f"Phase: {phase.value}" for phase in GAME_PHASE_ORDER]
+    assert all("morale" not in entry.lower() for entry in phase_logs)
 
 
 def test_command_phase_cp_generation():

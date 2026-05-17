@@ -1,8 +1,8 @@
 ---
-title: "Task 3.3 — Fix Sustained Hits resolution"
+title: Task 3.3 — Fix Sustained Hits resolution
 parent: remediation-plan
-status: complete
-phase: "3 — Combat math"
+status: completed
+phase: 3 — Combat math
 task_id: "3.3"
 source: remediation-plan.md
 ---
@@ -71,6 +71,12 @@ $ uv run python -m pytest tests/test_combat.py tests/test_modifiers.py -q
 $ uv run python -m pytest tests/ -q
 578 passed, 3 skipped, 60 warnings in 55.90s
 
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q  # re-review 2026-05-17
+50 passed in 10.38s
+
+$ uv run python -m pytest tests/ -q  # re-review 2026-05-17
+583 passed, 3 skipped, 60 warnings in 56.40s
+
 $ uv run ruff check backend/engine/combat.py backend/engine/modifiers.py tests/test_combat.py tests/test_modifiers.py
 All checks passed!
 
@@ -87,3 +93,33 @@ $ git diff --check -- backend/engine/combat.py tests/test_modifiers.py
 - [x] Regression evidence is recorded in the affected CR artifact(s).
 - [x] If this task completes a phase checkpoint, update `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-XX-*.md`, and `docs/requirements/code-review/code-review.md` with the phase completion artifact.
 - [x] `git diff --check` passes for touched files.
+
+## Code review — 2026-05-17
+
+Review file: `docs/reviews/2026-05-17/task-03-03-fix-sustained-hits-resolution-review.md`
+
+**Verdict: REQUEST CHANGES → FIXED 2026-05-17.**
+
+Implementation behavior re-check passed. Closure artifacts were completed: CR-11 now has Task 3.3 regression evidence, and Phase 3 completion evidence is synced across triage summary, CR-07, CR-11, and code-review index.
+
+| Finding | Evidence | Required action |
+| --- | --- | --- |
+| Missing CR-11 Task 3.3 regression evidence | Fixed: added Task 3.3 regression evidence to CR-11 with latest verification results. | Done. |
+| Missing Phase 3 completion artifact | Fixed: added Phase 3 completion evidence to triage summary, CR-07, CR-11, and code-review index. | Done. |
+
+Positive verification:
+
+```text
+rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q
+# 50 passed in 10.38s
+uv run python -m pytest tests/ -q
+# 583 passed, 3 skipped, 60 warnings in 56.40s
+Deterministic probe:
+# no_crit_sh1_damage=1
+# crit_sh1_two_hits_one_saved_or_failed_damage=1
+# crit_sh2_three_hits_two_damage=2
+# sh_lethal_original_auto_extra_normal_damage=2
+# sh_dev_extra_noncrit_save_applies_damage=1
+ruff check/format/diff-check
+# clean
+```

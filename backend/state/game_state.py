@@ -37,6 +37,10 @@ class GamePhase(Enum):
     FIGHT = "fight"
 
 
+GAME_PHASE_ORDER: tuple[GamePhase, ...] = tuple(GamePhase)
+"""Canonical 10e runtime phase order: Command -> Movement -> Shooting -> Charge -> Fight."""
+
+
 @dataclass
 class UnitState:
     """State of a single unit in the game."""
@@ -255,7 +259,7 @@ class GameState:
 
     def next_phase(self):
         """Advance to the next phase."""
-        phases = list(GamePhase)
+        phases = GAME_PHASE_ORDER
         current_index = phases.index(self.current_phase)
         next_index = (current_index + 1) % len(phases)
 

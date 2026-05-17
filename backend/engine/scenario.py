@@ -6,7 +6,7 @@ import contextlib
 from typing import Optional
 
 from ..model.unit import Unit
-from ..state.game_state import GamePhase, GameState
+from ..state.game_state import GAME_PHASE_ORDER, GamePhase, GameState
 from ..state.map import BattlefieldMap
 from ..state.mission import Mission, VPTracker, apply_scoring, check_end_game
 from ..state.runtime_id import format_event_identity
@@ -43,12 +43,11 @@ class Scenario:
         # Log round start
         self.state.game_log.append(f"Starting round {self.state.current_round}")
 
-        # Run through all phases using the game state's phase transition
+        # Run through all phases using the shared canonical phase order.
         phases_completed = 0
-        max_phases_per_round = 5  # COMMAND, MOVEMENT, SHOOTING, CHARGE, FIGHT
+        phases_per_round = len(GAME_PHASE_ORDER)
 
-        while phases_completed < max_phases_per_round and not self.state.is_game_over:
-            # Execute current phase
+        while phases_completed < phases_per_round and not self.state.is_game_over:
             self._execute_phase(self.state.current_phase)
             phases_completed += 1
 

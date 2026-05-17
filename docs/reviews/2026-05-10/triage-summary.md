@@ -323,32 +323,55 @@ All five Phase 1 remediation tasks done (1.1-1.5).
 Verification: 509+ tests pass (36 content contracts), lint/formatter clean.
 CR evidence: CR-06, CR-11, CR-12, CR-21.
 
-## Phase 2 — Roster validator — COMPLETE
+## Phase 2 — Roster validator — REQUEST CHANGES after Task 2.2 check
 
-All three Phase 2 remediation tasks done (2.1-2.3).
+Task 2.2 was re-opened on 2026-05-17 after an independent check found Warlord eligibility/UI parity blockers.
 
 | Task | Status | Key result |
 |------|--------|-----------|
 | 2.1 — Lock canonical PTS formula | ✅ | `calculate_squad_pts()`, loadout/nob support, shared parity fixture |
-| 2.2 — Enforce exactly one Warlord | ✅ | Shared Warlord validation, `is_warlord` param, `is_unit_eligible_warlord()` |
+| 2.2 — Enforce exactly one Warlord | ❌ changes_requested | Keyword-only `CHARACTER` units are not Warlord-eligible in shared validation; Team Builder treats zero eligible Characters as UI-valid. |
 | 2.3 — Enforce plan/feature gates | ✅ | Shared `_check_roster_limits()` — create/duplicate/update all enforced |
 
-Verification: 544 tests pass, lint/formatter clean.
-CR evidence: CR-12, CR-16, CR-17, CR-19.
+Verification during check: scoped roster suite `68 passed, 48 warnings`; full suite `593 passed, 3 skipped, 60 warnings`; Ruff lint/format clean for checked files.
+CR evidence exists in CR-12, CR-16, CR-17, CR-19 but must be refreshed after Task 2.2 fixes.
 
-## Phase 2 — COMPLETE
+## Phase 2 — REQUEST CHANGES
 
 Date: 2026-05-17
+
+Task 2.2 is not currently complete after the 2026-05-17 check.
 
 | Task | Status | Key changes |
 | --- | --- | --- |
 | 2.1 — Lock canonical PTS formula | completed | Backend canonical `calculate_squad_pts()` used by validation/API; loadout/Nob production path and parity fixture verified. |
-| 2.2 — Enforce exactly one Warlord when required | completed | Shared Warlord validator/API/generator contract verified; zero eligible invalid, exactly one valid Warlord required. |
+| 2.2 — Enforce exactly one Warlord when required | changes_requested | Shared Warlord validator mostly works, but keyword-only `CHARACTER` units are not eligible and Team Builder does not reject/warn for zero eligible Characters. |
 | 2.3 — Enforce plan/feature gates consistently | completed | Shared Free/Premium roster gates verified for create/duplicate/generated-save/update/public paths. |
 
-Verification:
+Verification during Task 2.2 check:
 - `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings.
-- `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings.
+- `uv run python -m pytest tests/ -q` → 593 passed, 3 skipped, 60 warnings.
 - `uv run ruff check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_autoplay.py` → clean.
 - `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_autoplay.py` → 7 files already formatted.
-- `git diff --check` → clean for Phase 2 touched files.
+- `git diff --check` → clean for checked Task 2.2 files.
+
+
+## Phase 3 completion — Combat math
+
+- Date: 2026-05-17
+- Completed tasks: 3.1, 3.2, 3.3
+- Closed findings:
+  - CR-07: natural 6 / Lethal Hits semantics; AP applied exactly once; Devastating Wounds only on Critical Wounds; Sustained Hits extra hits now resolve through wound/save/damage as normal non-critical hits.
+  - CR-11: AP/cover/Ignores Cover interaction regression evidence recorded; Sustained Hits closure recorded because Task 3.3 is co-owned by CR-11 in the remediation plan.
+- Still open:
+  - CR-07/CR-11 original review artifacts remain Request Changes until all non-Phase-3 findings are separately fixed or explicitly accepted.
+- Accepted debt: none.
+- Tests run:
+  - `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q` → 50 passed in 10.38s.
+  - `uv run python -m pytest tests/ -q` → 583 passed, 3 skipped, 60 warnings in 56.40s.
+- Lint/format run:
+  - `uv run ruff check backend/engine/combat.py backend/engine/modifiers.py tests/test_combat.py tests/test_modifiers.py` → All checks passed.
+  - `uv run ruff format --check backend/engine/combat.py backend/engine/modifiers.py tests/test_combat.py tests/test_modifiers.py` → 4 files already formatted.
+  - `git diff --check -- <Task 3.3 touched docs/code files>` → clean.
+- Browser/API smoke evidence: none required for backend combat math phase.
+- Remaining blockers before next phase: none for Phase 3 checkpoint.

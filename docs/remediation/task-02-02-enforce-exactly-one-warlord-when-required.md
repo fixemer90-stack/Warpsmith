@@ -1,7 +1,7 @@
 ---
 title: "Task 2.2 — Enforce exactly one Warlord when required"
 parent: remediation-plan
-status: completed
+status: changes_requested
 phase: "2 — Roster validator"
 task_id: "2.2"
 source: remediation-plan.md
@@ -33,9 +33,9 @@ saved and generated rosters have valid Warlord semantics.
 - [x] Validator rejects `is_warlord: true` on a non-Character unit.
 - [x] API save path uses the same backend validator as generated roster validation.
 - [x] Generated rosters always persist exactly one valid Warlord when eligible Characters exist.
-- [x] Team Builder disables or warns on save when Warlord state is invalid.
+- [ ] Team Builder disables or warns on save when Warlord state is invalid. *(Request changes: zero eligible Characters are invalid by the task contract, but frontend treats `warlordCandidates.length <= 1` as valid.)*
 - [x] Team Builder UI visibly exposes Warlord selection and warnings.
-- [x] Tests cover zero Characters, one Character auto/valid Warlord, multiple Characters with no Warlord invalid, multiple Characters with exactly one Warlord valid, two Warlords invalid, non-Character marked as Warlord invalid, generated roster setting exactly one valid Warlord, and API rejecting invalid Warlord payload.
+- [ ] Tests cover zero Characters, one Character auto/valid Warlord, multiple Characters with no Warlord invalid, multiple Characters with exactly one Warlord valid, two Warlords invalid, non-Character marked as Warlord invalid, generated roster setting exactly one valid Warlord, and API rejecting invalid Warlord payload. *(Request changes: missing keyword-only CHARACTER eligibility and Team Builder zero-eligible regression coverage.)*
 
 ## Warlord validation contract
 
@@ -73,9 +73,9 @@ saved and generated rosters have valid Warlord semantics.
 
 ## Completion requirements
 
-- [x] Implementation/change is complete for this task only; do not batch unrelated fixes.
+- [ ] Implementation/change is complete for this task only; do not batch unrelated fixes. *(Request changes: keyword-only CHARACTER eligibility and frontend zero-eligible invalid state are not complete.)*
 - [x] Regression evidence is recorded in the affected CR artifact(s).
-- [x] Phase 2 checkpoint updated in `docs/reviews/2026-05-10/triage-summary.md`, affected CR artifacts, and source/index docs after full Phase 2 verification passed.
+- [ ] Phase 2 checkpoint updated in `docs/reviews/2026-05-10/triage-summary.md`, affected CR artifacts, and source/index docs after full Phase 2 verification passed. *(Request changes: checkpoint evidence has stale full-suite counts and Task 2.2 is back to changes_requested.)*
 - [x] `git diff --check` passes for touched files.
 
 ## Review result
@@ -98,12 +98,17 @@ saved and generated rosters have valid Warlord semantics.
 ### Frontend (`team_builder.js`, `team_builder.html`)
 - Warlord candidate state, crown selection UI, warning banner, and save-disabled behavior are present.
 
-### Code review — 2026-05-17
+### Code review — 2026-05-17 check
 
-Review files:
-- `docs/reviews/2026-05-17/task-02-02-enforce-exactly-one-warlord-when-required-review.md`
-- `docs/reviews/2026-05-17/task-02-02-enforce-exactly-one-warlord-when-required-rereview.md`
+Review file: `docs/reviews/2026-05-17/task-02-02-enforce-exactly-one-warlord-when-required-check-2026-05-17.md`
 
-**Verdict: REQUEST CHANGES → FIXED 2026-05-17.**
+**Verdict: REQUEST CHANGES.**
 
-All re-review blockers resolved: code behavior, task frontmatter, source plan, index, review files, CR evidence, and Phase 2 checkpoint are synchronized with the latest green verification.
+Blocking findings:
+
+| Finding | Evidence | Required fix |
+|---------|----------|--------------|
+| Keyword-only `CHARACTER` units are not Warlord-eligible in shared validation | Deterministic probe: `keyword_only_eligible=False`; roster rejected as `no_eligible_warlord` | Include normalized `unit.keywords` in the shared eligibility helper or update the task contract consistently if keyword-only support is intentionally out of scope. |
+| Team Builder allows zero eligible Characters UI-side | `hasValidWarlordSelection` returns true whenever `warlordCandidates.length <= 1` | Mirror backend contract in frontend: zero candidates invalid, one candidate auto/valid, multiple candidates require exactly one crown. |
+| Regression coverage misses those edge cases | Current scoped tests still pass despite both probes | Add backend keyword-only Character tests and frontend zero-eligible tests. |
+| Closure counts stale | Current full suite is `593 passed, 3 skipped, 60 warnings`; artifacts still say `562 passed, 3 skipped, 60 warnings` | After fixes, update task/source-plan/index/review/CR/phase evidence with current verification. |

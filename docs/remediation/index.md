@@ -53,7 +53,7 @@ flowchart LR
 | Done | Task | File | Primary CRs | Depends on | Verification |
 | --- | --- | --- | --- | --- | --- |
 | [x] | 2.1 — Lock the canonical PTS formula | [task-02-01-lock-the-canonical-pts-formula.md](task-02-01-lock-the-canonical-pts-formula.md) | CR-12, CR-16, CR-17, CR-19. | [1.4 — Emit canonical JSON artifacts](task-01-04-emit-canonical-json-artifacts.md), Phase 1 checkpoint | `uv run python -m pytest tests/test_roster*.py -q`<br>Browser/API smoke if frontend changed. |
-| [x] | 2.2 — Enforce exactly one Warlord when required | [task-02-02-enforce-exactly-one-warlord-when-required.md](task-02-02-enforce-exactly-one-warlord-when-required.md) | CR-12, CR-16, CR-17, CR-19. | [2.1 — Lock the canonical PTS formula](task-02-01-lock-the-canonical-pts-formula.md) | `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q`<br>Browser smoke `/team-builder` for crown/warning/save-disabled state. |
+| [ ] | 2.2 — Enforce exactly one Warlord when required | [task-02-02-enforce-exactly-one-warlord-when-required.md](task-02-02-enforce-exactly-one-warlord-when-required.md) | CR-12, CR-16, CR-17, CR-19. | [2.1 — Lock the canonical PTS formula](task-02-01-lock-the-canonical-pts-formula.md) | `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q`<br>Browser smoke `/team-builder` for crown/warning/save-disabled state.<br>REQUEST CHANGES 2026-05-17: keyword-only CHARACTER eligibility + zero-eligible frontend state. |
 | [x] | 2.3 — Enforce plan/feature gates consistently | [task-02-03-enforce-plan-feature-gates-consistently.md](task-02-03-enforce-plan-feature-gates-consistently.md) | CR-12, CR-16, CR-17, CR-19. | [2.2 — Enforce exactly one Warlord when required](task-02-02-enforce-exactly-one-warlord-when-required.md) | `uv run python -m pytest tests/test_rosters.py -q` |
 
 ### Phase 3 — Combat math
@@ -66,11 +66,11 @@ flowchart LR
 
 ### Phase 4 — Game state / VP / phase invariants
 
-| Task | File | Primary CRs | Depends on | Verification |
-| --- | --- | --- | --- | --- |
-| 4.1 — Assert 5-phase 10e loop invariants | [task-04-01-assert-5-phase-10e-loop-invariants.md](task-04-01-assert-5-phase-10e-loop-invariants.md) | CR-08, CR-10, CR-14, CR-24. | Phase 2, 3 checkpoint | `uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q` |
-| 4.2 — Lock CP and battle-shock reset semantics | [task-04-02-lock-cp-and-battle-shock-reset-semantics.md](task-04-02-lock-cp-and-battle-shock-reset-semantics.md) | CR-08, CR-10, CR-14, CR-24. | [4.1 — Assert 5-phase 10e loop invariants](task-04-01-assert-5-phase-10e-loop-invariants.md) | `uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q` |
-| 4.3 — Lock VP, objectives, mission normalization, Battle Ready | [task-04-03-lock-vp-objectives-mission-normalization-battle-ready.md](task-04-03-lock-vp-objectives-mission-normalization-battle-ready.md) | CR-08, CR-10, CR-14, CR-24. | [4.2 — Lock CP and battle-shock reset semantics](task-04-02-lock-cp-and-battle-shock-reset-semantics.md) | `uv run python -m pytest tests/test_mission*.py tests/test_autoplay.py tests/test_result_screen.py -q` |
+| Done | Task | File | Primary CRs | Depends on | Verification |
+| --- | --- | --- | --- | --- | --- |
+| [x] | 4.1 — Assert 5-phase 10e loop invariants | [task-04-01-assert-5-phase-10e-loop-invariants.md](task-04-01-assert-5-phase-10e-loop-invariants.md) | CR-08, CR-10, CR-14, CR-24. | Phase 2, 3 checkpoint | `uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_autoplay.py tests/test_replay.py -q` |
+| [x] | 4.2 — Lock CP and battle-shock reset semantics | [task-04-02-lock-cp-and-battle-shock-reset-semantics.md](task-04-02-lock-cp-and-battle-shock-reset-semantics.md) | CR-08, CR-10, CR-14, CR-24. | [4.1 — Assert 5-phase 10e loop invariants](task-04-01-assert-5-phase-10e-loop-invariants.md) | `uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q` |
+| [ ] | 4.3 — Lock VP, objectives, mission normalization, Battle Ready | [task-04-03-lock-vp-objectives-mission-normalization-battle-ready.md](task-04-03-lock-vp-objectives-mission-normalization-battle-ready.md) | CR-08, CR-10, CR-14, CR-24. | [4.2 — Lock CP and battle-shock reset semantics](task-04-02-lock-cp-and-battle-shock-reset-semantics.md) | `uv run python -m pytest tests/test_mission*.py tests/test_autoplay.py tests/test_result_screen.py -q` |
 
 ### Phase 5 — Movement / charge / melee identity
 
