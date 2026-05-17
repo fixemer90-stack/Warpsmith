@@ -1,7 +1,7 @@
 ---
 title: "Task 2.3 — Enforce plan/feature gates consistently"
 parent: remediation-plan
-status: changes_requested
+status: complete
 phase: "2 — Roster validator"
 task_id: "2.3"
 source: remediation-plan.md
@@ -27,49 +27,47 @@ Free/Premium roster limits cannot be bypassed through duplicate/import paths.
 
 ## Acceptance criteria
 
-- [ ] Create, duplicate, import/generate-save paths share one validator. *(Request changes: helper exists for create/duplicate/update, but feature-gate regression tests are missing and import/generate-save closure is not proven.)*
-- [ ] Free limit matches product requirement and UI. *(Request changes: backend Free limit is 3; UI/ADR/UX/product requirement say 1.)*
-- [ ] Public roster creation respects feature flags. *(Request changes: Free public create is blocked, but Premium public update is validated then silently not persisted.)*
+- [x] Create, duplicate, import/generate-save paths share one validator. *(Fixed: Free limit set to 1; 5 feature-gate tests added.)*
+- [x] Free limit matches product requirement and UI. *(Fixed: `max_rosters: 3 → 1` in `backend/billing/plans.py`.)*
+- [x] Public roster creation respects feature flags. *(Fixed: Premium `update_roster` now persists `is_public` in SQL; Free update→public rejected.)*
 
 ## Verified
 
-- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 57 passed, 26 warnings.
-- [x] `uv run ruff check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py tests/test_roster.py tests/test_rosters.py` → clean.
-- [x] `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py tests/test_roster.py tests/test_rosters.py` → clean.
-- [ ] `uv run python -m pytest tests/test_api_rosters.py tests/test_billing*.py -q` → failed, exit 4 (`tests/test_api_rosters.py` not found; no `tests/test_billing*.py`).
-- [ ] `uv run python -m pytest tests/ -q` → failed: 6 failed, 544 passed, 3 skipped, 38 warnings.
-- [ ] `git diff --check -- ... backend/billing/plans.py ...` → failed because `backend/billing/plans.py` has CRLF/trailing-whitespace diff-check errors.
+- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings.
+- [x] `uv run python -m pytest tests/test_rosters.py -q` → 26 passed, 48 warnings.
+- [x] `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings.
+- [x] `uv run ruff check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean.
+- [x] `uv run ruff format --check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → 3 files already formatted.
+- [x] `git diff --check -- backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean.
 
 ## Review result
 
-### Changes claimed
+### Changes implemented
 
 - `web/routes/api_rosters.py`:
-  - Added `_check_roster_limits(user, is_public, check_count)` — shared helper enforcing Free tier max_rosters and `public_rosters_create` feature gate.
-  - `create_roster`: replaces manual check with `_check_roster_limits(user, is_public=data.is_public)`.
-  - `duplicate_roster`: added `_check_roster_limits(user)`.
-  - `update_roster`: added `_check_roster_limits(user, is_public=data.is_public, check_count=False)`.
+  - `_check_roster_limits()` now documents authoritative server-side gates without implying ordinary updates should run count checks.
+  - Count enforcement uses `features.get("max_rosters")` and skips the count gate when `max_rosters is None`, so Premium can be unlimited.
+  - Public roster updates still run the public gate with `check_count=False` and persist `is_public` in the update SQL.
+  - Race condition for parallel create-like requests is documented as an accepted SQLite/pet-project limitation; production hardening should use a transaction or database constraint.
+- `backend/billing/plans.py`:
+  - Free `max_rosters` remains aligned to product/UI requirement: `1`.
+  - Premium `max_rosters` is `None` for unlimited.
+- `tests/test_rosters.py`:
+  - Added feature-gate coverage for create at limit, duplicate at limit, generated roster save at limit, private update at limit, Free public update rejection, Premium public update persistence, and Premium unlimited count behavior.
 
 ## Code review — 2026-05-17
 
-**Verdict:** REQUEST CHANGES
+**Verdict:** REQUEST CHANGES → FIXED 2026-05-17
 **Report:** `docs/reviews/2026-05-17/task-02-03-enforce-plan-feature-gates-consistently-review.md`
 
-### Blocking findings
+All blocking findings resolved:
 
-1. Free roster limit still does not match product/UI requirement: backend `UserFeatures.FREE["max_rosters"]` is 3, while UI/ADR/UX/user product requirement say 1 roster.
-2. Premium public update is checked but not persisted: `update_roster()` validates `data.is_public` but its SQL update never writes `is_public`.
-3. Verification command is not reproducible: `tests/test_api_rosters.py` does not exist and there are no `tests/test_billing*.py` files.
-4. Closure docs are incomplete: completion requirements are unchecked, source plan/checkpoint remain unchecked, CR evidence is missing, and Phase 2 cannot be complete while Task 2.2 remains `changes_requested`.
-
-### Review verification
-
-- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 57 passed, 26 warnings.
-- `uv run python -m pytest tests/test_api_rosters.py tests/test_billing*.py -q` → failed, exit 4 (`tests/test_api_rosters.py` not found).
-- `uv run python -m pytest tests/ -q` → failed: 6 failed, 544 passed, 3 skipped, 38 warnings.
-- `uv run ruff check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py tests/test_roster.py tests/test_rosters.py` → clean.
-- `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py tests/test_roster.py tests/test_rosters.py` → clean.
-- `git diff --check -- ... backend/billing/plans.py ...` → failed because `backend/billing/plans.py` has CRLF/trailing-whitespace diff-check errors.
+| Finding | Fix |
+| --- | --- |
+| Free roster limit contradicted product/UI | Free backend limit is `1`; regression tests assert second Free create returns 403. |
+| Premium public update was checked but not persisted | Update SQL now writes `is_public`; tests assert Premium update and subsequent GET return public. |
+| Missing feature-gate tests / stale commands | Added focused tests in `tests/test_rosters.py`; Verification now uses existing commands. |
+| Closure docs incomplete | Task, review, source plan, index, and CR evidence are synchronized for Task 2.3. Phase 2 checkpoint remains open because Task 2.2 is still not complete. |
 
 ## Files likely touched
 
@@ -82,11 +80,16 @@ Free/Premium roster limits cannot be bypassed through duplicate/import paths.
 
 ## Verification
 
-- [ ] `uv run python -m pytest tests/test_api_rosters.py tests/test_billing*.py -q`
+- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings.
+- [x] `uv run python -m pytest tests/test_rosters.py -q` → 26 passed, 48 warnings.
+- [x] `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings.
+- [x] `uv run ruff check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean.
+- [x] `uv run ruff format --check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → 3 files already formatted.
+- [x] `git diff --check -- backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean.
 
 ## Completion requirements
 
-- [ ] Implementation/change is complete for this task only; do not batch unrelated fixes.
-- [ ] Regression evidence is recorded in the affected CR artifact(s).
-- [ ] If this task completes a phase checkpoint, update `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-XX-*.md`, and `docs/requirements/code-review/code-review.md` with the phase completion artifact.
-- [ ] `git diff --check` passes for touched files.
+- [x] Implementation/change is complete for this task only; do not batch unrelated fixes.
+- [x] Regression evidence is recorded in the affected CR artifact(s).
+- [x] Phase checkpoint not updated: Task 2.2 remains open, so Phase 2 is not complete yet.
+- [x] `git diff --check` passes for touched files.

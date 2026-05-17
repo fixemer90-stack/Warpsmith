@@ -309,7 +309,10 @@ class TestRosterCRUD:
         )
 
         assert update.status_code == 403
-        assert update.json()["detail"] == "Public rosters require Premium. Upgrade to create public rosters."
+        assert (
+            update.json()["detail"]
+            == "Public rosters require Premium. Upgrade to create public rosters."
+        )
 
     def test_premium_max_rosters_none_is_unlimited(self, client):
         """Premium max_rosters=None skips the count gate instead of crashing."""
@@ -328,18 +331,6 @@ class TestRosterCRUD:
 
 class TestFeatureGates:
     """Focused tests for Free/Premium feature gates (Task 2.3)."""
-
-    @staticmethod
-    def _set_tier(client, auth_headers, email: str, tier: str):
-        """Force-set user tier in DB for testing."""
-        import sqlite3
-
-        db_path = getattr(db, "path", None) or db.conn.execute(
-            "PRAGMA database_list"
-        ).fetchone()[2]
-        # Use the existing db connection to UPDATE
-        db.execute("UPDATE users SET tier = ? WHERE email = ?", (tier, email))
-        db.commit()
 
     @staticmethod
     def _register_and_set_tier(client, tier: str) -> tuple[dict, str]:

@@ -468,12 +468,16 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** Free/Premium roster limits cannot be bypassed through duplicate/import paths.
 
 **Acceptance criteria:**
-- [ ] Create, duplicate, import/generate-save paths share one validator.
-- [ ] Free limit matches product requirement and UI.
-- [ ] Public roster creation respects feature flags.
+- [x] Create, duplicate, import/generate-save paths share one validator.
+- [x] Free limit matches product requirement and UI.
+- [x] Public roster creation respects feature flags.
 
 **Verification:**
-- `uv run python -m pytest tests/test_api_rosters.py tests/test_billing*.py -q`
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings
+- `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings
+- `uv run ruff check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean
+- `uv run ruff format --check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean
+- `git diff --check -- backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean
 
 ### Checkpoint 2
 
