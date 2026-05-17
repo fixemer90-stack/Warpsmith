@@ -100,6 +100,24 @@ class RosterValidationResult:
         self.is_valid = False
 
 
+# ── Shared helpers ─────────────────────────────────────────────────────────
+
+
+def is_unit_eligible_warlord(unit: "Unit") -> bool:
+    """Check if a unit can be a Warlord candidate.
+
+    Matches the validation eligibility predicate so generators and
+    validators use the same definition.
+    """
+    tag_set = {str(t).lower() for t in (getattr(unit, "tags", []) or [])}
+    return (
+        unit.can_be_warlord
+        or unit.is_leader
+        or unit.category.lower() == "character"
+        or "character" in tag_set
+    )
+
+
 # ── Canonical PTS formula ──────────────────────────────────────────────────
 
 
@@ -135,6 +153,7 @@ def validate_roster(
     game_size: GameSize = GameSize.STRIKE_FORCE,
     loadout_pts: list[int] | None = None,
     nob_pts: list[int] | None = None,
+    is_warlord: list[bool] | None = None,
 ) -> RosterValidationResult:
     """Validate a roster against 10th edition rules.
 
@@ -146,6 +165,8 @@ def validate_roster(
                   Ignored when pts_limit is explicitly provided.
         loadout_pts: Optional per-unit loadout/upgrade points, same order as units.
         nob_pts: Optional per-unit flat Nob upgrade cost, same order as units.
+        is_warlord: Optional per-unit is_warlord flags, same order as units.
+                    When None, auto-selects if exactly one eligible Character exists.
 
     Returns:
         RosterValidationResult with errors if any violations found.
@@ -154,10 +175,12 @@ def validate_roster(
         pts_limit = game_size.pts_limit
     result = RosterValidationResult()
     counts: dict[str, int] = {}
-    has_warlord = False
     total_pts = 0
     total_models = 0
     epic_heroes_seen: set[str] = set()
+    eligible_candidates: list[str] = []  # names of Warlord-eligible units
+    warlord_count = 0
+    warlord_on_non_character: list[str] = []
 
     for i, (unit_name, squad_size) in enumerate(units):
         unit = unit_registry.get(unit_name)
@@ -214,8 +237,15 @@ def validate_roster(
             epic_heroes_seen.add(unit_name)
 
         # Warlord tracking
-        if unit.can_be_warlord:
-            has_warlord = True
+        is_eligible = is_unit_eligible_warlord(unit)
+        if is_eligible:
+            eligible_candidates.append(unit_name)
+
+        unit_is_warlord = bool(is_warlord[i]) if is_warlord and i < len(is_warlord) else False
+        if unit_is_warlord:
+            warlord_count += 1
+            if not is_eligible:
+                warlord_on_non_character.append(unit_name)
 
         # Points — use canonical formula with per-unit upgrades
         sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
@@ -250,12 +280,42 @@ def validate_roster(
             total_pts=total_pts,
         )
 
-    # Warlord requirement
-    if not has_warlord:
-        result.add_error(
-            "no_warlord",
-            "Roster must include at least one model that can be Warlord",
-        )
+    # ── Warlord validation ──
+    if warlord_on_non_character:
+        for name in warlord_on_non_character:
+            result.add_error(
+                "invalid_warlord",
+                f"'{name}' is not a Character and cannot be Warlord",
+                unit_name=name,
+            )
+
+    num_eligible = len(eligible_candidates)
+
+    if is_warlord is None:
+        # Auto mode: no explicit is_warlord flags passed
+        if num_eligible >= 2:
+            result.add_error(
+                "no_warlord",
+                f"Roster has {num_eligible} eligible Characters. Select exactly one Warlord.",
+            )
+        # 0 or 1 eligible: OK (auto-select)
+    else:
+        # Explicit is_warlord mode
+        if num_eligible == 0 and warlord_count > 0:
+            result.add_error(
+                "no_eligible_warlord",
+                "No eligible Characters in roster, but a Warlord is assigned",
+            )
+        elif num_eligible >= 1 and warlord_count == 0:
+            result.add_error(
+                "no_warlord",
+                "Roster must include exactly one Warlord",
+            )
+        elif num_eligible >= 1 and warlord_count > 1:
+            result.add_error(
+                "too_many_warlords",
+                f"Roster has {warlord_count} Warlords, expected exactly one",
+            )
 
     # Empty roster
     if not units:

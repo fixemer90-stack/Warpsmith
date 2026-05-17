@@ -54,7 +54,7 @@ class TestRosterCRUD:
         "pts_limit": 2000,
         "detachment": "War Horde",
         "units": [
-            {"unit_name": "Warboss", "squad_size": 1},
+            {"unit_name": "Warboss", "squad_size": 1, "is_warlord": True},
             {"unit_name": "Boyz", "squad_size": 10},
         ],
     }
@@ -174,7 +174,7 @@ class TestRosterCRUD:
             **self.ROSTER_PAYLOAD,
             "name": "Updated Ork Horde",
             "units": [
-                {"unit_name": "Warboss", "squad_size": 1},
+                {"unit_name": "Warboss", "squad_size": 1, "is_warlord": True},
                 {"unit_name": "Boyz", "squad_size": 15},  # Changed squad size
             ],
         }

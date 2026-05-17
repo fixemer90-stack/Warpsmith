@@ -122,3 +122,15 @@ Changes:
 - 11 new tests covering Boyz min, expanded, loadout, Nob upgrades, Nobz, single-model vehicle, roster totalPts sum, squad_pts breakdown, PTS exceeded error.
 
 Tests: 33 passed in test_roster.py (22 pre-existing + 11 new). Lint/format/diff-check clean.
+
+## Regression evidence — Task 2.2 (Warlord validation)
+
+**2026-05-17.** Shared Warlord validation in `validate_roster()`.
+
+Changes:
+- `roster.py`: added `is_warlord` param to `validate_roster()`; rejects 0 warlords for 2+ eligible chars, rejects 2+ warlords, rejects non-character warlord.
+- `roster.py`: added shared `is_unit_eligible_warlord(unit)` helper.
+- `api_rosters.py`: generator/validation use shared helper; create/update pass is_warlord flags.
+- 3 new tests.
+
+Tests: 543 passed. Lint/format/diff-check clean.

@@ -98,7 +98,7 @@ class TestValidateRoster:
     def test_valid_roster(self, registry):
         """A standard legal roster passes."""
         units = [("Warboss", 1), ("Boyz", 10), ("Weirdboy", 1)]
-        result = validate_roster(units, registry)
+        result = validate_roster(units, registry, is_warlord=[True, False, False])
         assert result.is_valid
         assert result.total_pts > 0
         assert len(result.errors) == 0
@@ -118,11 +118,83 @@ class TestValidateRoster:
         assert any(e.code == "pts_exceeded" for e in result.errors)
 
     def test_no_warlord(self, registry):
-        """Roster without a Warlord-capable unit fails."""
+        """Roster without any eligible Character has no Warlord requirement."""
         units = [("Boyz", 10)]
         result = validate_roster(units, registry)
-        assert not result.is_valid
+        # Zero eligible Characters → no Warlord requirement (new contract)
+        assert result.is_valid, (
+            f"Expected valid (no warlord needed without characters), errors: {result.errors}"
+        )
+        assert result.total_pts == 85
+
+    def test_multiple_characters_no_warlord(self, registry):
+        """Multiple Characters without explicit Warlord fails in auto mode too."""
+        # Auto mode (is_warlord=None): 2+ eligible chars → error
+        units = [("Warboss", 1), ("Weirdboy", 1)]
+        result = validate_roster(units, registry)
+        assert not result.is_valid, f"Expected invalid (2 eligible chars need explicit Warlord), errors: {result.errors}"
         assert any(e.code == "no_warlord" for e in result.errors)
+
+        # Explicit mode (is_warlord=[]): zero warlords flagged → error
+        result2 = validate_roster(units, registry, is_warlord=[False, False])
+        assert not result2.is_valid
+        assert any(e.code == "no_warlord" for e in result2.errors)
+
+    def test_too_many_warlords_fails(self, registry):
+        """More than one unit marked as Warlord fails."""
+        units = [("Warboss", 1), ("Weirdboy", 1)]
+        result = validate_roster(units, registry, is_warlord=[True, True])
+        assert not result.is_valid
+        assert any(e.code == "too_many_warlords" for e in result.errors), (
+            f"Expected too_many_warlords, got: {[e.code for e in result.errors]}"
+        )
+
+    def test_non_character_warlord_fails(self):
+        """A non-Character unit marked as Warlord fails."""
+        from backend.model.unit import Unit
+
+        boyz = Unit(
+            name="Boyz",
+            faction="orks",
+            category="Infantry",
+            movement=5,
+            toughness=4,
+            save=4,
+            wounds=2,
+            leadership=7,
+            objective_control=1,
+            points=85,
+            model_count=(10, 20),
+            squad_size={"min": 10, "max": 20, "step": 5},
+            keywords=["Infantry", "Battleline", "Orks"],
+        )
+        warlord = Unit(
+            name="Warboss",
+            faction="orks",
+            category="Character",
+            movement=6,
+            toughness=6,
+            save=3,
+            wounds=7,
+            leadership=6,
+            objective_control=2,
+            points=80,
+            model_count=(1, 1),
+            squad_size={"min": 1, "max": 1, "step": 1},
+            keywords=["Infantry", "Character", "Orks"],
+            can_be_warlord=True,
+        )
+        # Boyz marked as warlord but not eligible → error
+        units = [("Boyz", 10), ("Warboss", 1)]
+        result = validate_roster(
+            units,
+            {"Boyz": boyz, "Warboss": warlord},
+            is_warlord=[True, False],
+        )
+        assert not result.is_valid
+        assert any(e.code == "invalid_warlord" for e in result.errors), (
+            f"Expected invalid_warlord, got: {[e.code for e in result.errors]}"
+        )
 
     def test_too_many_copies_non_battleline(self, registry):
         """Non-Battleline units capped at 3 copies."""

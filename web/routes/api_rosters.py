@@ -10,7 +10,12 @@ from backend.auth import User, get_current_user
 from backend.billing.plans import UserFeatures
 from backend.db.database import db
 from backend.loader.registry import registry as wiki
-from backend.state.roster import RosterState, calculate_squad_pts, validate_roster
+from backend.state.roster import (
+    RosterState,
+    calculate_squad_pts,
+    is_unit_eligible_warlord,
+    validate_roster,
+)
 
 router = APIRouter()
 
@@ -42,13 +47,7 @@ def _warlord_validation_errors(units: list[RosterUnit]) -> list[dict]:
         unit = wiki.get_unit(roster_unit.unit_name)
         if not unit:
             continue
-        tags = {str(t).lower() for t in (getattr(unit, "tags", []) or [])}
-        if (
-            unit.can_be_warlord
-            or unit.is_leader
-            or unit.category.lower() == "character"
-            or "character" in tags
-        ):
+        if is_unit_eligible_warlord(unit):
             candidates.append(roster_unit)
 
     if len(candidates) <= 1:
@@ -128,12 +127,14 @@ async def create_roster(data: RosterCreate, user: User = Depends(get_current_use
     units_list = [(u.unit_name, u.squad_size) for u in data.units]
     loadout_pts = [_resolve_loadout_pts(u.unit_name, u.loadout) for u in data.units]
     nob_pts = [_resolve_nob_pts(u.unit_name, u.nob_option) for u in data.units]
+    is_warlord_list = [bool(u.is_warlord) for u in data.units]
     validation = validate_roster(
         units_list,
         wiki.units,
         pts_limit=data.pts_limit,
         loadout_pts=loadout_pts,
         nob_pts=nob_pts,
+        is_warlord=is_warlord_list,
     )
     warlord_errors = _warlord_validation_errors(data.units)
 
@@ -317,7 +318,7 @@ async def generate_roster(data: dict | None = None):
         total += cost
         counts[name] = counts.get(name, 0) + 1
 
-        if unit.can_be_warlord:
+        if is_unit_eligible_warlord(unit):
             has_warlord = True
 
     if not has_warlord:
@@ -327,7 +328,9 @@ async def generate_roster(data: dict | None = None):
         warlords = [
             (n, u)
             for n, u in wiki.units.items()
-            if u.can_be_warlord and u.points > 0 and (not faction or u.faction == faction)
+            if is_unit_eligible_warlord(u)
+            and u.points > 0
+            and (not faction or u.faction == faction)
         ]
         if warlords:
             n, u = min(warlords, key=lambda item: item[1].points)
@@ -361,7 +364,7 @@ async def generate_roster(data: dict | None = None):
     if selected and not any(u.get("is_warlord") for u in selected):
         for item in selected:
             unit = wiki.get_unit(item["unit_name"])
-            if unit and unit.can_be_warlord:
+            if unit and is_unit_eligible_warlord(unit):
                 item["is_warlord"] = True
                 break
 
@@ -410,12 +413,17 @@ async def update_roster(roster_id: int, data: RosterCreate, user: User = Depends
     # Валидация как в create_roster
     with contextlib.suppress(Exception):
         wiki.load()
-
     units_list = [(u.unit_name, u.squad_size) for u in data.units]
     loadout_pts = [_resolve_loadout_pts(u.unit_name, u.loadout) for u in data.units]
     nob_pts = [_resolve_nob_pts(u.unit_name, u.nob_option) for u in data.units]
+    is_warlord_list = [bool(u.is_warlord) for u in data.units]
     validation = validate_roster(
-        units_list, wiki.units, pts_limit=data.pts_limit, loadout_pts=loadout_pts, nob_pts=nob_pts
+        units_list,
+        wiki.units,
+        pts_limit=data.pts_limit,
+        loadout_pts=loadout_pts,
+        nob_pts=nob_pts,
+        is_warlord=is_warlord_list,
     )
     warlord_errors = _warlord_validation_errors(data.units)
 

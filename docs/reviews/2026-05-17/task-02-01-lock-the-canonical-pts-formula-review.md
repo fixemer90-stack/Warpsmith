@@ -6,11 +6,61 @@ Scope: Verify the claimed completed implementation of Task 2.1.
 
 ## Verdict
 
-REQUEST CHANGES → FIXED 2026-05-17.
+REQUEST CHANGES after re-review 2026-05-17.
 
-## Resolution
+## Re-review — 2026-05-17
 
-All findings resolved.
+Code fixes are substantially improved: production `validate_roster()` now accepts `loadout_pts`/`nob_pts`, API create/get totals match an upgraded Boyz+Nob payload in a deterministic probe, and the full suite is green. However the task cannot be approved because closure artifacts still contradict the verified state and one frontend-contract AC remains unproven.
+
+### Important 1 — closure docs still say incomplete/failed and contain stale evidence
+
+- Task frontmatter is still `status: changes_requested`.
+- Task acceptance criteria are still unchecked.
+- Task Verification still records full suite as failed (`18 failed, 515 passed`) and production-path parity smoke as failed, even though re-review observed those paths passing.
+- Task file has duplicate `## Completion requirements` sections with conflicting checked/unchecked state.
+- `docs/remediation/remediation-plan.md` still has Task 2.1 checkboxes unchecked.
+- `docs/remediation/index.md` has no visible completed status for Task 2.1.
+- CR-12/16/17/19 regression evidence exists, but still records stale `33 passed` / old scope instead of the latest verified 56 scoped and 543 full-suite results.
+
+Required fix: synchronize task file, source plan, index, and CR evidence with the latest verified commands/results before marking complete.
+
+### Important 2 — frontend formula contract is still only commented, not consumed/shared/proven
+
+`web/static/team_builder.js` still implements the PTS formula directly. A comment saying it must match `calculate_squad_pts()` is not a shared exported formula and is not a parity test. The task allows frontend-side calculation only if a shared exported formula/test fixture generated from the backend contract proves parity.
+
+Required fix: add a real backend-vs-frontend parity test/fixture or change the UI path to consume backend-calculated totals. If product decision is to accept comment-only parity, update the task contract explicitly; as written, this AC is not fully satisfied.
+
+### Re-review checks
+
+```text
+rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py -q
+→ 56 passed, 26 warnings
+
+uv run python -m pytest tests/ -q
+→ 543 passed, 3 skipped, 38 warnings
+
+Direct production-path smoke:
+expected=160; validate_total_pts=160; squad_pts[0].squad_pts=160; matches=True
+
+API production-path smoke with patched registry loadout/nob options:
+create_total_pts=240; get_total_pts=240; Boyz squad_pts=160; Warboss squad_pts=80
+
+uv run ruff check backend/state/roster.py web/routes/api_rosters.py tests/test_roster.py tests/test_rosters.py
+→ All checks passed
+
+uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py tests/test_roster.py tests/test_rosters.py
+→ 4 files already formatted
+
+node --check web/static/team_builder.js
+→ clean
+
+git diff --check -- backend/state/roster.py web/routes/api_rosters.py web/static/team_builder.js tests/test_roster.py tests/test_rosters.py docs/remediation/task-02-01-lock-the-canonical-pts-formula.md docs/reviews/2026-05-17/task-02-01-lock-the-canonical-pts-formula-review.md
+→ clean before this review-file update
+```
+
+## Previous resolution claim
+
+The previous resolution section claimed all findings resolved. Re-review supersedes that claim: code findings 1, 3, 4, 5, and full-suite status are now verified as fixed, but closure docs are stale and frontend parity remains unproven.
 
 ### Critical 1 — validate_roster() ignores loadoutPts/nobPts (Fixed)
 

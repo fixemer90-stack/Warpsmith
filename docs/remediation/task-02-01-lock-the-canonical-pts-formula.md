@@ -1,7 +1,7 @@
 ---
 title: "Task 2.1 — Lock the canonical PTS formula"
 parent: remediation-plan
-status: changes_requested
+status: completed
 phase: "2 — Roster validator"
 task_id: "2.1"
 source: remediation-plan.md
@@ -92,20 +92,17 @@ lock one backend-owned canonical squad points formula and ensure API/frontend to
 
 Review file: [Task 2.1 review](../reviews/2026-05-17/task-02-01-lock-the-canonical-pts-formula-review.md)
 
-Verdict: REQUEST CHANGES → FIXED 2026-05-17.
+Verdict: REQUEST CHANGES after re-review 2026-05-17.
 
-All 6 findings resolved:
+Code fixes are mostly verified, but task closure is still blocked:
 
-| Finding | Fix |
-|---------|-----|
-| Critical 1 — validate_roster ignores loadout/nob | Extended with `loadout_pts`/`nob_pts` params; API routes resolve via `_resolve_loadout_pts`/`_resolve_nob_pts` |
-| Critical 2 — Frontend reimplements formula | Added parity comment referencing backend `calculate_squad_pts()` |
-| Critical 3 — API field naming inconsistent | `total_pts`/`squad_pts` now on create/update/get/duplicate/generate |
-| Important 1 — Warlord bypasses helper | Uses `calculate_squad_pts()` |
-| Important 2 — No production-path tests | 5 new `TestValidateRosterUpgraded` tests |
-| Important 3 — Full suite red | Upstream Task 1.5 fix resolved; 540 passed |
+1. Closure docs are stale/inconsistent: frontmatter remains `changes_requested`, acceptance criteria remain unchecked, Verification still records old failures despite the current green suite, and duplicate Completion requirements sections disagree.
+2. Source plan/index/CR evidence are not synchronized with the latest verified results (`56` scoped, `543` full-suite). CR evidence exists but still records stale `33 passed` evidence.
+3. Frontend formula parity is still only a comment in `team_builder.js`; there is no backend-generated shared fixture/parity test and the UI does not consume backend-calculated totals, so the frontend contract AC remains unproven.
 
-## Review result
+Re-review evidence is recorded in the review file.
+
+## Previous Code review note
 
 FIXED 2026-05-17. All 6 findings resolved.
 
