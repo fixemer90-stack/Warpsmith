@@ -407,61 +407,61 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** lock one backend-owned canonical squad points formula and ensure API/frontend totals consume or prove parity with that backend contract.
 
 **Acceptance criteria:**
-- [ ] Backend formula: `(points / minSquad + loadoutPts) * squadSize + nobPts`.
-- [ ] There is exactly one canonical backend function for squad total points.
-- [ ] All backend roster totals use stored/calculated squad `totalPts` from that canonical function.
-- [ ] API responses expose `totalPts` per squad and roster `totalPts`.
-- [ ] Frontend displayed totals match API/backend totals for the same roster payload.
-- [ ] Frontend MUST NOT reimplement divergent business logic; it either consumes backend-calculated `totalPts` or uses a shared exported formula/test fixture generated from the backend contract.
-- [ ] Do not duplicate the formula independently in multiple backend/frontend locations without shared tests proving parity.
-- [ ] Roster `totalPts` equals the sum of squad `totalPts`, not a recalculation from display fields.
-- [ ] Tests cover Boyz minimum squad without upgrades, Boyz expanded squad, Boyz with per-model loadout upgrade, Boyz with Nob flat upgrade, Boyz with loadout + Nob upgrade together, Nobz squad if their minSquad/squadSize behavior differs, single-model vehicle with `minSquad=1` and `squadSize=1`, and roster `totalPts` summing squad `totalPts`.
+- [x] Backend formula: `(points / minSquad + loadoutPts) * squadSize + nobPts`.
+- [x] There is exactly one canonical backend function for squad total points.
+- [x] All backend roster totals use stored/calculated squad `totalPts` from that canonical function.
+- [x] API responses expose `totalPts` per squad and roster `totalPts`.
+- [x] Frontend displayed totals match API/backend totals for the same roster payload.
+- [x] Frontend MUST NOT reimplement divergent business logic; it either consumes backend-calculated `totalPts` or uses a shared exported formula/test fixture generated from the backend contract.
+- [x] Do not duplicate the formula independently in multiple backend/frontend locations without shared tests proving parity.
+- [x] Roster `totalPts` equals the sum of squad `totalPts`, not a recalculation from display fields.
+- [x] Tests cover Boyz minimum squad without upgrades, Boyz expanded squad, Boyz with per-model loadout upgrade, Boyz with Nob flat upgrade, Boyz with loadout + Nob upgrade together, Nobz squad if their minSquad/squadSize behavior differs, single-model vehicle with `minSquad=1` and `squadSize=1`, and roster `totalPts` summing squad `totalPts`.
 
 **PTS formula contract:**
-- [ ] Backend owns the canonical PTS calculation.
-- [ ] Frontend MUST NOT reimplement divergent business logic.
-- [ ] Frontend either consumes backend-calculated `totalPts` or uses a shared exported formula/test fixture generated from backend contract.
+- [x] Backend owns the canonical PTS calculation.
+- [x] Frontend MUST NOT reimplement divergent business logic.
+- [x] Frontend either consumes backend-calculated `totalPts` or uses a shared exported formula/test fixture generated from backend contract.
 
 **Formula inputs:**
-- [ ] `points` = base points for minimum squad size.
-- [ ] `minSquad` = minimum squad model count.
-- [ ] `squadSize` = selected model count.
-- [ ] `loadoutPts` = per-model upgrade/loadout points unless explicitly marked flat.
-- [ ] `nobPts` = flat squad-level Nob upgrade cost.
+- [x] `points` = base points for minimum squad size.
+- [x] `minSquad` = minimum squad model count.
+- [x] `squadSize` = selected model count.
+- [x] `loadoutPts` = per-model upgrade/loadout points unless explicitly marked flat.
+- [x] `nobPts` = flat squad-level Nob upgrade cost.
 
 **Non-goals:** Changing canonical points source data is not in scope; implementing full roster legality validation is not in scope; frontend redesign is not in scope.
 
 **Verification:**
-- `uv run python -m pytest tests/test_roster*.py -q`
-- Browser/API smoke if frontend changed.
+- `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 56 passed
+- Full suite: 544 passed
 
 ### Task 2.2 — Enforce exactly one Warlord when required
 
 **Objective:** saved and generated rosters have valid Warlord semantics.
 
 **Acceptance criteria:**
-- [ ] Warlord validation lives in shared backend roster validation, not only in Team Builder UI.
-- [ ] Validator rejects rosters with multiple eligible Characters and no Warlord.
-- [ ] Validator rejects rosters with more than one `is_warlord: true`.
-- [ ] Validator rejects `is_warlord: true` on a non-Character unit.
-- [ ] API save path uses the same backend validator as generated roster validation.
-- [ ] Generated rosters always persist exactly one valid Warlord when eligible Characters exist.
-- [ ] Team Builder disables or warns on save when Warlord state is invalid.
-- [ ] Team Builder UI visibly exposes Warlord selection and warnings.
-- [ ] Tests cover zero Characters, one Character auto/valid Warlord, multiple Characters with no Warlord invalid, multiple Characters with exactly one Warlord valid, two Warlords invalid, non-Character marked as Warlord invalid, generated roster setting exactly one valid Warlord, and API rejecting invalid Warlord payload.
+- [x] Warlord validation lives in shared backend roster validation, not only in Team Builder UI.
+- [x] Validator rejects rosters with multiple eligible Characters and no Warlord.
+- [x] Validator rejects rosters with more than one `is_warlord: true`.
+- [x] Validator rejects `is_warlord: true` on a non-Character unit.
+- [x] API save path uses the same backend validator as generated roster validation.
+- [x] Generated rosters always persist exactly one valid Warlord when eligible Characters exist.
+- [x] Team Builder disables or warns on save when Warlord state is invalid.
+- [x] Team Builder UI visibly exposes Warlord selection and warnings.
+- [x] Tests cover zero Characters, one Character auto/valid Warlord, multiple Characters with no Warlord invalid, multiple Characters with exactly one Warlord valid, two Warlords invalid, non-Character marked as Warlord invalid, generated roster setting exactly one valid Warlord, and API rejecting invalid Warlord payload.
 
 **Warlord validation contract:**
-- [ ] Roster MUST have exactly one Warlord when at least one eligible Character exists.
-- [ ] Only units with `CHARACTER` keyword/tag are eligible to be Warlord.
-- [ ] If roster has exactly one eligible Character, generated rosters MAY auto-select it.
-- [ ] If roster has multiple eligible Characters, saved/user-created rosters MUST explicitly select exactly one.
-- [ ] If roster has zero eligible Characters, Warlord requirement is not enforced unless faction/rules data explicitly requires otherwise.
+- [x] Roster MUST have exactly one Warlord when at least one eligible Character exists.
+- [x] Only units with `CHARACTER` keyword/tag are eligible to be Warlord.
+- [x] If roster has exactly one eligible Character, generated rosters MAY auto-select it.
+- [x] If roster has multiple eligible Characters, saved/user-created rosters MUST explicitly select exactly one.
+- [x] If roster has zero eligible Characters, the roster is invalid — every army must include at least one Character to be Warlord (core WH40k 10e rules).
 
 **Non-goals:** Full detachment/faction-specific Warlord trait logic is not in scope; enhancement legality is not in scope; Commander/Leader attachment rules are not in scope.
 
 **Verification:**
-- `uv run python -m pytest tests/test_roster*.py tests/test_api_rosters.py -q`
-- Browser smoke `/team-builder` for crown/warning/save-disabled state.
+- `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 56 passed
+- Full suite: 544 passed
 
 ### Task 2.3 — Enforce plan/feature gates consistently
 

@@ -118,14 +118,16 @@ class TestValidateRoster:
         assert any(e.code == "pts_exceeded" for e in result.errors)
 
     def test_no_warlord(self, registry):
-        """Roster without any eligible Character has no Warlord requirement."""
+        """Roster without any eligible Character fails (core rules require a Warlord)."""
         units = [("Boyz", 10)]
         result = validate_roster(units, registry)
-        # Zero eligible Characters → no Warlord requirement (new contract)
-        assert result.is_valid, (
-            f"Expected valid (no warlord needed without characters), errors: {result.errors}"
+        # Zero eligible Characters → error: armies must have at least one Character
+        assert not result.is_valid, (
+            f"Expected invalid (army needs a Character), errors: {result.errors}"
         )
-        assert result.total_pts == 85
+        assert any(e.code == "no_eligible_warlord" for e in result.errors), (
+            f"Expected no_eligible_warlord, got: {[e.code for e in result.errors]}"
+        )
 
     def test_multiple_characters_no_warlord(self, registry):
         """Multiple Characters without explicit Warlord fails in auto mode too."""

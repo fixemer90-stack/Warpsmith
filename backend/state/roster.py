@@ -293,18 +293,23 @@ def validate_roster(
 
     if is_warlord is None:
         # Auto mode: no explicit is_warlord flags passed
-        if num_eligible >= 2:
+        if num_eligible == 0:
+            result.add_error(
+                "no_eligible_warlord",
+                "Roster has no eligible Character to be Warlord. Armies must include at least one Character.",
+            )
+        elif num_eligible >= 2:
             result.add_error(
                 "no_warlord",
                 f"Roster has {num_eligible} eligible Characters. Select exactly one Warlord.",
             )
-        # 0 or 1 eligible: OK (auto-select)
+        # 1 eligible: OK (auto-select)
     else:
         # Explicit is_warlord mode
-        if num_eligible == 0 and warlord_count > 0:
+        if num_eligible == 0:
             result.add_error(
                 "no_eligible_warlord",
-                "No eligible Characters in roster, but a Warlord is assigned",
+                "Roster has no eligible Character to be Warlord. Armies must include at least one Character.",
             )
         elif num_eligible >= 1 and warlord_count == 0:
             result.add_error(
