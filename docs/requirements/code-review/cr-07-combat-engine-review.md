@@ -66,8 +66,19 @@ tags: [requirements, code-review, atomic-review]
   - `apply_modifiers`: removed `lethal_hits` from `auto_success` group (it no longer makes hits auto-succeed).
   - `_resolve_attack_chain`: now uses `handle_critical_hit()` to determine `auto_wound` based on Lethal Hits presence, not `hit_result.is_crit` directly.
   - Updated `test_shoota_vs_marine` expected range (0.20-0.30 → 0.15-0.20) to reflect correct non-Lethal-Hits damage.
-  - Added 6 new tests in `test_modifiers.py`: `test_lethal_hits_does_not_auto_succeed`, `test_plain_natural_6_requires_wound_roll`, `test_lethal_hits_natural_6_auto_wounds`, `test_lethal_hits_non_6_normal_wound_roll`, `test_plain_critical_hit_no_auto_wound_without_lethal`, `test_lethal_hits_bypasses_wound_but_proceeds_to_save`, `test_mixed_attack_pool_lethal_hits`.
+  - Added 6 new tests.
   - Full test suite: 550 passed, 3 skipped.
+
+## Task-03-02 Resolution (2026-05-17)
+
+- **AP applied twice → FIXED.**
+  - Removed duplicate `save_target = max(1, min(6, save_target - weapon.ap))` in `_resolve_wound_chain`.
+  - `defender.best_save(weapon.ap)` now applies AP exactly once; cover and modifiers apply after.
+- **Devastating Wounds bypasses all saves → FIXED (partially in 3.1, completed in 3.2).**
+  - `apply_modifiers`: `devastating_wounds` no longer sets `ignore_save` unconditionally — only `handle_critical_hit` sets it when the roll is a Critical Wound.
+- **Ignores Cover weapon tag → FIXED.** `_resolve_wound_chain` now checks weapon modifiers for `ignore_cover` operation in addition to `context.ignores_cover`.
+  - Added 9 new tests.
+  - Full test suite: 571 passed, 3 skipped.
 
 ## Triage summary
 

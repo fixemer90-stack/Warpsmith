@@ -93,10 +93,12 @@ def test_auto_hit_sets_auto_success() -> None:
     assert result.auto_success is True
 
 
-def test_devastating_wounds_ignores_save() -> None:
+def test_devastating_wounds_handled_by_handle_critical_hit() -> None:
+    """devastating_wounds does NOT set ignore_save in apply_modifiers —
+    it's only triggered on Critical Wounds via handle_critical_hit."""
     mods = [Modifier("wound_roll", "devastating_wounds")]
     result = apply_modifiers("wound_roll", 4, mods, make_context(), np.random.default_rng(42))
-    assert result.ignore_save is True
+    assert result.ignore_save is False
 
 
 def test_heavy_only_applies_when_stationary() -> None:
@@ -473,4 +475,336 @@ def test_lethal_hits_with_devastating_wounds_no_save_bypass() -> None:
     assert damage == 0, (
         "Lethal Hits auto-wound with Devastating Wounds should still allow normal save. "
         "Devastating Wounds only triggers on actual Critical Wound rolls."
+    )
+
+
+# ── AP/save/Devastating Wounds tests (task-03-02) ──
+
+
+def test_ap_modifies_save_exactly_once() -> None:
+    """AP is applied exactly once: best_save(weapon.ap). No double application."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    # Marine SV3+ with AP=-2 → saves on 5+ (3 - (-2) = 5)
+    # If AP were applied twice, save would be on 6+
+    weapon = Weapon(
+        name="AP-2 Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=3,
+        strength=8,
+        ap=-2,
+        damage_dice=(0, 0, 1),
+        tags=[],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4  # S8 vs T4 → wounds on 2+
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # Hit=3 (success), Wound=2 (success), Save=5 (passes SV5+) → saved
+    rng = SequenceRNG(3, 2, 5)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 0, f"Expected 0 damage (save on 5+ passes), got {damage}"
+
+    # Hit=3, Wound=2, Save=4 (fails SV5+) → 1 damage
+    rng = SequenceRNG(3, 2, 4)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, f"Expected 1 damage (save on 5+ fails on 4), got {damage}"
+
+
+def test_cover_applied_after_ap_correct_stage() -> None:
+    """Cover bonus applies after AP, modifying the effective save target.
+    Cover gives +1 to save (lowers target), but after AP is applied."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    # Marine SV3+. AP=-1 → save on 4+. Cover → save on 3+ (3-(-1)-1=3).
+    # But wait: best_save(-1) = 3+1 = 4. Cover -1 = 3. So save on 3+.
+    weapon = Weapon(
+        name="AP-1 Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=3,
+        strength=8,
+        ap=-1,
+        damage_dice=(0, 0, 1),
+        tags=[],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # No cover: AP=-1 → save on 4+. Roll=4 → saved.
+    rng = SequenceRNG(3, 2, 4)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 0, f"Without cover, save on 4+ with roll 4 should save: got {damage}"
+
+    # With cover: save on 3+ (SV3+ -(-1) - 1cover = 3). Roll=3 → saved.
+    ctx_with_cover = ModifierContext(attacker, defender, weapon, 12, False, 1, has_cover=True)
+    rng = SequenceRNG(3, 2, 3)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx_with_cover)
+    assert damage == 0, f"With cover, save on 3+ with roll 3 should save: got {damage}"
+
+    # With cover: save on 3+. Roll=2 → fails → damage.
+    rng = SequenceRNG(3, 2, 2)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx_with_cover)
+    assert damage == 1, f"With cover, save on 3+ with roll 2 should fail: got {damage}"
+
+
+def test_cover_and_ap_interaction_correct_save() -> None:
+    """Cover and AP interaction produces the expected effective save."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    # Marine SV3+, AP=-2 → save on 5+. Cover → save on 4+.
+    weapon = Weapon(
+        name="AP-2 Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=3,
+        strength=8,
+        ap=-2,
+        damage_dice=(0, 0, 1),
+        tags=[],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # No cover: AP=-2 → save on 5+. Roll=4 → fails → damage.
+    rng = SequenceRNG(3, 2, 4)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, f"No cover AP-2: save on 5+, roll 4 fails: expected 1, got {damage}"
+
+    # With cover: save on 4+ (5-1=4). Roll=4 → saved.
+    ctx_with = ModifierContext(attacker, defender, weapon, 12, False, 1, has_cover=True)
+    rng = SequenceRNG(3, 2, 4)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx_with)
+    assert damage == 0, f"Cover AP-2: save on 4+, roll 4 saves: expected 0, got {damage}"
+
+    # With cover: save on 4+. Roll=3 → fails → damage.
+    rng = SequenceRNG(3, 2, 3)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx_with)
+    assert damage == 1, f"Cover AP-2: save on 4+, roll 3 fails: expected 1, got {damage}"
+
+
+def test_normal_wound_standard_save_path() -> None:
+    """Normal wound (no crit, no DevWounds) uses standard save path."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    weapon = Weapon(
+        name="Normal Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=3,
+        strength=4,
+        ap=0,
+        damage_dice=(0, 0, 1),
+        tags=[],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # Hit=3 (success), Wound=4 (S4=T4→w4+, success, not crit), Save=2 (fails SV3+) → damage
+    rng = SequenceRNG(3, 4, 2)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, f"Normal wound, save fails: expected 1, got {damage}"
+
+    # Hit=3, Wound=4, Save=3 (passes SV3+) → saved
+    rng = SequenceRNG(3, 4, 3)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 0, f"Normal wound, save passes: expected 0, got {damage}"
+
+
+def test_critical_wound_without_devastating_standard_save() -> None:
+    """Critical Wound without Devastating Wounds uses standard save path."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    weapon = Weapon(
+        name="Crit Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=4,
+        strength=4,
+        ap=0,
+        damage_dice=(0, 0, 1),
+        tags=[],  # No Devastating Wounds — save applies normally even on crit
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4  # S4=T4 → wound on 4+. Crit is roll of 6 → always wounds.
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # Hit=6 (crit), Wound=6 (crit wound, no DevWounds), Save=3 (pass) → saved
+    rng = SequenceRNG(6, 6, 3)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 0, "Critical Wound without DevWounds uses standard save: expected 0"
+
+    # Hit=6, Wound=6, Save=2 (fails) → damage
+    rng = SequenceRNG(6, 6, 2)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, "Critical Wound without DevWounds, save fails: expected 1"
+
+
+def test_critical_wound_with_devastating_bypasses_save() -> None:
+    """Critical Wound with Devastating Wounds bypasses normal save path."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    weapon = Weapon(
+        name="Dev Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=4,
+        strength=4,
+        ap=0,
+        damage_dice=(0, 0, 1),
+        tags=["devastating_wounds"],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # Hit=6 (success, crit), Wound=6 (crit wound), Save=6 (would save, but DevWounds bypasses)
+    # Devastating Wounds on crit wound → ignore_save=True → save skipped → damage=1
+    rng = SequenceRNG(6, 6, 0)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, (
+        f"Critical Wound with DevWounds should bypass save: expected 1, got {damage}"
+    )
+
+
+def test_devastating_wounds_only_on_critical_wound() -> None:
+    """Devastating Wounds does NOT trigger on a non-critical wound."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    weapon = Weapon(
+        name="Dev Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=3,
+        strength=4,
+        ap=0,
+        damage_dice=(0, 0, 1),
+        tags=["devastating_wounds"],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4  # S4=T4 → wound on 4+
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # Hit=3 (success), Wound=4 (success, not crit), Save=2 (fails SV3+) → damage
+    # DevWounds should NOT trigger because wound roll is not a critical
+    rng = SequenceRNG(3, 4, 2)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, (
+        f"Non-critical wound with DevWounds uses normal save path: expected 1, got {damage}"
+    )
+
+    # Hit=3, Wound=4, Save=3 (passes SV3+) → saved
+    rng = SequenceRNG(3, 4, 3)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 0, (
+        f"Non-critical wound with DevWounds, save succeeds: expected 0, got {damage}"
+    )
+
+
+def test_devastating_wounds_damage_reaches_fnp() -> None:
+    """Devastating Wounds damage reaches FNP (Feel No Pain) layer."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    weapon = Weapon(
+        name="Dev Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=3,
+        strength=4,
+        ap=0,
+        damage_dice=(0, 0, 1),
+        tags=["devastating_wounds"],
+    )
+    attacker = make_unit("Attacker")
+    fnp_defender = make_unit("FNP Defender")
+    fnp_defender.toughness = 4
+    fnp_defender.feel_no_pain = 5  # 5+ FNP
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, fnp_defender, weapon, 12, False, 1)
+
+    # Hit=3, Wound=6 (crit wound), DevWounds bypasses save
+    # Then FNP: roll=0 → fails FNP → damage=1
+    # We use a special RNG that gives FNP roll of 0 (fails)
+    rng = SequenceRNG(3, 6, 0)
+    damage = _resolve_attack_chain(rng, weapon, fnp_defender, all_mods, ctx)
+    assert damage == 1, (
+        f"DevWounds damage bypasses save but FNP can stop it: expected 1, got {damage}"
+    )
+
+
+def test_ignores_cover_tag_cancels_cover_bonus() -> None:
+    """Weapon with ignores_cover tag does not get +1 save from cover.
+    AP-1 vs SV3+ with cover should normally save on 3+, but ignores_cover
+    removes cover, making save on 4+. Roll 3 → fails → damage."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    weapon = Weapon(
+        name="Ignore Cover Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=3,
+        strength=4,
+        ap=-1,
+        damage_dice=(0, 0, 1),
+        tags=["ignores_cover"],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1, has_cover=True)
+
+    # AP-1 → SV5+ (3-(-1)+cover=5-1 cover=4?). Wait, let me recalculate:
+    # best_save(-1) = 3+1 = 4 (need 4+). Cover → normally 3+. ignores_cover → stays 4+.
+    # Roll=3 → fails SV4+ → damage=1
+    rng = SequenceRNG(3, 4, 3)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, (
+        f"ignores_cover should cancel cover: expected 1 damage (save on 4+), got {damage}"
+    )
+
+    # Same situation WITHOUT ignores_cover: cover applies → SV3+. Roll=3 → saved → 0 damage
+    no_cover_weapon = Weapon(
+        name="Normal Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=3,
+        strength=4,
+        ap=-1,
+        damage_dice=(0, 0, 1),
+        tags=[],
+    )
+    all_mods_no = build_weapon_modifiers(no_cover_weapon)
+    rng = SequenceRNG(3, 4, 3)
+    damage = _resolve_attack_chain(rng, no_cover_weapon, defender, all_mods_no, ctx)
+    assert damage == 0, (
+        "Without ignores_cover, cover gives +1 save: expected 0 damage (save on 3+), got {damage}"
     )

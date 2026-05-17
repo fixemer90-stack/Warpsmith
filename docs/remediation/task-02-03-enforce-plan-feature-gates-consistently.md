@@ -1,7 +1,7 @@
 ---
 title: "Task 2.3 — Enforce plan/feature gates consistently"
 parent: remediation-plan
-status: complete
+status: completed
 phase: "2 — Roster validator"
 task_id: "2.3"
 source: remediation-plan.md
@@ -67,7 +67,7 @@ All blocking findings resolved:
 | Free roster limit contradicted product/UI | Free backend limit is `1`; regression tests assert second Free create returns 403. |
 | Premium public update was checked but not persisted | Update SQL now writes `is_public`; tests assert Premium update and subsequent GET return public. |
 | Missing feature-gate tests / stale commands | Added focused tests in `tests/test_rosters.py`; Verification now uses existing commands. |
-| Closure docs incomplete | Task, review, source plan, index, and CR evidence are synchronized for Task 2.3. Phase 2 checkpoint remains open because Task 2.2 is still not complete. |
+| Closure docs incomplete | Task, review, source plan, index, and CR evidence are synchronized for Task 2.3; Phase 2 checkpoint is now complete after Task 2.2 re-check. |
 
 ## Files likely touched
 
@@ -91,5 +91,5 @@ All blocking findings resolved:
 
 - [x] Implementation/change is complete for this task only; do not batch unrelated fixes.
 - [x] Regression evidence is recorded in the affected CR artifact(s).
-- [x] Phase checkpoint not updated: Task 2.2 remains open, so Phase 2 is not complete yet.
+- [x] Phase checkpoint updated after Task 2.2 re-check and full Phase 2 verification passed.
 - [x] `git diff --check` passes for touched files.

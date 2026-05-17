@@ -53,7 +53,7 @@ flowchart LR
 | Done | Task | File | Primary CRs | Depends on | Verification |
 | --- | --- | --- | --- | --- | --- |
 | [x] | 2.1 — Lock the canonical PTS formula | [task-02-01-lock-the-canonical-pts-formula.md](task-02-01-lock-the-canonical-pts-formula.md) | CR-12, CR-16, CR-17, CR-19. | [1.4 — Emit canonical JSON artifacts](task-01-04-emit-canonical-json-artifacts.md), Phase 1 checkpoint | `uv run python -m pytest tests/test_roster*.py -q`<br>Browser/API smoke if frontend changed. |
-| [ ] | 2.2 — Enforce exactly one Warlord when required | [task-02-02-enforce-exactly-one-warlord-when-required.md](task-02-02-enforce-exactly-one-warlord-when-required.md) | CR-12, CR-16, CR-17, CR-19. | [2.1 — Lock the canonical PTS formula](task-02-01-lock-the-canonical-pts-formula.md) | `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q`<br>Browser smoke `/team-builder` for crown/warning/save-disabled state. |
+| [x] | 2.2 — Enforce exactly one Warlord when required | [task-02-02-enforce-exactly-one-warlord-when-required.md](task-02-02-enforce-exactly-one-warlord-when-required.md) | CR-12, CR-16, CR-17, CR-19. | [2.1 — Lock the canonical PTS formula](task-02-01-lock-the-canonical-pts-formula.md) | `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q`<br>Browser smoke `/team-builder` for crown/warning/save-disabled state. |
 | [x] | 2.3 — Enforce plan/feature gates consistently | [task-02-03-enforce-plan-feature-gates-consistently.md](task-02-03-enforce-plan-feature-gates-consistently.md) | CR-12, CR-16, CR-17, CR-19. | [2.2 — Enforce exactly one Warlord when required](task-02-02-enforce-exactly-one-warlord-when-required.md) | `uv run python -m pytest tests/test_rosters.py -q` |
 
 ### Phase 3 — Combat math
@@ -61,7 +61,7 @@ flowchart LR
 | Done | Task | File | Primary CRs | Depends on | Verification |
 | --- | --- | --- | --- | --- | --- |
 | [x] | 3.1 — Fix natural 6 / Lethal Hits semantics | [task-03-01-fix-natural-6-lethal-hits-semantics.md](task-03-01-fix-natural-6-lethal-hits-semantics.md) | CR-07, CR-11. | [1.4 — Emit canonical JSON artifacts](task-01-04-emit-canonical-json-artifacts.md), Phase 1 checkpoint | `uv run python -m pytest tests/test_combat*.py tests/test_modifiers.py -q` |
-| [ ] | 3.2 — Fix AP/save application and Devastating Wounds | [task-03-02-fix-ap-save-application-and-devastating-wounds.md](task-03-02-fix-ap-save-application-and-devastating-wounds.md) | CR-07, CR-11. | [3.1 — Fix natural 6 / Lethal Hits semantics](task-03-01-fix-natural-6-lethal-hits-semantics.md) | `uv run python -m pytest tests/test_combat*.py tests/test_terrain*.py -q` |
+| [ ] | 3.2 — Fix AP/save application and Devastating Wounds | [task-03-02-fix-ap-save-application-and-devastating-wounds.md](task-03-02-fix-ap-save-application-and-devastating-wounds.md) | CR-07, CR-11. | [3.1 — Fix natural 6 / Lethal Hits semantics](task-03-01-fix-natural-6-lethal-hits-semantics.md) | `uv run python -m pytest tests/test_combat*.py tests/test_terrain*.py -q` *(REQUEST CHANGES 2026-05-17)* |
 | [ ] | 3.3 — Fix Sustained Hits resolution | [task-03-03-fix-sustained-hits-resolution.md](task-03-03-fix-sustained-hits-resolution.md) | CR-07, CR-11. | [3.2 — Fix AP/save application and Devastating Wounds](task-03-02-fix-ap-save-application-and-devastating-wounds.md) | `uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q` |
 
 ### Phase 4 — Game state / VP / phase invariants

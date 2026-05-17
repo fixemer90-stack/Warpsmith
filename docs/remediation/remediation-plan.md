@@ -432,8 +432,8 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Non-goals:** Changing canonical points source data is not in scope; implementing full roster legality validation is not in scope; frontend redesign is not in scope.
 
 **Verification:**
-- `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 56 passed
-- Full suite: 544 passed
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings
+- `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings
 
 ### Task 2.2 — Enforce exactly one Warlord when required
 
@@ -460,8 +460,8 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Non-goals:** Full detachment/faction-specific Warlord trait logic is not in scope; enhancement legality is not in scope; Commander/Leader attachment rules are not in scope.
 
 **Verification:**
-- `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 56 passed
-- Full suite: 544 passed
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings
+- `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings
 
 ### Task 2.3 — Enforce plan/feature gates consistently
 
@@ -481,8 +481,8 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 ### Checkpoint 2
 
-- [ ] Roster validation is shared and test-covered.
-- [ ] UI/API/generated roster behavior matches.
+- [x] Roster validation is shared and test-covered.
+- [x] UI/API/generated roster behavior matches.
 
 ## Phase 3 — Combat math
 

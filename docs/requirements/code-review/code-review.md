@@ -107,3 +107,9 @@ Remediation plan: [remediation-plan.md](remediation-plan.md)
 Created and linked: [docs/reviews/2026-05-10/triage-summary.md](../../reviews/2026-05-10/triage-summary.md)
 
 Current triage verdict: not release-ready. CR-24 executable gates passed, but release readiness remains blocked by open Critical/Important review debt and the reproduced result VP consistency issue.
+
+## Phase 2 checkpoint evidence
+
+Date: 2026-05-17
+
+Phase 2 roster-validator remediation is complete and verified: 68 scoped roster tests passed; full suite 562 passed, 3 skipped; Ruff lint/format clean for Phase 2 Python files.

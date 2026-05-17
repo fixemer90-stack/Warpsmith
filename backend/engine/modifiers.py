@@ -175,7 +175,8 @@ def apply_modifiers(
         elif modifier.operation in {"auto_hit", "auto_wound"}:
             result.auto_success = True
         elif modifier.operation == "devastating_wounds":
-            result.ignore_save = True
+            # Devastating Wounds is handled in handle_critical_hit — only on Critical Wounds.
+            pass
         elif modifier.operation in {
             "reroll_all",
             "reroll_hits",

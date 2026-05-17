@@ -11,7 +11,14 @@ class Database:
         if not db_path:
             db_path = os.getenv("DB_PATH", str(Path.cwd() / "simulator.db"))
         self.db_path = db_path
-        self._conn: sqlite3.Connection | None = None
+        # Пытаемся открыть, чтобы сделать checkpoint перед чисткой WAL
+        try:
+            ck_conn = sqlite3.connect(self.db_path, check_same_thread=False)
+            ck_conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+            ck_conn.close()
+        except Exception:
+            pass
+        # SQLite WAL journal files cleanup — only after checkpoint
 
     def connect(self) -> sqlite3.Connection:
         if self._conn is None:

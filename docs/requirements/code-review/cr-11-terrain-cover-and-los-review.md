@@ -85,3 +85,23 @@ Changes:
 - 12 new tmp_path tests.
 
 Tests: 36 passed (24 + 12 new). Lint/format/diff-check clean.
+
+## Regression evidence — Task 3.2 (AP/save application and Devastating Wounds)
+
+**2026-05-17.** (co-owned — CR-07, CR-11). Core save resolution and Devastating Wounds fixes.
+
+Changes:
+- `backend/engine/combat.py`: fixed AP applied twice — removed duplicate `save_target - weapon.ap`. Cover applied at correct stage after single AP application. `ignores_cover` weapon tag now propagated via modifier check in save resolution.
+- `backend/engine/modifiers.py`: `devastating_wounds` no longer sets `ignore_save` unconditionally in `apply_modifiers` — only `handle_critical_hit` triggers it on Critical Wounds.
+
+Tests: 9 new focused tests covering AP exactly once, cover+AP interaction, cover+AP+ignores_cover, normal save path vs Devastating Wounds bypass, Dev Wounds only on Critical Wounds, Dev Wounds reaching FNP.
+
+```
+$ uv run python -m pytest tests/test_combat.py tests/test_modifiers.py -q
+44 passed in 13.07s
+
+$ uv run python -m pytest tests/ -q
+571 passed, 3 skipped, 60 warnings in 71.50s
+```
+
+Lint/format/diff-check: clean.

@@ -335,3 +335,20 @@ All three Phase 2 remediation tasks done (2.1-2.3).
 
 Verification: 544 tests pass, lint/formatter clean.
 CR evidence: CR-12, CR-16, CR-17, CR-19.
+
+## Phase 2 — COMPLETE
+
+Date: 2026-05-17
+
+| Task | Status | Key changes |
+| --- | --- | --- |
+| 2.1 — Lock canonical PTS formula | completed | Backend canonical `calculate_squad_pts()` used by validation/API; loadout/Nob production path and parity fixture verified. |
+| 2.2 — Enforce exactly one Warlord when required | completed | Shared Warlord validator/API/generator contract verified; zero eligible invalid, exactly one valid Warlord required. |
+| 2.3 — Enforce plan/feature gates consistently | completed | Shared Free/Premium roster gates verified for create/duplicate/generated-save/update/public paths. |
+
+Verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings.
+- `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings.
+- `uv run ruff check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_autoplay.py` → clean.
+- `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_autoplay.py` → 7 files already formatted.
+- `git diff --check` → clean for Phase 2 touched files.

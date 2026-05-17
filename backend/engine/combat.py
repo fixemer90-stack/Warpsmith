@@ -189,11 +189,15 @@ def _resolve_wound_chain(
     wound_critical = handle_critical_hit(wound_result, "wound_roll", modifiers, context)
     ignore_save = wound_modifiers.ignore_save or wound_critical.ignore_save
     if not ignore_save:
-        # Save with Cover: +1 SV if has_cover and not ignores_cover
+        # Save resolution: best_save(weapon.ap) applies AP once and checks invuln.
+        # Cover gives +1 to the save roll (lowers target), applied after AP.
+        # Check context AND weapon modifiers for ignore_cover (weapon tag "ignores_cover").
+        effective_ignores_cover = context.ignores_cover or any(
+            m.target == "save_roll" and m.operation == "ignore_cover" for m in modifiers
+        )
         save_target = defender.best_save(weapon.ap)
-        if context.has_cover and not context.ignores_cover:
+        if context.has_cover and not effective_ignores_cover:
             save_target = max(2, save_target - 1)  # +1 save = lower target (SV3+ → SV2+)
-        save_target = max(1, min(6, save_target - weapon.ap))
         save_modifiers = apply_modifiers("save_roll", save_target, modifiers, context, rng)
         save_result = _roll_with_modifiers(rng, save_modifiers, modifiers, "save_roll")
         if save_result.success:
