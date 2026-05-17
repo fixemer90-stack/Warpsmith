@@ -26,19 +26,19 @@
     },
     {
       "filename": "units/adeptus-mechanicus.json",
-      "sha256": "sha256:d9b7008afa4b552aaf3ea74c35444a199dd3dc02e3eb06d48ede1b5b789c263c"
+      "sha256": "sha256:c4d5f8700aab77209e09aea7bd2d78ad8aefc2ff5480388b9a98a8d59ac16498"
     },
     {
       "filename": "units/orks.json",
-      "sha256": "sha256:d98cc92045f23a77e155a48b2495d40f3c35f493343593db9171eed1bd54df39"
+      "sha256": "sha256:357f8a89e9504ce587f1216e65ba74fe05717d86bf0bf5ca841ab10d5a99841d"
     },
     {
       "filename": "units/tau.json",
-      "sha256": "sha256:055415e6317848591bf9a297bfc74dbd4da3f5469ff522f9b8a9c347dd0da7d8"
+      "sha256": "sha256:d8b9f1d169820b05ed6ccd60af05e419ef1a1154bae2a311eea1daaae499fbfa"
     },
     {
       "filename": "units/index.json",
-      "sha256": "sha256:ed8572488bdabb067e6ff46a713c8a1f39ca1c23b79c2d90cfe8305b4bca423b"
+      "sha256": "sha256:b97585babaa7e028e679d3969e79a0b7543611201c5831dd3de0f78d33ec8c54"
     },
     {
       "filename": "faction_units/adeptus-mechanicus.json",
@@ -62,12 +62,12 @@
     },
     {
       "filename": "manifest.json",
-      "sha256": "sha256:85b83d0dd436fe8467a08c02105d57164021c200671974f82d69d2f4b587e064"
+      "sha256": "sha256:7135c42d68042a0ad0765a7563b8fc63853e9a8ff25f9e5d3f832ee670b87d35"
     }
   ],
   "collisions": [],
-  "content_hash": "96eb7154d35540b0a364f6838a557fe13a13f14e5c41dde5bbd78fe91dafcf30",
-  "generated_at": "2026-01-01T00:00:00+00:00",
+  "content_hash": "4b1babb7b2ea217910f5132b952210a4d2cca86817516b1cef30d551bf0841f9",
+  "generated_at": "2026-05-17T08:49:09.640278+00:00",
   "schema_version": "content.v1",
   "source_hashes": {
     "wiki/SCHEMA.md": "e04c9fcf80e58c8f46158ed53f3e3965d9c6c297479679c71e10e65bb1f708e7",

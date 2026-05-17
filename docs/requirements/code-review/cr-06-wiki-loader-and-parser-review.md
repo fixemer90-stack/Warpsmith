@@ -93,3 +93,16 @@ Required fields, points, weapons, model_count, canonical ID uniqueness, faction 
 **2026-05-16.** Unsafe `pickle` cache removed. Replaced with JSON-based content pipeline:
 `compiler.py` compiles wiki → JSON artifacts, `manifest.json` with SHA256 source hashes.
 `registry.py` loads from JSON, detects staleness via hash comparison. 21 cache tests.
+
+## Regression evidence — Task 1.5 (frontmatter canonical IDs)
+
+**2026-05-17.** Frontmatter `canonical_id` support for unit records.
+
+Changes:
+- Unit model (`backend/model/unit.py`): added `source_path: str = ""` to track wiki file path.
+- Parser (`backend/loader/parser.py`): passes `source_path=str(filepath)` to Unit constructor.
+- Compiler (`backend/loader/compiler.py`): validates explicit `canonical_id` format (`unit:<scope>:<name>`) with actionable error including source path; raises RuntimeError on invalid format; tracks `source_path` in canonical unit records; fatal collision check moved before artifact writes so duplicate explicit IDs prevent any artifact output.
+- 12 new focused tests with `tmp_path` fixtures.
+
+Tests: 36 passed in test_content_contracts.py (24 pre-existing + 12 new).
+Verification: lint clean, format clean, git diff-check clean.

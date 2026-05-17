@@ -74,3 +74,14 @@ tags: [requirements, code-review, atomic-review]
 **2026-05-16.** Content contract tests validate all wiki units against content.v1
 Pydantic schema. Terrain/cover/LoS code unchanged; structural content quality gate added.
 14 tests (incl. schema validation, squad_size, source-level duplicates).
+
+## Regression evidence — Task 1.5 (frontmatter canonical IDs)
+
+**2026-05-17.** (co-owned — CR-06, CR-11, CR-12, CR-21). Frontmatter `canonical_id` support.
+
+Changes:
+- Unit model: `source_path` field, parser passes source path.
+- Compiler: canonical_id format validation, source_path in records, pre-write fatal collision check.
+- 12 new tmp_path tests.
+
+Tests: 36 passed (24 + 12 new). Lint/format/diff-check clean.

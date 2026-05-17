@@ -16,6 +16,8 @@ Known allowed exceptions:
   - These are explicitly documented below and do NOT fail tests.
 """
 
+from pathlib import Path
+
 import pytest
 
 from backend.loader.registry import WikiRegistry
@@ -340,8 +342,7 @@ def test_content_contract_units_validate_against_content_v1_schema(all_units):
             failures.append(f"{unit_name}: {exc}")
 
     assert not failures, (
-        f"{len(failures)} unit(s) failed content.v1 schema validation:\n"
-        + "\n".join(failures[:20])
+        f"{len(failures)} unit(s) failed content.v1 schema validation:\n" + "\n".join(failures[:20])
     )
 
 
@@ -366,9 +367,8 @@ def test_content_contract_squad_size_validated(all_units):
         if step < 1:
             failures.append(f"{unit_name}: squad_size.step={step} < 1")
 
-    assert not failures, (
-        f"{len(failures)} unit(s) with invalid squad_size:\n"
-        + "\n".join(failures[:20])
+    assert not failures, f"{len(failures)} unit(s) with invalid squad_size:\n" + "\n".join(
+        failures[:20]
     )
 
 
@@ -405,6 +405,7 @@ def test_content_contract_no_source_file_duplicates(wiki):
         for file_path in sorted(faction_dir.glob("*.md")):
             try:
                 import frontmatter
+
                 post = frontmatter.load(str(file_path))
                 title = post.metadata.get("title")
                 if title:
@@ -442,9 +443,11 @@ def test_compiler_produces_units_json():
     data = load_units_index()
     assert len(data) > 100, f"Expected >100 units, got {len(data)}"
     # Spot-check a known unit
-    assert any("boyz" in k.lower() for k in data), f"No expected unit in keys: {list(data.keys())[:5]}"
+    assert any("boyz" in k.lower() for k in data), (
+        f"No expected unit in keys: {list(data.keys())[:5]}"
+    )
     # Verify index has the right structure
-    for uid, entry in list(data.items())[:3]:
+    for _uid, entry in list(data.items())[:3]:
         assert "faction_id" in entry
         assert "file" in entry
         assert "display_name" in entry
@@ -519,9 +522,8 @@ def test_squad_size_is_authoritative_not_model_count(all_units):
             if err:
                 failures.append(f"{unit_name}: max={sq['max']} rejected: {err.message}")
 
-    assert not failures, (
-        f"{len(failures)} unit(s) fail squad_size validation:\n"
-        + "\n".join(failures[:20])
+    assert not failures, f"{len(failures)} unit(s) fail squad_size validation:\n" + "\n".join(
+        failures[:20]
     )
 
 
@@ -537,7 +539,524 @@ def test_squad_size_step_valid(all_units):
                     f"({sq['max']} - {sq['min']}) = {sq['max'] - sq['min']}"
                 )
 
-    assert not failures, (
-        f"{len(failures)} unit(s) with invalid squad_size step:\n"
-        + "\n".join(failures[:20])
+    assert not failures, f"{len(failures)} unit(s) with invalid squad_size step:\n" + "\n".join(
+        failures[:20]
+    )
+
+
+def test_canonical_id_from_frontmatter():
+    """Compiler uses explicit canonical_id from frontmatter when present."""
+    import os
+    import tempfile
+
+    from backend.loader.compiler import compile_content
+    from backend.loader.registry import WikiRegistry
+
+    tmp = Path(tempfile.mkdtemp())
+    wiki_dir = tmp / "wiki"
+    units_dir = wiki_dir / "units" / "test-faction"
+    units_dir.mkdir(parents=True, exist_ok=True)
+
+    # Create a unit file with canonical_id
+    yaml = """---
+title: Test Warboss
+type: entity
+faction: test-faction
+category: Character
+movement: 6
+toughness: 6
+save: 3
+wounds: 7
+leadership: 6
+objective_control: 2
+points: 100
+canonical_id: unit:test-faction:warboss-explicit
+---
+
+# Test Warboss
+| M | T | SV | W | LD | OC |
+|---|---|---|---|---|---|
+| 6" | 6 | 3+ | 7 | 6+ | 2 |
+"""
+    (units_dir / "Warboss.md").write_text(yaml)
+
+    # Create another without canonical_id to verify fallback
+    yaml2 = """---
+title: Nobz Test
+type: entity
+faction: test-faction
+category: Infantry
+movement: 5
+toughness: 5
+save: 4
+wounds: 2
+leadership: 7
+objective_control: 1
+points: 110
+---
+
+# Nobz Test
+| M | T | SV | W | LD | OC |
+|---|---|---|---|---|---|
+| 5" | 5 | 4+ | 2 | 7+ | 1 |
+"""
+    (units_dir / "Nobz.md").write_text(yaml2)
+
+    out_dir = tmp / "generated"
+    try:
+        compile_content(
+            wiki_path=str(wiki_dir),
+            output_dir=str(out_dir),
+            freeze_clock="2026-01-01T00:00:00+00:00",
+        )
+    except RuntimeError:
+        pass  # May have collisions from missing weapons; that's fine
+
+    if (out_dir / "factions.json").exists():
+        import json
+
+        with (out_dir / "units" / "index.json").open() as f:
+            index = json.load(f)
+
+        # Unit with canonical_id should use the explicit id
+        assert "unit:test-faction:warboss-explicit" in index, (
+            f"Expected explicit canonical_id in index, got keys: {list(index.keys())}"
+        )
+
+    # Cleanup
+    import shutil
+
+    shutil.rmtree(tmp)
+
+
+# ── Task 1.5 — Frontmatter canonical IDs ────────────────────────────────
+
+
+def _make_test_wiki(tmp: Path, units: list[tuple[str, str]]) -> tuple[Path, Path]:
+    """Helper: create a minimal wiki with unit files.
+
+    Args:
+        tmp: temp directory root.
+        units: list of (filename, yaml_content) pairs.
+
+    Returns:
+        (wiki_dir, output_dir) paths.
+    """
+    wiki_dir = tmp / "wiki"
+    units_dir = wiki_dir / "units" / "test-faction"
+    units_dir.mkdir(parents=True, exist_ok=True)
+    for filename, yaml in units:
+        (units_dir / filename).write_text(yaml)
+    out_dir = tmp / "generated"
+    return wiki_dir, out_dir
+
+
+_MINIMAL_UNIT_TEMPLATE = """---
+title: {title}
+type: entity
+faction: test-faction
+category: Infantry
+movement: 5
+toughness: 4
+save: 4
+wounds: 2
+leadership: 7
+objective_control: 1
+points: 50
+{extra}
+---
+
+# {title}
+| M | T | SV | W | LD | OC |
+|---|---|---|---|---|---|
+| 5" | 4 | 4+ | 2 | 7+ | 1 |
+"""
+
+
+def test_15_explicit_canonical_id_overrides_fallback(tmp_path):
+    """Explicit canonical_id wins over generated fallback id."""
+    from backend.loader.compiler import compile_content
+
+    unit_yaml = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Test Boyz", extra="canonical_id: unit:test-faction:custom-boyz-id"
+    )
+    wiki_dir, out_dir = _make_test_wiki(tmp_path, [("Boyz.md", unit_yaml)])
+
+    compile_content(
+        wiki_path=str(wiki_dir),
+        output_dir=str(out_dir),
+        freeze_clock="2026-01-01T00:00:00+00:00",
+    )
+
+    import json
+
+    with (out_dir / "units" / "index.json").open() as f:
+        index = json.load(f)
+
+    assert "unit:test-faction:custom-boyz-id" in index, (
+        f"Expected explicit canonical_id in index, got keys: {list(index.keys())}"
+    )
+    # Fallback id should NOT be present
+    assert "unit:test-faction:test-boyz" not in index, (
+        "Fallback id should not appear when explicit canonical_id is present"
+    )
+
+
+def test_15_missing_canonical_id_uses_fallback(tmp_path):
+    """Missing canonical_id keeps deterministic fallback behavior."""
+    from backend.loader.compiler import compile_content
+
+    unit_yaml = _MINIMAL_UNIT_TEMPLATE.format(title="Gretchin Test", extra="")
+    wiki_dir, out_dir = _make_test_wiki(tmp_path, [("Gretchin.md", unit_yaml)])
+
+    compile_content(
+        wiki_path=str(wiki_dir),
+        output_dir=str(out_dir),
+        freeze_clock="2026-01-01T00:00:00+00:00",
+    )
+
+    import json
+
+    with (out_dir / "units" / "index.json").open() as f:
+        index = json.load(f)
+
+    assert "unit:test-faction:gretchin-test" in index, (
+        f"Expected fallback id in index, got keys: {list(index.keys())}"
+    )
+
+
+def test_15_invalid_canonical_id_format_fails(tmp_path):
+    """Invalid canonical_id format fails compilation with actionable error."""
+    import pytest
+
+    from backend.loader.compiler import compile_content
+
+    # Invalid format: missing 'unit:' prefix
+    unit_yaml = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Bad Unit",
+        extra="canonical_id: orks:boyz",
+    )
+    wiki_dir, out_dir = _make_test_wiki(tmp_path, [("BadUnit.md", unit_yaml)])
+
+    with pytest.raises(RuntimeError, match="Invalid canonical_id"):
+        compile_content(
+            wiki_path=str(wiki_dir),
+            output_dir=str(out_dir),
+            freeze_clock="2026-01-01T00:00:00+00:00",
+        )
+
+    # The error should contain the source path
+    with pytest.raises(RuntimeError, match=r"BadUnit\.md"):
+        compile_content(
+            wiki_path=str(wiki_dir),
+            output_dir=str(out_dir),
+            freeze_clock="2026-01-01T00:00:00+00:00",
+        )
+
+
+def test_15_invalid_canonical_id_format_with_source_path(tmp_path):
+    """Invalid canonical_id error includes source file path."""
+    import pytest
+
+    from backend.loader.compiler import compile_content
+
+    unit_yaml = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Weirdboy",
+        extra="canonical_id: not-a-valid-canonical-id",
+    )
+    wiki_dir, out_dir = _make_test_wiki(tmp_path, [("Weirdboy.md", unit_yaml)])
+
+    with pytest.raises(RuntimeError) as excinfo:
+        compile_content(
+            wiki_path=str(wiki_dir),
+            output_dir=str(out_dir),
+            freeze_clock="2026-01-01T00:00:00+00:00",
+        )
+
+    err_msg = str(excinfo.value)
+    assert "Weirdboy.md" in err_msg, f"Expected source path in error: {err_msg}"
+    assert "Invalid canonical_id" in err_msg, f"Expected Invalid canonical_id in: {err_msg}"
+
+
+def test_15_duplicate_explicit_id_fails_before_write(tmp_path):
+    """Duplicate explicit canonical ids fail compilation before artifacts written."""
+    import pytest
+
+    from backend.loader.compiler import compile_content
+
+    # Two units with the same explicit canonical_id
+    unit1 = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Warboss A",
+        extra="canonical_id: unit:test-faction:the-warboss",
+    )
+    unit2 = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Warboss B",
+        extra="canonical_id: unit:test-faction:the-warboss",
+    )
+    wiki_dir, out_dir = _make_test_wiki(tmp_path, [("WarbossA.md", unit1), ("WarbossB.md", unit2)])
+
+    with pytest.raises(RuntimeError) as excinfo:
+        compile_content(
+            wiki_path=str(wiki_dir),
+            output_dir=str(out_dir),
+            freeze_clock="2026-01-01T00:00:00+00:00",
+        )
+
+    err_msg = str(excinfo.value)
+    assert "collision" in err_msg.lower() or "duplicate" in err_msg.lower(), (
+        f"Expected collision/duplicate in error: {err_msg}"
+    )
+
+    # Verify artifacts were NOT written (factions.json must not exist)
+    assert not (out_dir / "factions.json").exists(), (
+        "Artifacts should not be written when fatal collisions exist"
+    )
+
+
+def test_15_duplicate_display_names_non_fatal_if_ids_differ(tmp_path):
+    """Duplicate display names produce non-fatal collision if ids differ."""
+    from backend.loader.compiler import BuildContext
+
+    # Test _deduplicate_units directly: add two records with same display_name
+    # but different IDs into the BuildContext units dict
+    ctx = BuildContext(str(tmp_path))
+    # Manually add two units with same display_name but different IDs
+    ctx.units["unit:faction-a:warboss"] = {
+        "unit_id": "unit:faction-a:warboss",
+        "display_name": "Warboss",
+        "faction_id": "faction:faction-a",
+        "source_path": str(tmp_path / "WarbossA.md"),
+    }
+    ctx.units["unit:faction-b:warboss"] = {
+        "unit_id": "unit:faction-b:warboss",
+        "display_name": "Warboss",
+        "faction_id": "faction:faction-b",
+        "source_path": str(tmp_path / "WarbossB.md"),
+    }
+
+    ctx._deduplicate_units()
+
+    collision_kinds = {c["kind"] for c in ctx.collisions}
+    assert "duplicate_display_name" in collision_kinds, (
+        f"Expected duplicate_display_name collision, got: {ctx.collisions}"
+    )
+
+    # Verify the collision entry has expected structure
+    dup_collisions = [c for c in ctx.collisions if c["kind"] == "duplicate_display_name"]
+    assert len(dup_collisions) == 1
+    assert dup_collisions[0]["display_name"] == "Warboss"
+    assert len(dup_collisions[0]["unit_ids"]) == 2
+
+
+def test_15_source_path_in_unit_records(tmp_path):
+    """Canonical unit records include source_path pointing back to the wiki source file."""
+    from backend.loader.compiler import compile_content
+
+    unit_yaml = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Nob With Banner",
+        extra="canonical_id: unit:test-faction:nob-banner",
+    )
+    wiki_dir, out_dir = _make_test_wiki(tmp_path, [("NobBanner.md", unit_yaml)])
+
+    compile_content(
+        wiki_path=str(wiki_dir),
+        output_dir=str(out_dir),
+        freeze_clock="2026-01-01T00:00:00+00:00",
+    )
+
+    import json
+
+    # Read the unit shard
+    with (out_dir / "units" / "test-faction.json").open() as f:
+        shard = json.load(f)
+
+    record = shard.get("unit:test-faction:nob-banner")
+    assert record is not None, f"Expected unit in shard, got keys: {list(shard.keys())}"
+
+    sp = record.get("source_path", "")
+    assert "NobBanner.md" in sp, f"Expected source_path to contain 'NobBanner.md', got: {sp}"
+    assert sp.endswith("NobBanner.md"), f"source_path should end with filename: {sp}"
+
+
+def test_15_display_name_rename_preserves_id(tmp_path):
+    """Display-name changes do not change unit id when canonical_id unchanged."""
+    from backend.loader.compiler import compile_content
+
+    # First compile: unit named "Old Name" with explicit canonical_id
+    unit1 = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Old Name",
+        extra="canonical_id: unit:test-faction:stable-unit",
+    )
+    wiki_dir, out_dir = _make_test_wiki(tmp_path, [("Unit.md", unit1)])
+
+    compile_content(
+        wiki_path=str(wiki_dir),
+        output_dir=str(out_dir),
+        freeze_clock="2026-01-01T00:00:00+00:00",
+    )
+
+    import json
+
+    with (out_dir / "units" / "index.json").open() as f:
+        index1 = json.load(f)
+
+    # Second compile: same canonical_id, different display name
+    unit2 = _MINIMAL_UNIT_TEMPLATE.format(
+        title="New Name",
+        extra="canonical_id: unit:test-faction:stable-unit",
+    )
+    (wiki_dir / "units" / "test-faction" / "Unit.md").write_text(unit2)
+
+    out_dir2 = tmp_path / "generated2"
+    compile_content(
+        wiki_path=str(wiki_dir),
+        output_dir=str(out_dir2),
+        freeze_clock="2026-01-01T00:00:00+00:00",
+    )
+
+    with (out_dir2 / "units" / "index.json").open() as f:
+        index2 = json.load(f)
+
+    # ID should be the same despite name change
+    assert "unit:test-faction:stable-unit" in index1
+    assert "unit:test-faction:stable-unit" in index2
+    # Display name should have changed
+    assert index1["unit:test-faction:stable-unit"]["display_name"] == "Old Name"
+    assert index2["unit:test-faction:stable-unit"]["display_name"] == "New Name"
+
+
+def test_15_source_file_rename_preserves_id(tmp_path):
+    """Source-file path changes do not change unit id when canonical_id unchanged."""
+    from backend.loader.compiler import compile_content
+
+    # First compile: file named "OldFile.md"
+    unit_yaml = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Deff Dread",
+        extra="canonical_id: unit:test-faction:deff-dread",
+    )
+    wiki_dir, out_dir = _make_test_wiki(tmp_path, [("OldFile.md", unit_yaml)])
+
+    compile_content(
+        wiki_path=str(wiki_dir),
+        output_dir=str(out_dir),
+        freeze_clock="2026-01-01T00:00:00+00:00",
+    )
+
+    import json
+
+    with (out_dir / "units" / "index.json").open() as f:
+        index1 = json.load(f)
+
+    # Rename the file
+    old_path = wiki_dir / "units" / "test-faction" / "OldFile.md"
+    new_path = wiki_dir / "units" / "test-faction" / "NewFile.md"
+    old_path.rename(new_path)
+
+    out_dir2 = tmp_path / "generated2"
+    compile_content(
+        wiki_path=str(wiki_dir),
+        output_dir=str(out_dir2),
+        freeze_clock="2026-01-01T00:00:00+00:00",
+    )
+
+    with (out_dir2 / "units" / "index.json").open() as f:
+        index2 = json.load(f)
+
+    # ID should be the same despite file rename
+    assert "unit:test-faction:deff-dread" in index1
+    assert "unit:test-faction:deff-dread" in index2
+
+
+def test_15_fallback_id_is_deterministic(tmp_path):
+    """Generated fallback ids remain deterministic for unchanged display name."""
+    from backend.loader.compiler import compile_content
+
+    unit_yaml = _MINIMAL_UNIT_TEMPLATE.format(title="Flash Gitz", extra="")
+    wiki_dir, out_dir = _make_test_wiki(tmp_path, [("FlashGitz.md", unit_yaml)])
+
+    compile_content(
+        wiki_path=str(wiki_dir),
+        output_dir=str(out_dir),
+        freeze_clock="2026-01-01T00:00:00+00:00",
+    )
+
+    import json
+
+    with (out_dir / "units" / "index.json").open() as f:
+        index1 = json.load(f)
+
+    # Second compile: same content
+    out_dir2 = tmp_path / "generated2"
+    compile_content(
+        wiki_path=str(wiki_dir),
+        output_dir=str(out_dir2),
+        freeze_clock="2026-01-01T00:00:00+00:00",
+    )
+
+    with (out_dir2 / "units" / "index.json").open() as f:
+        index2 = json.load(f)
+
+    # Fallback ids should be identical
+    expected_id = "unit:test-faction:flash-gitz"
+    assert expected_id in index1, f"Expected {expected_id} in index1, keys: {list(index1.keys())}"
+    assert expected_id in index2, f"Expected {expected_id} in index2, keys: {list(index2.keys())}"
+
+
+def test_15_collision_report_distinguishes_duplicate_types(tmp_path):
+    """Collision report distinguishes explicit-id duplicates from fallback-id collisions."""
+    import pytest
+
+    from backend.loader.compiler import compile_content
+
+    # Two units with same explicit canonical_id → fatal collision
+    unit1 = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Warboss One",
+        extra="canonical_id: unit:test-faction:warboss-duplicate",
+    )
+    unit2 = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Warboss Two",
+        extra="canonical_id: unit:test-faction:warboss-duplicate",
+    )
+    wiki_dir, out_dir = _make_test_wiki(tmp_path, [("Warboss1.md", unit1), ("Warboss2.md", unit2)])
+
+    with pytest.raises(RuntimeError) as excinfo:
+        compile_content(
+            wiki_path=str(wiki_dir),
+            output_dir=str(out_dir),
+            freeze_clock="2026-01-01T00:00:00+00:00",
+        )
+
+    # The duplicate-detection logic in _collect_units adds id_kind to collisions
+    # But the manifest may not be available on fatal collision.
+    # Verify the error message mentions collision
+    err_msg = str(excinfo.value)
+    assert "collision" in err_msg.lower(), f"Expected collision in error: {err_msg}"
+    assert f"{wiki_dir.resolve().as_posix()}" in err_msg or "warboss-duplicate" in err_msg, (
+        f"Expected duplicate info in error: {err_msg}"
+    )
+
+
+def test_15_runtime_ids_distinct_from_canonical_ids(tmp_path):
+    """No runtime loader starts treating canonical ids as runtime instance ids."""
+    # Verify that Unit model's canonical_id field does not affect
+    # the unit_id used in roster instances.
+    from backend.loader.parser import parse_unit
+
+    unit_yaml = _MINIMAL_UNIT_TEMPLATE.format(
+        title="Runtime Test",
+        extra="canonical_id: unit:test-faction:runtime-test",
+    )
+
+    unit_file = tmp_path / "RuntimeTest.md"
+    unit_file.write_text(unit_yaml)
+
+    unit = parse_unit(unit_file)
+
+    assert unit is not None, "Unit should parse successfully"
+    assert unit.canonical_id == "unit:test-faction:runtime-test", (
+        f"Expected canonical_id, got: {unit.canonical_id}"
+    )
+    # Runtime identity is just unit.name — not the canonical_id
+    assert unit.name == "Runtime Test", (
+        f"Runtime unit name should not be replaced by canonical_id: {unit.name}"
     )

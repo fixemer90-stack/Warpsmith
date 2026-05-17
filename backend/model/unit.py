@@ -119,6 +119,8 @@ class Unit:
     extended_wargear_options: list[dict] = field(default_factory=list)
     nob_options: list[dict] = field(default_factory=list)
     edition: str = "10e"
+    canonical_id: str | None = None  # Explicit canonical ID from YAML frontmatter (Task 1.4)
+    source_path: str = ""  # Absolute path to wiki source file (Task 1.5)
 
     def __post_init__(self) -> None:
         if not 2 <= self.save <= 7:

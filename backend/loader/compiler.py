@@ -36,6 +36,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import re
 from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timezone
@@ -56,6 +57,25 @@ logger = logging.getLogger(__name__)
 
 SCHEMA_VERSION = "content.v1"
 GENERATED_DIR = Path(__file__).parent.parent.parent / "data" / "generated" / "content"
+
+# ── Canonical ID validation ──────────────────────────────────────────────
+
+# Pattern for unit canonical IDs: unit:<scope>:<name>
+_VALID_UNIT_CID_RE = re.compile(r"^unit:[a-z][a-z0-9_-]*:[a-z][a-z0-9_-]*$")
+
+
+def _validate_unit_canonical_id(cid: str, source_path: str) -> str | None:
+    """Validate an explicit unit canonical_id format.
+
+    Returns an error message string if invalid, or None if valid.
+    The error message includes the source path for actionable diagnostics.
+    """
+    if not _VALID_UNIT_CID_RE.match(cid):
+        return (
+            f"Invalid canonical_id '{cid}' in {source_path}: "
+            f"expected format 'unit:<scope>:<name>' (e.g. 'unit:orks:boyz')"
+        )
+    return None
 
 
 # ── Manifest dataclasses ─────────────────────────────────────────────────
@@ -190,14 +210,30 @@ class BuildContext:
     def _collect_units(self):
         for name, unit in self.registry.units.items():
             fid = self._make_faction_id(unit.faction)
-            uid = self._make_unit_id(name, unit.faction)
+            source_path = getattr(unit, "source_path", "")
+
+            # Determine unit id: explicit canonical_id or generated fallback
+            cid = getattr(unit, "canonical_id", None)
+            if cid:
+                # Validate format before using
+                err = _validate_unit_canonical_id(cid, source_path)
+                if err:
+                    raise RuntimeError(err)
+                uid = cid
+                id_kind = "explicit"
+            else:
+                uid = self._make_unit_id(name, unit.faction)
+                id_kind = "fallback"
 
             if uid in self.units:
+                existing_source = self.units[uid].get("source_path", "")
                 self.collisions.append(
                     {
                         "kind": "unit_id",
                         "id": uid,
+                        "id_kind": id_kind,
                         "display_names": [name, self.units[uid].get("display_name", "")],
+                        "sources": [source_path, existing_source],
                     }
                 )
                 continue
@@ -210,7 +246,8 @@ class BuildContext:
                 "unit_id": uid,
                 "display_name": name,
                 "faction_id": fid,
-                "source_path": "",
+                "source_path": source_path,
+                "_id_kind": id_kind,  # internal tracking, stripped before JSON
                 "category": getattr(unit, "category", "Infantry"),
                 "movement": getattr(unit, "movement", 5),
                 "toughness": getattr(unit, "toughness", 3),
@@ -236,9 +273,12 @@ class BuildContext:
                 "edition": getattr(unit, "edition", "10e"),
             }
 
+            # Strip internal fields before schema validation and storage
+            clean_record = {k: v for k, v in record.items() if not k.startswith("_")}
+
             # Validate against strict schema before storing
             try:
-                UnitV1Strict(**record)
+                UnitV1Strict(**clean_record)
             except Exception as exc:
                 logger.warning("Unit %s failed schema validation: %s", uid, exc)
                 self.collisions.append(
@@ -246,11 +286,12 @@ class BuildContext:
                         "kind": "schema_failure",
                         "id": uid,
                         "error": str(exc),
+                        "source_path": source_path,
                     }
                 )
                 continue
 
-            self.units[uid] = record
+            self.units[uid] = clean_record
             # Track weapons for weapons.json
             for w in weapons_ranged + weapons_melee:
                 wid = self._make_weapon_id(w["name"], unit.faction)
@@ -393,9 +434,15 @@ def compile_content(
     """
     ctx = BuildContext(wiki_path or "")
     ctx.build()
-
     out = Path(output_dir) if output_dir else GENERATED_DIR
     out.mkdir(parents=True, exist_ok=True)
+
+    # Fatal collision check BEFORE any artifact writes (Task 1.5)
+    fatal_kinds = {"dangling_ref", "unit_id", "faction_id"}
+    fatal = [c for c in ctx.collisions if c.get("kind") in fatal_kinds]
+    if fatal:
+        msg_lines = [f"Fatal collision: {c}" for c in fatal]
+        raise RuntimeError("Compilation failed due to fatal collision(s):\n" + "\n".join(msg_lines))
 
     # ── Source tracking ──
     wiki = ctx.wiki_path
@@ -511,27 +558,22 @@ def compile_content(
     # ── Collisions ──
     collisions = sorted(ctx.collisions, key=lambda c: c.get("kind", ""))
     if collisions:
-        fatal_kinds = {"dangling_ref", "unit_id", "faction_id"}
-        fatal = [c for c in collisions if c.get("kind") in fatal_kinds]
-        if fatal:
-            msg_lines = [f"Fatal collision: {c}" for c in fatal]
-            raise RuntimeError(
-                "Compilation failed due to fatal collision(s):\n" + "\n".join(msg_lines)
-            )
         logger.warning("Compilation completed with %d non-fatal collision(s)", len(collisions))
 
     # ── Manifest (written after all other artifacts) ──
     # Build manifest with all artifact entries INCLUDING a placeholder for manifest
     # itself.  We compute the manifest content, hash it, and overwrite the placeholder.
-    manifest_content = _serialize_deterministic({
-        "schema_version": SCHEMA_VERSION,
-        "generated_at": freeze_clock or datetime.now(UTC).isoformat(),
-        "content_hash": content_hash,
-        "source_paths": sorted(source_paths),
-        "source_hashes": dict(sorted(source_hashes.items())),
-        "artifacts": [a.to_dict() for a in artifacts] + [],
-        "collisions": collisions,
-    })
+    manifest_content = _serialize_deterministic(
+        {
+            "schema_version": SCHEMA_VERSION,
+            "generated_at": freeze_clock or datetime.now(UTC).isoformat(),
+            "content_hash": content_hash,
+            "source_paths": sorted(source_paths),
+            "source_hashes": dict(sorted(source_hashes.items())),
+            "artifacts": [a.to_dict() for a in artifacts] + [],
+            "collisions": collisions,
+        }
+    )
     manifest_hash = hashlib.sha256(manifest_content.encode("utf-8")).hexdigest()
     artifacts.append(ManifestEntry(filename="manifest.json", sha256=manifest_hash))
 
@@ -541,15 +583,17 @@ def compile_content(
         all_content += f"{a.filename}:{a.sha256}\n"
     content_hash = hashlib.sha256(all_content.encode("utf-8")).hexdigest()
 
-    manifest_content = _serialize_deterministic({
-        "schema_version": SCHEMA_VERSION,
-        "generated_at": freeze_clock or datetime.now(UTC).isoformat(),
-        "content_hash": content_hash,
-        "source_paths": sorted(source_paths),
-        "source_hashes": dict(sorted(source_hashes.items())),
-        "artifacts": [a.to_dict() for a in artifacts],
-        "collisions": collisions,
-    })
+    manifest_content = _serialize_deterministic(
+        {
+            "schema_version": SCHEMA_VERSION,
+            "generated_at": freeze_clock or datetime.now(UTC).isoformat(),
+            "content_hash": content_hash,
+            "source_paths": sorted(source_paths),
+            "source_hashes": dict(sorted(source_hashes.items())),
+            "artifacts": [a.to_dict() for a in artifacts],
+            "collisions": collisions,
+        }
+    )
     (out / "manifest.json").write_text(manifest_content, encoding="utf-8")
 
     manifest = Manifest(

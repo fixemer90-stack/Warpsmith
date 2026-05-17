@@ -70,7 +70,7 @@
       }
     ],
     "save": 6,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Aun'Shi.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -157,7 +157,7 @@
       }
     ],
     "save": 5,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Aun'Va.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -292,7 +292,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/AX-1-0 Tiger Shark.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -397,7 +397,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Barracuda.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -481,7 +481,7 @@
       }
     ],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Breacher Team.md",
     "squad_size": {
       "max": 10,
       "min": 10,
@@ -612,7 +612,7 @@
       }
     ],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Broadside Battlesuits.md",
     "squad_size": {
       "max": 3,
       "min": 1,
@@ -714,7 +714,7 @@
       }
     ],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Cadre Fireblade.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -820,7 +820,7 @@
       }
     ],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Commander Farsight.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -862,7 +862,7 @@
     "points": 110,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Commander In Coldstar Battlesuit.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -1066,7 +1066,7 @@
       }
     ],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Commander In Enforcer Battlesuit.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -1237,7 +1237,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Commander Shadowsun.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -1430,7 +1430,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Crisis Battlesuits.md",
     "squad_size": {
       "max": 6,
       "min": 3,
@@ -1552,7 +1552,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Crisis Fireknife.md",
     "squad_size": {
       "max": 6,
       "min": 3,
@@ -1592,7 +1592,7 @@
     "points": 110,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Crisis Starscythe.md",
     "squad_size": {
       "max": 6,
       "min": 3,
@@ -1676,7 +1676,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Crisis Sunforge.md",
     "squad_size": {
       "max": 6,
       "min": 3,
@@ -1778,7 +1778,7 @@
       }
     ],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Darkstrider.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -1887,7 +1887,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Devilfish.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -1971,7 +1971,7 @@
       }
     ],
     "save": 5,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Ethereal.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2032,7 +2032,7 @@
       }
     ],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Firesight Marksman.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2163,7 +2163,7 @@
       }
     ],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Ghostkeel Battlesuit.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2318,7 +2318,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Hammerhead Gunship.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2443,7 +2443,7 @@
       }
     ],
     "save": 6,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Kroot Carnivores.md",
     "squad_size": {
       "max": 20,
       "min": 10,
@@ -2574,7 +2574,7 @@
       }
     ],
     "save": 6,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Kroot Farstalkers.md",
     "squad_size": {
       "max": 20,
       "min": 10,
@@ -2615,7 +2615,7 @@
     "points": 40,
     "ranged_weapons": [],
     "save": 6,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Kroot Hounds.md",
     "squad_size": {
       "max": 10,
       "min": 4,
@@ -2698,7 +2698,7 @@
       }
     ],
     "save": 5,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Kroot Lone-spear.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2740,7 +2740,7 @@
     "points": 50,
     "ranged_weapons": [],
     "save": 6,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Kroot War Shaper.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2781,7 +2781,7 @@
     "points": 85,
     "ranged_weapons": [],
     "save": 5,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Krootox Rampagers.md",
     "squad_size": {
       "max": 6,
       "min": 3,
@@ -2914,7 +2914,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Longstrike.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2998,7 +2998,7 @@
       }
     ],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Pathfinder Team.md",
     "squad_size": {
       "max": 10,
       "min": 10,
@@ -3078,7 +3078,7 @@
       }
     ],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Piranha.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -3160,7 +3160,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Remora Stealth Drones.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -3333,7 +3333,7 @@
       }
     ],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Riptide Battlesuit.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -3439,7 +3439,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Sky Ray Gunship.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -3564,7 +3564,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Stealth Battlesuits.md",
     "squad_size": {
       "max": 6,
       "min": 3,
@@ -3741,7 +3741,7 @@
       }
     ],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Stormsurge.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -3864,7 +3864,7 @@
       }
     ],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Strike Team.md",
     "squad_size": {
       "max": 10,
       "min": 10,
@@ -3906,7 +3906,7 @@
     "points": 25,
     "ranged_weapons": [],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Tactical Drones.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -3970,7 +3970,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Tidewall Defence Line.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -4071,7 +4071,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Tiger Shark.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -4156,7 +4156,7 @@
       }
     ],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Vespid Stingwings.md",
     "squad_size": {
       "max": 10,
       "min": 5,

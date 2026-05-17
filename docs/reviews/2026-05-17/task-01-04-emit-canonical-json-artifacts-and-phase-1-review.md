@@ -143,27 +143,38 @@ Required fix:
 - Validate every `unit.weapon_ids` entry exists in `weapons.json`.
 - Add regression tests for a missing weapon reference.
 
-### Important 3 — Canonical ids are derived from display name/source faction; explicit `canonical_id` is ignored
+### Follow-up split task — Explicit `canonical_id` from frontmatter is too large for this task
 
-`backend/loader/compiler.py:138-139` creates unit ids from `name` and `faction`:
+`backend/loader/compiler.py:138-139` currently creates unit ids from `name` and `faction`:
 
 ```python
 return f"unit:{self._slug(faction)}:{self._slug(name)}"
 ```
 
-The compiler does not read/use frontmatter `canonical_id`, and unit `source_path` is written as an empty string at `backend/loader/compiler.py:213`.
+That is acceptable as a first deterministic-id implementation for Task 1.4 if the task scope is limited to emitting canonical JSON artifacts. However, explicit frontmatter-driven `canonical_id` is a bigger migration than this review should force into the same patch, because it needs a content-authoring contract, wiki frontmatter migration, collision rules, backwards compatibility, and rename/source-path regression tests.
 
-This violates:
+Do not treat frontmatter `canonical_id` as a Task 1.4 blocker unless the task file explicitly adds it as acceptance criteria. For Task 1.4, require only that the current deterministic ids are stable for unchanged display names/faction slugs and that generated records preserve enough source metadata for future migration.
 
-- Canonical ids are independent from display names/source file paths.
-- Canonical ids survive display/source-path changes when explicit `canonical_id` is present.
-- Unit records include `source_path`.
+Recommended separate task: `task-01-05-adopt-frontmatter-canonical-ids.md`
 
-Required fix:
+Proposed objective:
 
-- Parse explicit `canonical_id` from frontmatter and make it authoritative.
-- Preserve source path in canonical records.
-- Add tests for display-name rename and source-file rename with unchanged explicit canonical id.
+- Add optional authoritative `canonical_id` to wiki frontmatter for units first, then expand to detachments/stratagems/enhancements only after the unit path is proven.
+- Preserve canonical ids across display-name and source-file renames.
+- Keep deterministic fallback ids for records without explicit `canonical_id`.
+- Emit a migration report listing missing/duplicate/invalid canonical ids without blocking unrelated generated-artifact work.
+
+Suggested acceptance criteria for the separate task:
+
+- Parser/compiler reads optional `canonical_id` from unit frontmatter.
+- If present, explicit `canonical_id` wins over generated id.
+- If absent, deterministic fallback remains `unit:<faction_slug>:<display_slug>`.
+- Duplicate explicit canonical ids fail compilation before writing artifacts.
+- Invalid id format fails with an actionable error containing source path.
+- Unit canonical records include `source_path` so collisions and migrations point to files.
+- Tests cover display-name rename with same `canonical_id`, source-file rename with same `canonical_id`, duplicate explicit ids, invalid id format, and fallback behavior for legacy wiki files.
+
+Task 1.4 still has blockers independent of this follow-up: registry shard loading, WikiRegistry cache loading, fatal dangling-ref semantics, manifest strategy, weapon refs if kept in the Task 1.4 contract, and verification/lint/doc sync.
 
 ### Important 4 — Tests do not cover the Task 1.4 acceptance criteria
 
@@ -181,7 +192,6 @@ Missing required coverage:
 - duplicate canonical ids across shards fail compilation.
 - duplicate display names emit a collision report but remain valid.
 - dangling references fail compilation.
-- renamed source files and display-name changes with explicit `canonical_id`.
 - deterministic rebuild output and manifest shard hashes.
 - registry loading sharded unit definitions as one logical `units` collection.
 - faction availability resolving shared units.

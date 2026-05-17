@@ -307,3 +307,18 @@ For each remediation batch:
 | 0.3 — Stop destructive DB/replay | ✅ | No DROP TABLE, INSERT-not-REPLACE, UUID game_id |
 
 Verification: 484 tests pass, lint/formatter clean. CR regression evidence in CR-05/06/12/14/20.
+
+## Phase 1 — Content compiler / schemas — COMPLETE
+
+All five Phase 1 remediation tasks done (1.1-1.5).
+
+| Task | Status | Key result |
+|------|--------|-----------|
+| 1.1 — Content contract tests | ✅ | 23 tests, content.v1 Pydantic schema validation |
+| 1.2 — Safe cache | ✅ | Pickle removed, JSON manifest pipeline |
+| 1.3 — Squad/points metadata | ✅ | `squad_size` authoritative, `model_count` per-model |
+| 1.4 — Canonical JSON artifacts | ✅ | 16 sharded artifacts, canonical IDs, strict schemas, deterministic rebuild |
+| 1.5 — Frontmatter canonical IDs | ✅ | `source_path` tracking, canonical_id validation, duplicate/pre-write checks, 12 new tests |
+
+Verification: 509+ tests pass (36 content contracts), lint/formatter clean.
+CR evidence: CR-06, CR-11, CR-12, CR-21.

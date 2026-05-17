@@ -76,3 +76,14 @@ tags: [requirements, code-review, atomic-review]
 **2026-05-16.** Content contract tests + content.v1 schema serve as documentation
 consistency gate — any wiki change that breaks required fields/weapons/squad_size
 is caught. 14 tests cover all 160+ wiki units.
+
+## Regression evidence — Task 1.5 (frontmatter canonical IDs)
+
+**2026-05-17.** (co-owned — CR-06, CR-11, CR-12, CR-21). Frontmatter `canonical_id` support.
+
+Changes:
+- Unit model: `source_path` field, parser passes source path.
+- Compiler: canonical_id format validation, source_path in records, pre-write fatal collision check.
+- 12 new tmp_path tests.
+
+Tests: 36 passed (24 + 12 new). Lint/format/diff-check clean.

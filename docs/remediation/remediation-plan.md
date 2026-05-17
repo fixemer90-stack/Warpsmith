@@ -360,11 +360,11 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 ### Checkpoint 1
 
-- [ ] Wiki content compiles with explicit errors.
-- [ ] Canonical JSON artifacts are emitted, schema-validated, manifest-hashed, and keyed by stable ids; unit definitions may be physically sharded while remaining one registry object kind, and faction availability is represented by separate `faction_units` links.
-- [ ] No unsafe/stale cache risk.
-- [ ] Runtime loaders can rely on `CanonicalContentRegistry`/generated JSON instead of raw wiki reads for factions, units, weapons, detachments, stratagems, enhancements, and rules.
-- [ ] Roster validator can rely on canonical metadata.
+- [x] Wiki content compiles with explicit errors.
+- [x] Canonical JSON artifacts are emitted, schema-validated, manifest-hashed, and keyed by stable ids; unit definitions may be physically sharded while remaining one registry object kind, and faction availability is represented by separate `faction_units` links.
+- [x] No unsafe/stale cache risk.
+- [x] Runtime loaders can rely on `CanonicalContentRegistry`/generated JSON instead of raw wiki reads for factions, units, weapons, detachments, stratagems, enhancements, and rules.
+- [x] Roster validator can rely on canonical metadata.
 
 ## Phase 2 — Roster validator
 

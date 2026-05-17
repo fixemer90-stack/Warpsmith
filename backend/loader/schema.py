@@ -234,9 +234,14 @@ def validate_unit_v1(unit: Any) -> UnitV1Strict:
 
     weapons_ranged = [
         WeaponV1(
-            name=w.name, type=w.type, range_max=w.range_max,
-            attacks_dice=w.attacks_dice, skill=w.skill,
-            strength=w.strength, ap=w.ap, damage_dice=w.damage_dice,
+            name=w.name,
+            type=w.type,
+            range_max=w.range_max,
+            attacks_dice=w.attacks_dice,
+            skill=w.skill,
+            strength=w.strength,
+            ap=w.ap,
+            damage_dice=w.damage_dice,
             tags=getattr(w, "tags", []) or [],
             abilities=getattr(w, "abilities", []) or [],
         )
@@ -244,9 +249,14 @@ def validate_unit_v1(unit: Any) -> UnitV1Strict:
     ]
     weapons_melee = [
         WeaponV1(
-            name=w.name, type=w.type, range_max=w.range_max,
-            attacks_dice=w.attacks_dice, skill=w.skill,
-            strength=w.strength, ap=w.ap, damage_dice=w.damage_dice,
+            name=w.name,
+            type=w.type,
+            range_max=w.range_max,
+            attacks_dice=w.attacks_dice,
+            skill=w.skill,
+            strength=w.strength,
+            ap=w.ap,
+            damage_dice=w.damage_dice,
             tags=getattr(w, "tags", []) or [],
             abilities=getattr(w, "abilities", []) or [],
         )
@@ -257,17 +267,27 @@ def validate_unit_v1(unit: Any) -> UnitV1Strict:
     return UnitV1Strict(
         unit_id="unit:{}:{}".format(
             unit.faction.lower().replace(" ", "-"),
-            unit.name.lower().replace(" ", "-").replace("!", "").replace("'", "").replace(".", "").replace(",", ""),
+            unit.name.lower()
+            .replace(" ", "-")
+            .replace("!", "")
+            .replace("'", "")
+            .replace(".", "")
+            .replace(",", ""),
         ),
         display_name=unit.name,
         faction_id=f"faction:{unit.faction}",
         category=unit.category,
-        movement=unit.movement, toughness=unit.toughness,
-        save=unit.save, wounds=unit.wounds,
-        leadership=unit.leadership, objective_control=unit.objective_control,
-        points=unit.points, model_count=unit.model_count,
+        movement=unit.movement,
+        toughness=unit.toughness,
+        save=unit.save,
+        wounds=unit.wounds,
+        leadership=unit.leadership,
+        objective_control=unit.objective_control,
+        points=unit.points,
+        model_count=unit.model_count,
         squad_size=sq,
-        ranged_weapons=weapons_ranged, melee_weapons=weapons_melee,
+        ranged_weapons=weapons_ranged,
+        melee_weapons=weapons_melee,
         abilities=getattr(unit, "abilities", []) or [],
         keywords=getattr(unit, "keywords", []) or [],
         faction_keywords=getattr(unit, "faction_keywords", []) or [],

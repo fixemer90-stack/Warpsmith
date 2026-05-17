@@ -229,9 +229,17 @@ class WikiRegistry:
                     if "faction_id" in ud and "faction" not in ud:
                         ud["faction"] = ud.pop("faction_id")
                     # Remove canonical-only fields not in Unit.__init__
-                    for kw in ("unit_id", "display_name", "faction_id", "source_path",
-                               "ranged_weapons", "melee_weapons", "wargear_options",
-                               "extended_wargear_options", "nob_options"):
+                    for kw in (
+                        "unit_id",
+                        "display_name",
+                        "faction_id",
+                        "source_path",
+                        "ranged_weapons",
+                        "melee_weapons",
+                        "wargear_options",
+                        "extended_wargear_options",
+                        "nob_options",
+                    ):
                         ud.pop(kw, None)
                     unit = Unit(**ud)
                 except Exception as exc:

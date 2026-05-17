@@ -100,3 +100,14 @@ fields. 14 tests pass.
 **2026-05-17.** `validate_squad_size()` and `_roster_to_player_state()` now use
 `unit.squad_size` from frontmatter (not `model_count`). `model_count` is per-model
 grouping only (e.g. swarms). 2 new tests: squad_size validation + step divisibility.
+
+## Regression evidence — Task 1.5 (frontmatter canonical IDs)
+
+**2026-05-17.** (co-owned — CR-06, CR-11, CR-12, CR-21). Frontmatter `canonical_id` support.
+
+Changes:
+- Unit model: `source_path` field, parser passes source path.
+- Compiler: canonical_id format validation, source_path in records, pre-write fatal collision check.
+- 12 new tmp_path tests.
+
+Tests: 36 passed (24 + 12 new). Lint/format/diff-check clean.

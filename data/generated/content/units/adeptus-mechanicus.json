@@ -24,7 +24,7 @@
     "points": 170,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Archaeopter Fusilave.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -65,7 +65,7 @@
     "points": 180,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Archaeopter Stratoraptor.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -106,7 +106,7 @@
     "points": 140,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Archaeopter Transvector.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -148,7 +148,7 @@
     "points": 150,
     "ranged_weapons": [],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Belisarius Cawl.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -189,7 +189,7 @@
     "points": 60,
     "ranged_weapons": [],
     "save": 7,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Corpuscarii Electropriests.md",
     "squad_size": {
       "max": 10,
       "min": 5,
@@ -229,7 +229,7 @@
     "points": 35,
     "ranged_weapons": [],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Cybernetica Datasmith.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -269,7 +269,7 @@
     "points": 70,
     "ranged_weapons": [],
     "save": 7,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Fulgurite Electropriests.md",
     "squad_size": {
       "max": 10,
       "min": 5,
@@ -418,7 +418,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Hastarii Exterminators.md",
     "squad_size": {
       "max": 10,
       "min": 5,
@@ -544,7 +544,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Hastarii Fusiliers.md",
     "squad_size": {
       "max": 10,
       "min": 5,
@@ -586,7 +586,7 @@
     "points": 50,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Ironstrider Ballistarii.md",
     "squad_size": {
       "max": 3,
       "min": 1,
@@ -625,7 +625,7 @@
     "points": 200,
     "ranged_weapons": [],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Kastelan Robots.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -664,7 +664,7 @@
     "points": 160,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Kataphron Breachers.md",
     "squad_size": {
       "max": 6,
       "min": 3,
@@ -704,7 +704,7 @@
     "points": 110,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Kataphron Destroyers.md",
     "squad_size": {
       "max": 6,
       "min": 3,
@@ -743,7 +743,7 @@
     "points": 155,
     "ranged_weapons": [],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Onager Dunecrawler.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -782,7 +782,7 @@
     "points": 90,
     "ranged_weapons": [],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Pteraxii Skystalkers.md",
     "squad_size": {
       "max": 10,
       "min": 5,
@@ -822,7 +822,7 @@
     "points": 100,
     "ranged_weapons": [],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Pteraxii Sterylizors.md",
     "squad_size": {
       "max": 10,
       "min": 5,
@@ -953,7 +953,7 @@
       }
     ],
     "save": 5,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Secutarii Hoplites.md",
     "squad_size": {
       "max": 10,
       "min": 5,
@@ -1084,7 +1084,7 @@
       }
     ],
     "save": 5,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Secutarii Peltasts.md",
     "squad_size": {
       "max": 10,
       "min": 5,
@@ -1127,7 +1127,7 @@
     "points": 70,
     "ranged_weapons": [],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Serberys Raiders.md",
     "squad_size": {
       "max": 6,
       "min": 3,
@@ -1167,7 +1167,7 @@
     "points": 55,
     "ranged_weapons": [],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Serberys Sulphurhounds.md",
     "squad_size": {
       "max": 6,
       "min": 3,
@@ -1386,7 +1386,7 @@
       }
     ],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Servitor Battleclade.md",
     "squad_size": {
       "max": 4,
       "min": 2,
@@ -1543,7 +1543,7 @@
       }
     ],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Servitors.md",
     "squad_size": {
       "max": 4,
       "min": 1,
@@ -1585,7 +1585,7 @@
     "points": 70,
     "ranged_weapons": [],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Sicarian Infiltrators.md",
     "squad_size": {
       "max": 10,
       "min": 5,
@@ -1624,7 +1624,7 @@
     "points": 75,
     "ranged_weapons": [],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Sicarian Ruststalkers.md",
     "squad_size": {
       "max": 10,
       "min": 5,
@@ -1663,7 +1663,7 @@
     "points": 45,
     "ranged_weapons": [],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Skitarii Marshal.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -1703,7 +1703,7 @@
     "points": 90,
     "ranged_weapons": [],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Skitarii Rangers.md",
     "squad_size": {
       "max": 10,
       "min": 10,
@@ -1743,7 +1743,7 @@
     "points": 90,
     "ranged_weapons": [],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Skitarii Vanguard.md",
     "squad_size": {
       "max": 10,
       "min": 10,
@@ -1783,7 +1783,7 @@
     "points": 175,
     "ranged_weapons": [],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Skorpius Disintegrator.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -1822,7 +1822,7 @@
     "points": 95,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Skorpius Dunerider.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -1862,7 +1862,7 @@
     "points": 70,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Sydonian Dragoons With Radium Jezzails.md",
     "squad_size": {
       "max": 3,
       "min": 1,
@@ -1901,7 +1901,7 @@
     "points": 70,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Sydonian Dragoons With Taser Lances.md",
     "squad_size": {
       "max": 3,
       "min": 1,
@@ -1940,7 +1940,7 @@
     "points": 60,
     "ranged_weapons": [],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Sydonian Skatros.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -1979,7 +1979,7 @@
     "points": 75,
     "ranged_weapons": [],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Tech-Priest Dominus.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2019,7 +2019,7 @@
     "points": 45,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Tech-Priest Enginseer.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2059,7 +2059,7 @@
     "points": 60,
     "ranged_weapons": [],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Tech-Priest Manipulus.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2099,7 +2099,7 @@
     "points": 45,
     "ranged_weapons": [],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Technoarcheologist.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2252,7 +2252,7 @@
       }
     ],
     "save": 3,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Terrax-pattern Termite.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2382,7 +2382,7 @@
       }
     ],
     "save": 2,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Thulia Ghuld.md",
     "squad_size": {
       "max": 1,
       "min": 1,
@@ -2469,7 +2469,7 @@
       }
     ],
     "save": 4,
-    "source_path": "",
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/X-101.md",
     "squad_size": {
       "max": 1,
       "min": 1,
