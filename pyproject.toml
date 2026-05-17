@@ -1,6 +1,6 @@
 [project]
 name = "warpsmith"
-version = "0.7.7"
+version = "0.7.9"
 description = "Warhammer 40,000 Battle Simulator"
 requires-python = ">=3.12"
 
@@ -22,6 +22,7 @@ dependencies = [
     "structlog",
     "sentry-sdk[fastapi]",
     "slowapi",
+    "requests>=2.34.2",
 ]
 
 [project.optional-dependencies]
@@ -94,6 +95,8 @@ unfixable = ["F841"]  # unused-variable — ручная проверка
     "PLR2004", "T20", "D100", "D101", "D102", "D103",
 ]
 "__init__.py" = ["F401", "E402", "N999"]
+"_compile.py" = ["T20"]
+"_fix_api_replays.py" = ["T20"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

@@ -7,6 +7,24 @@
 
 ---
 
+## 2026-05-17
+
+### Added
+- Task 1.5 — Frontmatter canonical ID support (`canonical_id`, `source_path`, format validation, pre-write collision check)
+- Task 2.1 — Canonical PTS formula (`calculate_squad_pts()`), loadout/Nob upgrade support in `validate_roster()`
+- Task 2.2 — Shared Warlord validation (`is_warlord` param, `is_unit_eligible_warlord()` helper)
+- Registry regression tests for JSON cache boundary
+- Frontend/backend PTS parity fixture test
+
+### Changed
+- **Version bump**: 0.7.7 → 0.7.9
+- `validate_roster()`: accepts `loadout_pts`, `nob_pts`, `is_warlord` parameters
+- `generate_roster()`: uses shared `is_unit_eligible_warlord()`, canonical `calculate_squad_pts()`
+- `WikiRegistry._load_from_json_cache()`: units keyed by display name, not canonical id; faction slugs preserved
+- `BuildContext._collect_units()`: scans source files directly, detects duplicate display names
+- Ruff lint: 3 pre-existing warnings fixed; `_compile.py`/`_fix_api_replays.py` excluded from T20
+- Full test suite: 544 passed
+
 ## 2026-05-09
 
 ### Added
@@ -30,7 +48,7 @@
 - `uv run ruff format --check .` — passed.
 - `node -c web/static/team_builder.js` and `node -c web/static/scenario_setup.js` — passed.
 - `uv run python -m pytest tests/ -q` — 454 passed, 3 skipped.
-- Local `/api/health` returned `{ "status": "ok", "version": "0.7.7" }`.
+- Local `/api/health` returned `{ "status": "ok", "version": "0.7.9" }`.
 - End-to-end generated-roster flow created/saved both rosters, called `/api/auto-play`, and received a valid `game_id`.
 
 ## 2026-05-07
@@ -80,7 +98,7 @@
 - **Result page — winner**: summary всегда имел `winner: null`. `_build_summary` теперь вычисляет победителя из VP. API fallback: если `summary.winner is None`, вычисляет из последнего раунда.
 - **Simulation redirect**: после симуляции → `/result/` (было `/round-viewer/`). На Replay добавлена кнопка `📊 View Result`.
 - **F2.14 Primary Missions spec** (`docs/features/f2.14-primary-missions.md`): документация для The Ritual, Supply Drop, Scorched Earth (12h, pending).
-- **Version bump**: 0.7.5 → 0.7.7 во всех файлах (`main.py`, `pyproject.toml`, `README.md`, `AGENTS.md`, `DEV_INDEX.md`, `ROADMAP.md`, `ROADMAP.html`, `api.py`).
+- **Version bump**: 0.7.5 → 0.7.9 во всех файлах (`main.py`, `pyproject.toml`, `README.md`, `AGENTS.md`, `DEV_INDEX.md`, `ROADMAP.md`, `ROADMAP.html`, `api.py`).
 
 ## 2026-05-06
 

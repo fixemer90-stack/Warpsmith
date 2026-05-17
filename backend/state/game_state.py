@@ -4,9 +4,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
+
+from backend.state.runtime_id import format_event_identity
 
 if TYPE_CHECKING:
     from .mission import Mission
@@ -204,9 +206,10 @@ class GameState:
                 if unit.current_wounds == 0:
                     unit.models_remaining = 0
 
-                self.game_log.append(f"{unit.name} took {damage} damage")
+                target_meta = format_event_identity(target_id=unit.unit_id)
+                self.game_log.append(f"{unit.name} took {damage} damage{target_meta}")
                 if unit.current_wounds == 0 and unit.models_remaining == 0:
-                    self.game_log.append(f"{unit.name} was destroyed")
+                    self.game_log.append(f"{unit.name} was destroyed{target_meta}")
                 return True
         return False
 
@@ -298,6 +301,86 @@ class GameState:
             "is_game_over": self.is_game_over,
             "winner": self.winner,
         }
+
+
+# ── Canonical GameState serializer (Task 0.2) ──────────────────────────
+
+
+def snapshot_game_state(state: GameState) -> dict[str, Any]:
+    """Canonical serialization of GameState for round snapshots, replay payloads,
+    and API payloads consumed by round-viewer and result screens.
+
+    This is the SINGLE source of truth for GameState shape.  All other
+    snapshot/serialization helpers MUST delegate here.
+    """
+    units_by_player: dict[str, list[dict[str, Any]]] = {}
+    for player_id, player in state.players.items():
+        units_by_player[player_id] = [_unit_snapshot(u, player_id) for u in player.units.values()]
+
+    victory_points = {pid: getattr(p, "victory_points", 0) for pid, p in state.players.items()}
+
+    phase_str = (
+        state.current_phase.value
+        if hasattr(state.current_phase, "value")
+        else str(state.current_phase)
+    )
+
+    return {
+        "round": state.current_round,
+        "phase": phase_str,
+        "map_width": state.map_width,
+        "map_height": state.map_height,
+        "victory_points": victory_points,
+        "units": units_by_player,
+    }
+
+
+def _unit_snapshot(unit, player_id: str) -> dict[str, Any]:
+    """Serialize a single UnitState into the canonical unit record shape.
+
+    Explicit identity/display contract (Task 0.2 acceptance criteria):
+      - ``runtime_unit_id`` — authoritative identity (e.g. ``p1:Boyz:0``)
+      - ``display_name`` — UI text only; MUST NOT be used as lookup key
+      - ``canonical_unit_id`` — unit name without player/index prefix
+      - ``owner_id`` / ``player_id`` — owning player
+
+    Legacy aliases ``id`` and ``name`` are kept for existing JS consumers
+    (round-viewer, result-chart).  New code MUST use the explicit fields.
+    """
+    pos = unit.position if hasattr(unit, "position") else (0, 0)
+    rtid = getattr(unit, "unit_id", "")
+    dname = getattr(unit, "name", str(unit))
+
+    # Derive canonical_unit_id from runtime_id: strip p<num>: prefix and :<idx> suffix
+    canonical = rtid
+    if rtid and ":" in rtid:
+        parts = rtid.split(":")
+        if len(parts) >= 2:
+            canonical = parts[1]  # the unit name part
+        if len(parts) >= 3:
+            # Re-join if name itself contains colons (unlikely but safe)
+            canonical = ":".join(parts[1:-1]) if len(parts) > 3 else parts[1]
+
+    return {
+        # ── Explicit identity/display contract ──
+        "runtime_unit_id": rtid,
+        "display_name": dname,
+        "canonical_unit_id": canonical,
+        "owner_id": player_id,
+        "player_id": player_id,
+        # ── Legacy aliases (keep for JS compatibility) ──
+        "id": rtid,
+        "name": dname,
+        # ── Position & stats ──
+        "position": {"x": int(pos[0]), "y": int(pos[1])},
+        "models_remaining": getattr(unit, "models_remaining", 1),
+        "models_total": getattr(unit, "models_total", 1),
+        "current_wounds": getattr(unit, "current_wounds", getattr(unit, "wounds", 1)),
+        "max_wounds": getattr(unit, "max_wounds", getattr(unit, "wounds", 1)),
+        "is_alive": getattr(unit, "is_alive", True),
+        "is_engaged": getattr(unit, "is_engaged", False),
+        "is_battle_shocked": getattr(unit, "is_battle_shocked", False),
+    }
 
 
 # Factory functions for creating game states

@@ -98,7 +98,7 @@ class TestValidateRoster:
     def test_valid_roster(self, registry):
         """A standard legal roster passes."""
         units = [("Warboss", 1), ("Boyz", 10), ("Weirdboy", 1)]
-        result = validate_roster(units, registry)
+        result = validate_roster(units, registry, is_warlord=[True, False, False])
         assert result.is_valid
         assert result.total_pts > 0
         assert len(result.errors) == 0
@@ -118,11 +118,85 @@ class TestValidateRoster:
         assert any(e.code == "pts_exceeded" for e in result.errors)
 
     def test_no_warlord(self, registry):
-        """Roster without a Warlord-capable unit fails."""
+        """Roster without any eligible Character has no Warlord requirement."""
         units = [("Boyz", 10)]
         result = validate_roster(units, registry)
-        assert not result.is_valid
+        # Zero eligible Characters → no Warlord requirement (new contract)
+        assert result.is_valid, (
+            f"Expected valid (no warlord needed without characters), errors: {result.errors}"
+        )
+        assert result.total_pts == 85
+
+    def test_multiple_characters_no_warlord(self, registry):
+        """Multiple Characters without explicit Warlord fails in auto mode too."""
+        # Auto mode (is_warlord=None): 2+ eligible chars → error
+        units = [("Warboss", 1), ("Weirdboy", 1)]
+        result = validate_roster(units, registry)
+        assert not result.is_valid, (
+            f"Expected invalid (2 eligible chars need explicit Warlord), errors: {result.errors}"
+        )
         assert any(e.code == "no_warlord" for e in result.errors)
+
+        # Explicit mode (is_warlord=[]): zero warlords flagged → error
+        result2 = validate_roster(units, registry, is_warlord=[False, False])
+        assert not result2.is_valid
+        assert any(e.code == "no_warlord" for e in result2.errors)
+
+    def test_too_many_warlords_fails(self, registry):
+        """More than one unit marked as Warlord fails."""
+        units = [("Warboss", 1), ("Weirdboy", 1)]
+        result = validate_roster(units, registry, is_warlord=[True, True])
+        assert not result.is_valid
+        assert any(e.code == "too_many_warlords" for e in result.errors), (
+            f"Expected too_many_warlords, got: {[e.code for e in result.errors]}"
+        )
+
+    def test_non_character_warlord_fails(self):
+        """A non-Character unit marked as Warlord fails."""
+        from backend.model.unit import Unit
+
+        boyz = Unit(
+            name="Boyz",
+            faction="orks",
+            category="Infantry",
+            movement=5,
+            toughness=4,
+            save=4,
+            wounds=2,
+            leadership=7,
+            objective_control=1,
+            points=85,
+            model_count=(10, 20),
+            squad_size={"min": 10, "max": 20, "step": 5},
+            keywords=["Infantry", "Battleline", "Orks"],
+        )
+        warlord = Unit(
+            name="Warboss",
+            faction="orks",
+            category="Character",
+            movement=6,
+            toughness=6,
+            save=3,
+            wounds=7,
+            leadership=6,
+            objective_control=2,
+            points=80,
+            model_count=(1, 1),
+            squad_size={"min": 1, "max": 1, "step": 1},
+            keywords=["Infantry", "Character", "Orks"],
+            can_be_warlord=True,
+        )
+        # Boyz marked as warlord but not eligible → error
+        units = [("Boyz", 10), ("Warboss", 1)]
+        result = validate_roster(
+            units,
+            {"Boyz": boyz, "Warboss": warlord},
+            is_warlord=[True, False],
+        )
+        assert not result.is_valid
+        assert any(e.code == "invalid_warlord" for e in result.errors), (
+            f"Expected invalid_warlord, got: {[e.code for e in result.errors]}"
+        )
 
     def test_too_many_copies_non_battleline(self, registry):
         """Non-Battleline units capped at 3 copies."""
@@ -252,3 +326,330 @@ class TestValidateSquadSize:
         """Exactly max size is valid."""
         err = validate_squad_size("Boyz", 20, boyz)
         assert err is None
+
+
+# ── Task 2.1 — Canonical PTS formula tests ──────────────────────────────
+
+
+class TestCalculateSquadPts:
+    """Tests for calculate_squad_pts()."""
+
+    def test_boyz_minimum_squad(self):
+        """Boyz minimum squad: 85 / 10 * 10 = 85."""
+        from backend.state.roster import calculate_squad_pts
+
+        pts = calculate_squad_pts(points=85, min_squad=10, squad_size=10)
+        assert pts == 85, f"Expected 85, got {pts}"
+
+    def test_boyz_expanded_squad(self):
+        """Boyz expanded squad: 85 / 10 * 20 = 170."""
+        from backend.state.roster import calculate_squad_pts
+
+        pts = calculate_squad_pts(points=85, min_squad=10, squad_size=20)
+        assert pts == 170, f"Expected 170, got {pts}"
+
+    def test_boyz_with_per_model_loadout(self):
+        """Boyz with per-model loadout upgrade: (85/10 + 5) * 10 = 135."""
+        from backend.state.roster import calculate_squad_pts
+
+        pts = calculate_squad_pts(points=85, min_squad=10, squad_size=10, loadout_pts=5)
+        assert pts == 135, f"Expected 135, got {pts}"
+
+    def test_boyz_with_nob_flat_upgrade(self):
+        """Boyz with Nob flat upgrade: (85/10) * 10 + 25 = 110."""
+        from backend.state.roster import calculate_squad_pts
+
+        pts = calculate_squad_pts(points=85, min_squad=10, squad_size=10, nob_pts=25)
+        assert pts == 110, f"Expected 110, got {pts}"
+
+    def test_boyz_with_loadout_and_nob(self):
+        """Boyz with loadout + Nob together: (85/10 + 5) * 10 + 25 = 160."""
+        from backend.state.roster import calculate_squad_pts
+
+        pts = calculate_squad_pts(points=85, min_squad=10, squad_size=10, loadout_pts=5, nob_pts=25)
+        assert pts == 160, f"Expected 160, got {pts}"
+
+    def test_nobz_min_squad_different(self):
+        """Nobz with different minSquad: (50/2) * 2 = 50."""
+        from backend.state.roster import calculate_squad_pts
+
+        pts = calculate_squad_pts(points=50, min_squad=2, squad_size=2)
+        assert pts == 50, f"Expected 50, got {pts}"
+
+    def test_nobz_expanded(self):
+        """Nobz expanded: (50/2) * 5 = 125."""
+        from backend.state.roster import calculate_squad_pts
+
+        pts = calculate_squad_pts(points=50, min_squad=2, squad_size=5)
+        assert pts == 125, f"Expected 125, got {pts}"
+
+    def test_single_model_vehicle(self):
+        """Single-model vehicle with minSquad=1, squadSize=1: (120/1) * 1 = 120."""
+        from backend.state.roster import calculate_squad_pts
+
+        pts = calculate_squad_pts(points=120, min_squad=1, squad_size=1)
+        assert pts == 120, f"Expected 120, got {pts}"
+
+    def test_roster_total_pts_sum(self):
+        """Roster totalPts equals sum of all squad_pts."""
+        from backend.model.unit import Unit
+        from backend.state.roster import RosterState, calculate_squad_pts, validate_roster
+
+        # Create a minimal roster with 2 units
+        boyz = Unit(
+            name="Boyz",
+            faction="orks",
+            category="Infantry",
+            movement=5,
+            toughness=4,
+            save=4,
+            wounds=2,
+            leadership=7,
+            objective_control=1,
+            points=85,
+            model_count=(10, 20),
+            squad_size={"min": 10, "max": 20, "step": 5},
+            keywords=["Infantry", "Battleline", "Orks"],
+        )
+        warboss = Unit(
+            name="Warboss",
+            faction="orks",
+            category="Character",
+            movement=6,
+            toughness=6,
+            save=3,
+            wounds=7,
+            leadership=6,
+            objective_control=2,
+            points=80,
+            model_count=(1, 1),
+            squad_size={"min": 1, "max": 1, "step": 1},
+            keywords=["Infantry", "Character", "Orks"],
+            can_be_warlord=True,
+        )
+
+        registry = {"Boyz": boyz, "Warboss": warboss}
+        units = [("Boyz", 10), ("Warboss", 1)]
+        result = validate_roster(units, registry)
+
+        # total_pts should equal sum of squad_pts
+        expected_total = 85 + 80  # Boyz min squad 85 + Warboss 80
+        assert result.total_pts == expected_total, (
+            f"Expected {expected_total}, got {result.total_pts}"
+        )
+
+        squad_sum = sum(s["squad_pts"] for s in result.squad_pts)
+        assert squad_sum == result.total_pts, (
+            f"squad_pts sum {squad_sum} != total_pts {result.total_pts}"
+        )
+
+    def test_validate_roster_squad_pts_breakdown(self):
+        """validate_roster returns squad_pts breakdown per unit."""
+        from backend.model.unit import Unit
+        from backend.state.roster import validate_roster
+
+        warboss = Unit(
+            name="Warboss",
+            faction="orks",
+            category="Character",
+            movement=6,
+            toughness=6,
+            save=3,
+            wounds=7,
+            leadership=6,
+            objective_control=2,
+            points=80,
+            model_count=(1, 1),
+            squad_size={"min": 1, "max": 1, "step": 1},
+            keywords=["Infantry", "Character", "Orks"],
+            can_be_warlord=True,
+        )
+
+        result = validate_roster([("Warboss", 1)], {"Warboss": warboss})
+        assert len(result.squad_pts) == 1
+        entry = result.squad_pts[0]
+        assert entry["unit_name"] == "Warboss"
+        assert entry["squad_size"] == 1
+        assert entry["base_pts"] == 80
+        assert entry["min_squad"] == 1
+        assert entry["squad_pts"] == 80
+
+    def test_pts_exceeded_with_canonical_formula(self):
+        """PTS exceeded error still works with canonical formula."""
+        from backend.model.unit import Unit
+        from backend.state.roster import validate_roster
+
+        warboss = Unit(
+            name="Warboss",
+            faction="orks",
+            category="Character",
+            movement=6,
+            toughness=6,
+            save=3,
+            wounds=7,
+            leadership=6,
+            objective_control=2,
+            points=80,
+            model_count=(1, 1),
+            squad_size={"min": 1, "max": 1, "step": 1},
+            keywords=["Infantry", "Character", "Orks"],
+            can_be_warlord=True,
+        )
+
+        units = [("Warboss", 1)] * 100  # 8000pts
+        result = validate_roster(units, {"Warboss": warboss}, pts_limit=2000)
+        assert not result.is_valid
+        assert any(e.code == "pts_exceeded" for e in result.errors)
+
+
+class TestValidateRosterUpgraded:
+    """Production-path tests: validate_roster() with loadout/nob PTS."""
+
+    def _make_boyz(self) -> Unit:
+        return Unit(
+            name="Boyz",
+            faction="orks",
+            category="Infantry",
+            movement=5,
+            toughness=4,
+            save=4,
+            wounds=2,
+            leadership=7,
+            objective_control=1,
+            points=85,
+            model_count=(10, 20),
+            squad_size={"min": 10, "max": 20, "step": 5},
+            keywords=["Infantry", "Battleline", "Orks"],
+        )
+
+    def test_validate_roster_with_loadout_pts(self):
+        """validate_roster with loadout_pts uses canonical formula."""
+        boyz = self._make_boyz()
+        result = validate_roster(
+            [("Boyz", 10)],
+            {"Boyz": boyz},
+            loadout_pts=[5],
+            nob_pts=[0],
+        )
+        # (85/10 + 5) * 10 = 135
+        assert result.total_pts == 135, f"Expected 135, got {result.total_pts}"
+
+    def test_validate_roster_with_nob_pts(self):
+        """validate_roster with nob_pts uses canonical formula."""
+        boyz = self._make_boyz()
+        result = validate_roster(
+            [("Boyz", 10)],
+            {"Boyz": boyz},
+            loadout_pts=[0],
+            nob_pts=[25],
+        )
+        # (85/10) * 10 + 25 = 110
+        assert result.total_pts == 110, f"Expected 110, got {result.total_pts}"
+
+    def test_validate_roster_with_both_upgrades(self):
+        """validate_roster with loadout + Nob uses canonical formula."""
+        boyz = self._make_boyz()
+        result = validate_roster(
+            [("Boyz", 10)],
+            {"Boyz": boyz},
+            loadout_pts=[5],
+            nob_pts=[25],
+        )
+        # (85/10 + 5) * 10 + 25 = 160
+        assert result.total_pts == 160, f"Expected 160, got {result.total_pts}"
+
+    def test_validate_roster_mixed_units_with_upgrades(self):
+        """Mixed roster with upgrades: total_pts sums correctly."""
+        boyz = self._make_boyz()
+        warboss = Unit(
+            name="Warboss",
+            faction="orks",
+            category="Character",
+            movement=6,
+            toughness=6,
+            save=3,
+            wounds=7,
+            leadership=6,
+            objective_control=2,
+            points=80,
+            model_count=(1, 1),
+            squad_size={"min": 1, "max": 1, "step": 1},
+            keywords=["Infantry", "Character", "Orks"],
+            can_be_warlord=True,
+        )
+        result = validate_roster(
+            [("Boyz", 10), ("Warboss", 1)],
+            {"Boyz": boyz, "Warboss": warboss},
+            loadout_pts=[5, 0],
+            nob_pts=[25, 0],
+        )
+        # Boyz: (85/10 + 5) * 10 + 25 = 160, Warboss: (80/1 + 0) * 1 + 0 = 80
+        expected = 160 + 80
+        assert result.total_pts == expected, f"Expected {expected}, got {result.total_pts}"
+
+        # Verify squad_pts breakdown
+        assert len(result.squad_pts) == 2
+        assert result.squad_pts[0]["squad_pts"] == 160
+        assert result.squad_pts[1]["squad_pts"] == 80
+
+    def test_validate_roster_upgraded_squad_pts_in_result(self):
+        """squad_pts breakdown includes loadout/nob in per-squad total."""
+        boyz = self._make_boyz()
+        result = validate_roster(
+            [("Boyz", 20)],
+            {"Boyz": boyz},
+            loadout_pts=[5],
+            nob_pts=[25],
+        )
+        # (85/10 + 5) * 20 + 25 = 295
+        assert len(result.squad_pts) == 1
+        entry = result.squad_pts[0]
+        assert entry["unit_name"] == "Boyz"
+        assert entry["squad_size"] == 20
+        assert entry["base_pts"] == 85
+        assert entry["min_squad"] == 10
+        assert entry["squad_pts"] == 295
+
+
+# ── Frontend/Backend PTS parity fixture ────────────────────────────────
+
+
+def test_pts_formula_parity_fixture():
+    """Canonical PTS formula fixture — used for frontend/backend parity.
+
+    This test documents the exact expected values for known formula inputs.
+    Frontend developers should ensure team_builder.js totalCost returns
+    the same values for these inputs.
+
+    Backend formula: (points / minSquad + loadoutPts) * squadSize + nobPts
+    JS formula:     (points  / minSquad + loadoutPts) * squadSize + nobPts
+
+    | Scenario                  | points | minSquad | squadSize | loadoutPts | nobPts | Expected |
+    |---------------------------|--------|----------|-----------|------------|--------|----------|
+    | Boyz minimum squad        | 85     | 10       | 10        | 0          | 0      | 85       |
+    | Boyz expanded             | 85     | 10       | 20        | 0          | 0      | 170      |
+    | Boyz with loadout         | 85     | 10       | 10        | 5          | 0      | 135      |
+    | Boyz with Nob upgrade     | 85     | 10       | 10        | 0          | 25     | 110      |
+    | Boyz loadout + Nob        | 85     | 10       | 10        | 5          | 25     | 160      |
+    | Nobz minimum squad        | 50     | 2        | 2         | 0          | 0      | 50       |
+    | Nobz expanded             | 50     | 2        | 5         | 0          | 0      | 125      |
+    | Single-model vehicle      | 120    | 1        | 1         | 0          | 0      | 120      |
+    """
+    from backend.state.roster import calculate_squad_pts
+
+    cases = [
+        (85, 10, 10, 0, 0, 85),
+        (85, 10, 20, 0, 0, 170),
+        (85, 10, 10, 5, 0, 135),
+        (85, 10, 10, 0, 25, 110),
+        (85, 10, 10, 5, 25, 160),
+        (50, 2, 2, 0, 0, 50),
+        (50, 2, 5, 0, 0, 125),
+        (120, 1, 1, 0, 0, 120),
+    ]
+    for points, min_sq, squad_size, loadout, nob, expected in cases:
+        result = calculate_squad_pts(points, min_sq, squad_size, loadout, nob)
+        assert result == expected, (
+            f"calculate_squad_pts({points}, {min_sq}, {squad_size}, "
+            f"{loadout}, {nob}) = {result}, expected {expected}"
+        )

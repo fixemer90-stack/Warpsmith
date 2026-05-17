@@ -115,7 +115,6 @@ class Database:
             FOREIGN KEY (user_id) REFERENCES users(id)
         );
 
-        DROP TABLE IF EXISTS replays;
         CREATE TABLE IF NOT EXISTS replays (
             game_id TEXT PRIMARY KEY,
             created_at TEXT NOT NULL,

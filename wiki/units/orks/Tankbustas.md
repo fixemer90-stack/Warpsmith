@@ -4,7 +4,8 @@ created: 2026-05-01
 updated: 2026-05-01
 type: entity
 tags: [orks, infantry]
-squad_size: {'min': 5, 'max': 10, 'step': 5}
+squad_size: {'min': 6, 'max': 6, 'step': 1}
+model_count: [1, 1]
 sources: [Orks Faction Pack v1.3]
 edition: 10e
 confidence: high

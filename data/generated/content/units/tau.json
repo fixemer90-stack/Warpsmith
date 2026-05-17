@@ -1,0 +1,4175 @@
+{
+  "unit:tau:aunshi": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Aun'Shi",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "SUSTAINED HITS 1"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Honour Blade",
+        "range_max": null,
+        "skill": 2,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 60,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Pulse Pistol",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 6,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Aun'Shi.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "character",
+      "epic-hero"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:aunshi",
+    "wounds": 3
+  },
+  "unit:tau:aunva": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Aun'Va",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "SUSTAINED HITS 1"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Honour Blade",
+        "range_max": null,
+        "skill": 2,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 65,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Pulse Pistol",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Aun'Va.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "character",
+      "epic-hero"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:aunva",
+    "wounds": 5
+  },
+  "unit:tau:ax-1-0-tiger-shark": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "AX-1-0 Tiger Shark",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 315,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Heavy",
+          "Sustained Hits 1",
+          "Devastating Wounds"
+        ],
+        "ap": -5,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          2
+        ],
+        "name": "Heavy Rail Rifle",
+        "range_max": 60,
+        "skill": 4,
+        "strength": 14,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Heavy",
+          "Sustained Hits 1",
+          "Devastating Wounds"
+        ],
+        "ap": -5,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          2
+        ],
+        "name": "Heavy Rail Rifle",
+        "range_max": 60,
+        "skill": 4,
+        "strength": 14,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "(2× Burst Cannon — anti-infantry support)"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          0
+        ],
+        "name": "Burst Cannon",
+        "range_max": 0,
+        "skill": 6,
+        "strength": 0,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Indirect Fire",
+          "ignores cover"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          0
+        ],
+        "name": "Twin smart missile system",
+        "range_max": 0,
+        "skill": 6,
+        "strength": 0,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/AX-1-0 Tiger Shark.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "vehicle",
+      "fly"
+    ],
+    "toughness": 11,
+    "unit_id": "unit:tau:ax-1-0-tiger-shark",
+    "wounds": 18
+  },
+  "unit:tau:barracuda": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Barracuda",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 155,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Sustained Hits 1"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Heavy Rail Rifle",
+        "range_max": 60,
+        "skill": 4,
+        "strength": 12,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Long-barreled Burst Cannon (×2)",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "One Shot"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Seeker Missile (×2)",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Barracuda.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "vehicle",
+      "fly"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:tau:barracuda",
+    "wounds": 14
+  },
+  "unit:tau:breacher-team": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Battleline",
+    "display_name": "Breacher Team",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          0
+        ],
+        "name": "Close Combat Weapon",
+        "range_max": null,
+        "skill": 6,
+        "strength": 0,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 2,
+    "points": 80,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Assault"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Pulse Blaster",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Breacher Team.md",
+    "squad_size": {
+      "max": 10,
+      "min": 10,
+      "step": 10
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "battleline"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:breacher-team",
+    "wounds": 1
+  },
+  "unit:tau:broadside-battlesuits": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Broadside Battlesuits",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 5,
+    "objective_control": 2,
+    "points": 80,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Heavy",
+          "Sustained Hits 1"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Heavy Rail Rifle",
+        "range_max": 36,
+        "skill": 4,
+        "strength": 10,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Heavy"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          1,
+          3,
+          0
+        ],
+        "name": "High-Yield Missile Pods",
+        "range_max": 36,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Indirect Fire",
+          "Twin-linked"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin Smart Missile System",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "One Shot"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Seeker Missile",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Broadside Battlesuits.md",
+    "squad_size": {
+      "max": 3,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "battlesuit"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:tau:broadside-battlesuits",
+    "wounds": 8
+  },
+  "unit:tau:cadre-fireblade": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Cadre Fireblade",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close combat weapon",
+        "range_max": null,
+        "skill": 3,
+        "strength": 3,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 50,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Pulse Rifle",
+        "range_max": 30,
+        "skill": 3,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Pulse Pistol",
+        "range_max": 12,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Cadre Fireblade.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "character"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:cadre-fireblade",
+    "wounds": 3
+  },
+  "unit:tau:commander-farsight": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Commander Farsight",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "DEVASTATING WOUNDS"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          4
+        ],
+        "name": "Dawn Blade",
+        "range_max": null,
+        "skill": 2,
+        "strength": 12,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 2,
+    "points": 120,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Plasma Rifle",
+        "range_max": 30,
+        "skill": 2,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "MELTA 2"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Fusion Blaster",
+        "range_max": 12,
+        "skill": 2,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Commander Farsight.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "battlesuit",
+      "character",
+      "epic-hero",
+      "infantry",
+      "tau"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:tau:commander-farsight",
+    "wounds": 8
+  },
+  "unit:tau:commander-in-coldstar-battlesuit": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Commander In Coldstar Battlesuit",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 110,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Commander In Coldstar Battlesuit.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "battlesuit",
+      "character",
+      "infantry",
+      "tau"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:tau:commander-in-coldstar-battlesuit",
+    "wounds": 6
+  },
+  "unit:tau:commander-in-enforcer-battlesuit": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Commander In Enforcer Battlesuit",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 2,
+    "points": 105,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Cyclic Ion Blaster (Standard)",
+        "range_max": 18,
+        "skill": 3,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Cyclic Ion Blaster (Overcharge)",
+        "range_max": 18,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Fusion Blaster",
+        "range_max": 18,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Plasma Rifle",
+        "range_max": 30,
+        "skill": 3,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Missile Pod",
+        "range_max": 30,
+        "skill": 3,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Burst Cannon",
+        "range_max": 18,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Airbursting Fragmentation Projector",
+        "range_max": 18,
+        "skill": 3,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Flamer",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Commander In Enforcer Battlesuit.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "battlesuit",
+      "character",
+      "infantry",
+      "tau"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:tau:commander-in-enforcer-battlesuit",
+    "wounds": 6
+  },
+  "unit:tau:commander-shadowsun": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Commander Shadowsun",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "See abilities"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          0
+        ],
+        "name": "Command-link Drone",
+        "range_max": null,
+        "skill": 6,
+        "strength": 0,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "See abilities"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          0
+        ],
+        "name": "Shield Drone",
+        "range_max": null,
+        "skill": 6,
+        "strength": 0,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Battlesuit Fists",
+        "range_max": null,
+        "skill": 2,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 1,
+    "points": 110,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Melta 2"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Fusion Blaster",
+        "range_max": 12,
+        "skill": 2,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Pulse Pistol",
+        "range_max": 12,
+        "skill": 2,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Light Missile Pod",
+        "range_max": 30,
+        "skill": 2,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Commander Shadowsun.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "battlesuit",
+      "character",
+      "epic-hero",
+      "infantry",
+      "tau"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:tau:commander-shadowsun",
+    "wounds": 6
+  },
+  "unit:tau:crisis-battlesuits": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Crisis Battlesuits",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Battlesuit fists",
+        "range_max": null,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      3,
+      6
+    ],
+    "movement": 10,
+    "objective_control": 2,
+    "points": 100,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Assault"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Burst Cannon",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Missile Pod",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Melta 2"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Fusion Blaster",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Plasma Rifle",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Hazardous"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Cyclic Ion Blaster",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Torrent",
+          "Ignore Cover"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Flamer",
+        "range_max": 18,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Crisis Battlesuits.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "battlesuit",
+      "infantry",
+      "tau"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:tau:crisis-battlesuits",
+    "wounds": 4
+  },
+  "unit:tau:crisis-fireknife": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Crisis Fireknife",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Battlesuit fists",
+        "range_max": null,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      3,
+      6
+    ],
+    "movement": 10,
+    "objective_control": 2,
+    "points": 130,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Plasma Rifle",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Plasma Rifle",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Missile Pod",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Crisis Fireknife.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "battlesuit",
+      "infantry",
+      "tau"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:tau:crisis-fireknife",
+    "wounds": 4
+  },
+  "unit:tau:crisis-starscythe": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Crisis Starscythe",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 2,
+    "points": 110,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Crisis Starscythe.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "battlesuit",
+      "infantry",
+      "tau"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:tau:crisis-starscythe",
+    "wounds": 4
+  },
+  "unit:tau:crisis-sunforge": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Crisis Sunforge",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Battlesuit fists",
+        "range_max": null,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      3,
+      6
+    ],
+    "movement": 10,
+    "objective_control": 2,
+    "points": 105,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Melta 2"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Fusion Blaster",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Crisis Sunforge.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "battlesuit",
+      "infantry",
+      "tau"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:tau:crisis-sunforge",
+    "wounds": 4
+  },
+  "unit:tau:darkstrider": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Darkstrider",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close combat weapon",
+        "range_max": null,
+        "skill": 3,
+        "strength": 3,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 7,
+    "objective_control": 1,
+    "points": 50,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Pulse Carbine",
+        "range_max": 18,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Pulse Pistol",
+        "range_max": 12,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Darkstrider.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "character",
+      "epic-hero"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:darkstrider",
+    "wounds": 3
+  },
+  "unit:tau:devilfish": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Transport",
+    "display_name": "Devilfish",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 85,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Assault",
+          "Twin-linked"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin Pulse Carbine",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Assault"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Gun Drone (×2)",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Indirect Fire"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Smart Missile System",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Devilfish.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "vehicle",
+      "transport"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:tau:devilfish",
+    "wounds": 13
+  },
+  "unit:tau:ethereal": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Ethereal",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Honour blade",
+        "range_max": null,
+        "skill": 3,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 50,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Pulse Pistol",
+        "range_max": 12,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Ethereal.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "character"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:ethereal",
+    "wounds": 3
+  },
+  "unit:tau:firesight-marksman": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Firesight Marksman",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 3,
+    "points": 60,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Longshot Pulse Rifle",
+        "range_max": 36,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Firesight Marksman.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "character",
+      "sniper"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:firesight-marksman",
+    "wounds": 4
+  },
+  "unit:tau:ghostkeel-battlesuit": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Ghostkeel Battlesuit",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Battlesuit fists",
+        "range_max": null,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 3,
+    "points": 160,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Sustained Hits 1"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Cyclic Ion Raker",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Melta 2"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Twin Fusion Blaster",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Torrent",
+          "Ignore Cover"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Flamer",
+        "range_max": 18,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Ghostkeel Battlesuit.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "battlesuit",
+      "infantry",
+      "tau"
+    ],
+    "toughness": 8,
+    "unit_id": "unit:tau:ghostkeel-battlesuit",
+    "wounds": 12
+  },
+  "unit:tau:hammerhead-gunship": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Hammerhead Gunship",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 3,
+    "points": 130,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Heavy",
+          "Devastating Wounds on 6 to wound"
+        ],
+        "ap": -5,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          6
+        ],
+        "name": "Railgun",
+        "range_max": 72,
+        "skill": 4,
+        "strength": 20,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Heavy"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Ion Cannon",
+        "range_max": 36,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Heavy",
+          "Hazardous"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Ion Cannon (Overcharge)",
+        "range_max": 36,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Assault"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "2× Gun Drone",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Indirect Fire"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Smart Missile System",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Hammerhead Gunship.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "vehicle"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:tau:hammerhead-gunship",
+    "wounds": 14
+  },
+  "unit:tau:kroot-carnivores": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Kroot Carnivores",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close combat weapon",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 7,
+    "objective_control": 2,
+    "points": 55,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kroot rifle",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Heavy"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Kroot hunting rifle",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kroot pistol",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 6,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Kroot Carnivores.md",
+    "squad_size": {
+      "max": 20,
+      "min": 10,
+      "step": 10
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "auxiliary"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:kroot-carnivores",
+    "wounds": 1
+  },
+  "unit:tau:kroot-farstalkers": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Kroot Farstalkers",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 7,
+    "objective_control": 1,
+    "points": 70,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Assault"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kroot rifle",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Heavy",
+          "Precision",
+          "Sustained Hits 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Hunting rifle",
+        "range_max": 30,
+        "skill": 3,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kroot pistol",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Heavy"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Krootox rifle",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 6,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Kroot Farstalkers.md",
+    "squad_size": {
+      "max": 20,
+      "min": 10,
+      "step": 10
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "kroot",
+      "auxiliary"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:kroot-farstalkers",
+    "wounds": 1
+  },
+  "unit:tau:kroot-hounds": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Kroot Hounds",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 8,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 0,
+    "points": 40,
+    "ranged_weapons": [],
+    "save": 6,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Kroot Hounds.md",
+    "squad_size": {
+      "max": 10,
+      "min": 4,
+      "step": 3
+    },
+    "tags": [
+      "tau",
+      "unit",
+      "auxiliary",
+      "kroot"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:kroot-hounds",
+    "wounds": 1
+  },
+  "unit:tau:kroot-lone-spear": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Kroot Lone-spear",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Hunting Blades",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 80,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          3,
+          0
+        ],
+        "name": "Kroot Long Gun",
+        "range_max": 36,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Kroot Lone-spear.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "character",
+      "sniper",
+      "kroot",
+      "lone-operative"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:tau:kroot-lone-spear",
+    "wounds": 6
+  },
+  "unit:tau:kroot-war-shaper": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Kroot War Shaper",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 7,
+    "objective_control": 1,
+    "points": 50,
+    "ranged_weapons": [],
+    "save": 6,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Kroot War Shaper.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "character",
+      "kroot",
+      "leader"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:kroot-war-shaper",
+    "wounds": 3
+  },
+  "unit:tau:krootox-rampagers": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Krootox Rampagers",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 7,
+    "objective_control": 2,
+    "points": 85,
+    "ranged_weapons": [],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Krootox Rampagers.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "tau",
+      "fast-attack",
+      "kroot",
+      "cavalry"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:tau:krootox-rampagers",
+    "wounds": 5
+  },
+  "unit:tau:longstrike": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Longstrike",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 3,
+    "points": 155,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Heavy",
+          "Devastating Wounds on 6 to wound"
+        ],
+        "ap": -5,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          6
+        ],
+        "name": "Railgun",
+        "range_max": 72,
+        "skill": 3,
+        "strength": 20,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Heavy"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Ion Cannon",
+        "range_max": 36,
+        "skill": 3,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Assault"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "2× Gun Drone",
+        "range_max": 18,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Indirect Fire"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Smart Missile System",
+        "range_max": 30,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Longstrike.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "vehicle",
+      "character",
+      "epic-hero"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:tau:longstrike",
+    "wounds": 14
+  },
+  "unit:tau:pathfinder-team": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Pathfinder Team",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 7,
+    "objective_control": 1,
+    "points": 90,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rail Rifle",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Ion Gun",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 7,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Pathfinder Team.md",
+    "squad_size": {
+      "max": 10,
+      "min": 10,
+      "step": 10
+    },
+    "tags": [
+      "tau",
+      "infantry"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:pathfinder-team",
+    "wounds": 1
+  },
+  "unit:tau:piranha": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Piranha",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 14,
+    "objective_control": 2,
+    "points": 60,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Piranha Fusion Blaster",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin Pulse Carbine",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Piranha.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "fast-attack",
+      "vehicle",
+      "fly"
+    ],
+    "toughness": 7,
+    "unit_id": "unit:tau:piranha",
+    "wounds": 7
+  },
+  "unit:tau:remora-stealth-drones": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Remora Stealth Drones",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 16,
+    "objective_control": 0,
+    "points": 160,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Burst Cannon",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Seeker Missile",
+        "range_max": 30,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Remora Stealth Drones.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "vehicle",
+      "fly"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:tau:remora-stealth-drones",
+    "wounds": 5
+  },
+  "unit:tau:riptide-battlesuit": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Monster",
+    "display_name": "Riptide Battlesuit",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Monster"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Battlesuit fists",
+        "range_max": null,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 4,
+    "points": 190,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Sustained Hits 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          12
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Heavy Burst Cannon",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Hazardous"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          4
+        ],
+        "name": "Ion Accelerator** (Standard)",
+        "range_max": 36,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Hazardous"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          5
+        ],
+        "name": "Ion Accelerator** (Overcharge)",
+        "range_max": 36,
+        "skill": 4,
+        "strength": 10,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Indirect Fire",
+          "Twin-linked"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin Smart Missile System",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Missile Drone** (замена Twin SMS)",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 7,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Riptide Battlesuit.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "battlesuit",
+      "tau"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:tau:riptide-battlesuit",
+    "wounds": 14
+  },
+  "unit:tau:sky-ray-gunship": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Sky Ray Gunship",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 3,
+    "points": 110,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "One Shot",
+          "vs FLY: +1 to hit"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Seeker Missile (×6)",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Indirect Fire",
+          "Ignores Cover"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Smart Missile System",
+        "range_max": 30,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Gun Drone (×2)",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Sky Ray Gunship.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "vehicle"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:tau:sky-ray-gunship",
+    "wounds": 14
+  },
+  "unit:tau:stealth-battlesuits": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Stealth Battlesuits",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Battlesuit fists",
+        "range_max": null,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      3,
+      6
+    ],
+    "movement": 8,
+    "objective_control": 1,
+    "points": 100,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Assault"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Burst Cannon",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Melta 2"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Fusion Blaster",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Missile Pod",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Stealth Battlesuits.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "battlesuit"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:tau:stealth-battlesuits",
+    "wounds": 2
+  },
+  "unit:tau:stormsurge": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Monster",
+    "display_name": "Stormsurge",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Monster"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Close Combat Weapon",
+        "range_max": null,
+        "skill": 5,
+        "strength": 10,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 6,
+    "points": 400,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Heavy",
+          "Blast"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          4
+        ],
+        "name": "Pulse Driver",
+        "range_max": 72,
+        "skill": 4,
+        "strength": 12,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Heavy",
+          "Blast"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          6
+        ],
+        "name": "Pulse Blastcannon",
+        "range_max": 48,
+        "skill": 4,
+        "strength": 14,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "One Shot"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "4× Destroyer Missiles",
+        "range_max": 72,
+        "skill": 4,
+        "strength": 10,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Indirect Fire",
+          "Twin-linked"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin Smart Missile System",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Blast"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Cluster Rocket System",
+        "range_max": 48,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Stormsurge.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "battlesuit",
+      "tau"
+    ],
+    "toughness": 11,
+    "unit_id": "unit:tau:stormsurge",
+    "wounds": 20
+  },
+  "unit:tau:strike-team": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Battleline",
+    "display_name": "Strike Team",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close combat weapon",
+        "range_max": null,
+        "skill": 5,
+        "strength": 3,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 2,
+    "points": 75,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Pulse Rifle",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Pulse Carbine",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Smart Missile System (Turret)",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Strike Team.md",
+    "squad_size": {
+      "max": 10,
+      "min": 10,
+      "step": 10
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "battleline"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:strike-team",
+    "wounds": 1
+  },
+  "unit:tau:tactical-drones": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Tactical Drones",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 0,
+    "points": 25,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Tactical Drones.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "vehicle",
+      "fly"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:tau:tactical-drones",
+    "wounds": 1
+  },
+  "unit:tau:tidewall-defence-line": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Tidewall Defence Line",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 8,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 0,
+    "objective_control": 0,
+    "points": 70,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Twin-linked",
+          "Assault"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin pulse carbine",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Tidewall Defence Line.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "vehicle"
+    ],
+    "toughness": 8,
+    "unit_id": "unit:tau:tidewall-defence-line",
+    "wounds": 14
+  },
+  "unit:tau:tiger-shark": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Transport",
+    "display_name": "Tiger Shark",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          0
+        ],
+        "name": "Twin smart missile system",
+        "range_max": null,
+        "skill": 6,
+        "strength": 0,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 330,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          12
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Heavy Burst Cannon (×2)",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Missile Pod (×2)",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Tiger Shark.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "tau",
+      "vehicle",
+      "fly",
+      "transport"
+    ],
+    "toughness": 11,
+    "unit_id": "unit:tau:tiger-shark",
+    "wounds": 18
+  },
+  "unit:tau:vespid-stingwings": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Vespid Stingwings",
+    "edition": "10e",
+    "faction_id": "faction:tau",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          0
+        ],
+        "name": "Close combat weapon",
+        "range_max": null,
+        "skill": 6,
+        "strength": 0,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 1,
+    "points": 65,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Assault"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Neutron Blaster",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/tau/Vespid Stingwings.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "tau",
+      "infantry",
+      "auxiliary",
+      "vespid"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:tau:vespid-stingwings",
+    "wounds": 1
+  }
+}

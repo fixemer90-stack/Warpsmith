@@ -1,0 +1,442 @@
+{
+  "enhancement:alpha-leader": {
+    "effect": "Kroot Character only. Each time a friendly Kroot unit within 6\" of this model makes an attack, re-roll a Hit roll of 1.",
+    "name": "Alpha Leader",
+    "points": 20
+  },
+  "enhancement:arch-negator": {
+    "effect": "вражеские юниты теряют способность Objective Secured, находясь на objective marker в радиусе 3\" от носителя.",
+    "name": "Arch-negator",
+    "points": 0
+  },
+  "enhancement:ard-as-nails": {
+    "effect": "4+ Feel No Pain, но только один раз за бой",
+    "name": "'Ard as Nails",
+    "points": 0
+  },
+  "enhancement:artisan": {
+    "effect": "один дружественный CORPUSCARY юнит получает +1 AP ко всем атакам на время боя.",
+    "name": "Artisan",
+    "points": 0
+  },
+  "enhancement:autoclavic-denunciation": {
+    "effect": "когда носитель погибает, радиус эффекта Rad-bombardment расширяется на 6\" до конца игры (действует на все objective markers в радиусе).",
+    "name": "Autoclavic Denunciation",
+    "points": 0
+  },
+  "enhancement:battle-sphere-uplink": {
+    "effect": "пока носитель находится на поле боя, дружественные юниты SKITARII в радиусе 36\" получают +1 к своей характеристике Ballistic Skill.",
+    "name": "Battle-sphere Uplink",
+    "points": 0
+  },
+  "enhancement:belicosa-class-capacitor-vanes": {
+    "effect": "пока носитель и его юнит находятся под эффектом Canticle, их ranged-оружие также получает [ASSAULT] и [IGNORES COVER].",
+    "name": "Belicosa-class Capacitor Vanes",
+    "points": 0
+  },
+  "enhancement:big-game-boss": {
+    "effect": "+1 to Wound vs Monsters/Vehicles",
+    "name": "Big Game Boss",
+    "points": 0
+  },
+  "enhancement:bionik-workshop": {
+    "effect": "At the start of the battle, roll one D3. Until end of battle, models in bearer's unit have:\n  - 1. Bionik Legs: +2\" Move\n  - 2. Bionik Arms: +1 S on melee weapons\n  - 3. Bionik Bonce: Improve WS by 1",
+    "name": "Bionik Workshop",
+    "points": 0
+  },
+  "enhancement:blackout-key": {
+    "effect": "в вашей Command Phase выберите одну вражескую модель в 12\" от носителя. Она теряет все auras и abilities до начала вашей следующей Command Phase.",
+    "name": "Blackout-key",
+    "points": 0
+  },
+  "enhancement:blastajet-engine": {
+    "effect": "WALKER получает +3' к движению",
+    "name": "Blastajet Engine",
+    "points": 0
+  },
+  "enhancement:blitzkaptin": {
+    "effect": "After both players have deployed their armies, if the bearer's unit (or any Transport it is embarked within) is on the battlefield, select up to three Orks Vehicle units from your army and redeploy them. When doing so, you can set those units up in Strategic Reserves, regardless of how many units are already in Strategic Reserves.",
+    "name": "Blitzkaptin",
+    "points": 0
+  },
+  "enhancement:boss-cybork-arm": {
+    "effect": "+1 S, AP на атаках",
+    "name": "Boss Cybork Arm",
+    "points": 0
+  },
+  "enhancement:brooding-tyranny": {
+    "effect": "Kroot отряды получают +1 OC",
+    "name": "Brooding Tyranny",
+    "points": 0
+  },
+  "enhancement:cantic-thrallnet": {
+    "effect": "вражеские юниты не могут быть выставлены с Deep Strike или Strategic Reserves в радиусе 12\" от носителя.",
+    "name": "Cantic Thrallnet",
+    "points": 0
+  },
+  "enhancement:clandestine-infiltrator": {
+    "effect": "носитель может быть выставлен в резерв за пределами зоны высадки противника (Infiltrators).",
+    "name": "Clandestine Infiltrator",
+    "points": 0
+  },
+  "enhancement:cognitive-reinforcement": {
+    "effect": "один дружественный юнит может перебрасывать один кубик To Hit за фазу.",
+    "name": "Cognitive Reinforcement",
+    "points": 0
+  },
+  "enhancement:cybernetic-controller": {
+    "effect": "один дружественный KASTELAN ROBOT юнит получает +1 к характеристикам Weapon Skill и Ballistic Skill.",
+    "name": "Cybernetic Controller",
+    "points": 0
+  },
+  "enhancement:da-gobshot-thunderbuss": {
+    "effect": "Ranged weapons equipped by the bearer have the [DEVASTATING WOUNDS] and [HAZARDOUS] abilities.",
+    "name": "Da Gobshot Thunderbuss",
+    "points": 0
+  },
+  "enhancement:da-kaptin": {
+    "effect": "Once per battle round, at the start of any phase, you can select one friendly Orks unit that is Battle-shocked and within 12\" of the bearer. That unit suffers D3 mortal wounds and it is no longer Battle-shocked.",
+    "name": "Da Kaptin",
+    "points": 0
+  },
+  "enhancement:da-one-who-leads": {
+    "effect": "Waaagh! banner",
+    "name": "Da One Who Leads",
+    "points": 0
+  },
+  "enhancement:da-supa-cybork-body": {
+    "effect": "4+ invuln",
+    "name": "Da Supa Cybork Body",
+    "points": 0
+  },
+  "enhancement:data-blessed-autosermon": {
+    "effect": "в начале вашей Command Phase вы можете выбрать два разных Canticle вместо одного. Они действуют одновременно.",
+    "name": "Data-blessed Autosermon",
+    "points": 0
+  },
+  "enhancement:dead-shiny-shootas": {
+    "effect": "Ranged weapons equipped by models in the bearer's unit have the [RAPID FIRE 1] ability.",
+    "name": "Dead Shiny Shootas",
+    "points": 0
+  },
+  "enhancement:destroyer-of-empires": {
+    "effect": "+1 to wound vs MONSTERS/VEHICLES",
+    "name": "Destroyer of Empires",
+    "points": 0
+  },
+  "enhancement:emotionless-clarity": {
+    "effect": "один дружественный CORPUSCARY юнит игнорирует все модификаторы характеристик Ballistic Skill и Weapon Skill.",
+    "name": "Emotionless Clarity",
+    "points": 0
+  },
+  "enhancement:exemplar-of-the-montka": {
+    "effect": "переброс 1 to Wound в 1-2 раундах",
+    "name": "Exemplar of the Mont'ka",
+    "points": 0
+  },
+  "enhancement:follow-me-ladz": {
+    "effect": "когда этот персонаж совершает Heroic Intervention, дружественные ORKS в 6' могут сделать то же самое",
+    "name": "Follow Me Ladz",
+    "points": 0
+  },
+  "enhancement:genetor-upgrade": {
+    "effect": "один дружественный EXPLORATOR INFANTRY юнит получает +1 к Toughness.",
+    "name": "Genetor Upgrade",
+    "points": 0
+  },
+  "enhancement:git-spotter-squig": {
+    "effect": "Ranged weapons equipped by models in the bearer's unit have the [IGNORES COVER] ability.",
+    "name": "Git-Spotter Squig",
+    "points": 0
+  },
+  "enhancement:gob-boomer": {
+    "effect": "Each time the bearer issues Taktiks, it can do so to a friendly Orks Infantry or Orks Mounted unit within 18\", instead of 6\".",
+    "name": "Gob Boomer",
+    "points": 0
+  },
+  "enhancement:greater-good-adaptations": {
+    "effect": "Kroot Carnivores получают Scouts 7'",
+    "name": "Greater Good Adaptations",
+    "points": 0
+  },
+  "enhancement:hard-as-nails": {
+    "effect": "4+ FNP (один раз)",
+    "name": "Hard as Nails",
+    "points": 0
+  },
+  "enhancement:headwoppas-killchoppa": {
+    "effect": "оружие ближнего боя: S+2, AP-2, D3, каждый раз при убийстве модели, этот персонаж может совершить ещё одну атаку",
+    "name": "Headwoppa's Killchoppa",
+    "points": 0
+  },
+  "enhancement:irradiated-payload": {
+    "effect": "ranged-оружие носителя получает правило [HAZARDOUS] и +1 к Strength.",
+    "name": "Irradiated Payload",
+    "points": 0
+  },
+  "enhancement:kunnin-an-brutal": {
+    "effect": "Beast Snagga character in the unit",
+    "name": "Kunnin' an' Brutal",
+    "points": 0
+  },
+  "enhancement:kustom-job": {
+    "effect": "в фазе командования WALKER восстанавливает D3 wounds",
+    "name": "Kustom Job",
+    "points": 0
+  },
+  "enhancement:kwik-klik-gun": {
+    "effect": "пистолет получает +1 S, AP, D",
+    "name": "Kwik-Klik Gun",
+    "points": 0
+  },
+  "enhancement:logis-master": {
+    "effect": "один раз за бой, после любого броска кубиков дружественным юнитом вы можете перебросить этот бросок.",
+    "name": "Logis-Master",
+    "points": 0
+  },
+  "enhancement:machine-spirit-node": {
+    "effect": "дружественные KASTELAN ROBOTS юниты получают Feel No Pain 5+.",
+    "name": "Machine-Spirit Node",
+    "points": 0
+  },
+  "enhancement:master-of-the-hunt": {
+    "effect": "+1 to Hit для Kroot при движении",
+    "name": "Master of the Hunt",
+    "points": 0
+  },
+  "enhancement:mechanicus-arcanus": {
+    "effect": "вражеские PSYKER-юниты в пределах rad-zone (от Rad-bombardment или Rad-Ordinance) теряют все свои Psychic-способности.",
+    "name": "Mechanicus Arcanus",
+    "points": 0
+  },
+  "enhancement:mega-armour": {
+    "effect": "+1 W",
+    "name": "Mega Armour",
+    "points": 0
+  },
+  "enhancement:mek-kaptin": {
+    "effect": "During the Declare Battle Formations step, the bearer can be attached to a Flash Gitz unit. Each time a model in the bearer's unit makes a ranged attack, you can re-roll the Hit roll.",
+    "name": "Mek Kaptin",
+    "points": 0
+  },
+  "enhancement:mightiest-of-bosses": {
+    "effect": "пока этот персонаж жив, дружественные ORKS в 6' перебрасывают 1 to Wound",
+    "name": "Mightiest of Bosses",
+    "points": 0
+  },
+  "enhancement:mob-boss": {
+    "effect": "бонус к лидерству",
+    "name": "Mob Boss",
+    "points": 0
+  },
+  "enhancement:morks-kunnin": {
+    "effect": "After both players have deployed their armies, select up to three Orks units from your army and redeploy them. When doing so, you can set those units up in Strategic Reserves, regardless of how many units are already in Strategic Reserves.",
+    "name": "Mork's Kunnin'",
+    "points": 0
+  },
+  "enhancement:necromechanic": {
+    "effect": "один раз за бой, в вашей Command Phase, носитель может восстановить D3 потерянных ран одному дружественному VEHICLE юниту в 3\".",
+    "name": "Necromechanic",
+    "points": 0
+  },
+  "enhancement:neurotransience-auspice": {
+    "effect": "носитель получает способность Feel No Pain 5+ против Psychic-атак.",
+    "name": "Neurotransience Auspice",
+    "points": 0
+  },
+  "enhancement:neuroweb-commander": {
+    "effect": "враги не могут стрелять по другим целям пока этот командир жив",
+    "name": "Neuroweb Commander",
+    "points": 0
+  },
+  "enhancement:neuroweb-system-jammer": {
+    "effect": "враги в 12' не могут использовать перебросы попадания",
+    "name": "Neuroweb System Jammer",
+    "points": 0
+  },
+  "enhancement:nomadic-hunter": {
+    "effect": "Kroot Character only. At the start of the battle round, select one objective marker on the battlefield that is not within your deployment zone. While a friendly Kroot unit from your army is within range of that objective marker, that unit can ignore any or all modifiers to its Objective Control characteristic.",
+    "name": "Nomadic Hunter",
+    "points": 10
+  },
+  "enhancement:override-command": {
+    "effect": "один раз за бой, в начале любой фазы вы можете сменить текущий Protocol на другой без ожидания следующей фазы.",
+    "name": "Override Command",
+    "points": 0
+  },
+  "enhancement:paragon-of-the-imperative": {
+    "effect": "один раз за бой в любой фазе носитель может активировать: +1 к Hit, +1 к Wound и +1 к Save до конца фазы.",
+    "name": "Paragon of the Imperative",
+    "points": 0
+  },
+  "enhancement:patients-folly": {
+    "effect": "носитель и его юнит получают +1\" к Move и +1\" к Charge.",
+    "name": "Patient's Folly",
+    "points": 0
+  },
+  "enhancement:precision-of-the-hunter": {
+    "effect": "+1 to wound при стрельбе по ближайшей цели",
+    "name": "Precision of the Hunter",
+    "points": 0
+  },
+  "enhancement:precision-of-the-patient-hunter": {
+    "effect": "+1 to Hit в первый раз при стрельбе",
+    "name": "Precision of the Patient Hunter",
+    "points": 0
+  },
+  "enhancement:predators-instincts": {
+    "effect": "Kroot Character only. While this model is leading a unit, that unit can ignore any or all modifiers to its Advance and Charge rolls.",
+    "name": "Predator's Instincts",
+    "points": 15
+  },
+  "enhancement:prototype-weapon-system": {
+    "effect": "одно оружие получает +1 D",
+    "name": "Prototype Weapon System",
+    "points": 0
+  },
+  "enhancement:puretide-engram-neurochip": {
+    "effect": "после убийства отряда, получи CP на 2+",
+    "name": "Puretide Engram Neurochip",
+    "points": 0
+  },
+  "enhancement:rad-ordinance": {
+    "effect": "вокруг носителя создаётся постоянная радиационная зона радиусом 3\". Вражеские юниты в этой зоне теряют -1 T.",
+    "name": "Rad-Ordinance",
+    "points": 0
+  },
+  "enhancement:razgits-magik-map": {
+    "effect": "After both players have deployed their armies, select up to three Orks Infantry units from your army and redeploy them. When doing so, you can set those units up in Strategic Reserves, regardless of how many units are already in Strategic Reserves.",
+    "name": "Razgit's Magik Map",
+    "points": 0
+  },
+  "enhancement:reprocessor-swarm": {
+    "effect": "Vespid восстанавливает D3 ран",
+    "name": "Reprocessor Swarm",
+    "points": 0
+  },
+  "enhancement:rippas-snazzwagon": {
+    "effect": "Warlord trait",
+    "name": "Rippa's Snazzwagon",
+    "points": 0
+  },
+  "enhancement:rokkit-boosta": {
+    "effect": "+1' к броску заряда (Charge roll)",
+    "name": "Rokkit Boosta",
+    "points": 0
+  },
+  "enhancement:runnin-boots": {
+    "effect": "Each time you make a Charge roll for the bearer's unit, if that unit disembarked from a Transport this turn, add 1 to the result.",
+    "name": "Runnin' Boots",
+    "points": 0
+  },
+  "enhancement:scribed-munitions": {
+    "effect": "ranged-оружие носителя получает +1 к Strength.",
+    "name": "Scribed Munitions",
+    "points": 0
+  },
+  "enhancement:shield-drone": {
+    "effect": "дополнительная защита",
+    "name": "Shield Drone",
+    "points": 0
+  },
+  "enhancement:shield-matrix": {
+    "effect": "4+ invuln для отряда",
+    "name": "Shield Matrix",
+    "points": 0
+  },
+  "enhancement:shiny-armour": {
+    "effect": "3+ SV на Warlord-пехоте",
+    "name": "Shiny Armour",
+    "points": 0
+  },
+  "enhancement:skwad-leader": {
+    "effect": "During the Declare Battle Formations step, the bearer can be attached to a Kommandos unit. While leading a Kommandos unit, it has the Infiltrators and Stealth abilities.",
+    "name": "Skwad Leader",
+    "points": 0
+  },
+  "enhancement:snagga-handle": {
+    "effect": "+1 S в ближнем бою",
+    "name": "Snagga Handle",
+    "points": 0
+  },
+  "enhancement:solid-image-projection-unit": {
+    "effect": "2+ invuln против стрельбы, один раз за бой",
+    "name": "Solid-image Projection Unit",
+    "points": 0
+  },
+  "enhancement:sparkly-jubbly": {
+    "effect": "при перегрузке на результате 6 эффект удваивается",
+    "name": "Sparkly Jubbly",
+    "points": 0
+  },
+  "enhancement:spinning-plates": {
+    "effect": "+1' движения",
+    "name": "Spinning Plates",
+    "points": 0
+  },
+  "enhancement:squig-hide": {
+    "effect": "5+ FNP",
+    "name": "Squig Hide",
+    "points": 0
+  },
+  "enhancement:starflare-ignition-system": {
+    "effect": "Deep Strike + перевыставление",
+    "name": "Starflare Ignition System",
+    "points": 0
+  },
+  "enhancement:stealthy-stalker": {
+    "effect": "Kroot Character only. The unit this model is leading is eligible to shoot and declare a charge in a turn in which it Advanced.",
+    "name": "Stealthy Stalker",
+    "points": 25
+  },
+  "enhancement:supa-cybork-body": {
+    "effect": "4+ invuln",
+    "name": "Supa Cybork Body",
+    "points": 0
+  },
+  "enhancement:supercharged-squig-oil": {
+    "effect": "Each time the bearer uses its Mekaniak ability, until the end of the turn, you can re-roll Charge rolls for the selected Vehicle model's unit.",
+    "name": "Supercharged Squig Oil",
+    "points": 0
+  },
+  "enhancement:targetin-squigs": {
+    "effect": "Each time a model in the bearer's unit makes a ranged attack, add 1 to the Hit roll.",
+    "name": "Targetin' Squigs",
+    "points": 0
+  },
+  "enhancement:templar-fervour": {
+    "effect": "один дружественный DATA-PSALM CONCLAVE юнит, находящийся под эффектом Canticle, может совершить атаку (стрельбу или ближний бой) сразу после того, как он уничтожен, до своего удаления.",
+    "name": "Templar Fervour",
+    "points": 0
+  },
+  "enhancement:the-big-tusk": {
+    "effect": "+1 S, AP на оружии ближнего боя",
+    "name": "The Big Tusk",
+    "points": 0
+  },
+  "enhancement:transdimensional-annihilator": {
+    "effect": "оружие носителя получает [DEVASTATING WOUNDS] и +2 к Strength.",
+    "name": "Transdimensional Annihilator",
+    "points": 0
+  },
+  "enhancement:tuff-git": {
+    "effect": "At the end of a phase in which the bearer's unit disembarked from a Transport, if that unit is Battle-shocked, it is no longer Battle-shocked.",
+    "name": "Tuff Git",
+    "points": 0
+  },
+  "enhancement:unmatched-tenacity": {
+    "effect": "носитель и его юнит получают Feel No Pain 5+ против Mortal Wounds.",
+    "name": "Unmatched Tenacity",
+    "points": 0
+  },
+  "enhancement:zealous-devotion": {
+    "effect": "носитель может быть выбран для выполнения Heroic Intervention. Все дружественные ERADICATION юниты в 6\" от него после Heroic Intervention перебрасывают Charge в этой фазе.",
+    "name": "Zealous Devotion",
+    "points": 0
+  },
+  "enhancement:zog-off-and-eat-dakka": {
+    "effect": "The bearer's unit is eligible to shoot in a turn in which it Fell Back.",
+    "name": "Zog Off and Eat Dakka!",
+    "points": 0
+  }
+}

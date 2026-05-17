@@ -1,7 +1,7 @@
 ---
 title: Datasheet and Stats (10ed)
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-11
 type: concept
 tags: [core-rules, datasheet, profile]
 sources: [https://wahapedia.ru/wh40k10ed/the-rules/core-rules/]
@@ -69,3 +69,7 @@ confidence: high
 Значит: ходит 5 дюймов, стойкость 7, спас-бросок 2+, 12 ран, лидерство 5+, контроль цели 5.
 
 **The Great Claw:** A8 WS2+ S16 AP-4 D6 — 8 атак с WS2+, сила 16, бронепробитие -4, урон D6.
+
+## Ссылки
+
+[[Phases Overview]], [[Making Attacks (10ed)]], [[Weapon Keywords (10ed)]], [[Battle-shock]], [[Benefit of Cover]]

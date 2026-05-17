@@ -1,0 +1,5071 @@
+{
+  "weapon:adeptus-mechanicus:arc-lance": {
+    "abilities": [
+      "ANTI-VEHICLE 4+",
+      "DEVASTATING WOUNDS"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Arc lance",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:archeotech-pistol-alpha": {
+    "abilities": [
+      "PISTOL"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Archeotech pistol (Alpha)",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:close-combat-weapon": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Close combat weapon",
+    "range_max": null,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:adeptus-mechanicus:close-combat-weapon-alpha": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Close combat weapon (Alpha)",
+    "range_max": null,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:adeptus-mechanicus:combi-bolter": {
+    "abilities": [
+      "RAPID FIRE 2"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Combi-bolter",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:dataspikes-underseer": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Dataspikes (Underseer)",
+    "range_max": null,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:adeptus-mechanicus:eradication-caster-–-dissipated": {
+    "abilities": [
+      "ANTI-INFANTRY 4+"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Eradication caster – dissipated",
+    "range_max": 30,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:eradication-caster-–-focused": {
+    "abilities": [
+      "ANTI-INFANTRY 4+"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Eradication caster – focused",
+    "range_max": 15,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:galvanic-caster-–-flechette": {
+    "abilities": [
+      "ASSAULT"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      5
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Galvanic caster – flechette",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:galvanic-caster-–-hammershot": {
+    "abilities": [
+      "HEAVY"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Galvanic caster – hammershot",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:grav-gun": {
+    "abilities": [
+      "ANTI-VEHICLE 4+"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Grav-gun",
+    "range_max": 18,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:hastarii-arc-blaster": {
+    "abilities": [
+      "ANTI-VEHICLE 4+",
+      "DEVASTATING WOUNDS"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Hastarii arc blaster",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:hastarii-phosphor-blaster": {
+    "abilities": [
+      "IGNORES COVER"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Hastarii phosphor blaster",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:heavy-arc-rifle": {
+    "abilities": [
+      "ANTI-VEHICLE 4+",
+      "RAPID FIRE 1"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Heavy arc rifle",
+    "range_max": 30,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:heavy-bolter": {
+    "abilities": [
+      "HEAVY",
+      "SUSTAINED HITS 1"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Heavy bolter",
+    "range_max": 36,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:heavy-flamer": {
+    "abilities": [
+      "TORRENT"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      1,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Heavy flamer",
+    "range_max": 12,
+    "skill": 6,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:hydraulic-claw": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Hydraulic claw",
+    "range_max": null,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:adeptus-mechanicus:incendine-igniter": {
+    "abilities": [
+      "IGNORES COVER",
+      "TORRENT"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      1,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Incendine igniter",
+    "range_max": 12,
+    "skill": 6,
+    "strength": 3,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:jericho-class-conversion-resonator-–-shockwave": {
+    "abilities": [
+      "BLAST",
+      "SUSTAINED HITS 1"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      1,
+      6,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Jericho-class conversion resonator – shockwave",
+    "range_max": 24,
+    "skill": 2,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:jericho-class-conversion-resonator-–-titanic-impact": {
+    "abilities": [
+      "DEVASTATING WOUNDS"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      1,
+      6,
+      2
+    ],
+    "name": "Jericho-class conversion resonator – titanic impact",
+    "range_max": 24,
+    "skill": 2,
+    "strength": 12,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:mechanicus-pistol": {
+    "abilities": [
+      "DEVASTATING WOUNDS",
+      "PISTOL"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Mechanicus pistol",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:meltagun": {
+    "abilities": [
+      "MELTA 2"
+    ],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Meltagun",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:multi-melta": {
+    "abilities": [
+      "HEAVY",
+      "MELTA 2"
+    ],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Multi-melta",
+    "range_max": 18,
+    "skill": 5,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:neutron-fusil": {
+    "abilities": [],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      1
+    ],
+    "name": "Neutron fusil",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 12,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:phosphor-blaster": {
+    "abilities": [
+      "IGNORES COVER",
+      "RAPID FIRE 1"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Phosphor blaster",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:plasma-cannon-–-standard": {
+    "abilities": [
+      "BLAST",
+      "HEAVY"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Plasma cannon – standard",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 7,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:plasma-cannon-–-supercharge": {
+    "abilities": [
+      "BLAST",
+      "HAZARDOUS",
+      "HEAVY"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Plasma cannon – supercharge",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:power-weapon-alpha-only": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Power weapon (Alpha only)",
+    "range_max": null,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:adeptus-mechanicus:rod-of-the-war-forge-–-strike": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Rod of the War Forge – strike",
+    "range_max": null,
+    "skill": 2,
+    "strength": 10,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:adeptus-mechanicus:rod-of-the-war-forge-–-sweep": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      12
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Rod of the War Forge – sweep",
+    "range_max": null,
+    "skill": 2,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:adeptus-mechanicus:servitors-servo-arm": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Servitor's servo-arm",
+    "range_max": null,
+    "skill": 5,
+    "strength": 8,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:adeptus-mechanicus:servo-claw": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Servo-claw",
+    "range_max": null,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:adeptus-mechanicus:termite-drill": {
+    "abilities": [
+      "ANTI-VEHICLE 3+"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      1,
+      3,
+      3
+    ],
+    "name": "Termite drill",
+    "range_max": null,
+    "skill": 4,
+    "strength": 14,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:adeptus-mechanicus:terrax-melta-cutter": {
+    "abilities": [
+      "MELTA 2"
+    ],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      5
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Terrax melta cutter",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:adeptus-mechanicus:twin-volkite-charger": {
+    "abilities": [
+      "DEVASTATING WOUNDS",
+      "TWIN-LINKED"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Twin volkite charger",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:armoured-hull": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Armoured hull",
+    "range_max": null,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:attack-squig": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Attack Squig",
+    "range_max": null,
+    "skill": 3,
+    "strength": 4,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:beast-choppa": {
+    "abilities": [
+      "ANTI-MONSTER 4+",
+      "ANTI-VEHICLE 4+"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      5
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Beast Choppa",
+    "range_max": null,
+    "skill": 3,
+    "strength": 9,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:beast-claw": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Beast Claw",
+    "range_max": null,
+    "skill": 3,
+    "strength": 7,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:beast-snappa": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Beast Snappa",
+    "range_max": 18,
+    "skill": 5,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:big-choppa": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Big choppa",
+    "range_max": null,
+    "skill": 3,
+    "strength": 7,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:big-choppa-kaptin-only": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Big Choppa (Kaptin only)",
+    "range_max": null,
+    "skill": 3,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:big-shoota": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Big shoota",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:big-shoota-spanner": {
+    "abilities": [
+      "Sustained Hits 1"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Big Shoota (Spanner)",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:bomms": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      0
+    ],
+    "name": "Bomms",
+    "range_max": null,
+    "skill": 6,
+    "strength": 0,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:boomdakka": {
+    "abilities": [
+      "Sustained Hits 1"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      8
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Boomdakka",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:burna": {
+    "abilities": [
+      "Torrent"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Burna",
+    "range_max": 18,
+    "skill": 5,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:burna-bombs": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      0
+    ],
+    "name": "Burna bombs",
+    "range_max": null,
+    "skill": 6,
+    "strength": 0,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:burna-рукопашная": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Burna (рукопашная)",
+    "range_max": null,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:bursta-kannon": {
+    "abilities": [
+      "BLAST"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      3,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Bursta kannon",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 14,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:choppa": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Choppa",
+    "range_max": null,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:close-combat-weapon": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Close combat weapon",
+    "range_max": null,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:close-combat-weapons": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Close combat weapons",
+    "range_max": null,
+    "skill": 3,
+    "strength": 4,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:cutlass": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Cutlass",
+    "range_max": null,
+    "skill": 3,
+    "strength": 4,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:da-rippa-–-standard": {
+    "abilities": [
+      "HEAVY",
+      "SUSTAINED HITS 1"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Da Rippa – standard",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 7,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:da-rippa-–-supercharge": {
+    "abilities": [
+      "HAZARDOUS",
+      "HEAVY",
+      "SUSTAINED HITS 1"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Da Rippa – supercharge",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:da-vulchas-klaws-and-choppa": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Da Vulcha's Klaws and choppa",
+    "range_max": null,
+    "skill": 2,
+    "strength": 8,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:deff-rolla": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Deff rolla",
+    "range_max": null,
+    "skill": 3,
+    "strength": 9,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:deffgun": {
+    "abilities": [
+      "RAPID FIRE 1"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Deffgun",
+    "range_max": 48,
+    "skill": 5,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:deffkannon": {
+    "abilities": [
+      "Blast",
+      "Sustained Hits 1"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      6
+    ],
+    "name": "Deffkannon",
+    "range_max": 72,
+    "skill": 5,
+    "strength": 14,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:deffstorm-mega-shoota": {
+    "abilities": [
+      "Sustained Hits 1"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      12
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Deffstorm mega-shoota",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:eadbanger": {
+    "abilities": [
+      "Psychic",
+      "Hazardous"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "'Eadbanger",
+    "range_max": 18,
+    "skill": 5,
+    "strength": 10,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:fixits-wrench": {
+    "abilities": [
+      "EXTRA ATTACKS"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Fixit's wrench",
+    "range_max": null,
+    "skill": 4,
+    "strength": 3,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:giga-shoota": {
+    "abilities": [
+      "SUSTAINED HITS 1"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      30
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Giga shoota",
+    "range_max": 48,
+    "skill": 5,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:gorin-horns-–-strike": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Gorin' horns – strike",
+    "range_max": null,
+    "skill": 3,
+    "strength": 12,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:gorin-horns-–-sweep": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      8
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Gorin' horns – sweep",
+    "range_max": null,
+    "skill": 3,
+    "strength": 9,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:gorkanaut-klaw": {
+    "abilities": [],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      5
+    ],
+    "name": "Gorkanaut klaw",
+    "range_max": null,
+    "skill": 4,
+    "strength": 16,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:grabba-dragga": {
+    "abilities": [
+      "ASSAULT",
+      "PRECISION"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Grabba dragga",
+    "range_max": 12,
+    "skill": 2,
+    "strength": 10,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:grabbin-klaw": {
+    "abilities": [
+      "EXTRA ATTACKS"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Grabbin' klaw",
+    "range_max": null,
+    "skill": 3,
+    "strength": 8,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:grot-blasta": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Grot blasta",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 3,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:grot-guided-bomm": {
+    "abilities": [
+      "BLAST",
+      "ONE SHOT",
+      "INDIRECT FIRE"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      1,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Grot-guided bomm",
+    "range_max": 72,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:grot-guided-bomms": {
+    "abilities": [
+      "BLAST",
+      "ONE SHOT",
+      "INDIRECT FIRE"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      1,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Grot-guided bomms",
+    "range_max": 72,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:grot-knife": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Grot knife",
+    "range_max": null,
+    "skill": 4,
+    "strength": 3,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:grot-orderly": {
+    "abilities": [
+      "Pistol"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Grot orderly",
+    "range_max": 6,
+    "skill": 5,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:grot-tank-shoota": {
+    "abilities": [
+      "DEVASTATING WOUNDS",
+      "RAPID FIRE 2"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Grot tank shoota",
+    "range_max": 36,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:grotzooka": {
+    "abilities": [
+      "BLAST",
+      "IGNORES COVER"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      1,
+      3,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Grotzooka",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:gyroscopic-whirlygig": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Gyroscopic whirlygig",
+    "range_max": null,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:huge-tusks-–-strike": {
+    "abilities": [
+      "LANCE"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      12
+    ],
+    "name": "Huge tusks – strike",
+    "range_max": null,
+    "skill": 3,
+    "strength": 14,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:huge-tusks-–-sweep": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      18
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Huge tusks – sweep",
+    "range_max": null,
+    "skill": 3,
+    "strength": 9,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:icon-of-da-revolushun": {
+    "abilities": [
+      "DEVASTATING WOUNDS"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Icon of da Revolushun",
+    "range_max": null,
+    "skill": 4,
+    "strength": 3,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:kannon-–-frag": {
+    "abilities": [
+      "BLAST",
+      "HEAVY"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      1,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Kannon – frag",
+    "range_max": 36,
+    "skill": 6,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:kannon-–-shell": {
+    "abilities": [
+      "HEAVY"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Kannon – shell",
+    "range_max": 36,
+    "skill": 6,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:killa-jet": {
+    "abilities": [
+      "Pistol",
+      "Sustained Hits 1"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Killa jet",
+    "range_max": 12,
+    "skill": 5,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:killsaw": {
+    "abilities": [],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Killsaw",
+    "range_max": null,
+    "skill": 4,
+    "strength": 12,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:killsaw-boss-nob-only": {
+    "abilities": [],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Killsaw (Boss Nob only)",
+    "range_max": null,
+    "skill": 3,
+    "strength": 10,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:knucklebustas": {
+    "abilities": [
+      "ANTI-MONSTER 4+",
+      "ANTI-VEHICLE 4+",
+      "TWIN-LINKED"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      5
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Knucklebustas",
+    "range_max": null,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:kombi-weapon": {
+    "abilities": [
+      "ANTI-INFANTRY 4+",
+      "DEVASTATING WOUNDS",
+      "RAPID FIRE 1"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Kombi-weapon",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:kopta-rokkits": {
+    "abilities": [
+      "BLAST",
+      "TWIN-LINKED"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      1,
+      3,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Kopta rokkits",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:krusha-kannon-–-blast-burna": {
+    "abilities": [
+      "BLAST"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      3,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Krusha kannon – blast burna",
+    "range_max": 48,
+    "skill": 5,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:krusha-kannon-–-tankhamma-shell": {
+    "abilities": [
+      "HEAVY"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      6
+    ],
+    "name": "Krusha kannon – tankhamma shell",
+    "range_max": 60,
+    "skill": 5,
+    "strength": 16,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:kustom-grot-blasta": {
+    "abilities": [
+      "DEVASTATING WOUNDS",
+      "PISTOL"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      1,
+      3,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Kustom grot blasta",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:kustom-mega-blasta": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Kustom mega-blasta",
+    "range_max": 18,
+    "skill": 5,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:kustom-mega-slugga": {
+    "abilities": [
+      "BLAST",
+      "HAZARDOUS"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      1,
+      3,
+      0
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Kustom mega-slugga",
+    "range_max": 12,
+    "skill": 5,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:kustom-mega-zappa": {
+    "abilities": [
+      "Sustained Hits 1"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      0
+    ],
+    "name": "Kustom mega-zappa",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 12,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:kustom-pistol": {
+    "abilities": [
+      "Pistol"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Kustom pistol",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:kustom-shoota": {
+    "abilities": [
+      "RAPID FIRE 2"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Kustom shoota",
+    "range_max": 18,
+    "skill": 5,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:lifta-droppa": {
+    "abilities": [
+      "ANTI-VEHICLE 3+"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      1,
+      6,
+      1
+    ],
+    "name": "Lifta-droppa",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:lobba": {
+    "abilities": [
+      "BLAST",
+      "HEAVY",
+      "INDIRECT FIRE"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      1,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Lobba",
+    "range_max": 48,
+    "skill": 6,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:mega-tank-weapons": {
+    "abilities": [
+      "RAPID FIRE 10"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      10
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Mega-tank weapons",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:morkanaut-klaw": {
+    "abilities": [],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      5
+    ],
+    "damage_dice": [
+      0,
+      0,
+      5
+    ],
+    "name": "Morkanaut klaw",
+    "range_max": null,
+    "skill": 4,
+    "strength": 16,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:morks-roar": {
+    "abilities": [],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Mork's Roar",
+    "range_max": 12,
+    "skill": 2,
+    "strength": 14,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:mukes-twin-blades": {
+    "abilities": [
+      "Devastating Wounds"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      7
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Muke's Twin Blades",
+    "range_max": null,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:power-klaw": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Power Klaw",
+    "range_max": null,
+    "skill": 3,
+    "strength": 9,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:power-klaw-kaptin-only": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Power Klaw (Kaptin only)",
+    "range_max": null,
+    "skill": 3,
+    "strength": 9,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:power-klaw-nob": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Power Klaw (Nob)",
+    "range_max": null,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:power-klaw-nob-only": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Power Klaw (Nob only)",
+    "range_max": null,
+    "skill": 3,
+    "strength": 9,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:princess-jaws": {
+    "abilities": [
+      "EXTRA ATTACKS"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Princess' jaws",
+    "range_max": null,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:psyko-gatler": {
+    "abilities": [
+      "ASSAULT",
+      "SUSTAINED HITS 1"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      12
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Psyko-gatler",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:rack-of-rokkits": {
+    "abilities": [
+      "BLAST"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      1,
+      3,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Rack of rokkits",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:ramshackle-hull": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Ramshackle hull",
+    "range_max": null,
+    "skill": 5,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:rattler-kannon": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Rattler kannon",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:reinforced-ram": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      8
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Reinforced ram",
+    "range_max": null,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:rokkit-launcha": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Rokkit Launcha",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:rokkit-launcha-×2": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Rokkit Launcha (×2)",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:rokkit-pistol": {
+    "abilities": [
+      "PISTOL"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Rokkit pistol",
+    "range_max": 12,
+    "skill": 5,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:rokkits": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Rokkits",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:runtherd-stick": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Runtherd stick",
+    "range_max": null,
+    "skill": 4,
+    "strength": 3,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:savage-claws": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Savage claws",
+    "range_max": null,
+    "skill": 3,
+    "strength": 4,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:savage-claws-and-teeth": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Savage claws and teeth",
+    "range_max": null,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:savage-horns-and-hooves": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Savage horns and hooves",
+    "range_max": null,
+    "skill": 3,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:saw-blades": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Saw blades",
+    "range_max": null,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:shokk-attack-gun": {
+    "abilities": [
+      "Heavy",
+      "Sustained Hits 1",
+      "Hazardous"
+    ],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      2
+    ],
+    "name": "Shokk Attack Gun",
+    "range_max": 36,
+    "skill": 4,
+    "strength": 12,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:shokk-rifle": {
+    "abilities": [
+      "DEVASTATING WOUNDS",
+      "HAZARDOUS",
+      "PRECISION"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      1
+    ],
+    "name": "Shokk rifle",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:shoota": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Shoota",
+    "range_max": 18,
+    "skill": 5,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:skorcha": {
+    "abilities": [
+      "IGNORES COVER",
+      "TORRENT"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      1,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Skorcha",
+    "range_max": 12,
+    "skill": 6,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:skorcha-×2": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Skorcha (×2)",
+    "range_max": 18,
+    "skill": 6,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:slag-em": {
+    "abilities": [
+      "Pistol"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Slag 'em",
+    "range_max": 12,
+    "skill": 5,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:slugga": {
+    "abilities": [
+      "PISTOL"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Slugga",
+    "range_max": 12,
+    "skill": 5,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:smash-hammer": {
+    "abilities": [
+      "ANTI-MONSTER 4+",
+      "ANTI-VEHICLE 4+"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Smash hammer",
+    "range_max": null,
+    "skill": 3,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:snagga-klaw": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Snagga klaw",
+    "range_max": null,
+    "skill": 2,
+    "strength": 9,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:snazzgun": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Snazzgun",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:snazzhammer": {
+    "abilities": [
+      "DEVASTATING WOUNDS"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Snazzhammer",
+    "range_max": null,
+    "skill": 3,
+    "strength": 10,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:snipa": {
+    "abilities": [
+      "Heavy",
+      "Precision"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Snipa",
+    "range_max": 36,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:speeding-bulk-and-flaming-exhaust": {
+    "abilities": [
+      "EXTRA ATTACKS"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Speeding bulk and flaming exhaust",
+    "range_max": null,
+    "skill": 2,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:spiked-ram": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Spiked ram",
+    "range_max": null,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:spiked-wheel": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Spiked wheel",
+    "range_max": null,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:spiked-wheels": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Spiked wheels",
+    "range_max": null,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:spinnin-blades": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Spinnin' blades",
+    "range_max": null,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:squig-jaws-melee": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      5
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Squig Jaws (melee)",
+    "range_max": null,
+    "skill": 3,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:squig-launcha": {
+    "abilities": [
+      "Blast"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Squig launcha",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:squigosaur-jaws": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Squigosaur jaws",
+    "range_max": null,
+    "skill": 2,
+    "strength": 9,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:stab-em": {
+    "abilities": [
+      "Precision"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      5
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Stab 'em",
+    "range_max": null,
+    "skill": 3,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:staff": {
+    "abilities": [
+      "Psychic"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Staff",
+    "range_max": null,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:stikka-melee": {
+    "abilities": [
+      "Anti-Monster/Vehicle 5+"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Stikka (Melee)",
+    "range_max": null,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:stomp": {
+    "abilities": [
+      "Titanic"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Stomp",
+    "range_max": null,
+    "skill": 4,
+    "strength": 10,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:stompa-klaw": {
+    "abilities": [],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      8
+    ],
+    "damage_dice": [
+      0,
+      0,
+      8
+    ],
+    "name": "Stompa klaw",
+    "range_max": null,
+    "skill": 4,
+    "strength": 20,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:supa-gatler": {
+    "abilities": [
+      "Sustained Hits 1"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      20
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Supa-gatler",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:supa-kannon": {
+    "abilities": [
+      "BLAST"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      2,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Supa-kannon",
+    "range_max": 60,
+    "skill": 5,
+    "strength": 12,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:supa-kannon-–-frag": {
+    "abilities": [
+      "BLAST"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      1,
+      6,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Supa-kannon – frag",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:supa-kannon-–-shell": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      3,
+      3
+    ],
+    "name": "Supa-kannon – shell",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:supa-shoota": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Supa-shoota",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:tankhammer": {
+    "abilities": [
+      "ANTI-MONSTER 4+",
+      "ANTI-VEHICLE 4+",
+      "DEVASTATING WOUNDS",
+      "HAZARDOUS"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Tankhammer",
+    "range_max": null,
+    "skill": 3,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:tellyport-blasta": {
+    "abilities": [
+      "Pistol"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Tellyport blasta",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:the-great-claw": {
+    "abilities": [],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      8
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "The Great Claw",
+    "range_max": null,
+    "skill": 2,
+    "strength": 16,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:thumpa": {
+    "abilities": [
+      "Pistol"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Thumpa",
+    "range_max": 12,
+    "skill": 5,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:tracks-and-wheels": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Tracks and wheels",
+    "range_max": null,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:twin-big-shoota": {
+    "abilities": [
+      "RAPID FIRE 2",
+      "TWIN-LINKED"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Twin big shoota",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:twin-big-shoota-×2": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Twin big shoota (×2)",
+    "range_max": 36,
+    "skill": 5,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:twin-boomstick": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Twin boomstick",
+    "range_max": null,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:twin-dakkagun": {
+    "abilities": [
+      "ASSAULT",
+      "RAPID FIRE 2",
+      "TWIN-LINKED"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Twin dakkagun",
+    "range_max": 18,
+    "skill": 5,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:twin-grotzooka": {
+    "abilities": [
+      "BLAST",
+      "IGNORES COVER",
+      "TWIN-LINKED"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      1,
+      3,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Twin grotzooka",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:twin-killsaw": {
+    "abilities": [
+      "Только на Boss Meganob"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      5
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Twin killsaw",
+    "range_max": null,
+    "skill": 3,
+    "strength": 10,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:twin-kustom-mega-blasta": {
+    "abilities": [
+      "HAZARDOUS",
+      "TWIN-LINKED"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Twin kustom mega-blasta",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:twin-rokkit-launcha": {
+    "abilities": [
+      "BLAST",
+      "TWIN-LINKED"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      1,
+      3,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Twin rokkit launcha",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:twin-rokkits": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Twin rokkits",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:twin-skorcha": {
+    "abilities": [
+      "IGNORES COVER",
+      "TORRENT",
+      "TWIN-LINKED"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      1,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Twin skorcha",
+    "range_max": 12,
+    "skill": 6,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:twin-slugga": {
+    "abilities": [
+      "Pistol"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Twin slugga",
+    "range_max": 12,
+    "skill": 5,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:urty-syringe": {
+    "abilities": [
+      "ANTI-INFANTRY 4+",
+      "EXTRA ATTACKS",
+      "PRECISION"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "'Urty syringe",
+    "range_max": null,
+    "skill": 3,
+    "strength": 2,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:waaagh-banner": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Waaagh! banner",
+    "range_max": null,
+    "skill": 3,
+    "strength": 8,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:wing-missiles": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Wing missiles",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:wreckin-ball": {
+    "abilities": [
+      "EXTRA ATTACKS"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Wreckin' ball",
+    "range_max": null,
+    "skill": 4,
+    "strength": 10,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:wurrboy-staff": {
+    "abilities": [
+      "Psychic"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      9
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Wurrboy staff",
+    "range_max": null,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:zap-powa": {
+    "abilities": [
+      "Sustained Hits 2",
+      "Psychic",
+      "Hazardous"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Zap-powa",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:zzap-gun": {
+    "abilities": [
+      "DEVASTATING WOUNDS",
+      "HEAVY"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Zzap gun",
+    "range_max": 36,
+    "skill": 6,
+    "strength": 7,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:чп-рукопашная": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "ЧП (рукопашная)",
+    "range_max": null,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:orks:—-*или*-attacks": {
+    "abilities": [
+      "Pistol"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "— *или* Attacks",
+    "range_max": 12,
+    "skill": 5,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:orks:—-*или*-big-choppa": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "— *или* Big Choppa",
+    "range_max": null,
+    "skill": 2,
+    "strength": 6,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:tau:2×-gun-drone": {
+    "abilities": [
+      "Assault"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "2× Gun Drone",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:4×-destroyer-missiles": {
+    "abilities": [
+      "One Shot"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "4× Destroyer Missiles",
+    "range_max": 72,
+    "skill": 4,
+    "strength": 10,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:airbursting-fragmentation-projector": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Airbursting Fragmentation Projector",
+    "range_max": 18,
+    "skill": 3,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:battlesuit-fists": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Battlesuit Fists",
+    "range_max": null,
+    "skill": 2,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:tau:burst-cannon": {
+    "abilities": [
+      "(2× Burst Cannon — anti-infantry support)"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      0
+    ],
+    "name": "Burst Cannon",
+    "range_max": 0,
+    "skill": 6,
+    "strength": 0,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:close-combat-weapon": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      0
+    ],
+    "name": "Close Combat Weapon",
+    "range_max": null,
+    "skill": 6,
+    "strength": 0,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:tau:cluster-rocket-system": {
+    "abilities": [
+      "Blast"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Cluster Rocket System",
+    "range_max": 48,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:command-link-drone": {
+    "abilities": [
+      "See abilities"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      0
+    ],
+    "name": "Command-link Drone",
+    "range_max": null,
+    "skill": 6,
+    "strength": 0,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:tau:cyclic-ion-blaster": {
+    "abilities": [
+      "Hazardous"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Cyclic Ion Blaster",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:cyclic-ion-blaster-overcharge": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Cyclic Ion Blaster (Overcharge)",
+    "range_max": 18,
+    "skill": 3,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:cyclic-ion-blaster-standard": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Cyclic Ion Blaster (Standard)",
+    "range_max": 18,
+    "skill": 3,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:cyclic-ion-raker": {
+    "abilities": [
+      "Sustained Hits 1"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Cyclic Ion Raker",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:dawn-blade": {
+    "abilities": [
+      "DEVASTATING WOUNDS"
+    ],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      4
+    ],
+    "name": "Dawn Blade",
+    "range_max": null,
+    "skill": 2,
+    "strength": 12,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:tau:flamer": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      1,
+      6,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Flamer",
+    "range_max": 12,
+    "skill": 6,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:fusion-blaster": {
+    "abilities": [
+      "MELTA 2"
+    ],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Fusion Blaster",
+    "range_max": 12,
+    "skill": 2,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:gun-drone-×2": {
+    "abilities": [
+      "Assault"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Gun Drone (×2)",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:heavy-burst-cannon": {
+    "abilities": [
+      "Sustained Hits 1"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      12
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Heavy Burst Cannon",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:heavy-burst-cannon-×2": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      12
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Heavy Burst Cannon (×2)",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:heavy-rail-rifle": {
+    "abilities": [
+      "Heavy",
+      "Sustained Hits 1",
+      "Devastating Wounds"
+    ],
+    "ap": -5,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      2
+    ],
+    "name": "Heavy Rail Rifle",
+    "range_max": 60,
+    "skill": 4,
+    "strength": 14,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:high-yield-missile-pods": {
+    "abilities": [
+      "Heavy"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      1,
+      3,
+      0
+    ],
+    "name": "High-Yield Missile Pods",
+    "range_max": 36,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:honour-blade": {
+    "abilities": [
+      "SUSTAINED HITS 1"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      5
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Honour Blade",
+    "range_max": null,
+    "skill": 2,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:tau:hunting-blades": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Hunting Blades",
+    "range_max": null,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:tau:hunting-rifle": {
+    "abilities": [
+      "Heavy",
+      "Precision",
+      "Sustained Hits 1"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Hunting rifle",
+    "range_max": 30,
+    "skill": 3,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:ion-accelerator**-overcharge": {
+    "abilities": [
+      "Hazardous"
+    ],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      5
+    ],
+    "name": "Ion Accelerator** (Overcharge)",
+    "range_max": 36,
+    "skill": 4,
+    "strength": 10,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:ion-accelerator**-standard": {
+    "abilities": [
+      "Hazardous"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      4
+    ],
+    "name": "Ion Accelerator** (Standard)",
+    "range_max": 36,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:ion-cannon": {
+    "abilities": [
+      "Heavy"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Ion Cannon",
+    "range_max": 36,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:ion-cannon-overcharge": {
+    "abilities": [
+      "Heavy",
+      "Hazardous"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Ion Cannon (Overcharge)",
+    "range_max": 36,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:ion-gun": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Ion Gun",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 7,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:kroot-hunting-rifle": {
+    "abilities": [
+      "Heavy"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Kroot hunting rifle",
+    "range_max": 30,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:kroot-long-gun": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      3,
+      0
+    ],
+    "name": "Kroot Long Gun",
+    "range_max": 36,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:kroot-pistol": {
+    "abilities": [
+      "Pistol"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Kroot pistol",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:kroot-rifle": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Kroot rifle",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 4,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:krootox-rifle": {
+    "abilities": [
+      "Heavy"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Krootox rifle",
+    "range_max": 24,
+    "skill": 5,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:light-missile-pod": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Light Missile Pod",
+    "range_max": 30,
+    "skill": 2,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:long-barreled-burst-cannon-×2": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Long-barreled Burst Cannon (×2)",
+    "range_max": 24,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:longshot-pulse-rifle": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Longshot Pulse Rifle",
+    "range_max": 36,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:missile-drone**-замена-twin-sms": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Missile Drone** (замена Twin SMS)",
+    "range_max": 30,
+    "skill": 4,
+    "strength": 7,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:missile-pod": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Missile Pod",
+    "range_max": 30,
+    "skill": 3,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:missile-pod-×2": {
+    "abilities": [],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Missile Pod (×2)",
+    "range_max": 30,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:neutron-blaster": {
+    "abilities": [
+      "Assault"
+    ],
+    "ap": -2,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Neutron Blaster",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:piranha-fusion-blaster": {
+    "abilities": [],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Piranha Fusion Blaster",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:plasma-rifle": {
+    "abilities": [],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Plasma Rifle",
+    "range_max": 30,
+    "skill": 2,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:pulse-blastcannon": {
+    "abilities": [
+      "Heavy",
+      "Blast"
+    ],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      6
+    ],
+    "name": "Pulse Blastcannon",
+    "range_max": 48,
+    "skill": 4,
+    "strength": 14,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:pulse-blaster": {
+    "abilities": [
+      "Assault"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      3
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Pulse Blaster",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:pulse-carbine": {
+    "abilities": [],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Pulse Carbine",
+    "range_max": 18,
+    "skill": 3,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:pulse-driver": {
+    "abilities": [
+      "Heavy",
+      "Blast"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      6
+    ],
+    "damage_dice": [
+      0,
+      0,
+      4
+    ],
+    "name": "Pulse Driver",
+    "range_max": 72,
+    "skill": 4,
+    "strength": 12,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:pulse-pistol": {
+    "abilities": [
+      "PISTOL"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Pulse Pistol",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:pulse-rifle": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Pulse Rifle",
+    "range_max": 30,
+    "skill": 3,
+    "strength": 6,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:rail-rifle": {
+    "abilities": [],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      0,
+      0,
+      3
+    ],
+    "name": "Rail Rifle",
+    "range_max": 30,
+    "skill": 4,
+    "strength": 8,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:railgun": {
+    "abilities": [
+      "Heavy",
+      "Devastating Wounds on 6 to wound"
+    ],
+    "ap": -5,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      6
+    ],
+    "name": "Railgun",
+    "range_max": 72,
+    "skill": 4,
+    "strength": 20,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:seeker-missile": {
+    "abilities": [
+      "One Shot"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Seeker Missile",
+    "range_max": 30,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:seeker-missile-×2": {
+    "abilities": [
+      "One Shot"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Seeker Missile (×2)",
+    "range_max": 30,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:seeker-missile-×6": {
+    "abilities": [
+      "One Shot",
+      "vs FLY: +1 to hit"
+    ],
+    "ap": -3,
+    "attacks_dice": [
+      0,
+      0,
+      1
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Seeker Missile (×6)",
+    "range_max": 30,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:shield-drone": {
+    "abilities": [
+      "See abilities"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      0
+    ],
+    "name": "Shield Drone",
+    "range_max": null,
+    "skill": 6,
+    "strength": 0,
+    "tags": [],
+    "type": "melee"
+  },
+  "weapon:tau:smart-missile-system": {
+    "abilities": [
+      "Indirect Fire"
+    ],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Smart Missile System",
+    "range_max": 30,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:smart-missile-system-turret": {
+    "abilities": [],
+    "ap": -1,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      0,
+      0,
+      2
+    ],
+    "name": "Smart Missile System (Turret)",
+    "range_max": 30,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:twin-fusion-blaster": {
+    "abilities": [
+      "Melta 2"
+    ],
+    "ap": -4,
+    "attacks_dice": [
+      0,
+      0,
+      2
+    ],
+    "damage_dice": [
+      1,
+      6,
+      0
+    ],
+    "name": "Twin Fusion Blaster",
+    "range_max": 12,
+    "skill": 4,
+    "strength": 9,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:twin-pulse-carbine": {
+    "abilities": [
+      "Assault",
+      "Twin-linked"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      4
+    ],
+    "damage_dice": [
+      0,
+      0,
+      1
+    ],
+    "name": "Twin Pulse Carbine",
+    "range_max": 18,
+    "skill": 4,
+    "strength": 5,
+    "tags": [],
+    "type": "ranged"
+  },
+  "weapon:tau:twin-smart-missile-system": {
+    "abilities": [
+      "Indirect Fire",
+      "ignores cover"
+    ],
+    "ap": 0,
+    "attacks_dice": [
+      0,
+      0,
+      0
+    ],
+    "damage_dice": [
+      0,
+      0,
+      0
+    ],
+    "name": "Twin smart missile system",
+    "range_max": 0,
+    "skill": 6,
+    "strength": 0,
+    "tags": [],
+    "type": "ranged"
+  }
+}

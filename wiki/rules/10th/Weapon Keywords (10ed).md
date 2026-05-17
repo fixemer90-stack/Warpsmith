@@ -8,7 +8,7 @@ created: 2026-05-01
 
 # Weapon Keywords (10ed)
 
-Свод ключевых слов оружия в 10-й редакции Warhammer 40,000. Каждое ключевое слово модифицирует поведение атаки на определённом этапе (Hit, Wound, Save, Damage).
+Свод ключевых слов оружия в 10-й редакции Warhammer 40,000. Каждое ключевое слово модифицирует поведение атаки на определённом этапе (Hit, Wound, Save, Damage) и дополняет профиль оружия из [[Datasheet and Stats (10ed)]].
 
 ## Полный список
 
@@ -31,4 +31,4 @@ created: 2026-05-01
 | [TORRENT] | Автоматическое попадание (без броска на попадание) |
 | [TWIN-LINKED] | Переброс ранении |
 
-Ссылки: [[Making Attacks (10ed)]], [[Indirect Fire]], [[Ignores Cover]], [[One Shot]], [[Mortal Wounds]]
+Ссылки: [[Datasheet and Stats (10ed)]], [[Making Attacks (10ed)]], [[Indirect Fire]], [[Ignores Cover]], [[One Shot]], [[Mortal Wounds]]

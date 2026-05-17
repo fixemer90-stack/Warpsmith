@@ -2,13 +2,14 @@
 confidence: medium
 created: 2026-04-30
 edition: 10e
-points: 75
+points: 65
 sources:
 - https://wahapedia.ru/wh40k10ed/factions/orks/
 tags:
 - orks
 - infantry
 squad_size: {'min': 5, 'max': 10, 'step': 5}
+model_count: [1, 1]
 title: Stormboyz
 type: entity
 updated: 2026-04-30

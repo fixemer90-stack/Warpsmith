@@ -101,6 +101,9 @@ function teamBuilder() {
 
         get totalCost() {
             if (!this.unitDetail) return 0;
+            // Canonical PTS formula (must match backend calculate_squad_pts())
+            // Backend:  (points / minSquad + loadoutPts) * squadSize + nobPts
+            // See backend/state/roster.py:calculate_squad_pts()
             const minSquad = this.unitDetail.squad_size?.min || 1;
             const ptsPerModel = this.unitDetail.points / minSquad;
             const loadout = this.unitDetail.wargear_options

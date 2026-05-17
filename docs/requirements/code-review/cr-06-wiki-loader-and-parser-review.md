@@ -1,7 +1,7 @@
 ---
 title: "CR-06 — Wiki loader and parser review"
 parent: code-review
-status: pending
+status: request-changes
 source: ../code-review-plan.md#cr-06
 tags: [requirements, code-review, atomic-review]
 ---
@@ -34,7 +34,7 @@ tags: [requirements, code-review, atomic-review]
 
 ## Execution Status
 
-**Status:** Pending
+**Status:** Request Changes
 
 **Review report target:** `docs/reviews/YYYY-MM-DD/CR-06-wiki-loader-and-parser-review.md`
 
@@ -53,11 +53,56 @@ tags: [requirements, code-review, atomic-review]
 - [ ] Findings report written
 - [ ] Triage status updated in `docs/requirements/code-review/code-review.md`
 
-### Result
+#
 
-- **Verdict:** Not started
-- **Critical:** 0 known before execution
-- **Important:** 0 known before execution
-- **Suggestions:** 0 known before execution
-- **Blocked by:** —
-- **Completed at:** —
+## Result
+
+- **Report:** `docs/reviews/2026-05-09/CR-06-wiki-loader-and-parser-review.md`
+- **Outcome:** Verdict: REQUEST CHANGES. Critical 1, Important 4, Suggestions 1. Unsafe pickle cache, 168 unit files vs 160 loaded units, 27 zero-point units, 45 no-weapon units, live content validation gaps.
+
+## Triage summary
+
+- [CR-06 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-06)
+- Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
+
+## Regression evidence — Task 0.1 (runtime unit identity)
+
+**2026-05-16.** No direct findings fixed in CR-06 scope. Structural change: `RosterState.units`
+type changed (`dict` → `list`) — downstream consumers in `backend/engine/ai/autoplay.py`
+and `web/routes/api_replays.py` updated. Wiki loader/parser/registry unchanged.
+Full test suite: 471 passed, 0 failures.
+
+## Regression evidence — Task 0.2 (canonical GameState serializer)
+
+**2026-05-16.** Canonical `snapshot_game_state()` in `game_state.py`. Wiki loader/parser unchanged.
+Structural cleanup: two divergent snapshot builders consolidated. 478 tests pass.
+
+## Regression evidence — Task 0.3 (non-destructive DB/replay)
+
+**2026-05-16.** Non-destructive DB changes. No impact on wiki loader/parser. 484 tests pass.
+
+## Regression evidence — Task 1.1 (content contract tests)
+
+**2026-05-16.** `tests/test_content_contracts.py` created — 11 tests validating all wiki units.
+Required fields, points, weapons, model_count, canonical ID uniqueness, faction coverage.
+28 zero-point units and 44 no-weapon units documented as known exceptions (parser gap).
+495 tests pass.
+
+## Regression evidence — Task 1.2 (safe cache)
+
+**2026-05-16.** Unsafe `pickle` cache removed. Replaced with JSON-based content pipeline:
+`compiler.py` compiles wiki → JSON artifacts, `manifest.json` with SHA256 source hashes.
+`registry.py` loads from JSON, detects staleness via hash comparison. 21 cache tests.
+
+## Regression evidence — Task 1.5 (frontmatter canonical IDs)
+
+**2026-05-17.** Frontmatter `canonical_id` support for unit records.
+
+Changes:
+- Unit model (`backend/model/unit.py`): added `source_path: str = ""` to track wiki file path.
+- Parser (`backend/loader/parser.py`): passes `source_path=str(filepath)` to Unit constructor.
+- Compiler (`backend/loader/compiler.py`): validates explicit `canonical_id` format (`unit:<scope>:<name>`) with actionable error including source path; raises RuntimeError on invalid format; tracks `source_path` in canonical unit records; fatal collision check moved before artifact writes so duplicate explicit IDs prevent any artifact output.
+- 12 new focused tests with `tmp_path` fixtures.
+
+Tests: 36 passed in test_content_contracts.py (24 pre-existing + 12 new).
+Verification: lint clean, format clean, git diff-check clean.

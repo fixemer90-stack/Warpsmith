@@ -1,7 +1,7 @@
 ---
 title: "CR-18 — Pages/templates/navigation review"
 parent: code-review
-status: pending
+status: request-changes
 source: ../code-review-plan.md#cr-18
 tags: [requirements, code-review, atomic-review]
 ---
@@ -14,7 +14,7 @@ tags: [requirements, code-review, atomic-review]
 - Review: `web/templates/`
 - Review: `web/routes/pages.py`
 - Review: `web/static/`
-- Output: `docs/reviews/YYYY-MM-DD/CR-18-pages-templates-navigation.md`
+- Output: `docs/reviews/2026-05-10/CR-18-pages-templates-navigation-review.md`
 
 **Steps:**
 1. Проверить all page routes return 200 or expected auth redirect.
@@ -33,30 +33,35 @@ tags: [requirements, code-review, atomic-review]
 
 ## Execution Status
 
-**Status:** Pending
+**Status:** Request Changes
 
-**Review report target:** `docs/reviews/YYYY-MM-DD/CR-18-pages-templates-navigation-review.md`
+**Review report target:** `docs/reviews/2026-05-10/CR-18-pages-templates-navigation-review.md`
 
 ### Status checklist
 
-- [ ] Scope confirmed
-- [ ] Requirements/specs reviewed
-- [ ] Tests reviewed first
-- [ ] Production code reviewed
-- [ ] Correctness checked
-- [ ] Readability checked
-- [ ] Architecture checked
-- [ ] Security checked
-- [ ] Performance checked
-- [ ] Verification commands executed
-- [ ] Findings report written
-- [ ] Triage status updated in `docs/requirements/code-review/code-review.md`
+- [x] Scope confirmed
+- [x] Requirements/specs reviewed
+- [x] Tests reviewed first
+- [x] Production code reviewed
+- [x] Correctness checked
+- [x] Readability checked
+- [x] Architecture checked
+- [x] Security checked
+- [x] Performance checked
+- [x] Verification commands executed
+- [x] Findings report written
+- [x] Triage status updated in `docs/requirements/code-review/code-review.md`
 
 ### Result
 
-- **Verdict:** Not started
-- **Critical:** 0 known before execution
-- **Important:** 0 known before execution
-- **Suggestions:** 0 known before execution
-- **Blocked by:** —
-- **Completed at:** —
+- **Verdict:** Request Changes — common routes/static assets load, but pricing CTA is broken, shared CSS helper classes do not apply under Tailwind CDN, Progressive Disclosure has a localStorage failure path, and tests miss these CR-18 contracts.
+- **Critical:** 0
+- **Important:** 4
+- **Suggestions:** 1
+- **Blocked by:** Codex CLI unavailable (`codex: command not found`); review completed with direct inspection, probes, browser smoke, and delegated independent reviewer.
+- **Completed at:** 2026-05-10
+
+## Triage summary
+
+- [CR-18 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-18)
+- Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.

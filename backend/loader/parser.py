@@ -138,6 +138,8 @@ def parse_unit(filepath: Path) -> Unit | None:
     kwargs["squad_size"] = metadata.get("squad_size", {"min": 1, "max": 1, "step": 1})
     kwargs["extended_wargear_options"] = ensure_list(metadata.get("extended_wargear_options", []))
     kwargs["nob_options"] = ensure_list(metadata.get("nob_options", []))
+    kwargs["canonical_id"] = metadata.get("canonical_id")
+    kwargs["source_path"] = str(filepath)
 
     weapons_data = metadata.get("weapons", [])
     ranged_weapons, melee_weapons = _parse_weapons_from_frontmatter(ensure_list(weapons_data))

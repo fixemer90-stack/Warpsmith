@@ -9,6 +9,7 @@ from ..model.unit import Unit
 from ..state.game_state import GamePhase, GameState
 from ..state.map import BattlefieldMap
 from ..state.mission import Mission, VPTracker, apply_scoring, check_end_game
+from ..state.runtime_id import format_event_identity
 
 
 class Scenario:
@@ -565,14 +566,22 @@ class Scenario:
                         ignores_cover=False,
                     )
                     damage = int(result.total_stats.mean)
+                    identity = format_event_identity(
+                        actor_id=unit.unit_id, target_id=target.unit_id
+                    )
                     self.state.game_log.append(
-                        f"{unit.name} shoots {target.name} — expected {result.total_stats.mean:.1f} dmg"
+                        f"{unit.name} shoots {target.name} — expected {result.total_stats.mean:.1f} dmg{identity}"
                     )
                 else:
                     # Simplified damage fallback
                     damage = max(1, unit.models_remaining // 2)
+                    identity = format_event_identity(
+                        actor_id=unit.unit_id, target_id=target.unit_id
+                    )
                 self.state.deal_damage(target.unit_id, damage)
-                self.state.game_log.append(f"{unit.name} hits {target.name} for {damage} damage")
+                self.state.game_log.append(
+                    f"{unit.name} hits {target.name} for {damage} damage{identity}"
+                )
                 unit.has_shot = True
 
     def _charge_phase(self) -> None:
@@ -625,12 +634,18 @@ class Scenario:
                     )
                     if self.state.move_unit(unit.unit_id, charge_pos):
                         unit.is_engaged = True
+                        identity = format_event_identity(
+                            actor_id=unit.unit_id, target_id=closest.unit_id
+                        )
                         self.state.game_log.append(
-                            f"{unit.name} charges {closest.name} (rolled {roll} ≥ {dist:.0f}) — engaged!"
+                            f"{unit.name} charges {closest.name} (rolled {roll} ≥ {dist:.0f}) — engaged!{identity}"
                         )
                 else:
+                    identity = format_event_identity(
+                        actor_id=unit.unit_id, target_id=closest.unit_id
+                    )
                     self.state.game_log.append(
-                        f"{unit.name} fails charge (rolled {roll} < {dist:.0f})"
+                        f"{unit.name} fails charge (rolled {roll} < {dist:.0f}){identity}"
                     )
                 unit.has_charged = True
 
@@ -717,16 +732,22 @@ class Scenario:
         # Attacking unit damages enemy
         damage_to_enemy = 1  # Simplified: 1 damage per attack
         self.state.deal_damage(enemy_unit.unit_id, damage_to_enemy)
+        identity = format_event_identity(
+            actor_id=attacking_unit.unit_id, target_id=enemy_unit.unit_id
+        )
         self.state.game_log.append(
-            f"{attacking_unit.name} hits {enemy_unit.name} for {damage_to_enemy} damage"
+            f"{attacking_unit.name} hits {enemy_unit.name} for {damage_to_enemy} damage{identity}"
         )
 
         # Enemy unit damages attacking unit (if still alive)
         if enemy_unit.is_alive:
             damage_to_attacker = 1  # Simplified: 1 damage per attack
             self.state.deal_damage(attacking_unit.unit_id, damage_to_attacker)
+            identity = format_event_identity(
+                actor_id=enemy_unit.unit_id, target_id=attacking_unit.unit_id
+            )
             self.state.game_log.append(
-                f"{enemy_unit.name} hits {attacking_unit.name} for {damage_to_attacker} damage"
+                f"{enemy_unit.name} hits {attacking_unit.name} for {damage_to_attacker} damage{identity}"
             )
 
     def _battle_shock_tests(self) -> None:

@@ -1,0 +1,9407 @@
+{
+  "unit:orks:attack-fighta": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Attack Fighta",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Armoured hull",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "RAPID FIRE 2",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Wing missiles",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Attack Fighta.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "fly",
+      "aircraft",
+      "legends",
+      "speed-freeks"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:orks:attack-fighta",
+    "wounds": 10
+  },
+  "unit:orks:battlewagon": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Transport",
+    "display_name": "Battlewagon",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 5,
+    "points": 155,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Battlewagon.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "transport"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:orks:battlewagon",
+    "wounds": 16
+  },
+  "unit:orks:beast-snagga-boyz": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Battleline",
+    "display_name": "Beast Snagga Boyz",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      10,
+      20
+    ],
+    "movement": 6,
+    "objective_control": 2,
+    "points": 90,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Thumpa",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit Launcha",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Beast Snagga Boyz.md",
+    "squad_size": {
+      "max": 20,
+      "min": 10,
+      "step": 10
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "battleline",
+      "beast-snagga"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:beast-snagga-boyz",
+    "wounds": 1
+  },
+  "unit:orks:beastboss": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Beastboss",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "ANTI-MONSTER 4+",
+          "ANTI-VEHICLE 4+"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Beast Choppa",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Savage claws and teeth",
+        "range_max": null,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 80,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Beastboss.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:beastboss",
+    "wounds": 6
+  },
+  "unit:orks:beastboss-on-squigosaur": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Beastboss On Squigosaur",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Mounted"
+    ],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Squigosaur jaws",
+        "range_max": null,
+        "skill": 2,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Savage horns and hooves",
+        "range_max": null,
+        "skill": 3,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 3,
+    "points": 125,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Beast Snappa",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Beastboss On Squigosaur.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "mount",
+      "character"
+    ],
+    "toughness": 8,
+    "unit_id": "unit:orks:beastboss-on-squigosaur",
+    "wounds": 8
+  },
+  "unit:orks:big-gunz": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Big Gunz",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 8,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close combat weapons",
+        "range_max": null,
+        "skill": 3,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 3,
+    "objective_control": 1,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "BLAST",
+          "HEAVY"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kannon – frag",
+        "range_max": 36,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "HEAVY"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Kannon – shell",
+        "range_max": 36,
+        "skill": 6,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST",
+          "HEAVY",
+          "INDIRECT FIRE"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Lobba",
+        "range_max": 48,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "DEVASTATING WOUNDS",
+          "HEAVY"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Zzap gun",
+        "range_max": 36,
+        "skill": 6,
+        "strength": 7,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Big Gunz.md",
+    "squad_size": {
+      "max": 3,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "artillery",
+      "legends",
+      "grots"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:orks:big-gunz",
+    "wounds": 3
+  },
+  "unit:orks:big-mek": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Big Mek",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 50,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Hazardous"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Kustom mega-blasta",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Tellyport blasta",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Big Mek.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:big-mek",
+    "wounds": 6
+  },
+  "unit:orks:big-mek-in-mega-armour": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Big Mek In Mega Armour",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Power Klaw",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 5,
+    "objective_control": 1,
+    "points": 90,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Kustom mega-blasta",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Big Mek In Mega Armour.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:big-mek-in-mega-armour",
+    "wounds": 5
+  },
+  "unit:orks:big-mek-on-warbike": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Legends",
+    "display_name": "Big Mek on Warbike",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Big choppa",
+        "range_max": null,
+        "skill": 3,
+        "strength": 7,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Choppa",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close combat weapon",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Killsaw",
+        "range_max": null,
+        "skill": 4,
+        "strength": 12,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Power klaw",
+        "range_max": null,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "ANTI-INFANTRY 4+",
+          "DEVASTATING WOUNDS",
+          "RAPID FIRE 1"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kombi-weapon",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "HAZARDOUS"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Kustom mega-blasta",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST",
+          "HAZARDOUS"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          0
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Kustom mega-slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit launcha",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST",
+          "HEAVY"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          1,
+          6,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Shokk attack gun",
+        "range_max": 60,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "ASSAULT",
+          "RAPID FIRE 2",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin dakkagun",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Big Mek on Warbike.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "character",
+      "legends",
+      "speed-freeks",
+      "big-mek"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:big-mek-on-warbike",
+    "wounds": 6
+  },
+  "unit:orks:big-mek-with-kustom-force-field": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Legends",
+    "display_name": "Big Mek with Kustom Force Field",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Choppa",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Big Mek with Kustom Force Field.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "character",
+      "legends",
+      "big-mek"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:big-mek-with-kustom-force-field",
+    "wounds": 4
+  },
+  "unit:orks:big-mek-with-shokk-attack-gun": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Big Mek With Shokk Attack Gun",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Close combat weapon",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 75,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Heavy",
+          "Sustained Hits 1",
+          "Hazardous"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          2
+        ],
+        "name": "Shokk Attack Gun",
+        "range_max": 36,
+        "skill": 4,
+        "strength": 12,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Kustom pistol",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Big Mek With Shokk Attack Gun.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:big-mek-with-shokk-attack-gun",
+    "wounds": 5
+  },
+  "unit:orks:blitza-bommer": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Blitza-bommer",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          0
+        ],
+        "name": "Bomms",
+        "range_max": null,
+        "skill": 6,
+        "strength": 0,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 120,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota (×2)",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Blitza-bommer.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "fly"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:orks:blitza-bommer",
+    "wounds": 12
+  },
+  "unit:orks:boomdakka-snazzwagon": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Boomdakka Snazzwagon",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Saw blades",
+        "range_max": null,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Spiked ram",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 3,
+    "points": 85,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Sustained Hits 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          8
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Boomdakka",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Boomdakka Snazzwagon.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle"
+    ],
+    "toughness": 7,
+    "unit_id": "unit:orks:boomdakka-snazzwagon",
+    "wounds": 9
+  },
+  "unit:orks:boss-snikrot": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Boss Snikrot",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "Precision"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Stab 'em",
+        "range_max": null,
+        "skill": 3,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "Devastating Wounds"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          7
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Muke's Twin Blades",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 85,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Slag 'em",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Boss Snikrot.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character",
+      "epic-hero"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:boss-snikrot",
+    "wounds": 6
+  },
+  "unit:orks:boss-zagstruk": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Legends",
+    "display_name": "Boss Zagstruk",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Da Vulcha's Klaws and choppa",
+        "range_max": null,
+        "skill": 2,
+        "strength": 8,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 1,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Boss Zagstruk.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "character",
+      "epic-hero",
+      "legends",
+      "stormboyz"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:boss-zagstruk",
+    "wounds": 6
+  },
+  "unit:orks:boyz": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Battleline",
+    "display_name": "Boyz",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      10,
+      20
+    ],
+    "movement": 6,
+    "objective_control": 2,
+    "points": 80,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Shoota",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big Shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit Launcha",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Boyz.md",
+    "squad_size": {
+      "max": 20,
+      "min": 10,
+      "step": 10
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "battleline"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:boyz",
+    "wounds": 1
+  },
+  "unit:orks:breaka-boyz": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Breaka Boyz",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Choppa",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "ANTI-MONSTER 4+",
+          "ANTI-VEHICLE 4+",
+          "TWIN-LINKED"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Knucklebustas",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "ANTI-MONSTER 4+",
+          "ANTI-VEHICLE 4+"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Smash hammer",
+        "range_max": null,
+        "skill": 3,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "ANTI-MONSTER 4+",
+          "ANTI-VEHICLE 4+",
+          "DEVASTATING WOUNDS",
+          "HAZARDOUS"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Tankhammer",
+        "range_max": null,
+        "skill": 3,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 140,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit pistol",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Breaka Boyz.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "orks",
+      "infantry"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:breaka-boyz",
+    "wounds": 2
+  },
+  "unit:orks:burna-bommer": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Burna-bommer",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          0
+        ],
+        "name": "Burna bombs",
+        "range_max": null,
+        "skill": 6,
+        "strength": 0,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 110,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota (×2)",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Skorcha (×2)",
+        "range_max": 18,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Burna-bommer.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "fly"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:orks:burna-bommer",
+    "wounds": 12
+  },
+  "unit:orks:burna-boyz": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Burna Boyz",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Burna (рукопашная)",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "ЧП (рукопашная)",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      5,
+      10
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 70,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Torrent"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Burna",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Burna Boyz.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "orks",
+      "infantry"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:burna-boyz",
+    "wounds": 1
+  },
+  "unit:orks:chinork-warkopta": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Chinork Warkopta",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Armoured hull",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 14,
+    "objective_control": 2,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "RAPID FIRE 2"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "RAPID FIRE 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Deffgun",
+        "range_max": 48,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "HAZARDOUS"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Kustom mega-blasta",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Rattler kannon",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit launcha",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "IGNORES COVER",
+          "TORRENT"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Skorcha",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Chinork Warkopta.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "fly",
+      "transport",
+      "legends",
+      "speed-freeks"
+    ],
+    "toughness": 8,
+    "unit_id": "unit:orks:chinork-warkopta",
+    "wounds": 10
+  },
+  "unit:orks:da-red-gobbo": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Legends",
+    "display_name": "Da Red Gobbo",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "DEVASTATING WOUNDS"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Icon of da Revolushun",
+        "range_max": null,
+        "skill": 4,
+        "strength": 3,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "DEVASTATING WOUNDS",
+          "PISTOL"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          1,
+          3,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kustom grot blasta",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Da Red Gobbo.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "character",
+      "epic-hero",
+      "legends",
+      "grots"
+    ],
+    "toughness": 2,
+    "unit_id": "unit:orks:da-red-gobbo",
+    "wounds": 3
+  },
+  "unit:orks:dakkajet": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Dakkajet",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 115,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Supa-shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Dakkajet.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "fly"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:orks:dakkajet",
+    "wounds": 12
+  },
+  "unit:orks:deff-dread": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Deff Dread",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 3,
+    "points": 90,
+    "ranged_weapons": [],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Deff Dread.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:orks:deff-dread",
+    "wounds": 8
+  },
+  "unit:orks:deff-rolla-battle-fortress": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Deff Rolla Battle Fortress",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Deff rolla",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 8,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "RAPID FIRE 2"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kannon – frag",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Kannon – shell",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST",
+          "INDIRECT FIRE"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Lobba",
+        "range_max": 48,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit launcha",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "IGNORES COVER",
+          "TORRENT"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Skorcha",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "RAPID FIRE 2",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "DEVASTATING WOUNDS"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Zzap gun",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 7,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Deff Rolla Battle Fortress.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "titanic",
+      "transport",
+      "legends"
+    ],
+    "toughness": 12,
+    "unit_id": "unit:orks:deff-rolla-battle-fortress",
+    "wounds": 22
+  },
+  "unit:orks:deffkilla-wartrike": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Deffkilla Wartrike",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Mounted"
+    ],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Snagga klaw",
+        "range_max": null,
+        "skill": 2,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Twin boomstick",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 3,
+    "points": 85,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Pistol",
+          "Sustained Hits 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Killa jet",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Deffkilla Wartrike.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "mount",
+      "character"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:deffkilla-wartrike",
+    "wounds": 9
+  },
+  "unit:orks:deffkoptas": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Deffkoptas",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Spinnin' blades",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      3,
+      6
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 100,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Kopta rokkits",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big Shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Deffkoptas.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "fly"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:deffkoptas",
+    "wounds": 4
+  },
+  "unit:orks:deffkoptas-with-big-shootas": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Deffkoptas with Big Shootas",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Killsaw",
+        "range_max": null,
+        "skill": 4,
+        "strength": 12,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Spinnin' blades",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "BLAST",
+          "TWIN-LINKED"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Kopta rokkits",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "HAZARDOUS"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Kustom mega-blasta",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "RAPID FIRE 2",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Deffkoptas with Big Shootas.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "fly",
+      "legends"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:deffkoptas-with-big-shootas",
+    "wounds": 4
+  },
+  "unit:orks:fighta-bommer": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Fighta-Bommer",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Armoured hull",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "BLAST",
+          "ONE SHOT",
+          "INDIRECT FIRE"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Grot-guided bomm",
+        "range_max": 72,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "RAPID FIRE 2",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Wing missiles",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Fighta-Bommer.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "fly",
+      "aircraft",
+      "legends",
+      "speed-freeks"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:orks:fighta-bommer",
+    "wounds": 12
+  },
+  "unit:orks:flash-gitz": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Flash Gitz",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Cutlass",
+        "range_max": null,
+        "skill": 3,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Big Choppa (Kaptin only)",
+        "range_max": null,
+        "skill": 3,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Power Klaw (Kaptin only)",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 135,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Snazzgun",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kustom pistol",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Flash Gitz.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "orks",
+      "infantry"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:flash-gitz",
+    "wounds": 2
+  },
+  "unit:orks:gargantuan-squiggoth": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Monster",
+    "display_name": "Gargantuan Squiggoth",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "LANCE"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          12
+        ],
+        "name": "Huge tusks – strike",
+        "range_max": null,
+        "skill": 3,
+        "strength": 14,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          18
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Huge tusks – sweep",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 12,
+    "points": 440,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kannon – frag",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Kannon – shell",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          2,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Supa-kannon",
+        "range_max": 60,
+        "skill": 5,
+        "strength": 12,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Gargantuan Squiggoth.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "monster",
+      "imperial-armour"
+    ],
+    "toughness": 13,
+    "unit_id": "unit:orks:gargantuan-squiggoth",
+    "wounds": 30
+  },
+  "unit:orks:ghazghkull-thraka": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Ghazghkull Thraka",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          8
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "The Great Claw",
+        "range_max": null,
+        "skill": 2,
+        "strength": 16,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Attack Squig",
+        "range_max": null,
+        "skill": 3,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 5,
+    "objective_control": 4,
+    "points": 235,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Mork's Roar",
+        "range_max": 12,
+        "skill": 2,
+        "strength": 14,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Ghazghkull Thraka.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character",
+      "epic-hero"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:ghazghkull-thraka",
+    "wounds": 10
+  },
+  "unit:orks:gorkanaut": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Gorkanaut",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          5
+        ],
+        "name": "Gorkanaut klaw",
+        "range_max": null,
+        "skill": 4,
+        "strength": 16,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 8,
+    "points": 280,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Sustained Hits 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          12
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Deffstorm mega-shoota",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota (×2)",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit Launcha (×2)",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Torrent",
+          "Ignore Cover"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Skorcha",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Gorkanaut.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle"
+    ],
+    "toughness": 12,
+    "unit_id": "unit:orks:gorkanaut",
+    "wounds": 20
+  },
+  "unit:orks:gretchin": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Gretchin",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 8,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Grot knife",
+        "range_max": null,
+        "skill": 4,
+        "strength": 3,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      10,
+      20
+    ],
+    "movement": 6,
+    "objective_control": 2,
+    "points": 45,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Grot blasta",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 3,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 7,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Gretchin.md",
+    "squad_size": {
+      "max": 20,
+      "min": 10,
+      "step": 10
+    },
+    "tags": [
+      "orks",
+      "infantry"
+    ],
+    "toughness": 2,
+    "unit_id": "unit:orks:gretchin",
+    "wounds": 1
+  },
+  "unit:orks:grot-bomm-launcha": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Grot Bomm Launcha",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Spiked wheel",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "BLAST",
+          "ONE SHOT",
+          "INDIRECT FIRE"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Grot-guided bomms",
+        "range_max": 72,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Grot Bomm Launcha.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "legends",
+      "speed-freeks",
+      "grots"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:grot-bomm-launcha",
+    "wounds": 6
+  },
+  "unit:orks:grot-mega-tank": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Grot Mega-Tank",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 8,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Armoured hull",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 4,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "RAPID FIRE 10"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          10
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Mega-tank weapons",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "RAPID FIRE 2",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST",
+          "IGNORES COVER",
+          "TWIN-LINKED"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          3,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin grotzooka",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "HAZARDOUS",
+          "TWIN-LINKED"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Twin kustom mega-blasta",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST",
+          "TWIN-LINKED"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Twin rokkit launcha",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "IGNORES COVER",
+          "TORRENT",
+          "TWIN-LINKED"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin skorcha",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Grot Mega-Tank.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "legends",
+      "grots"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:orks:grot-mega-tank",
+    "wounds": 12
+  },
+  "unit:orks:grot-tanks": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Grot Tanks",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 8,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Ramshackle hull",
+        "range_max": null,
+        "skill": 5,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 2,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "DEVASTATING WOUNDS",
+          "RAPID FIRE 2"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Grot tank shoota",
+        "range_max": 36,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST",
+          "IGNORES COVER"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          3,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Grotzooka",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "HAZARDOUS"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Kustom mega-blasta",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit launcha",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "IGNORES COVER",
+          "TORRENT"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Skorcha",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Grot Tanks.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "legends",
+      "grots"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:grot-tanks",
+    "wounds": 5
+  },
+  "unit:orks:hunta-rig": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Transport",
+    "display_name": "Hunta Rig",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 5,
+    "points": 145,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Hunta Rig.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "transport",
+      "beast-snagga"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:orks:hunta-rig",
+    "wounds": 16
+  },
+  "unit:orks:kannonwagon": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Kannonwagon",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Spiked ram",
+        "range_max": null,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 4,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "RAPID FIRE 2"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          1,
+          6,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Supa-kannon – frag",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          3,
+          3
+        ],
+        "name": "Supa-kannon – shell",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Kannonwagon.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "transport",
+      "legends"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:orks:kannonwagon",
+    "wounds": 16
+  },
+  "unit:orks:kaptin-badrukk": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Legends",
+    "display_name": "Kaptin Badrukk",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Choppa",
+        "range_max": null,
+        "skill": 2,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "HEAVY",
+          "SUSTAINED HITS 1"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Da Rippa – standard",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 7,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "HAZARDOUS",
+          "HEAVY",
+          "SUSTAINED HITS 1"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Da Rippa – supercharge",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Kaptin Badrukk.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "character",
+      "epic-hero",
+      "legends",
+      "freebooter",
+      "flash-gitz"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:kaptin-badrukk",
+    "wounds": 6
+  },
+  "unit:orks:kill-krusha": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Kill Krusha",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Tracks and wheels",
+        "range_max": null,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 8,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          3,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Krusha kannon – blast burna",
+        "range_max": 48,
+        "skill": 5,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "HEAVY"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          6
+        ],
+        "name": "Krusha kannon – tankhamma shell",
+        "range_max": 60,
+        "skill": 5,
+        "strength": 16,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit launcha",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "IGNORES COVER",
+          "TORRENT"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Skorcha",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "RAPID FIRE 2",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Kill Krusha.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "titanic",
+      "transport",
+      "legends"
+    ],
+    "toughness": 12,
+    "unit_id": "unit:orks:kill-krusha",
+    "wounds": 22
+  },
+  "unit:orks:kill-rig": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Transport",
+    "display_name": "Kill Rig",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "Psychic"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          9
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Wurrboy staff",
+        "range_max": null,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Saw blades",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 5,
+    "points": 165,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Sustained Hits 1"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Sustained Hits 2",
+          "Psychic",
+          "Hazardous"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Zap-powa",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Kill Rig.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "transport"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:orks:kill-rig",
+    "wounds": 16
+  },
+  "unit:orks:kill-tank": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Kill Tank",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          8
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Reinforced ram",
+        "range_max": null,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 10,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          3,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Bursta kannon",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 14,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "SUSTAINED HITS 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          30
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Giga shoota",
+        "range_max": 48,
+        "skill": 5,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "IGNORES COVER",
+          "TORRENT"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Skorcha",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "RAPID FIRE 2",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Kill Tank.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "titanic",
+      "transport",
+      "legends"
+    ],
+    "toughness": 12,
+    "unit_id": "unit:orks:kill-tank",
+    "wounds": 24
+  },
+  "unit:orks:killa-kans": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Killa Kans",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 8,
+    "melee_weapons": [],
+    "model_count": [
+      3,
+      6
+    ],
+    "movement": 6,
+    "objective_control": 2,
+    "points": 120,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Grotzooka",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          3,
+          0
+        ],
+        "name": "Rokkit Launcha",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Skorcha",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Killa Kans.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "orks",
+      "vehicle"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:killa-kans",
+    "wounds": 5
+  },
+  "unit:orks:kommandos": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Kommandos",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      5,
+      10
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 135,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Torrent"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Burna",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit Launcha",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Heavy",
+          "Precision"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Snipa",
+        "range_max": 36,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Kommandos.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "orks",
+      "infantry"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:kommandos",
+    "wounds": 1
+  },
+  "unit:orks:kustom-boosta-blasta": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Kustom Boosta-blasta",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Saw blades",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Spiked ram",
+        "range_max": null,
+        "skill": 4,
+        "strength": 7,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 3,
+    "points": 85,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Torrent",
+          "Twin-linked"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Twin skorcha",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Kustom Boosta-blasta.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle"
+    ],
+    "toughness": 7,
+    "unit_id": "unit:orks:kustom-boosta-blasta",
+    "wounds": 9
+  },
+  "unit:orks:lifta-wagon": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Lifta Wagon",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Deff rolla",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "EXTRA ATTACKS"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Grabbin' klaw",
+        "range_max": null,
+        "skill": 3,
+        "strength": 8,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Tracks and wheels",
+        "range_max": null,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "EXTRA ATTACKS"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Wreckin' ball",
+        "range_max": null,
+        "skill": 4,
+        "strength": 10,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 5,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "RAPID FIRE 2"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "ANTI-VEHICLE 3+"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          1,
+          6,
+          1
+        ],
+        "name": "Lifta-droppa",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit launcha",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Lifta Wagon.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "legends"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:orks:lifta-wagon",
+    "wounds": 16
+  },
+  "unit:orks:lootas": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Lootas",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close Combat Weapon",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      5,
+      10
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 50,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Heavy",
+          "Sustained Hits 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Deffgun",
+        "range_max": 48,
+        "skill": 5,
+        "strength": 7,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Sustained Hits 1"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big Shoota (Spanner)",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Lootas.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "orks",
+      "infantry"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:lootas",
+    "wounds": 1
+  },
+  "unit:orks:mad-dok-grotsnik": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Legends",
+    "display_name": "Mad Dok Grotsnik",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "SUSTAINED HITS 1"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Power klaw",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "ANTI-INFANTRY 4+",
+          "EXTRA ATTACKS",
+          "PRECISION"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "'Urty syringe",
+        "range_max": null,
+        "skill": 3,
+        "strength": 2,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Mad Dok Grotsnik.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "character",
+      "epic-hero",
+      "legends",
+      "painboy"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:mad-dok-grotsnik",
+    "wounds": 4
+  },
+  "unit:orks:meganobz": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Meganobz",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Power Klaw",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Killsaw",
+        "range_max": null,
+        "skill": 3,
+        "strength": 10,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "Только на Boss Meganob"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Twin killsaw",
+        "range_max": null,
+        "skill": 3,
+        "strength": 10,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 5,
+    "objective_control": 1,
+    "points": 65,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Rapid Fire 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Kombi-weapon",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Meganobz.md",
+    "squad_size": {
+      "max": 6,
+      "min": 2,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:meganobz",
+    "wounds": 3
+  },
+  "unit:orks:megatrakk-scrapjet": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Megatrakk Scrapjet",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Saw blades",
+        "range_max": null,
+        "skill": 4,
+        "strength": 7,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Spiked ram",
+        "range_max": null,
+        "skill": 4,
+        "strength": 7,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 3,
+    "points": 90,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Twin rokkits",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Wing missiles",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Megatrakk Scrapjet.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle"
+    ],
+    "toughness": 7,
+    "unit_id": "unit:orks:megatrakk-scrapjet",
+    "wounds": 9
+  },
+  "unit:orks:mek": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Mek",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 30,
+    "ranged_weapons": [],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Mek.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:mek",
+    "wounds": 4
+  },
+  "unit:orks:mek-gunz": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Mek Gunz",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 8,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      3
+    ],
+    "movement": 3,
+    "objective_control": 2,
+    "points": 50,
+    "ranged_weapons": [],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Mek Gunz.md",
+    "squad_size": {
+      "max": 3,
+      "min": 1,
+      "step": 2
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "artillery"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:mek-gunz",
+    "wounds": 6
+  },
+  "unit:orks:mekboy-workshop": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Mekboy Workshop",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 0,
+    "objective_control": 0,
+    "points": 0,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Mekboy Workshop.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "fortification",
+      "vehicle",
+      "legends"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:orks:mekboy-workshop",
+    "wounds": 10
+  },
+  "unit:orks:morkanaut": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Morkanaut",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          5
+        ],
+        "name": "Morkanaut klaw",
+        "range_max": null,
+        "skill": 4,
+        "strength": 16,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 8,
+    "points": 310,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Sustained Hits 1"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          0
+        ],
+        "name": "Kustom mega-zappa",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 12,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Sustained Hits 1",
+          "Twin-linked"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota (×2)",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit Launcha (×2)",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Ignores Cover",
+          "Torrent"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Skorcha",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Morkanaut.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle"
+    ],
+    "toughness": 12,
+    "unit_id": "unit:orks:morkanaut",
+    "wounds": 20
+  },
+  "unit:orks:mozrog-skragbad": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Mozrog Skragbad",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 3,
+    "points": 160,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Mozrog Skragbad.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "mount",
+      "character",
+      "epic-hero"
+    ],
+    "toughness": 8,
+    "unit_id": "unit:orks:mozrog-skragbad",
+    "wounds": 8
+  },
+  "unit:orks:nob-with-waaagh-banner": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Legends",
+    "display_name": "Nob with Waaagh! Banner",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Waaagh! banner",
+        "range_max": null,
+        "skill": 3,
+        "strength": 8,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "RAPID FIRE 2"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kustom shoota",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Nob with Waaagh! Banner.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "character",
+      "legends"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:nob-with-waaagh-banner",
+    "wounds": 3
+  },
+  "unit:orks:nobz": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Nobz",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Big Choppa",
+        "range_max": null,
+        "skill": 3,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Power Klaw",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Killsaw (Boss Nob only)",
+        "range_max": null,
+        "skill": 3,
+        "strength": 10,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 110,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big Shoota",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kombi-weapon",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Nobz.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "elite"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:nobz",
+    "wounds": 2
+  },
+  "unit:orks:painboss": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Painboss",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Beast Claw",
+        "range_max": null,
+        "skill": 3,
+        "strength": 7,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "'Urty Syringe",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 60,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Painboss.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:painboss",
+    "wounds": 4
+  },
+  "unit:orks:painboy": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Painboy",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "'Urty syringe",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Power klaw",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 55,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Grot orderly",
+        "range_max": 6,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Painboy.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:painboy",
+    "wounds": 3
+  },
+  "unit:orks:painboy-on-warbike": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Legends",
+    "display_name": "Painboy on Warbike",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Killsaw",
+        "range_max": null,
+        "skill": 4,
+        "strength": 12,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Power klaw",
+        "range_max": null,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "ANTI-INFANTRY 4+",
+          "EXTRA ATTACKS",
+          "PRECISION"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "'Urty syringe",
+        "range_max": null,
+        "skill": 3,
+        "strength": 2,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "ASSAULT",
+          "RAPID FIRE 2",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin dakkagun",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Painboy on Warbike.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "character",
+      "legends",
+      "speed-freeks"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:painboy-on-warbike",
+    "wounds": 4
+  },
+  "unit:orks:rukkatrukk-squigbuggy": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Rukkatrukk Squigbuggy",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Saw blades",
+        "range_max": null,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Spiked ram",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 3,
+    "points": 80,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Blast"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Squig launcha",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Rukkatrukk Squigbuggy.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle"
+    ],
+    "toughness": 7,
+    "unit_id": "unit:orks:rukkatrukk-squigbuggy",
+    "wounds": 9
+  },
+  "unit:orks:shokkjump-dragsta": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Shokkjump Dragsta",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Gyroscopic whirlygig",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 3,
+    "points": 90,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Hazardous"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Kustom mega-blasta",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkits",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Shokkjump Dragsta.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle"
+    ],
+    "toughness": 7,
+    "unit_id": "unit:orks:shokkjump-dragsta",
+    "wounds": 9
+  },
+  "unit:orks:skorchas": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Skorchas",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Spiked wheel",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "IGNORES COVER",
+          "TORRENT"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Skorcha",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Skorchas.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "legends",
+      "speed-freeks"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:skorchas",
+    "wounds": 6
+  },
+  "unit:orks:squigboss": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Squigboss",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Squig Jaws (melee)",
+        "range_max": null,
+        "skill": 3,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 5,
+    "objective_control": 1,
+    "points": 70,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Squigboss.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "character",
+      "beast-snagga"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:squigboss",
+    "wounds": 4
+  },
+  "unit:orks:squiggoth": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Squiggoth",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Gorin' horns – strike",
+        "range_max": null,
+        "skill": 3,
+        "strength": 12,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          8
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Gorin' horns – sweep",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 5,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Kannon – frag",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Kannon – shell",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Squiggoth.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "monster",
+      "transport",
+      "legends"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:orks:squiggoth",
+    "wounds": 18
+  },
+  "unit:orks:squighog-boyz": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Squighog Boyz",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Squig jaws (Melee)",
+        "range_max": null,
+        "skill": 3,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "Anti-Monster/Vehicle 5+"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Stikka (Melee)",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Power Klaw (Nob)",
+        "range_max": null,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      3,
+      6
+    ],
+    "movement": 10,
+    "objective_control": 2,
+    "points": 105,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 0,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Squighog Boyz.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "orks",
+      "mount"
+    ],
+    "toughness": 7,
+    "unit_id": "unit:orks:squighog-boyz",
+    "wounds": 3
+  },
+  "unit:orks:stompa": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Stompa",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          8
+        ],
+        "damage_dice": [
+          0,
+          0,
+          8
+        ],
+        "name": "Stompa klaw",
+        "range_max": null,
+        "skill": 4,
+        "strength": 20,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "Titanic"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Stomp",
+        "range_max": null,
+        "skill": 4,
+        "strength": 10,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 12,
+    "points": 800,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Blast",
+          "Sustained Hits 1"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          6
+        ],
+        "name": "Deffkannon",
+        "range_max": 72,
+        "skill": 5,
+        "strength": 14,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Sustained Hits 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          20
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Supa-gatler",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Sustained Hits 1 — ×2"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Torrent",
+          "Ignores Cover — ×2"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Skorcha",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "— ×2"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit Launcha",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Stompa.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle"
+    ],
+    "toughness": 14,
+    "unit_id": "unit:orks:stompa",
+    "wounds": 30
+  },
+  "unit:orks:stormboyz": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Stormboyz",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Infantry"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      5,
+      10
+    ],
+    "movement": 12,
+    "objective_control": 1,
+    "points": 65,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big Shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit Launcha",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Stormboyz.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "orks",
+      "infantry"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:stormboyz",
+    "wounds": 1
+  },
+  "unit:orks:tankbustas": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Tankbustas",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Choppa",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close combat weapon",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "ANTI-MONSTER 4+",
+          "ANTI-VEHICLE 4+"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Smash hammer",
+        "range_max": null,
+        "skill": 3,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 140,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit launcha",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rokkit pistol",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Tankbustas.md",
+    "squad_size": {
+      "max": 6,
+      "min": 6,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:tankbustas",
+    "wounds": 2
+  },
+  "unit:orks:trukk": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Transport",
+    "display_name": "Trukk",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 65,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Trukk.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "transport"
+    ],
+    "toughness": 8,
+    "unit_id": "unit:orks:trukk",
+    "wounds": 10
+  },
+  "unit:orks:ufthak-blackhawk": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Legends",
+    "display_name": "Ufthak Blackhawk",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "EXTRA ATTACKS"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Princess' jaws",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "DEVASTATING WOUNDS"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Snazzhammer",
+        "range_max": null,
+        "skill": 3,
+        "strength": 10,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "DEVASTATING WOUNDS",
+          "HAZARDOUS",
+          "PRECISION"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          1
+        ],
+        "name": "Shokk rifle",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Ufthak Blackhawk.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "character",
+      "epic-hero",
+      "legends"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:ufthak-blackhawk",
+    "wounds": 6
+  },
+  "unit:orks:warbikers": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Warbikers",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Choppa",
+        "range_max": null,
+        "skill": 3,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Power Klaw (Nob only)",
+        "range_max": null,
+        "skill": 3,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      3,
+      6
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 85,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin dakkagun",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Big Shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Warbikers.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "orks",
+      "vehicle"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:warbikers",
+    "wounds": 3
+  },
+  "unit:orks:warboss": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Warboss",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Power Klaw",
+        "range_max": null,
+        "skill": 2,
+        "strength": 9,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "— *или* Big Choppa",
+        "range_max": null,
+        "skill": 2,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 65,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Rapid Fire 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Kombi-weapon",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "— *или* Attacks",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin slugga",
+        "range_max": 12,
+        "skill": 5,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Warboss.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:warboss",
+    "wounds": 6
+  },
+  "unit:orks:warboss-in-mega-armour": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Warboss In Mega Armour",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          7
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Twin killsaw",
+        "range_max": null,
+        "skill": 2,
+        "strength": 10,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 5,
+    "objective_control": 1,
+    "points": 95,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Rapid Fire 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Kombi-weapon",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Warboss In Mega Armour.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:warboss-in-mega-armour",
+    "wounds": 7
+  },
+  "unit:orks:warbuggies": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Warbuggies",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Spiked wheels",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rack of rokkits",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "RAPID FIRE 2",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Warbuggies.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "legends",
+      "speed-freeks"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:warbuggies",
+    "wounds": 6
+  },
+  "unit:orks:wartrakks": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Wartrakks",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Spiked wheel",
+        "range_max": null,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 0,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "BLAST"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          3,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rack of rokkits",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "RAPID FIRE 2",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Twin big shoota",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Wartrakks.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "legends",
+      "speed-freeks"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:orks:wartrakks",
+    "wounds": 6
+  },
+  "unit:orks:wazbom-blastajet": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Wazbom Blastajet",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [
+      "Vehicle"
+    ],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 175,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Wazbom Blastajet.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "vehicle",
+      "fly"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:orks:wazbom-blastajet",
+    "wounds": 12
+  },
+  "unit:orks:wazdakka-gutsmek": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Wazdakka Gutsmek",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "EXTRA ATTACKS"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Fixit's wrench",
+        "range_max": null,
+        "skill": 4,
+        "strength": 3,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "LANCE"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Grabba dragga",
+        "range_max": null,
+        "skill": 2,
+        "strength": 10,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [
+          "EXTRA ATTACKS"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Speeding bulk and flaming exhaust",
+        "range_max": null,
+        "skill": 2,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 14,
+    "objective_control": 3,
+    "points": 175,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "ASSAULT",
+          "PRECISION"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Grabba dragga",
+        "range_max": 12,
+        "skill": 2,
+        "strength": 10,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "ASSAULT",
+          "SUSTAINED HITS 1"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          12
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Psyko-gatler",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Wazdakka Gutsmek.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "mount",
+      "vehicle",
+      "character",
+      "epic-hero",
+      "speed-freeks"
+    ],
+    "toughness": 8,
+    "unit_id": "unit:orks:wazdakka-gutsmek",
+    "wounds": 10
+  },
+  "unit:orks:weirdboy": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Weirdboy",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "Psychic"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Staff",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 60,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Psychic",
+          "Hazardous"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "'Eadbanger",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 10,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Weirdboy.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character",
+      "psychic-powers"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:weirdboy",
+    "wounds": 4
+  },
+  "unit:orks:wurrboy": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Wurrboy",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "Psychic"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Wurrboy staff",
+        "range_max": null,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Savage claws",
+        "range_max": null,
+        "skill": 3,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 55,
+    "ranged_weapons": [],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Wurrboy.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character",
+      "psychic-powers"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:wurrboy",
+    "wounds": 4
+  },
+  "unit:orks:zodgrod-wortsnagga": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Zodgrod Wortsnagga",
+    "edition": "10e",
+    "faction_id": "faction:orks",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Runtherd stick",
+        "range_max": null,
+        "skill": 4,
+        "strength": 3,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 40,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "Pistol"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Grot blasta",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 3,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Zodgrod Wortsnagga.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "orks",
+      "infantry",
+      "character",
+      "epic-hero"
+    ],
+    "toughness": 5,
+    "unit_id": "unit:orks:zodgrod-wortsnagga",
+    "wounds": 5
+  }
+}

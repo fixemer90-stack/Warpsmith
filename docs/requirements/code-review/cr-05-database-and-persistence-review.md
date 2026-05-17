@@ -1,7 +1,7 @@
 ---
 title: "CR-05 — Database and persistence review"
 parent: code-review
-status: pending
+status: request-changes
 source: ../code-review-plan.md#cr-05
 tags: [requirements, code-review, atomic-review]
 ---
@@ -33,30 +33,57 @@ tags: [requirements, code-review, atomic-review]
 
 ## Execution Status
 
-**Status:** Pending
+**Status:** Request Changes
 
-**Review report target:** `docs/reviews/YYYY-MM-DD/CR-05-database-and-persistence-review.md`
+**Review report:** `docs/reviews/2026-05-09/CR-05-database-and-persistence-review.md`
 
 ### Status checklist
 
-- [ ] Scope confirmed
-- [ ] Requirements/specs reviewed
-- [ ] Tests reviewed first
-- [ ] Production code reviewed
-- [ ] Correctness checked
-- [ ] Readability checked
-- [ ] Architecture checked
-- [ ] Security checked
-- [ ] Performance checked
-- [ ] Verification commands executed
-- [ ] Findings report written
-- [ ] Triage status updated in `docs/requirements/code-review/code-review.md`
+- [x] Scope confirmed
+- [x] Requirements/specs reviewed
+- [x] Tests reviewed first
+- [x] Production code reviewed
+- [x] Correctness checked
+- [x] Readability checked
+- [x] Architecture checked
+- [x] Security checked
+- [x] Performance checked
+- [x] Verification commands executed
+- [x] Findings report written
+- [x] Triage status updated in `docs/requirements/code-review/code-review.md`
 
 ### Result
 
-- **Verdict:** Not started
-- **Critical:** 0 known before execution
-- **Important:** 0 known before execution
-- **Suggestions:** 0 known before execution
+- **Verdict:** REQUEST CHANGES / PERSISTENCE FIXES REQUIRED
+- **Critical:** 1
+- **Important:** 6
+- **Suggestions:** 4
 - **Blocked by:** —
-- **Completed at:** —
+- **Report:** `docs/reviews/2026-05-09/CR-05-database-and-persistence-review.md`
+- **Completed at:** 2026-05-09
+
+## Triage summary
+
+- [CR-05 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-05)
+- Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
+
+## Regression evidence — Task 0.1 (runtime unit identity)
+
+**2026-05-16.** `RosterState.units` type changed from `dict[str, Unit]` to `list[tuple[str, Unit]]`
+to support duplicate unit entries in a single roster (CR-12 roster-duplicate finding).
+Persistence boundaries (`units_from_db` in `api_replays.py`) updated accordingly.
+Database schema unchanged — runtime IDs are generated at conversion time.
+
+Verification: `uv run python -m pytest tests/ -q` → 471 passed, 3 skipped, 0 failures.
+
+## Regression evidence — Task 0.2 (canonical GameState serializer)
+
+**2026-05-16.** Canonical `snapshot_game_state()` added to `backend/state/game_state.py`.
+No schema changes; database boundaries unchanged. Persistence consumers (`replay.py`,
+`autoplay.py`) now delegate to single canonical serializer. 478 tests pass.
+
+## Regression evidence — Task 0.3 (non-destructive DB/replay)
+
+**2026-05-16.** `DROP TABLE IF EXISTS replays` removed from `migrate()`. `save_replay()`
+now INSERT by default (IntegrityError on dup), `overwrite=True` opt-in. `game_id`
+uses UUID instead of seed. 6 new tests. 484 tests pass.

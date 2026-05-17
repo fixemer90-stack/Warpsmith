@@ -1,0 +1,26 @@
+{
+  "faction:adeptus-mechanicus": {
+    "detachment_count": 7,
+    "display_name": "Adeptus-Mechanicus",
+    "faction_id": "faction:adeptus-mechanicus",
+    "unit_count": 39
+  },
+  "faction:core": {
+    "detachment_count": 0,
+    "display_name": "Core",
+    "faction_id": "faction:core",
+    "unit_count": 0
+  },
+  "faction:orks": {
+    "detachment_count": 10,
+    "display_name": "Orks",
+    "faction_id": "faction:orks",
+    "unit_count": 81
+  },
+  "faction:tau": {
+    "detachment_count": 5,
+    "display_name": "Tau",
+    "faction_id": "faction:tau",
+    "unit_count": 40
+  }
+}

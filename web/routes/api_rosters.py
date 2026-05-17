@@ -10,7 +10,12 @@ from backend.auth import User, get_current_user
 from backend.billing.plans import UserFeatures
 from backend.db.database import db
 from backend.loader.registry import registry as wiki
-from backend.state.roster import RosterState, validate_roster
+from backend.state.roster import (
+    RosterState,
+    calculate_squad_pts,
+    is_unit_eligible_warlord,
+    validate_roster,
+)
 
 router = APIRouter()
 
@@ -42,13 +47,7 @@ def _warlord_validation_errors(units: list[RosterUnit]) -> list[dict]:
         unit = wiki.get_unit(roster_unit.unit_name)
         if not unit:
             continue
-        tags = {str(t).lower() for t in (getattr(unit, "tags", []) or [])}
-        if (
-            unit.can_be_warlord
-            or unit.is_leader
-            or unit.category.lower() == "character"
-            or "character" in tags
-        ):
+        if is_unit_eligible_warlord(unit):
             candidates.append(roster_unit)
 
     if len(candidates) <= 1:
@@ -64,6 +63,33 @@ def _warlord_validation_errors(units: list[RosterUnit]) -> list[dict]:
             "detail": {"candidates": [u.unit_name for u in candidates]},
         }
     ]
+
+
+def _resolve_loadout_pts(unit_name: str, loadout_name: str | None) -> int:
+    """Resolve a loadout option name to its point cost from the wiki."""
+    if not loadout_name:
+        return 0
+    unit = wiki.get_unit(unit_name)
+    if not unit:
+        return 0
+    # Search extended_wargear_options for matching name
+    for option in getattr(unit, "extended_wargear_options", []) or []:
+        if isinstance(option, dict) and option.get("name") == loadout_name:
+            return int(option.get("points", 0))
+    return 0
+
+
+def _resolve_nob_pts(unit_name: str, nob_name: str | None) -> int:
+    """Resolve a Nob option name to its point cost from the wiki."""
+    if not nob_name:
+        return 0
+    unit = wiki.get_unit(unit_name)
+    if not unit:
+        return 0
+    for option in getattr(unit, "nob_options", []) or []:
+        if isinstance(option, dict) and option.get("name") == nob_name:
+            return int(option.get("points", 0))
+    return 0
 
 
 class RosterUpdate(BaseModel):
@@ -99,7 +125,17 @@ async def create_roster(data: RosterCreate, user: User = Depends(get_current_use
         wiki.load()
 
     units_list = [(u.unit_name, u.squad_size) for u in data.units]
-    validation = validate_roster(units_list, wiki.units, pts_limit=data.pts_limit)
+    loadout_pts = [_resolve_loadout_pts(u.unit_name, u.loadout) for u in data.units]
+    nob_pts = [_resolve_nob_pts(u.unit_name, u.nob_option) for u in data.units]
+    is_warlord_list = [bool(u.is_warlord) for u in data.units]
+    validation = validate_roster(
+        units_list,
+        wiki.units,
+        pts_limit=data.pts_limit,
+        loadout_pts=loadout_pts,
+        nob_pts=nob_pts,
+        is_warlord=is_warlord_list,
+    )
     warlord_errors = _warlord_validation_errors(data.units)
 
     if not validation.is_valid or warlord_errors:
@@ -126,7 +162,12 @@ async def create_roster(data: RosterCreate, user: User = Depends(get_current_use
     )
     db.commit()
 
-    return {"id": cur.lastrowid, **data.model_dump()}
+    return {
+        "id": cur.lastrowid,
+        **data.model_dump(),
+        "total_pts": validation.total_pts,
+        "squad_pts": validation.squad_pts,
+    }
 
 
 def _parse_roster_row(row: dict) -> dict:
@@ -135,6 +176,50 @@ def _parse_roster_row(row: dict) -> dict:
     if isinstance(data.get("units"), str):
         data["units"] = json.loads(data["units"])
     return data
+
+
+def _recalc_roster_total_pts(units_data: list[dict]) -> dict:
+    """Recalculate total_pts and squad_pts from stored roster units.
+
+    Uses the canonical calculate_squad_pts() formula with wiki lookups
+    for unit base points and squad_size min.  Lightweight — does not
+    run full validate_roster() (no warlord/copy/duplicate checks).
+
+    Returns dict with ``total_pts`` (int) and ``squad_pts`` (list[dict]).
+    """
+    total = 0
+    sq_pts: list[dict] = []
+    for u in units_data:
+        unit_name = u.get("unit_name", "")
+        squad_size = u.get("squad_size", 1)
+        unit = wiki.get_unit(unit_name)
+        if unit is None:
+            sq_pts.append({"unit_name": unit_name, "squad_pts": 0})
+            continue
+        sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
+        min_sq = sq["min"]
+        loadout_name = u.get("loadout")
+        nob_name = u.get("nob_option")
+        loadout_p = _resolve_loadout_pts(unit_name, loadout_name)
+        nob_p = _resolve_nob_pts(unit_name, nob_name)
+        pts = calculate_squad_pts(
+            points=unit.points,
+            min_squad=min_sq,
+            squad_size=squad_size,
+            loadout_pts=loadout_p,
+            nob_pts=nob_p,
+        )
+        total += pts
+        sq_pts.append(
+            {
+                "unit_name": unit_name,
+                "squad_size": squad_size,
+                "base_pts": unit.points,
+                "min_squad": min_sq,
+                "squad_pts": pts,
+            }
+        )
+    return {"total_pts": total, "squad_pts": sq_pts}
 
 
 @router.get("/rosters")
@@ -213,16 +298,27 @@ async def generate_roster(data: dict | None = None):
             epic_heroes.add(name)
 
         sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
-        cost = round((unit.points / max(sq["min"], 1)) * squad_size)
+        cost = calculate_squad_pts(
+            points=unit.points,
+            min_squad=sq["min"],
+            squad_size=squad_size,
+        )
 
         if total + cost > pts_limit:
             continue
 
-        selected.append({"unit_name": name, "squad_size": squad_size, "is_warlord": False})
+        selected.append(
+            {
+                "unit_name": name,
+                "squad_size": squad_size,
+                "is_warlord": False,
+                "squad_pts": cost,
+            }
+        )
         total += cost
         counts[name] = counts.get(name, 0) + 1
 
-        if unit.can_be_warlord:
+        if is_unit_eligible_warlord(unit):
             has_warlord = True
 
     if not has_warlord:
@@ -232,11 +328,13 @@ async def generate_roster(data: dict | None = None):
         warlords = [
             (n, u)
             for n, u in wiki.units.items()
-            if u.can_be_warlord and u.points > 0 and (not faction or u.faction == faction)
+            if is_unit_eligible_warlord(u)
+            and u.points > 0
+            and (not faction or u.faction == faction)
         ]
         if warlords:
             n, u = min(warlords, key=lambda item: item[1].points)
-            cost = u.points
+            cost = calculate_squad_pts(points=u.points, min_squad=1, squad_size=1)
             while selected and total + cost > pts_limit:
                 removed = selected.pop()
                 removed_unit = wiki.get_unit(removed["unit_name"])
@@ -246,17 +344,27 @@ async def generate_roster(data: dict | None = None):
                         "max": 1,
                         "step": 1,
                     }
-                    total -= round(
-                        (removed_unit.points / max(sq["min"], 1)) * removed["squad_size"]
+                    total -= calculate_squad_pts(
+                        points=removed_unit.points,
+                        min_squad=sq["min"],
+                        squad_size=removed["squad_size"],
                     )
             if total + cost <= pts_limit:
-                selected.insert(0, {"unit_name": n, "squad_size": 1, "is_warlord": True})
+                selected.insert(
+                    0,
+                    {
+                        "unit_name": n,
+                        "squad_size": 1,
+                        "is_warlord": True,
+                        "squad_pts": cost,
+                    },
+                )
                 total += cost
 
     if selected and not any(u.get("is_warlord") for u in selected):
         for item in selected:
             unit = wiki.get_unit(item["unit_name"])
-            if unit and unit.can_be_warlord:
+            if unit and is_unit_eligible_warlord(unit):
                 item["is_warlord"] = True
                 break
 
@@ -286,6 +394,10 @@ async def get_roster(roster_id: int, user: User = Depends(get_current_user)):
     data = dict(row)
     if isinstance(data.get("units"), str):
         data["units"] = json.loads(data["units"])
+    with contextlib.suppress(Exception):
+        wiki.load()
+    totals = _recalc_roster_total_pts(data["units"])
+    data.update(totals)
     return data
 
 
@@ -301,9 +413,18 @@ async def update_roster(roster_id: int, data: RosterCreate, user: User = Depends
     # Валидация как в create_roster
     with contextlib.suppress(Exception):
         wiki.load()
-
     units_list = [(u.unit_name, u.squad_size) for u in data.units]
-    validation = validate_roster(units_list, wiki.units, pts_limit=data.pts_limit)
+    loadout_pts = [_resolve_loadout_pts(u.unit_name, u.loadout) for u in data.units]
+    nob_pts = [_resolve_nob_pts(u.unit_name, u.nob_option) for u in data.units]
+    is_warlord_list = [bool(u.is_warlord) for u in data.units]
+    validation = validate_roster(
+        units_list,
+        wiki.units,
+        pts_limit=data.pts_limit,
+        loadout_pts=loadout_pts,
+        nob_pts=nob_pts,
+        is_warlord=is_warlord_list,
+    )
     warlord_errors = _warlord_validation_errors(data.units)
 
     if not validation.is_valid or warlord_errors:
@@ -331,7 +452,10 @@ async def update_roster(roster_id: int, data: RosterCreate, user: User = Depends
 
     # Return updated roster
     result = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_id,))
-    return _parse_roster_row(result)
+    row_data = _parse_roster_row(result)
+    row_data["total_pts"] = validation.total_pts
+    row_data["squad_pts"] = validation.squad_pts
+    return row_data
 
 
 @router.post("/rosters/{roster_id}/duplicate")
@@ -352,7 +476,12 @@ async def duplicate_roster(roster_id: int, user: User = Depends(get_current_user
     new_id = result.lastrowid
 
     duplicated = db.fetchone("SELECT * FROM rosters WHERE id = ?", (new_id,))
-    return _parse_roster_row(duplicated)
+    row_data = _parse_roster_row(duplicated)
+    with contextlib.suppress(Exception):
+        wiki.load()
+    totals = _recalc_roster_total_pts(row_data["units"])
+    row_data.update(totals)
+    return row_data
 
 
 @router.delete("/rosters/{roster_id}")

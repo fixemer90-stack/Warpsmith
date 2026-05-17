@@ -26,7 +26,7 @@ class RosterState:
     name: str
     faction: str
     total_pts: int
-    units: dict[str, "Unit"] = field(default_factory=dict)
+    units: list[tuple[str, "Unit"]] = field(default_factory=list)
     warlord_unit_name: str | None = None
     detachment: str = ""
 
@@ -93,10 +93,57 @@ class RosterValidationResult:
     errors: list[RosterValidationError] = field(default_factory=list)
     total_pts: int = 0
     total_models: int = 0
+    squad_pts: list[dict] = field(default_factory=list)  # per-squad PTS breakdown
 
     def add_error(self, code: str, message: str, **detail) -> None:
         self.errors.append(RosterValidationError(code, message, detail or None))
         self.is_valid = False
+
+
+# ── Shared helpers ─────────────────────────────────────────────────────────
+
+
+def is_unit_eligible_warlord(unit: "Unit") -> bool:
+    """Check if a unit can be a Warlord candidate.
+
+    Matches the validation eligibility predicate so generators and
+    validators use the same definition.
+    """
+    tag_set = {str(t).lower() for t in (getattr(unit, "tags", []) or [])}
+    return (
+        unit.can_be_warlord
+        or unit.is_leader
+        or unit.category.lower() == "character"
+        or "character" in tag_set
+    )
+
+
+# ── Canonical PTS formula ──────────────────────────────────────────────────
+
+
+def calculate_squad_pts(
+    points: int,
+    min_squad: int,
+    squad_size: int,
+    loadout_pts: int = 0,
+    nob_pts: int = 0,
+) -> int:
+    """Canonical squad total points formula.
+
+    Formula: (points / minSquad + loadoutPts) * squadSize + nobPts
+
+    Args:
+        points: Base points for minimum squad size (unit.points).
+        min_squad: Minimum squad model count (squad_size.min).
+        squad_size: Selected model count.
+        loadout_pts: Per-model upgrade/loadout points. Default 0.
+        nob_pts: Flat squad-level Nob upgrade cost. Default 0.
+
+    Returns:
+        Total points for the squad (integer).
+    """
+    pts_per_model = points / max(min_squad, 1)
+    return round((pts_per_model + loadout_pts) * squad_size + nob_pts)
 
 
 def validate_roster(
@@ -104,6 +151,9 @@ def validate_roster(
     unit_registry: dict[str, "Unit"],
     pts_limit: int | None = None,
     game_size: GameSize = GameSize.STRIKE_FORCE,
+    loadout_pts: list[int] | None = None,
+    nob_pts: list[int] | None = None,
+    is_warlord: list[bool] | None = None,
 ) -> RosterValidationResult:
     """Validate a roster against 10th edition rules.
 
@@ -113,6 +163,10 @@ def validate_roster(
         pts_limit: Maximum points allowed. Overrides game_size if set.
         game_size: Named game size (default Strike Force = 2000pts).
                   Ignored when pts_limit is explicitly provided.
+        loadout_pts: Optional per-unit loadout/upgrade points, same order as units.
+        nob_pts: Optional per-unit flat Nob upgrade cost, same order as units.
+        is_warlord: Optional per-unit is_warlord flags, same order as units.
+                    When None, auto-selects if exactly one eligible Character exists.
 
     Returns:
         RosterValidationResult with errors if any violations found.
@@ -121,12 +175,14 @@ def validate_roster(
         pts_limit = game_size.pts_limit
     result = RosterValidationResult()
     counts: dict[str, int] = {}
-    has_warlord = False
     total_pts = 0
     total_models = 0
     epic_heroes_seen: set[str] = set()
+    eligible_candidates: list[str] = []  # names of Warlord-eligible units
+    warlord_count = 0
+    warlord_on_non_character: list[str] = []
 
-    for unit_name, squad_size in units:
+    for i, (unit_name, squad_size) in enumerate(units):
         unit = unit_registry.get(unit_name)
         if unit is None:
             result.add_error(
@@ -181,16 +237,39 @@ def validate_roster(
             epic_heroes_seen.add(unit_name)
 
         # Warlord tracking
-        if unit.can_be_warlord:
-            has_warlord = True
+        is_eligible = is_unit_eligible_warlord(unit)
+        if is_eligible:
+            eligible_candidates.append(unit_name)
 
-        # Points — use squad_size from frontmatter for ptsPerModel
+        unit_is_warlord = bool(is_warlord[i]) if is_warlord and i < len(is_warlord) else False
+        if unit_is_warlord:
+            warlord_count += 1
+            if not is_eligible:
+                warlord_on_non_character.append(unit_name)
+
+        # Points — use canonical formula with per-unit upgrades
         sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
         min_sq = sq["min"]
-        pts_per_model = unit.points / max(min_sq, 1)
-        unit_pts = round(pts_per_model * squad_size)
+        unit_loadout = loadout_pts[i] if loadout_pts and i < len(loadout_pts) else 0
+        unit_nob = nob_pts[i] if nob_pts and i < len(nob_pts) else 0
+        unit_pts = calculate_squad_pts(
+            points=unit.points,
+            min_squad=min_sq,
+            squad_size=squad_size,
+            loadout_pts=unit_loadout,
+            nob_pts=unit_nob,
+        )
         total_pts += unit_pts
         total_models += squad_size * unit.model_count[1]
+        result.squad_pts.append(
+            {
+                "unit_name": unit_name,
+                "squad_size": squad_size,
+                "base_pts": unit.points,
+                "min_squad": min_sq,
+                "squad_pts": unit_pts,
+            }
+        )
 
     # PTS limit
     if total_pts > pts_limit:
@@ -201,12 +280,42 @@ def validate_roster(
             total_pts=total_pts,
         )
 
-    # Warlord requirement
-    if not has_warlord:
-        result.add_error(
-            "no_warlord",
-            "Roster must include at least one model that can be Warlord",
-        )
+    # ── Warlord validation ──
+    if warlord_on_non_character:
+        for name in warlord_on_non_character:
+            result.add_error(
+                "invalid_warlord",
+                f"'{name}' is not a Character and cannot be Warlord",
+                unit_name=name,
+            )
+
+    num_eligible = len(eligible_candidates)
+
+    if is_warlord is None:
+        # Auto mode: no explicit is_warlord flags passed
+        if num_eligible >= 2:
+            result.add_error(
+                "no_warlord",
+                f"Roster has {num_eligible} eligible Characters. Select exactly one Warlord.",
+            )
+        # 0 or 1 eligible: OK (auto-select)
+    else:
+        # Explicit is_warlord mode
+        if num_eligible == 0 and warlord_count > 0:
+            result.add_error(
+                "no_eligible_warlord",
+                "No eligible Characters in roster, but a Warlord is assigned",
+            )
+        elif num_eligible >= 1 and warlord_count == 0:
+            result.add_error(
+                "no_warlord",
+                "Roster must include exactly one Warlord",
+            )
+        elif num_eligible >= 1 and warlord_count > 1:
+            result.add_error(
+                "too_many_warlords",
+                f"Roster has {warlord_count} Warlords, expected exactly one",
+            )
 
     # Empty roster
     if not units:
@@ -224,9 +333,12 @@ def validate_squad_size(
 ) -> RosterValidationError | None:
     """Check that squad size is within the unit's allowed range.
 
-    Returns an error if out of range, None if valid.
+    Uses ``unit.squad_size`` from YAML frontmatter (authoritative),
+    NOT ``model_count``.  ``model_count`` describes per-model grouping
+    (e.g. swarms), not roster min/max.
     """
-    min_size, max_size = unit.model_count
+    sq = getattr(unit, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
+    min_size, max_size = sq["min"], sq["max"]
     if squad_size < min_size:
         return RosterValidationError(
             "squad_too_small",

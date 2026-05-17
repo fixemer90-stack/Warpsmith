@@ -1,7 +1,7 @@
 ---
 title: "CR-07 — Combat engine review"
 parent: code-review
-status: pending
+status: request-changes
 source: ../code-review-plan.md#cr-07
 tags: [requirements, code-review, atomic-review]
 ---
@@ -34,7 +34,7 @@ tags: [requirements, code-review, atomic-review]
 
 ## Execution Status
 
-**Status:** Pending
+**Status:** Request Changes
 
 **Review report target:** `docs/reviews/YYYY-MM-DD/CR-07-combat-engine-review.md`
 
@@ -53,11 +53,14 @@ tags: [requirements, code-review, atomic-review]
 - [ ] Findings report written
 - [ ] Triage status updated in `docs/requirements/code-review/code-review.md`
 
-### Result
+#
 
-- **Verdict:** Not started
-- **Critical:** 0 known before execution
-- **Important:** 0 known before execution
-- **Suggestions:** 0 known before execution
-- **Blocked by:** —
-- **Completed at:** —
+## Result
+
+- **Report:** `docs/reviews/2026-05-09/CR-07-combat-engine-review.md`
+- **Outcome:** Verdict: REQUEST CHANGES. Critical 3, Important 4, Suggestions 1. Natural 6 auto-wounds without Lethal Hits, Devastating Wounds bypasses all saves, AP applied twice, Sustained Hits does not add resolved hits.
+
+## Triage summary
+
+- [CR-07 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-07)
+- Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.

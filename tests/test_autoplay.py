@@ -9,6 +9,8 @@ from backend.engine.ai.autoplay import (
     AutoPlayResult,
     InvalidRosterError,
     TimeoutError,
+    _build_summary,
+    _roster_to_player_state,
     resolve_ai_for_faction,
     run_auto_game,
 )
@@ -51,12 +53,12 @@ def make_test_roster(
     """Create a test roster."""
     if units is None:
         units = [make_test_unit(f"Unit {i}", faction) for i in range(3)]
-    unit_dict = {u.name: u for u in units}
+    unit_list = [(u.name, u) for u in units]
     return RosterState(
         name=f"{faction} roster",
         faction=faction,
         total_pts=pts,
-        units=unit_dict,
+        units=unit_list,
         warlord_unit_name=units[0].name if units else None,
     )
 
@@ -202,6 +204,48 @@ def test_seed_zero_works():
         config=config,
     )
     assert result.error is None
+
+
+def test_roster_to_player_state_preserves_two_identical_units():
+    """Two identical roster entries get distinct runtime IDs and shared display labels."""
+    boyz = make_test_unit("Boyz", "orks")
+    roster = RosterState(
+        name="orks roster",
+        faction="orks",
+        total_pts=200,
+        units=[("Boyz", boyz), ("Boyz", boyz)],
+        warlord_unit_name="Boyz",
+    )
+
+    player = _roster_to_player_state(roster, "1", AutoPlayConfig())
+
+    assert set(player.units) == {"p1:Boyz:0", "p1:Boyz:1"}
+    assert [u.name for u in player.units.values()] == ["Boyz", "Boyz"]
+
+
+def test_build_summary_uses_runtime_ids_for_same_display_names():
+    """Same display names across players do not collide when logs carry runtime IDs."""
+    boyz_a = make_test_unit("Boyz", "orks")
+    boyz_b = make_test_unit("Boyz", "orks")
+    roster_a = make_test_roster(units=[boyz_a], faction="orks")
+    roster_b = make_test_roster(units=[boyz_b], faction="orks")
+    result = run_auto_game(roster_a, roster_b, config=AutoPlayConfig(seed=42, max_rounds=1))
+    state = result.game_state
+    assert state is not None
+
+    round_logs = [
+        {
+            "phase_logs": [
+                "Boyz hits Boyz for 3 damage [actor_id=p1:Boyz:0; target_id=p2:Boyz:0]",
+                "Boyz was destroyed [target_id=p2:Boyz:0]",
+            ]
+        }
+    ]
+
+    summary = _build_summary(state, round_logs, {})
+
+    assert summary["total_damage"] == {"1": 3.0}
+    assert summary["total_kills"] == {"1": 1}
 
 
 def test_melee_only_unit():

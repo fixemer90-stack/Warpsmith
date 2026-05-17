@@ -1,0 +1,962 @@
+{
+  "unit:adeptus-mechanicus:archaeopter-fusilave": {
+    "display_name": "Archaeopter Fusilave",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:399cbfaa2703ca6a77c6a46582f20ad61b4eedfd262c7f28af57f84a80fc138d"
+  },
+  "unit:adeptus-mechanicus:archaeopter-stratoraptor": {
+    "display_name": "Archaeopter Stratoraptor",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:366897667dd6e309d05376aceefeea198f4479bcc0fb3342b4f524b5bf47983e"
+  },
+  "unit:adeptus-mechanicus:archaeopter-transvector": {
+    "display_name": "Archaeopter Transvector",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:4d2f5afc2b2be80e34cc4332d406b3b5f0897e50e9e82003fee92fdffd7a3f6d"
+  },
+  "unit:adeptus-mechanicus:belisarius-cawl": {
+    "display_name": "Belisarius Cawl",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:129e187bd289f72d9eb9cb35a15ad58de9391d7ca14bd6d910bbc90779dc6f81"
+  },
+  "unit:adeptus-mechanicus:corpuscarii-electro-priests": {
+    "display_name": "Corpuscarii Electro-priests",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:d85a576caa15d0f9292d7ea811e6886feab130e0f5f392297898ba5528b2b9ae"
+  },
+  "unit:adeptus-mechanicus:cybernetica-datasmith": {
+    "display_name": "Cybernetica Datasmith",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:e946c41f24e8920d6274c7c474e377ba56128e91eccc2b91e3a100b24802445c"
+  },
+  "unit:adeptus-mechanicus:fulgurite-electro-priests": {
+    "display_name": "Fulgurite Electro-priests",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:070612ed950ceae2168fd469dde46710f37fedf0e11a799e934fad88c97caadc"
+  },
+  "unit:adeptus-mechanicus:hastarii-exterminators": {
+    "display_name": "Hastarii Exterminators",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:1e3adaf04ca6b761e7dae07f431b33caefc38247414a47e755a6bbefb6d42c6d"
+  },
+  "unit:adeptus-mechanicus:hastarii-fusiliers": {
+    "display_name": "Hastarii Fusiliers",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:fc59701242256a85eb4e7fb151a8421c48b1ea28ead8c5b5fdd9e1002f6767d9"
+  },
+  "unit:adeptus-mechanicus:ironstrider-ballistarii": {
+    "display_name": "Ironstrider Ballistarii",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:0f8f9e32cf001e3c1c754516146f3c9d90ccf6f63f36b7dbf56739e4a939aff5"
+  },
+  "unit:adeptus-mechanicus:kastelan-robots": {
+    "display_name": "Kastelan Robots",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:fdb513b1477a5cfa7b9fe59111cbb4afb48edd1b5d3e08dca3314531d9242686"
+  },
+  "unit:adeptus-mechanicus:kataphron-breachers": {
+    "display_name": "Kataphron Breachers",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:cb4bf27114395895e93e0ec62f212771454924c1029ebf95ad875165bdb92f0c"
+  },
+  "unit:adeptus-mechanicus:kataphron-destroyers": {
+    "display_name": "Kataphron Destroyers",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:74ad709b2ca01269104e0e5359138d82b466e30051f07a3302d874f349d0aa45"
+  },
+  "unit:adeptus-mechanicus:onager-dunecrawler": {
+    "display_name": "Onager Dunecrawler",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:442b8322aa296eeed36807a152cccd68f6dde4bebf13bcda04d53b348380c6c9"
+  },
+  "unit:adeptus-mechanicus:pteraxii-skystalkers": {
+    "display_name": "Pteraxii Skystalkers",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:25dfe3bdca622f0ca2a75dfa454523ac555b19064b9fe664d87e8650bfc21f87"
+  },
+  "unit:adeptus-mechanicus:pteraxii-sterylizors": {
+    "display_name": "Pteraxii Sterylizors",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:124c0ddce2d0cbde0d4ac97bbb1a1cca0d3b9381e0728d1a908c143ddc57a2e5"
+  },
+  "unit:adeptus-mechanicus:secutarii-hoplites": {
+    "display_name": "Secutarii Hoplites",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:18a3008ab2bc1ad75ae835e58b3e739951478072e0fa2ffa9ee88bd11fa8efe2"
+  },
+  "unit:adeptus-mechanicus:secutarii-peltasts": {
+    "display_name": "Secutarii Peltasts",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:ac746b16b039b6cdc1a0ec43c17befb49add2042a4177ab216308a3d2a6b2e35"
+  },
+  "unit:adeptus-mechanicus:serberys-raiders": {
+    "display_name": "Serberys Raiders",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:678ad53c2317b7e89eca65dc7f7e086cbde9089e29b20166713b4fd0842f2ff5"
+  },
+  "unit:adeptus-mechanicus:serberys-sulphurhounds": {
+    "display_name": "Serberys Sulphurhounds",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:eda9c08cee45f54fcd9572c52edf19fc07fb1e926d6ac827b47f4ff12016c884"
+  },
+  "unit:adeptus-mechanicus:servitor-battleclade": {
+    "display_name": "Servitor Battleclade",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:151ee6a2b3e1ea3009ae0aa37121878034f687c30104c25449f8829716d1c5d6"
+  },
+  "unit:adeptus-mechanicus:servitors": {
+    "display_name": "Servitors",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:8baf5708ba1e0362f91f722d8913766eafa6550059b9ccf184200f88862579db"
+  },
+  "unit:adeptus-mechanicus:sicarian-infiltrators": {
+    "display_name": "Sicarian Infiltrators",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:5aacb56ad30531f45a90d6790b7e85e4a644b60816c1974f9a03577875120911"
+  },
+  "unit:adeptus-mechanicus:sicarian-ruststalkers": {
+    "display_name": "Sicarian Ruststalkers",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:1788bb699b4c1aeb0aff23630f07a9fa4bccb795b604cb57962f5c9ef83bde0d"
+  },
+  "unit:adeptus-mechanicus:skitarii-marshal": {
+    "display_name": "Skitarii Marshal",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:5c16ef175c07150f5b491bfcc36d8cf21e8d868a2fe975f12bebe0f350c50fe9"
+  },
+  "unit:adeptus-mechanicus:skitarii-rangers": {
+    "display_name": "Skitarii Rangers",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:f16b2ed426c2ba85740040a741209fa31b1cdc0fb66716d07f0193e7644fe24a"
+  },
+  "unit:adeptus-mechanicus:skitarii-vanguard": {
+    "display_name": "Skitarii Vanguard",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:5934e7a14fef8eb347700016ea578a4318c0e310b995c8741992c5496fe62d62"
+  },
+  "unit:adeptus-mechanicus:skorpius-disintegrator": {
+    "display_name": "Skorpius Disintegrator",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:a43f38d9423104de2c899a47e35806465b23f15b48102f3180822b601c5764eb"
+  },
+  "unit:adeptus-mechanicus:skorpius-dunerider": {
+    "display_name": "Skorpius Dunerider",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:18c64175fb978941de6b00e58eb1d1e62efaf9044b797fcb54f414ab378f215b"
+  },
+  "unit:adeptus-mechanicus:sydonian-dragoons-with-radium-jezzails": {
+    "display_name": "Sydonian Dragoons With Radium Jezzails",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:2abf9793f0f675025ea350d61e62c2f773edee9412123a8377e2d4b511335f9b"
+  },
+  "unit:adeptus-mechanicus:sydonian-dragoons-with-taser-lances": {
+    "display_name": "Sydonian Dragoons With Taser Lances",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:82991bf11e0944dca758d04f55389543bfe5b95990cf5d4a0289fd558de8c42e"
+  },
+  "unit:adeptus-mechanicus:sydonian-skatros": {
+    "display_name": "Sydonian Skatros",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:11552493681862af9060e6849ab09d75a8eced43e6a22f1c154a29a04685f3d8"
+  },
+  "unit:adeptus-mechanicus:tech-priest-dominus": {
+    "display_name": "Tech-Priest Dominus",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:696c4f1d2a229b6df7db4ad73274448928689bc092394ead8c40eb1820111897"
+  },
+  "unit:adeptus-mechanicus:tech-priest-enginseer": {
+    "display_name": "Tech-Priest Enginseer",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:db219d39583aa86d3952d2c1c16ebf9926f9d27436bdb2c7578e098133b6d5f3"
+  },
+  "unit:adeptus-mechanicus:tech-priest-manipulus": {
+    "display_name": "Tech-Priest Manipulus",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:6e6457a714fb8ed6eed7f50d5c0e4424e23ea9ba0d8caa49e05ba0f0580f1c28"
+  },
+  "unit:adeptus-mechanicus:technoarcheologist": {
+    "display_name": "Technoarcheologist",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:49aa449b0927d03acd8f922455958e38ed1edee2e25def2cd90ed5a97dbabd5e"
+  },
+  "unit:adeptus-mechanicus:terrax-pattern-termite": {
+    "display_name": "Terrax-pattern Termite",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:767e47e1a977a1dc365c07995d158e7b702b3e79977eb5efc6f9184ff4fc02bd"
+  },
+  "unit:adeptus-mechanicus:thulia-ghuld": {
+    "display_name": "Thulia Ghuld",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:a93a49f6e16a742c4a55d3c9bde0b4691df5dfbd6ee82911b277b318941a7f58"
+  },
+  "unit:adeptus-mechanicus:x-101": {
+    "display_name": "X-101",
+    "faction_id": "faction:adeptus-mechanicus",
+    "file": "units/adeptus-mechanicus.json",
+    "hash": "sha256:3b22b2c9f60472f03e89a00381b6e43807e097c926d587315259f39cd98b9aa3"
+  },
+  "unit:orks:attack-fighta": {
+    "display_name": "Attack Fighta",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:7e417a5040c57937d8e8be5404c1824534e0a350a8945e9265065a41a63cbf0c"
+  },
+  "unit:orks:battlewagon": {
+    "display_name": "Battlewagon",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:591f75a88c7b2757db42f7616377b3c717171a624e05ee66600e79265ec75e5b"
+  },
+  "unit:orks:beast-snagga-boyz": {
+    "display_name": "Beast Snagga Boyz",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:8ffb94e66e99a772a31f8e64c2db46cbd88c64f68c6f932c6ccd605dd0173786"
+  },
+  "unit:orks:beastboss": {
+    "display_name": "Beastboss",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:4cf98bd65152251e607d7abef91c34cd7fd6a22baf9f9bdc6e618034395fc79d"
+  },
+  "unit:orks:beastboss-on-squigosaur": {
+    "display_name": "Beastboss On Squigosaur",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:ca0cce61503353bc5b81889bd82fde2f8a247a0c2646c69c9a7b19de2086f731"
+  },
+  "unit:orks:big-gunz": {
+    "display_name": "Big Gunz",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:f0aa0a2cc9e7fe3707ef4e2f8e233452a2671c39262410e9ea7c68538f3b329b"
+  },
+  "unit:orks:big-mek": {
+    "display_name": "Big Mek",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:f8e2913b45d400042b4a15e2a85277d3b5a3a6b8fa954bf9431ead23b6ea636f"
+  },
+  "unit:orks:big-mek-in-mega-armour": {
+    "display_name": "Big Mek In Mega Armour",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:e8baef6cf8e828778da8fe492aa9f347f27568ecf8bc29b98a7c6616503ad55e"
+  },
+  "unit:orks:big-mek-on-warbike": {
+    "display_name": "Big Mek on Warbike",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:bf767803ab5db7bf793f80e82ffee223affc0d47d5fec5a98c391ad5c24b4707"
+  },
+  "unit:orks:big-mek-with-kustom-force-field": {
+    "display_name": "Big Mek with Kustom Force Field",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:e5bb907a2a0e5988c41f1e8905ede9b5e55d789a7b3ba7851f30b2ea12f93c50"
+  },
+  "unit:orks:big-mek-with-shokk-attack-gun": {
+    "display_name": "Big Mek With Shokk Attack Gun",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:505ac56062313732564196481e4e19a08b3a43ce7d1ddd5b24f75ca4469c1fbb"
+  },
+  "unit:orks:blitza-bommer": {
+    "display_name": "Blitza-bommer",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:2bcc3d437dc300b85058b805c86908a25783441b6b0a8a8787221f725e01f8a5"
+  },
+  "unit:orks:boomdakka-snazzwagon": {
+    "display_name": "Boomdakka Snazzwagon",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:04689bcf6e3cd8e9d2c000390f7d39ca99c389edd69c1a47febaaf321e905ca2"
+  },
+  "unit:orks:boss-snikrot": {
+    "display_name": "Boss Snikrot",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:2f87007606d9425915b20e6e818e2d797b2454e4a4b43d61f38fcc984ea67d39"
+  },
+  "unit:orks:boss-zagstruk": {
+    "display_name": "Boss Zagstruk",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:57405b068b89a1a11c8db24af26f657262ea7751d50a4c816fbf9743ce62d8dd"
+  },
+  "unit:orks:boyz": {
+    "display_name": "Boyz",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:87fa4029cda886dfcbf3a71386aa8d388b703981540000a8a578e50215379d6f"
+  },
+  "unit:orks:breaka-boyz": {
+    "display_name": "Breaka Boyz",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:3d0eb33fe8f9cbbedb3e3d8e363bb9798e577c66cd04dd80e0dd998438c4a38a"
+  },
+  "unit:orks:burna-bommer": {
+    "display_name": "Burna-bommer",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:ee9282ffbb3df8a614b6fa3049ffe3c44189e959647916d525590f76bc53906e"
+  },
+  "unit:orks:burna-boyz": {
+    "display_name": "Burna Boyz",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:88fdf59d6572033360c1febe2065e4dca1f9ea8fbcfb6f98353741ee6054de6e"
+  },
+  "unit:orks:chinork-warkopta": {
+    "display_name": "Chinork Warkopta",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:c63c23bc12e9cda0c80153bfa5d09ae38acb2aaf5fa8efc9593b01bca43b5631"
+  },
+  "unit:orks:da-red-gobbo": {
+    "display_name": "Da Red Gobbo",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:4ff7911c91c06e09d428b17044114d6e504c30619140369ae0315aa0f52de184"
+  },
+  "unit:orks:dakkajet": {
+    "display_name": "Dakkajet",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:40f0e6f7ae2a1acfe40bc4ed751bd852c86723b2855280fa49a369b4dbee68d7"
+  },
+  "unit:orks:deff-dread": {
+    "display_name": "Deff Dread",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:c6d6271ddeffc9a2cba1ddcda15468f67162a5b6415a19810b58cfe236d92fbd"
+  },
+  "unit:orks:deff-rolla-battle-fortress": {
+    "display_name": "Deff Rolla Battle Fortress",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:9c665231feccd94a6d4ad20891b485f391454a405daddb25c7b2691aef550e47"
+  },
+  "unit:orks:deffkilla-wartrike": {
+    "display_name": "Deffkilla Wartrike",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:de3a26f9cdf40ea91d2559fe37a71680d86d4a0e3ef76daaf2c7d942e2cb0e0c"
+  },
+  "unit:orks:deffkoptas": {
+    "display_name": "Deffkoptas",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:ab213a930ed4e9599e0a19006a076e5f9152512964e5ac7b85dab1cc4ca614d2"
+  },
+  "unit:orks:deffkoptas-with-big-shootas": {
+    "display_name": "Deffkoptas with Big Shootas",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:a94ff0900aee69e00116999483cb6fc956fae68aaab9f2854bce3e8b74330e20"
+  },
+  "unit:orks:fighta-bommer": {
+    "display_name": "Fighta-Bommer",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:675e5190a3fc0ec85949f4077bde9adb6e1460e5db3a8dc6ef747e49eaa3cf34"
+  },
+  "unit:orks:flash-gitz": {
+    "display_name": "Flash Gitz",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:37de2e6261590df39f6e318ae66d3b7f9ceb20c6a82c305cd14ab954cd216d1b"
+  },
+  "unit:orks:gargantuan-squiggoth": {
+    "display_name": "Gargantuan Squiggoth",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:5511b1447b4829d5bff4295cc2e9c33864e8b3c867fcf0f169514210ad2836cf"
+  },
+  "unit:orks:ghazghkull-thraka": {
+    "display_name": "Ghazghkull Thraka",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:bbf43638b4c791df6b473ab07487358e1da418030f17bf3bd54b1d4824cf86d9"
+  },
+  "unit:orks:gorkanaut": {
+    "display_name": "Gorkanaut",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:1fdc23121ae5860c062ef0394f77fced621d24c50bd3c794c42242ef1385405a"
+  },
+  "unit:orks:gretchin": {
+    "display_name": "Gretchin",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:4f89c157b9ae59acf82e76753972eb377c63272b10f139626a263963789357b7"
+  },
+  "unit:orks:grot-bomm-launcha": {
+    "display_name": "Grot Bomm Launcha",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:57da716e3a329978e1195e8bd57284465af74efce1fad691f23988549ca76082"
+  },
+  "unit:orks:grot-mega-tank": {
+    "display_name": "Grot Mega-Tank",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:a1171504a75f47358694e9ef0612bf014217c06dc29b27a949134d1b48fd66f6"
+  },
+  "unit:orks:grot-tanks": {
+    "display_name": "Grot Tanks",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:713f43b867255d400c814406be1571c6df6b6055b54e5150aa50fe3457b13cee"
+  },
+  "unit:orks:hunta-rig": {
+    "display_name": "Hunta Rig",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:db63d70a12b7698b3971cc49b7ee73ac1e711d1e43a0d530a02db0d845f53eef"
+  },
+  "unit:orks:kannonwagon": {
+    "display_name": "Kannonwagon",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:f95d69f0b5fd1716f645ec619645985b1217ce8ca8d89975a04c8be289e46fb3"
+  },
+  "unit:orks:kaptin-badrukk": {
+    "display_name": "Kaptin Badrukk",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:a07a7ec697977e7a202bfcbfe2039bd44071069afcfe1d249dcd6b29dcad8494"
+  },
+  "unit:orks:kill-krusha": {
+    "display_name": "Kill Krusha",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:887126f7b1ef3e6007d1ce66563f31e12bc374866bcd4d90763ff55140538353"
+  },
+  "unit:orks:kill-rig": {
+    "display_name": "Kill Rig",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:a6f8f868483e03d05d8a8d928b0be9fc3a16b387d411f71996dfdc960178d1ae"
+  },
+  "unit:orks:kill-tank": {
+    "display_name": "Kill Tank",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:622274638e8c7f0a350b344106b86153407bfea93a503f6f46170647afbac946"
+  },
+  "unit:orks:killa-kans": {
+    "display_name": "Killa Kans",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:919f6d9690a1a059d6b0b6d13b51ae690d8141932548172d0b86cccd338b8820"
+  },
+  "unit:orks:kommandos": {
+    "display_name": "Kommandos",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:a8e16ea5d85cf75258a15a6de1d4f4602c1fde7f1dd95799ea4b8d96affcb28c"
+  },
+  "unit:orks:kustom-boosta-blasta": {
+    "display_name": "Kustom Boosta-blasta",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:ba46d597eaf4365dcc7d6e8eb34300f3f8082962c76870bc0b8edf25f6f5a1d4"
+  },
+  "unit:orks:lifta-wagon": {
+    "display_name": "Lifta Wagon",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:489fd9d59da6440b265c8fe4d07dff180067d8ee04431c8f58b87a005fe766ef"
+  },
+  "unit:orks:lootas": {
+    "display_name": "Lootas",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:ba2df803d12b20205e8eb80cc86d35a4f0e8ef52c7ec75dd3fc4ba8def18a353"
+  },
+  "unit:orks:mad-dok-grotsnik": {
+    "display_name": "Mad Dok Grotsnik",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:b70b17851fab4a7fb6efe8a92a8dd8d4dd1abe2cf9cb84a9a7db543b815554d9"
+  },
+  "unit:orks:meganobz": {
+    "display_name": "Meganobz",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:049ea105458210d7199fe9a89f1fe5a350c92efb31727230f26c46cb0e509e79"
+  },
+  "unit:orks:megatrakk-scrapjet": {
+    "display_name": "Megatrakk Scrapjet",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:65f3bcee06b820d5d1be4992e3865e289586ba69d81df87361d3638bcffba7a0"
+  },
+  "unit:orks:mek": {
+    "display_name": "Mek",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:9aabace0dd9079933a7a3a750f8bd44f5e7a60cd83dbdff2a7e429d00b1b797e"
+  },
+  "unit:orks:mek-gunz": {
+    "display_name": "Mek Gunz",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:582efd7e445c94a7163ade99f6412c4a3acece300319f70a22cecfb60203136f"
+  },
+  "unit:orks:mekboy-workshop": {
+    "display_name": "Mekboy Workshop",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:6c01955bad520254cc1b99959e17ef0b8172a76b25ccfeee15cc1dc5f52d2957"
+  },
+  "unit:orks:morkanaut": {
+    "display_name": "Morkanaut",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:693db71a859e230508a04f51ba3bb329c7d8460fc96677c743062a1083384ecc"
+  },
+  "unit:orks:mozrog-skragbad": {
+    "display_name": "Mozrog Skragbad",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:4866bd4369cc21b7496b08a89e8989f4f3203a1427632c3c8fbbc9457ab08014"
+  },
+  "unit:orks:nob-with-waaagh-banner": {
+    "display_name": "Nob with Waaagh! Banner",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:fd23187359f73142b207264a593e1a456926a5e623047b428370fd59454214d1"
+  },
+  "unit:orks:nobz": {
+    "display_name": "Nobz",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:1ca60dfb2d55b28b3e25b30e4ae8667e5df88c2c9b9cc95b07f7a530976a7ed3"
+  },
+  "unit:orks:painboss": {
+    "display_name": "Painboss",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:1df8b16bb89529c859f247887ffa0e51a7a8e615cf104a54e97c9c19d3eb91ad"
+  },
+  "unit:orks:painboy": {
+    "display_name": "Painboy",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:48087b536eda56c0fb6fd0453da99b0031ba217fa5e5b82df58a732bb0a1e8d6"
+  },
+  "unit:orks:painboy-on-warbike": {
+    "display_name": "Painboy on Warbike",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:0827a2c4dfdb21c519bbfec0f2b531fa96da08c4efa3bf97e7718d9918786305"
+  },
+  "unit:orks:rukkatrukk-squigbuggy": {
+    "display_name": "Rukkatrukk Squigbuggy",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:910d50687cceabaae136e9314f940b5138ec0c0dcdb77d41ab2c3a151fba7a50"
+  },
+  "unit:orks:shokkjump-dragsta": {
+    "display_name": "Shokkjump Dragsta",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:c3f76e495599bed2db25013911eac74ec42fe414b0cd35896e4551dd51db29c4"
+  },
+  "unit:orks:skorchas": {
+    "display_name": "Skorchas",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:6c70b9f6433074583e7515ea20055f0e61724b3962dbfa21e794a165a7efa40e"
+  },
+  "unit:orks:squigboss": {
+    "display_name": "Squigboss",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:d7d3cfd83321ace5c2b35f2d76cef86fa30ddfa117eee0f60e825fa7fc4740c6"
+  },
+  "unit:orks:squiggoth": {
+    "display_name": "Squiggoth",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:b88e5bbb030e3ded1e0cf7359f9492a665a54a4ad512a068ad8a332ff3b2c293"
+  },
+  "unit:orks:squighog-boyz": {
+    "display_name": "Squighog Boyz",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:25618a78e8422c85589d29258d10a862df44c912fa8e129a71a1d4a88477bcf5"
+  },
+  "unit:orks:stompa": {
+    "display_name": "Stompa",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:efe7b0a483b4d4683e71450e3c09945e3157f59faefe1625e734c43c528a68b1"
+  },
+  "unit:orks:stormboyz": {
+    "display_name": "Stormboyz",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:5dbc2674eb1becc21ef24b7e297296c563cb758010fe9f2707d5175fc98a7c27"
+  },
+  "unit:orks:tankbustas": {
+    "display_name": "Tankbustas",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:0c68b1e57528ef87054916654bda064b555a662e074e33efc41d4f538a1a4304"
+  },
+  "unit:orks:trukk": {
+    "display_name": "Trukk",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:b5fed24a9585141d6e0e185260b53924bbf2f10a9482eb433a0b6aa2e7e84d6d"
+  },
+  "unit:orks:ufthak-blackhawk": {
+    "display_name": "Ufthak Blackhawk",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:a2535a38c8e5ce00b89cb815a1f9c0945b53651ea09feaf4c0862cdeabbb1032"
+  },
+  "unit:orks:warbikers": {
+    "display_name": "Warbikers",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:3db710a347b0d6bddc415f4204cb780cc942b26041e9477afe1373a8c4ce9df4"
+  },
+  "unit:orks:warboss": {
+    "display_name": "Warboss",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:7a4c99380612e573f8445cf7c62fc800ab3b61d9e86599d27d0a665a71d89e86"
+  },
+  "unit:orks:warboss-in-mega-armour": {
+    "display_name": "Warboss In Mega Armour",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:7aefb02a90b8a3a5abed14c169e65362b886ab2eab967bed31b4ee2a6b42ec41"
+  },
+  "unit:orks:warbuggies": {
+    "display_name": "Warbuggies",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:9177bc2d487d7dc62ec830cefe82f0f15187ff5952451263dc58f7fb2fb5b5ca"
+  },
+  "unit:orks:wartrakks": {
+    "display_name": "Wartrakks",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:c6f593a9b754a689cd62a45cec4fe861fc114c535bbbee309d790325ca76cf32"
+  },
+  "unit:orks:wazbom-blastajet": {
+    "display_name": "Wazbom Blastajet",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:46ba2471dcc83a74e5bae3a71499f6be2b9298477b761409e5506681178bb560"
+  },
+  "unit:orks:wazdakka-gutsmek": {
+    "display_name": "Wazdakka Gutsmek",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:20b38a137968f6e1a9a1c7c4a40ff81b99744416540aef1f13d231d11f6d1484"
+  },
+  "unit:orks:weirdboy": {
+    "display_name": "Weirdboy",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:41aea9a6e838d974572d9947a052663045b007e4e0c86d4f17e2386653e43fb7"
+  },
+  "unit:orks:wurrboy": {
+    "display_name": "Wurrboy",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:c5f06050ef57cbc540a3c0c407a07bcbe124c6b59e22ab1166153e7002bff71b"
+  },
+  "unit:orks:zodgrod-wortsnagga": {
+    "display_name": "Zodgrod Wortsnagga",
+    "faction_id": "faction:orks",
+    "file": "units/orks.json",
+    "hash": "sha256:f4f3a1f54a20ea5a1710c510fdbdda3fe6b2d52aa01288c38ac2131ba315344b"
+  },
+  "unit:tau:aunshi": {
+    "display_name": "Aun'Shi",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:8e6ab33cac7f76110279491d8bb58dbdacf9a218c513deaaf3d5d3d8e5294fb7"
+  },
+  "unit:tau:aunva": {
+    "display_name": "Aun'Va",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:42b606afb6c379e4cbf8433eaff7c258942bddb14a14d9dc8b546a065673c797"
+  },
+  "unit:tau:ax-1-0-tiger-shark": {
+    "display_name": "AX-1-0 Tiger Shark",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:5ed10e215c4d030132b41f53fd9e9cd5d5c20ebecdf8de09b9c6c1a9fd99426f"
+  },
+  "unit:tau:barracuda": {
+    "display_name": "Barracuda",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:9636b845082ed70e2ee278f203997c1852f04a3f2a5b0feae740a489d0d05a0e"
+  },
+  "unit:tau:breacher-team": {
+    "display_name": "Breacher Team",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:69b5943612290e5668d1d7af9b342b835d854371d4c1f1a1f7349162475490e6"
+  },
+  "unit:tau:broadside-battlesuits": {
+    "display_name": "Broadside Battlesuits",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:9329e97a883cf58cbecf78f0d22868c0696576b0a517d0bbc31725d4c42c870f"
+  },
+  "unit:tau:cadre-fireblade": {
+    "display_name": "Cadre Fireblade",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:fec27a9dba7c1e67c8fbdabf47fb72aa3eab0ce785ddf3b971d9120de9a516dd"
+  },
+  "unit:tau:commander-farsight": {
+    "display_name": "Commander Farsight",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:754e6f52eaf4ec4c3a4b9024b677966999cdf814870d985f6272a3243fbf1932"
+  },
+  "unit:tau:commander-in-coldstar-battlesuit": {
+    "display_name": "Commander In Coldstar Battlesuit",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:05d0b7941a7f5a60079a4f959dcda0159ac4bebe00daa8a4682917ea65f39ee8"
+  },
+  "unit:tau:commander-in-enforcer-battlesuit": {
+    "display_name": "Commander In Enforcer Battlesuit",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:69ff701d6752cc6647ae1dacf083c6a2a2c86cb16720e04402c6a2174579eeaa"
+  },
+  "unit:tau:commander-shadowsun": {
+    "display_name": "Commander Shadowsun",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:242788973514387e7c4f3dfa94cb7d807fefb5dc84d658ecbd92742d4261d605"
+  },
+  "unit:tau:crisis-battlesuits": {
+    "display_name": "Crisis Battlesuits",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:7d600f7d8f25b5e019be65bf9ae495972f082b2c0e926e17f3f440c8c0f4a646"
+  },
+  "unit:tau:crisis-fireknife": {
+    "display_name": "Crisis Fireknife",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:2cee87c4a8e601f5669a649cb12457eed6f60d722f4c8d6db0696d9e5e7a4cfa"
+  },
+  "unit:tau:crisis-starscythe": {
+    "display_name": "Crisis Starscythe",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:16cb4b64d857ca8b269e28c94d9bdd53f23eb95c86798f50e07572b7e4f8cf55"
+  },
+  "unit:tau:crisis-sunforge": {
+    "display_name": "Crisis Sunforge",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:da848638b5f98f76361bf7bc40dcd4014031aec088627ae197c05237bb3acbb2"
+  },
+  "unit:tau:darkstrider": {
+    "display_name": "Darkstrider",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:ec81689e594cf1bf3e82ff25f9de9e5a3ba264dcb4f001c6242a838d3e8d1fa1"
+  },
+  "unit:tau:devilfish": {
+    "display_name": "Devilfish",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:0c857b75a2b05d9c084865c0a60fc387e5724e0a4cb5242169082bc4fc881f3a"
+  },
+  "unit:tau:ethereal": {
+    "display_name": "Ethereal",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:a5fab637edd7bbfe1523ed3330c7157ee2e7419d647176179f961ceb3c10283c"
+  },
+  "unit:tau:firesight-marksman": {
+    "display_name": "Firesight Marksman",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:32976078bce2fd4f66847773a08e11eb13807dd8027212db1dd9d5459dd4f09a"
+  },
+  "unit:tau:ghostkeel-battlesuit": {
+    "display_name": "Ghostkeel Battlesuit",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:29b7531f4bccdecfaadd46364fe04bcf9b98999948395f815d58d16dcdc20d41"
+  },
+  "unit:tau:hammerhead-gunship": {
+    "display_name": "Hammerhead Gunship",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:3f4fa343a99629bccb292e196f69ca10cb16214b00575e4af79dbf4d09494d9e"
+  },
+  "unit:tau:kroot-carnivores": {
+    "display_name": "Kroot Carnivores",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:e6c10ad6304f7411b547cd131d3ca5ce6dfc6b9e992edaacf7c866051098e114"
+  },
+  "unit:tau:kroot-farstalkers": {
+    "display_name": "Kroot Farstalkers",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:e4258c29fde64734d7726c75ea39f78c81143659ee66179653925a73ddb28210"
+  },
+  "unit:tau:kroot-hounds": {
+    "display_name": "Kroot Hounds",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:a6f8792d8d6e082cec773421d1333c57990c40be182aaeb6f28929c272ad921d"
+  },
+  "unit:tau:kroot-lone-spear": {
+    "display_name": "Kroot Lone-spear",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:2af346f35572e2ce6081a96a2865cb591e1f2c3d9af70d508f5107d413de2f89"
+  },
+  "unit:tau:kroot-war-shaper": {
+    "display_name": "Kroot War Shaper",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:37a7694d9ffb2c523ead2071854ca9eb6c27d5c616094e3f2dc8928599034f5d"
+  },
+  "unit:tau:krootox-rampagers": {
+    "display_name": "Krootox Rampagers",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:10758fda47ef325534e9cf729a6af2792e555a4602b533259dcdc8db9c1cbc56"
+  },
+  "unit:tau:longstrike": {
+    "display_name": "Longstrike",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:4ad48ca939b767890706b3ab9181f8e3fdc7a287cd4c352eeaa0e12b177750f3"
+  },
+  "unit:tau:pathfinder-team": {
+    "display_name": "Pathfinder Team",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:6f72203bd5ba1cac2522f0b9792240236dd8df0d0772aca69ff7013e10970aa6"
+  },
+  "unit:tau:piranha": {
+    "display_name": "Piranha",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:e5cd4552a96069d90da1dec11a5be4c3f1ba9fb99adcf1598814dbbc6b1a1496"
+  },
+  "unit:tau:remora-stealth-drones": {
+    "display_name": "Remora Stealth Drones",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:e6e56bd6750a406ba7a26b8f45af34875b79a7ed2e4e1992cb664691bec6c8ff"
+  },
+  "unit:tau:riptide-battlesuit": {
+    "display_name": "Riptide Battlesuit",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:896ed959fe17adba522172ae787372675bd5fbdd3234d2b6ab4c6147774e44aa"
+  },
+  "unit:tau:sky-ray-gunship": {
+    "display_name": "Sky Ray Gunship",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:6933c72efe97bfacd56539b0c6011ea660af2a6bc51672bccc15d12daae2fa25"
+  },
+  "unit:tau:stealth-battlesuits": {
+    "display_name": "Stealth Battlesuits",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:2c44325031b416cf06c69d903dfc9dc21c27bf2d652a166124bb49ddbcd3a00e"
+  },
+  "unit:tau:stormsurge": {
+    "display_name": "Stormsurge",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:c56b3b18c8fa63330468559440e71a2d93d5e0250bbe7dcb5177fea03709c3de"
+  },
+  "unit:tau:strike-team": {
+    "display_name": "Strike Team",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:f0d5d0d2fba81fc357f3d2e4a36a477681556824cd2477da83288883c1e3eafd"
+  },
+  "unit:tau:tactical-drones": {
+    "display_name": "Tactical Drones",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:9e18a75ebba9898eec641be16f316fb2bc647b3f10d2bbe14fd55ef0cbf7fe32"
+  },
+  "unit:tau:tidewall-defence-line": {
+    "display_name": "Tidewall Defence Line",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:c4d81ac5a2a2951c3882c776e98a55c91670010c21f75a3d3ffddb8b6ac7cc6c"
+  },
+  "unit:tau:tiger-shark": {
+    "display_name": "Tiger Shark",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:e7e7a8a2f6ffd8374c92ae2cb86746acf7d78063b23363dc3186116b7a3be3ee"
+  },
+  "unit:tau:vespid-stingwings": {
+    "display_name": "Vespid Stingwings",
+    "faction_id": "faction:tau",
+    "file": "units/tau.json",
+    "hash": "sha256:f1468dfbb10391f0bd5423a73b536e0ee46312a661a44cb99b8b3e275889479a"
+  }
+}

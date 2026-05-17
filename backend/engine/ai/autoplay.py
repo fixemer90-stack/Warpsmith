@@ -26,6 +26,7 @@ from backend.model.unit import Unit
 from backend.state.game_state import GamePhase, GameState, PlayerState, UnitState
 from backend.state.map import BattlefieldMap, TerrainType
 from backend.state.roster import RosterState
+from backend.state.runtime_id import make_runtime_unit_id, strip_event_identity
 
 
 class AutoPlayError(Exception):
@@ -172,16 +173,26 @@ def _create_default_map(seed: int | None = None, pts_limit: int = 2000) -> Battl
 def _roster_to_player_state(
     roster: RosterState, player_id: str, config: AutoPlayConfig
 ) -> PlayerState:
-    """Convert a RosterState (data) to a PlayerState (runtime game state)."""
+    """Convert a RosterState (data) to a PlayerState (runtime game state).
+
+    Generates stable runtime unit IDs per the contract:
+        p<player_num>:<canonical_unit_name>:<occurrence_index>
+    """
     units: dict[str, UnitState] = {}
-    for unit_name, unit_model in roster.units.items():
-        # Infer squad size from model_count
-        min_size, _ = unit_model.model_count
-        # Use min size for test simplicity; could be parameterized
-        squad_size = min_size
+    # Track occurrence indices for duplicate unit names within a roster
+    name_counts: dict[str, int] = {}
+    for unit_name, unit_model in roster.units:
+        # Use squad_size from frontmatter (authoritative), not model_count
+        sq = getattr(unit_model, "squad_size", None) or {"min": 1, "max": 1, "step": 1}
+        squad_size = sq["min"]
+
+        # Generate stable runtime unit ID
+        idx = name_counts.get(unit_name, 0)
+        runtime_id = make_runtime_unit_id(player_id, unit_name, idx)
+        name_counts[unit_name] = idx + 1
 
         unit_state = UnitState(
-            unit_id=unit_name,
+            unit_id=runtime_id,
             name=unit_name,
             faction=roster.faction,
             position=(0, 0),
@@ -193,7 +204,7 @@ def _roster_to_player_state(
             objective_control=unit_model.objective_control,
             is_warlord=(unit_name == roster.warlord_unit_name),
         )
-        units[unit_name] = unit_state
+        units[runtime_id] = unit_state
 
     return PlayerState(
         player_id=player_id,
@@ -204,65 +215,104 @@ def _roster_to_player_state(
 
 
 def _build_unit_models(roster_a: RosterState, roster_b: RosterState) -> dict[str, Unit]:
-    """Build a flat dict of unit_id → Unit model for both rosters."""
+    """Build a flat dict of runtime_unit_id → Unit model for both rosters.
+
+    Uses runtime unit IDs as keys (p1:<unit_name>:<idx>) so that
+    identical unit names across players do not collide.
+    """
     models: dict[str, Unit] = {}
-    for unit_name, unit_model in roster_a.units.items():
-        models[unit_name] = unit_model
-    for unit_name, unit_model in roster_b.units.items():
-        models[unit_name] = unit_model
+    # Track occurrence indices per player
+    counts_a: dict[str, int] = {}
+    counts_b: dict[str, int] = {}
+    for unit_name, unit_model in roster_a.units:
+        idx = counts_a.get(unit_name, 0)
+        rt_id = make_runtime_unit_id("1", unit_name, idx)
+        models[rt_id] = unit_model
+        counts_a[unit_name] = idx + 1
+    for unit_name, unit_model in roster_b.units:
+        idx = counts_b.get(unit_name, 0)
+        rt_id = make_runtime_unit_id("2", unit_name, idx)
+        models[rt_id] = unit_model
+        counts_b[unit_name] = idx + 1
     return models
 
 
 def _build_summary(
     state: GameState, round_logs: list[dict[str, Any]], _placements: dict[str, list[Any]]
 ) -> dict[str, Any]:
-    """Построить сводку симуляции из game_log текстов."""
+    """Построить сводку симуляции из game_log текстов.
+
+    Uses the runtime-ID identity suffix (``[actor_id=...; target_id=...]``)
+    added by ``format_event_identity()`` to attribute events correctly even
+    when display names collide across players.
+    """
     import re
 
     total_kills: dict[str, int] = {}
     total_damage: dict[str, float] = {}
     charge_count: dict[str, int] = {}
 
-    # Build unit_name → player_id map
-    unit_owner: dict[str, str] = {}
+    # Build runtime_id → player_id map (authoritative — runtime IDs are unique)
+    unit_owner_by_rtid: dict[str, str] = {}
+    # Fallback: display_name → player_id for log lines without identity suffix
+    unit_owner_by_name: dict[str, str] = {}
     for pid, player in state.players.items():
-        for uname in player.units:
-            unit_owner[uname] = pid
+        for unit_state in player.units.values():
+            rtid = getattr(unit_state, "unit_id", unit_state.name)
+            unit_owner_by_rtid[rtid] = pid
+            # Only set name→pid if not already claimed (no collision resolution needed
+            # when identity suffix is present; fallback for simple logs)
+            if unit_state.name not in unit_owner_by_name:
+                unit_owner_by_name[unit_state.name] = pid
 
     # Patterns
-    kill_re = re.compile(r"^(.+?)\s+was\s+destroyed$")
-    damage_re = re.compile(r"^(.+?)\s+hits\s+(.+?)\s+for\s+([\d.]+)\s+damage$")
+    kill_re = re.compile(r"^(.+?)\s+was\s+destroyed")
+    damage_re = re.compile(r"^(.+?)\s+hits\s+(.+?)\s+for\s+([\d.]+)\s+damage")
     charge_re = re.compile(r"^(.+?)\s+charges\s+.+engaged!")
 
     for log in round_logs:
         if not isinstance(log, dict):
             continue
         for line in log.get("phase_logs", []):
-            # Kill: "X was destroyed" — credit killer (find who attacked X)
-            m = kill_re.match(line)
+            # Strip identity suffix once, reuse
+            human_text, meta = strip_event_identity(line)
+
+            # Kill: "X was destroyed [target_id=...]" — credit the other player
+            m = kill_re.match(human_text)
             if m:
-                victim = m.group(1).strip()
-                # Find killer by scanning damage lines in same round
-                # Simplified: the victim belongs to one player, credit the other
-                victim_pid = unit_owner.get(victim, "0")
+                target_id = meta.get("target_id")
+                if target_id and target_id in unit_owner_by_rtid:
+                    victim_pid = unit_owner_by_rtid[target_id]
+                else:
+                    victim = m.group(1).strip()
+                    victim_pid = unit_owner_by_name.get(victim, "0")
                 killer_pid = "1" if victim_pid == "2" else ("2" if victim_pid == "1" else "0")
                 total_kills[killer_pid] = total_kills.get(killer_pid, 0) + 1
                 continue
 
-            # Damage: "X hits Y for N damage" — credit X's player
-            m = damage_re.match(line)
+            # Damage: "X hits Y for N damage [actor_id=...; target_id=...]"
+            m = damage_re.match(human_text)
             if m:
-                actor = m.group(1).strip()
                 dmg = float(m.group(3))
-                pid = unit_owner.get(actor, "0")
+                actor_id = meta.get("actor_id")
+                if actor_id and actor_id in unit_owner_by_rtid:
+                    pid = unit_owner_by_rtid[actor_id]
+                else:
+                    # Fallback: use display name
+                    actor = m.group(1).strip()
+                    pid = unit_owner_by_name.get(actor, "0")
                 total_damage[pid] = total_damage.get(pid, 0.0) + dmg
                 continue
 
-            # Charge: "X charges Y ... engaged!" — credit X's player
-            m = charge_re.match(line)
+            # Charge: "X charges Y ... engaged!"
+            m = charge_re.match(human_text)
             if m:
-                actor = m.group(1).strip()
-                pid = unit_owner.get(actor, "0")
+                actor_id = meta.get("actor_id")
+                if actor_id and actor_id in unit_owner_by_rtid:
+                    pid = unit_owner_by_rtid[actor_id]
+                else:
+                    actor = m.group(1).strip()
+                    pid = unit_owner_by_name.get(actor, "0")
                 charge_count[pid] = charge_count.get(pid, 0) + 1
                 continue
 
@@ -318,39 +368,10 @@ def _check_game_end(state: GameState) -> bool:
 
 
 def _snapshot_state(state: GameState) -> dict[str, Any]:
-    """Serialize current GameState for replay round-viewer canvas."""
-    units: dict[str, list[dict[str, Any]]] = {}
-    for player_id, player in state.players.items():
-        player_units: list[dict[str, Any]] = []
-        for unit in player.units.values():
-            player_units.append(
-                {
-                    "id": getattr(unit, "unit_id", unit.name),
-                    "name": unit.name,
-                    "position": {"x": unit.position[0], "y": unit.position[1]},
-                    "is_alive": getattr(unit, "is_alive", True),
-                    "is_engaged": getattr(unit, "is_engaged", False),
-                    "is_battle_shocked": getattr(unit, "is_battle_shocked", False),
-                    "models_remaining": getattr(
-                        unit, "models_remaining", getattr(unit, "current_wounds", 1)
-                    ),
-                    "models_total": getattr(unit, "max_wounds", 1),
-                    "victory_points": getattr(player, "victory_points", 0),
-                }
-            )
-        units[player_id] = player_units
+    """Canonical GameState snapshot — delegates to backend.state.game_state."""
+    from backend.state.game_state import snapshot_game_state
 
-    victory_points = {
-        pid: getattr(player, "victory_points", 0) for pid, player in state.players.items()
-    }
-
-    return {
-        "round": state.current_round,
-        "units": units,
-        "victory_points": victory_points,
-        "map_width": state.map_width,
-        "map_height": state.map_height,
-    }
+    return snapshot_game_state(state)
 
 
 def run_auto_game(
@@ -402,8 +423,11 @@ def run_auto_game(
         player_b = _roster_to_player_state(roster_b, "2", config)
 
         # 4. Create GameState — __post_init__ auto-creates Mission from mission_name
+        import uuid
+
+        game_id = f"auto_{uuid.uuid4().hex[:12]}"
         state = GameState(
-            game_id=f"auto_{actual_seed}",
+            game_id=game_id,
             mission_name=mission_name,
             map_width=game_map.width,
             map_height=game_map.height,
@@ -489,6 +513,10 @@ def run_auto_game(
             state.game_log.append(
                 f"{player.name} gains 10 Battle Ready VP (total: {player.victory_points})"
             )
+
+        # Re-snapshot final state so persisted replay/result reflects Battle Ready VP
+        if round_logs:
+            round_logs[-1]["end_state"] = _snapshot_state(state)
 
         # 9. Summary
         summary = _build_summary(state, round_logs, placements)

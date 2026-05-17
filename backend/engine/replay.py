@@ -252,38 +252,27 @@ class ReplayRecorder:
 
 
 def _snapshot_state(state: GameState) -> dict[str, Any]:
-    """Создать снимок GameState для реплея."""
-    units_by_player: dict[str, list[dict]] = {}
-    for pid, player in getattr(state, "players", {}).items():
-        units_by_player[pid] = [_unit_snapshot(u) for u in player.units.values()]
+    """Canonical GameState snapshot — delegates to backend.state.game_state."""
+    from backend.state.game_state import snapshot_game_state
 
-    return {
-        "round": getattr(state, "current_round", 0),
-        "phase": getattr(state, "current_phase", "").value
-        if hasattr(getattr(state, "current_phase", None), "value")
-        else str(getattr(state, "current_phase", "")),
-        "victory_points": {
-            pid: getattr(player, "victory_points", 0)
-            for pid, player in getattr(state, "players", {}).items()
-        },
-        "units": units_by_player,
-    }
+    return snapshot_game_state(state)
 
 
 def _unit_snapshot(unit: UnitState) -> dict[str, Any]:
-    pos = unit.position if hasattr(unit, "position") else (0, 0)
-    return {
-        "id": getattr(unit, "unit_id", ""),
-        "name": getattr(unit, "name", str(unit)),
-        "models_remaining": getattr(unit, "models_remaining", 1),
-        "models_total": getattr(unit, "models_total", 1),
-        "current_wounds": getattr(unit, "current_wounds", getattr(unit, "wounds", 1)),
-        "max_wounds": getattr(unit, "max_wounds", getattr(unit, "wounds", 1)),
-        "position": {"x": pos[0], "y": pos[1]},
-        "is_engaged": getattr(unit, "is_engaged", False),
-        "is_battle_shocked": getattr(unit, "is_battle_shocked", False),
-        "is_alive": getattr(unit, "is_alive", True),
-    }
+    """Canonical unit snapshot — delegates to backend.state.game_state.
+
+    Derives player_id from the unit's runtime_id prefix (``p<N>:...``).
+    Falls back to ``""`` when runtime_id is missing or unparseable.
+    """
+    from backend.state.game_state import _unit_snapshot as _canonical_unit_snapshot
+
+    rtid = getattr(unit, "unit_id", "")
+    pid = ""
+    if rtid.startswith("p") and ":" in rtid:
+        player_num = rtid[1:].split(":", 1)[0]
+        if player_num.isdigit():
+            pid = player_num
+    return _canonical_unit_snapshot(unit, player_id=pid)
 
 
 def _pos_dict(pos) -> dict[str, int]:
@@ -357,13 +346,23 @@ def _replay_from_dict(raw: dict[str, Any]) -> Replay:
     )
 
 
-def save_replay(db: sqlite3.Connection, replay: Replay, user_id: int | None = None):
-    """Сохранить реплей в SQLite."""
-    db.execute(
-        """INSERT OR REPLACE INTO replays
-           (game_id, created_at, roster_a, roster_b,
+def save_replay(
+    db: sqlite3.Connection,
+    replay: Replay,
+    user_id: int | None = None,
+    overwrite: bool = False,
+):
+    """Сохранить реплей в SQLite.
+
+    By default uses INSERT — fails with sqlite3.IntegrityError on duplicate
+    game_id.  Pass ``overwrite=True`` to use INSERT OR REPLACE instead.
+    """
+    sql = "INSERT OR REPLACE INTO replays" if overwrite else "INSERT INTO replays"
+    sql += """ (game_id, created_at, roster_a, roster_b,
             mission, deployment, seed, replay_json, summary, user_id)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+    db.execute(
+        sql,
         (
             replay.game_id,
             replay.created_at,

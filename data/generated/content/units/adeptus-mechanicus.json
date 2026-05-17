@@ -1,0 +1,2491 @@
+{
+  "unit:adeptus-mechanicus:archaeopter-fusilave": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Archaeopter Fusilave",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 170,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Archaeopter Fusilave.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "vehicle",
+      "fly",
+      "aircraft"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:adeptus-mechanicus:archaeopter-fusilave",
+    "wounds": 10
+  },
+  "unit:adeptus-mechanicus:archaeopter-stratoraptor": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Archaeopter Stratoraptor",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 180,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Archaeopter Stratoraptor.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "vehicle",
+      "fly",
+      "aircraft"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:adeptus-mechanicus:archaeopter-stratoraptor",
+    "wounds": 10
+  },
+  "unit:adeptus-mechanicus:archaeopter-transvector": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Transport",
+    "display_name": "Archaeopter Transvector",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 20,
+    "objective_control": 0,
+    "points": 140,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Archaeopter Transvector.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "vehicle",
+      "fly",
+      "aircraft",
+      "transport"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:adeptus-mechanicus:archaeopter-transvector",
+    "wounds": 10
+  },
+  "unit:adeptus-mechanicus:belisarius-cawl": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Belisarius Cawl",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 3,
+    "points": 150,
+    "ranged_weapons": [],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Belisarius Cawl.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "epic-hero",
+      "character",
+      "infantry"
+    ],
+    "toughness": 8,
+    "unit_id": "unit:adeptus-mechanicus:belisarius-cawl",
+    "wounds": 10
+  },
+  "unit:adeptus-mechanicus:corpuscarii-electro-priests": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Corpuscarii Electro-priests",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 60,
+    "ranged_weapons": [],
+    "save": 7,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Corpuscarii Electropriests.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry",
+      "cult-mechanicus"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:adeptus-mechanicus:corpuscarii-electro-priests",
+    "wounds": 1
+  },
+  "unit:adeptus-mechanicus:cybernetica-datasmith": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Cybernetica Datasmith",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 35,
+    "ranged_weapons": [],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Cybernetica Datasmith.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "character",
+      "infantry"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:cybernetica-datasmith",
+    "wounds": 3
+  },
+  "unit:adeptus-mechanicus:fulgurite-electro-priests": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Fulgurite Electro-priests",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 70,
+    "ranged_weapons": [],
+    "save": 7,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Fulgurite Electropriests.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry",
+      "cult-mechanicus"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:adeptus-mechanicus:fulgurite-electro-priests",
+    "wounds": 1
+  },
+  "unit:adeptus-mechanicus:hastarii-exterminators": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Battleline",
+    "display_name": "Hastarii Exterminators",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close combat weapon",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Power weapon (Alpha only)",
+        "range_max": null,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 5,
+    "objective_control": 1,
+    "points": 90,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "ANTI-VEHICLE 4+",
+          "DEVASTATING WOUNDS"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Hastarii arc blaster",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "ANTI-INFANTRY 4+"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Eradication caster – dissipated",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "ANTI-INFANTRY 4+"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Eradication caster – focused",
+        "range_max": 15,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Hastarii Exterminators.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "skitarii",
+      "hastarii",
+      "infantry",
+      "battleline"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:hastarii-exterminators",
+    "wounds": 2
+  },
+  "unit:adeptus-mechanicus:hastarii-fusiliers": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Battleline",
+    "display_name": "Hastarii Fusiliers",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close combat weapon",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Power weapon (Alpha only)",
+        "range_max": null,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 5,
+    "objective_control": 1,
+    "points": 85,
+    "ranged_weapons": [
+      {
+        "abilities": [],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          1
+        ],
+        "name": "Neutron fusil",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 12,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "IGNORES COVER"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Hastarii phosphor blaster",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Hastarii Fusiliers.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "skitarii",
+      "hastarii",
+      "infantry",
+      "battleline"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:hastarii-fusiliers",
+    "wounds": 2
+  },
+  "unit:adeptus-mechanicus:ironstrider-ballistarii": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Ironstrider Ballistarii",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 2,
+    "points": 50,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Ironstrider Ballistarii.md",
+    "squad_size": {
+      "max": 3,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "vehicle"
+    ],
+    "toughness": 7,
+    "unit_id": "unit:adeptus-mechanicus:ironstrider-ballistarii",
+    "wounds": 7
+  },
+  "unit:adeptus-mechanicus:kastelan-robots": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Kastelan Robots",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 2,
+    "points": 200,
+    "ranged_weapons": [],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Kastelan Robots.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "vehicle"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:adeptus-mechanicus:kastelan-robots",
+    "wounds": 7
+  },
+  "unit:adeptus-mechanicus:kataphron-breachers": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Battleline",
+    "display_name": "Kataphron Breachers",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 5,
+    "objective_control": 1,
+    "points": 160,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Kataphron Breachers.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry",
+      "battleline"
+    ],
+    "toughness": 7,
+    "unit_id": "unit:adeptus-mechanicus:kataphron-breachers",
+    "wounds": 3
+  },
+  "unit:adeptus-mechanicus:kataphron-destroyers": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Kataphron Destroyers",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 5,
+    "objective_control": 1,
+    "points": 110,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Kataphron Destroyers.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry"
+    ],
+    "toughness": 6,
+    "unit_id": "unit:adeptus-mechanicus:kataphron-destroyers",
+    "wounds": 3
+  },
+  "unit:adeptus-mechanicus:onager-dunecrawler": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Onager Dunecrawler",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 3,
+    "points": 155,
+    "ranged_weapons": [],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Onager Dunecrawler.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "vehicle"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:adeptus-mechanicus:onager-dunecrawler",
+    "wounds": 11
+  },
+  "unit:adeptus-mechanicus:pteraxii-skystalkers": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Pteraxii Skystalkers",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 1,
+    "points": 90,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Pteraxii Skystalkers.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry",
+      "fly"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:pteraxii-skystalkers",
+    "wounds": 2
+  },
+  "unit:adeptus-mechanicus:pteraxii-sterylizors": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Pteraxii Sterylizors",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 1,
+    "points": 100,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Pteraxii Sterylizors.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry",
+      "fly"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:pteraxii-sterylizors",
+    "wounds": 2
+  },
+  "unit:adeptus-mechanicus:secutarii-hoplites": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Secutarii Hoplites",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "ANTI-VEHICLE 4+",
+          "DEVASTATING WOUNDS",
+          "LANCE"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Arc lance",
+        "range_max": null,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close combat weapon (Alpha)",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 70,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "ANTI-VEHICLE 4+",
+          "DEVASTATING WOUNDS"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Arc lance",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Archeotech pistol (Alpha)",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Secutarii Hoplites.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "legends",
+      "skitarii",
+      "secutarii",
+      "hopites",
+      "infantry"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:adeptus-mechanicus:secutarii-hoplites",
+    "wounds": 1
+  },
+  "unit:adeptus-mechanicus:secutarii-peltasts": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Secutarii Peltasts",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Close combat weapon (Alpha)",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 65,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "ASSAULT"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Galvanic caster – flechette",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "HEAVY"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Galvanic caster – hammershot",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "PISTOL"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Archeotech pistol (Alpha)",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 5,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Secutarii Peltasts.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "legends",
+      "skitarii",
+      "secutarii",
+      "peltasts",
+      "infantry"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:adeptus-mechanicus:secutarii-peltasts",
+    "wounds": 1
+  },
+  "unit:adeptus-mechanicus:serberys-raiders": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Serberys Raiders",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 70,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Serberys Raiders.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry",
+      "mount"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:serberys-raiders",
+    "wounds": 2
+  },
+  "unit:adeptus-mechanicus:serberys-sulphurhounds": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Serberys Sulphurhounds",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 55,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Serberys Sulphurhounds.md",
+    "squad_size": {
+      "max": 6,
+      "min": 3,
+      "step": 3
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry",
+      "mount"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:serberys-sulphurhounds",
+    "wounds": 2
+  },
+  "unit:adeptus-mechanicus:servitor-battleclade": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Servitor Battleclade",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Dataspikes (Underseer)",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Servo-claw",
+        "range_max": null,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 50,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "ANTI-VEHICLE 4+",
+          "RAPID FIRE 1"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Heavy arc rifle",
+        "range_max": 30,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "HEAVY",
+          "SUSTAINED HITS 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Heavy bolter",
+        "range_max": 36,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "IGNORES COVER",
+          "TORRENT"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Incendine igniter",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 3,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "DEVASTATING WOUNDS",
+          "PISTOL"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Mechanicus pistol",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "MELTA 2"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Meltagun",
+        "range_max": 12,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "IGNORES COVER",
+          "RAPID FIRE 1"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Phosphor blaster",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Servitor Battleclade.md",
+    "squad_size": {
+      "max": 4,
+      "min": 2,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry",
+      "cult-mechanicus",
+      "servitor",
+      "battleclade"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:servitor-battleclade",
+    "wounds": 2
+  },
+  "unit:adeptus-mechanicus:servitors": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Servitors",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 8,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Servitor's servo-arm",
+        "range_max": null,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 0,
+    "points": 35,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "HEAVY",
+          "SUSTAINED HITS 1"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          3
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Heavy bolter",
+        "range_max": 36,
+        "skill": 5,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "HEAVY",
+          "MELTA 2"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Multi-melta",
+        "range_max": 18,
+        "skill": 5,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST",
+          "HEAVY"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Plasma cannon – standard",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 7,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST",
+          "HAZARDOUS",
+          "HEAVY"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          1
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Plasma cannon – supercharge",
+        "range_max": 24,
+        "skill": 5,
+        "strength": 8,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Servitors.md",
+    "squad_size": {
+      "max": 4,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "legends",
+      "infantry",
+      "cult-mechanicus",
+      "servitor"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:adeptus-mechanicus:servitors",
+    "wounds": 1
+  },
+  "unit:adeptus-mechanicus:sicarian-infiltrators": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Sicarian Infiltrators",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 1,
+    "points": 70,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Sicarian Infiltrators.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:sicarian-infiltrators",
+    "wounds": 2
+  },
+  "unit:adeptus-mechanicus:sicarian-ruststalkers": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Infantry",
+    "display_name": "Sicarian Ruststalkers",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 1,
+    "points": 75,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Sicarian Ruststalkers.md",
+    "squad_size": {
+      "max": 10,
+      "min": 5,
+      "step": 5
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:sicarian-ruststalkers",
+    "wounds": 2
+  },
+  "unit:adeptus-mechanicus:skitarii-marshal": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Skitarii Marshal",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 45,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Skitarii Marshal.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "character",
+      "infantry"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:adeptus-mechanicus:skitarii-marshal",
+    "wounds": 3
+  },
+  "unit:adeptus-mechanicus:skitarii-rangers": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Battleline",
+    "display_name": "Skitarii Rangers",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 2,
+    "points": 90,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Skitarii Rangers.md",
+    "squad_size": {
+      "max": 10,
+      "min": 10,
+      "step": 10
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry",
+      "battleline"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:adeptus-mechanicus:skitarii-rangers",
+    "wounds": 1
+  },
+  "unit:adeptus-mechanicus:skitarii-vanguard": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Battleline",
+    "display_name": "Skitarii Vanguard",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 2,
+    "points": 90,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Skitarii Vanguard.md",
+    "squad_size": {
+      "max": 10,
+      "min": 10,
+      "step": 10
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "infantry",
+      "battleline"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:adeptus-mechanicus:skitarii-vanguard",
+    "wounds": 1
+  },
+  "unit:adeptus-mechanicus:skorpius-disintegrator": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Skorpius Disintegrator",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 3,
+    "points": 175,
+    "ranged_weapons": [],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Skorpius Disintegrator.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "vehicle"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:adeptus-mechanicus:skorpius-disintegrator",
+    "wounds": 12
+  },
+  "unit:adeptus-mechanicus:skorpius-dunerider": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Transport",
+    "display_name": "Skorpius Dunerider",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 12,
+    "objective_control": 2,
+    "points": 95,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Skorpius Dunerider.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "vehicle",
+      "transport"
+    ],
+    "toughness": 9,
+    "unit_id": "unit:adeptus-mechanicus:skorpius-dunerider",
+    "wounds": 11
+  },
+  "unit:adeptus-mechanicus:sydonian-dragoons-with-radium-jezzails": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Sydonian Dragoons With Radium Jezzails",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 2,
+    "points": 70,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Sydonian Dragoons With Radium Jezzails.md",
+    "squad_size": {
+      "max": 3,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "vehicle"
+    ],
+    "toughness": 7,
+    "unit_id": "unit:adeptus-mechanicus:sydonian-dragoons-with-radium-jezzails",
+    "wounds": 7
+  },
+  "unit:adeptus-mechanicus:sydonian-dragoons-with-taser-lances": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Sydonian Dragoons With Taser Lances",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 10,
+    "objective_control": 2,
+    "points": 70,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Sydonian Dragoons With Taser Lances.md",
+    "squad_size": {
+      "max": 3,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "vehicle"
+    ],
+    "toughness": 7,
+    "unit_id": "unit:adeptus-mechanicus:sydonian-dragoons-with-taser-lances",
+    "wounds": 7
+  },
+  "unit:adeptus-mechanicus:sydonian-skatros": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Vehicle",
+    "display_name": "Sydonian Skatros",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 1,
+    "points": 60,
+    "ranged_weapons": [],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Sydonian Skatros.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "vehicle"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:sydonian-skatros",
+    "wounds": 4
+  },
+  "unit:adeptus-mechanicus:tech-priest-dominus": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Tech-Priest Dominus",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 75,
+    "ranged_weapons": [],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Tech-Priest Dominus.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "character",
+      "infantry"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:tech-priest-dominus",
+    "wounds": 4
+  },
+  "unit:adeptus-mechanicus:tech-priest-enginseer": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Tech-Priest Enginseer",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 45,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Tech-Priest Enginseer.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "character",
+      "infantry"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:tech-priest-enginseer",
+    "wounds": 3
+  },
+  "unit:adeptus-mechanicus:tech-priest-manipulus": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Tech-Priest Manipulus",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 60,
+    "ranged_weapons": [],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Tech-Priest Manipulus.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "character",
+      "infantry"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:tech-priest-manipulus",
+    "wounds": 4
+  },
+  "unit:adeptus-mechanicus:technoarcheologist": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Character",
+    "display_name": "Technoarcheologist",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 7,
+    "melee_weapons": [],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 1,
+    "points": 45,
+    "ranged_weapons": [],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Technoarcheologist.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "character",
+      "infantry"
+    ],
+    "toughness": 4,
+    "unit_id": "unit:adeptus-mechanicus:technoarcheologist",
+    "wounds": 3
+  },
+  "unit:adeptus-mechanicus:terrax-pattern-termite": {
+    "abilities": [],
+    "can_be_warlord": false,
+    "category": "Legends",
+    "display_name": "Terrax-pattern Termite",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [
+          "ANTI-VEHICLE 3+"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          1,
+          3,
+          3
+        ],
+        "name": "Termite drill",
+        "range_max": null,
+        "skill": 4,
+        "strength": 14,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 2,
+    "points": 120,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "RAPID FIRE 2"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Combi-bolter",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 4,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "TORRENT"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          1,
+          6,
+          0
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Heavy flamer",
+        "range_max": 12,
+        "skill": 6,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "MELTA 2"
+        ],
+        "ap": -4,
+        "attacks_dice": [
+          0,
+          0,
+          5
+        ],
+        "damage_dice": [
+          1,
+          6,
+          0
+        ],
+        "name": "Terrax melta cutter",
+        "range_max": 18,
+        "skill": 4,
+        "strength": 9,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "DEVASTATING WOUNDS",
+          "TWIN-LINKED"
+        ],
+        "ap": 0,
+        "attacks_dice": [
+          0,
+          0,
+          4
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Twin volkite charger",
+        "range_max": 24,
+        "skill": 4,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 3,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Terrax-pattern Termite.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "legends",
+      "vehicle",
+      "transport",
+      "dedicated-transport",
+      "terrax-termite"
+    ],
+    "toughness": 10,
+    "unit_id": "unit:adeptus-mechanicus:terrax-pattern-termite",
+    "wounds": 14
+  },
+  "unit:adeptus-mechanicus:thulia-ghuld": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Epic Hero",
+    "display_name": "Thulia Ghuld",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 6,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          6
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Rod of the War Forge – strike",
+        "range_max": null,
+        "skill": 2,
+        "strength": 10,
+        "tags": [],
+        "type": "melee"
+      },
+      {
+        "abilities": [],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          12
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Rod of the War Forge – sweep",
+        "range_max": null,
+        "skill": 2,
+        "strength": 6,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 8,
+    "objective_control": 3,
+    "points": 150,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "DEVASTATING WOUNDS"
+        ],
+        "ap": -3,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          1,
+          6,
+          2
+        ],
+        "name": "Jericho-class conversion resonator – titanic impact",
+        "range_max": 24,
+        "skill": 2,
+        "strength": 12,
+        "tags": [],
+        "type": "ranged"
+      },
+      {
+        "abilities": [
+          "BLAST",
+          "SUSTAINED HITS 1"
+        ],
+        "ap": -2,
+        "attacks_dice": [
+          1,
+          6,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          1
+        ],
+        "name": "Jericho-class conversion resonator – shockwave",
+        "range_max": 24,
+        "skill": 2,
+        "strength": 6,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 2,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/Thulia Ghuld.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "epic-hero",
+      "monster",
+      "character",
+      "tech-priest",
+      "thulia-ghuld"
+    ],
+    "toughness": 8,
+    "unit_id": "unit:adeptus-mechanicus:thulia-ghuld",
+    "wounds": 10
+  },
+  "unit:adeptus-mechanicus:x-101": {
+    "abilities": [],
+    "can_be_warlord": true,
+    "category": "Legends",
+    "display_name": "X-101",
+    "edition": "10e",
+    "faction_id": "faction:adeptus-mechanicus",
+    "faction_keywords": [],
+    "feel_no_pain": null,
+    "invulnerable_save": null,
+    "is_epic_hero": false,
+    "is_leader": false,
+    "keywords": [],
+    "leader_for": [],
+    "leadership": 8,
+    "melee_weapons": [
+      {
+        "abilities": [],
+        "ap": -2,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          3
+        ],
+        "name": "Hydraulic claw",
+        "range_max": null,
+        "skill": 4,
+        "strength": 8,
+        "tags": [],
+        "type": "melee"
+      }
+    ],
+    "model_count": [
+      1,
+      1
+    ],
+    "movement": 6,
+    "objective_control": 0,
+    "points": 40,
+    "ranged_weapons": [
+      {
+        "abilities": [
+          "ANTI-VEHICLE 4+"
+        ],
+        "ap": -1,
+        "attacks_dice": [
+          0,
+          0,
+          2
+        ],
+        "damage_dice": [
+          0,
+          0,
+          2
+        ],
+        "name": "Grav-gun",
+        "range_max": 18,
+        "skill": 3,
+        "strength": 5,
+        "tags": [],
+        "type": "ranged"
+      }
+    ],
+    "save": 4,
+    "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/mechanicus/X-101.md",
+    "squad_size": {
+      "max": 1,
+      "min": 1,
+      "step": 1
+    },
+    "tags": [
+      "adeptus-mechanicus",
+      "legends",
+      "epic-hero",
+      "infantry",
+      "character",
+      "servitor",
+      "x-101"
+    ],
+    "toughness": 3,
+    "unit_id": "unit:adeptus-mechanicus:x-101",
+    "wounds": 3
+  }
+}
