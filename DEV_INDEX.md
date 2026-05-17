@@ -1,7 +1,7 @@
 # Developer Index — Warpsmith
 
 Центральный хаб проекта. Отсюда ведут все тропы.
-Обновлён: 2026-05-09 | v0.7.9
+Обновлён: 2026-05-17 | v0.7.9
 
 **Навигация:** [INDEX.md](/mnt/d/Python/Balthier/INDEX.md) ← · → [WIKI_INDEX.md](/mnt/d/Python/Balthier/simulator/wiki/WIKI_INDEX.md) · → [Features Index](docs/features/Features_index.md)
 

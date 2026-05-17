@@ -361,7 +361,7 @@ async def auto_play_simulation(
                         wounds=unit.wounds,
                         leadership=unit.leadership,
                         objective_control=unit.objective_control,
-                        squad_size=u_data["squad_size"],
+                        squad_size={"min": u_data["squad_size"], "max": u_data["squad_size"], "step": 1},
                         ranged_weapons=unit.ranged_weapons,
                         melee_weapons=unit.melee_weapons,
                         abilities=unit.abilities,
