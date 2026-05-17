@@ -106,3 +106,30 @@ Full suite: 478 passed, 0 failures.
 
 **2026-05-16.** `DROP TABLE IF EXISTS replays` removed. `save_replay()` non-destructive by default.
 `game_id` UUID-based. 6 new tests. 484 passed.
+
+## Regression evidence — Task 4.1 (5-phase 10e loop invariants)
+
+**2026-05-17.** Locked the runtime phase loop to the canonical Warhammer 40k 10e order: Command → Movement → Shooting → Charge → Fight.
+
+Changes:
+- Added `GAME_PHASE_ORDER` as the shared canonical phase order in `backend/state/game_state.py`.
+- Updated `GameState.next_phase()` and `Scenario.run_round()` to consume that shared order instead of duplicated hardcoded phase-count logic.
+- Added regression coverage for enum size/order, shared phase-order export, scenario full-round phase logs, replay/autoplay snapshot phase names, and autoplay full-turn five-phase execution.
+- Confirmed no runtime Morale/Psychic/End phase enum members are present and battle-shock remains a Command phase step.
+
+```bash
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_autoplay.py tests/test_replay.py -q
+80 passed, 12 warnings in 8.20s
+
+$ uv run python -m pytest tests/ -q
+593 passed, 3 skipped, 60 warnings in 53.49s
+
+$ uv run ruff check backend/state/game_state.py backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_autoplay.py tests/test_replay.py
+All checks passed!
+
+$ uv run ruff format --check backend/state/game_state.py backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_autoplay.py tests/test_replay.py
+6 files already formatted
+
+$ git diff --check -- backend/state/game_state.py backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_autoplay.py tests/test_replay.py
+(clean)
+```

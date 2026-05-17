@@ -2,11 +2,11 @@
 
 Date: 2026-05-17
 Task: `docs/remediation/task-03-02-fix-ap-save-application-and-devastating-wounds.md`
-Verdict: REQUEST CHANGES
+Verdict: REQUEST CHANGES → FIXED 2026-05-17
 
 ## Summary
 
-The implementation fixes the direct AP double-application in `_resolve_wound_chain()` and improves Devastating Wounds handling so it only bypasses saves on Critical Wounds. However, Task 3.2 cannot be closed yet because one save-modifier path is still wrong, the task's claimed verification command is stale and fails, and required CR evidence is incomplete.
+The implementation fixes the direct AP double-application in `_resolve_wound_chain()`, keeps Devastating Wounds on the Critical Wound path only, propagates `ignores_cover`, and now passes the full suite after the replay DB reset regression was resolved.
 
 ## Findings
 
@@ -128,9 +128,9 @@ PY
 
 ## Re-review — 2026-05-17
 
-Verdict: REQUEST CHANGES after re-review.
+Verdict: REQUEST CHANGES after re-review → FIXED 2026-05-17.
 
-The Task 3.2 combat implementation is now substantially fixed, but the task still cannot be closed because the latest full suite is red.
+The Task 3.2 combat implementation and the full-suite replay DB blocker are now fixed; closure checks pass.
 
 ### Previous finding: `ignores_cover` weapon modifier no-op — Fixed
 
@@ -159,14 +159,30 @@ $ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_combat*.py tests
 - `docs/requirements/code-review/cr-11-terrain-cover-and-los-review.md` now has `Regression evidence — Task 3.2`.
 - CR-07 also records Task 3.2 resolution, including AP, Devastating Wounds, and Ignores Cover notes.
 
-### Remaining blocker: latest full suite fails
+### Remaining blocker: replay DB reset regression — Fixed
+
+Root cause: `Database.hard_reset()` closed the connection and removed stale WAL/SHM files but did not reopen the SQLite connection. The preservation test then called `migrate()` on the same `Database` instance, so `self.conn` was `None` and `self.conn.executescript(schema)` raised `AttributeError`.
+
+Fix: `backend/db/database.py::Database.hard_reset()` now reopens `self._conn`, restores `sqlite3.Row`, and reapplies WAL mode after cleanup.
 
 ```bash
-$ uv run python -m pytest tests/ -q
-1 failed, 571 passed, 3 skipped, 59 warnings in 59.03s
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_replay.py::test_db_init_preserves_existing_replay_rows -vv --tb=long
+1 passed in 0.42s
 
-FAILED tests/test_replay.py::test_db_init_preserves_existing_replay_rows
-AttributeError: 'NoneType' object has no attribute 'executescript'
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_replay.py -q
+35 passed, 12 warnings in 0.57s
+
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q --tb=long -x
+578 passed, 3 skipped, 60 warnings in 100.31s
+
+$ uv run ruff check backend/db/database.py tests/test_replay.py
+All checks passed!
+
+$ uv run ruff format --check backend/db/database.py tests/test_replay.py
+2 files already formatted
+
+$ git diff --check -- backend/db/database.py tests/test_replay.py
+(clean)
 ```
 
-Focused combat implementation is approved from a Task 3.2 behavior standpoint, but project closure remains REQUEST CHANGES until the full-suite failure is resolved or explicitly accepted as unrelated baseline debt.
+Focused combat implementation is approved from a Task 3.2 behavior standpoint, and the project full-suite blocker is resolved.

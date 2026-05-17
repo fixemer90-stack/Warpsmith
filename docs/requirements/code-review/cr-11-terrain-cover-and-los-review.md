@@ -103,9 +103,57 @@ $ uv run python -m pytest tests/test_combat.py tests/test_modifiers.py -q
 $ uv run python -m pytest tests/ -q
 571 passed, 3 skipped, 60 warnings in 71.50s
 
-$ uv run python -m pytest tests/ -q  # re-review 2026-05-17
-1 failed, 571 passed, 3 skipped, 59 warnings in 59.03s
-FAILED tests/test_replay.py::test_db_init_preserves_existing_replay_rows
+$ uv run python -m pytest tests/ -q  # re-review 2026-05-17 after DB hard_reset fix
+578 passed, 3 skipped, 60 warnings in 100.31s
 ```
 
 Lint/format/diff-check: clean.
+
+
+## Regression evidence — Task 3.3 (Sustained Hits resolution)
+
+**2026-05-17.** (co-owned — CR-07, CR-11). Sustained Hits closure evidence for Phase 3 combat math checkpoint.
+
+Changes/evidence:
+- `_resolve_attack_chain()` resolves Sustained Hits extra hits as real downstream wound/save/damage chains.
+- Extra hits use `auto_wound=False`, so they are normal non-critical hits and do not recursively trigger Sustained Hits, Lethal Hits auto-wounds, or Devastating Wounds save bypass.
+- Deterministic probes verified no-crit, SH1, SH2, SH+Lethal, and SH+Devastating Wounds boundaries.
+
+```text
+no_crit_sh1_damage=1
+crit_sh1_two_hits_one_saved_or_failed_damage=1
+crit_sh2_three_hits_two_damage=2
+sh_lethal_original_auto_extra_normal_damage=2
+sh_dev_extra_noncrit_save_applies_damage=1
+```
+
+```bash
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q
+50 passed in 10.38s
+
+$ uv run python -m pytest tests/ -q
+583 passed, 3 skipped, 60 warnings in 56.40s
+```
+
+Lint/format/diff-check: clean.
+
+
+## Phase 3 completion — Combat math
+
+- Date: 2026-05-17
+- Completed tasks: 3.1, 3.2, 3.3
+- Closed findings:
+  - CR-07: natural 6 / Lethal Hits semantics; AP applied exactly once; Devastating Wounds only on Critical Wounds; Sustained Hits extra hits now resolve through wound/save/damage as normal non-critical hits.
+  - CR-11: AP/cover/Ignores Cover interaction regression evidence recorded; Sustained Hits closure recorded because Task 3.3 is co-owned by CR-11 in the remediation plan.
+- Still open:
+  - CR-07/CR-11 original review artifacts remain Request Changes until all non-Phase-3 findings are separately fixed or explicitly accepted.
+- Accepted debt: none.
+- Tests run:
+  - `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q` → 50 passed in 10.38s.
+  - `uv run python -m pytest tests/ -q` → 583 passed, 3 skipped, 60 warnings in 56.40s.
+- Lint/format run:
+  - `uv run ruff check backend/engine/combat.py backend/engine/modifiers.py tests/test_combat.py tests/test_modifiers.py` → All checks passed.
+  - `uv run ruff format --check backend/engine/combat.py backend/engine/modifiers.py tests/test_combat.py tests/test_modifiers.py` → 4 files already formatted.
+  - `git diff --check -- <Task 3.3 touched docs/code files>` → clean.
+- Browser/API smoke evidence: none required for backend combat math phase.
+- Remaining blockers before next phase: none for Phase 3 checkpoint.

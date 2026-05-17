@@ -79,7 +79,7 @@ tags: [requirements, code-review, atomic-review]
 - **Ignores Cover weapon tag → FIXED.** `_resolve_wound_chain` now checks weapon modifiers for `ignore_cover` operation in addition to `context.ignores_cover`.
   - Added 9 new tests.
   - Focused tests: 44 passed.
-  - Full test suite: 578 passed, 3 skipped.
+  - Re-review full suite after replay DB reset fix: 578 passed, 3 skipped, 60 warnings (`tests/test_replay.py::test_db_init_preserves_existing_replay_rows` fixed by reopening the SQLite connection in `Database.hard_reset()`).
 
 ## Task-03-03 Resolution (2026-05-17)
 
@@ -95,3 +95,24 @@ tags: [requirements, code-review, atomic-review]
 
 - [CR-07 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-07)
 - Current release triage verdict: not-release-ready until open Critical/Important findings are fixed/re-reviewed or explicitly accepted where allowed.
+
+
+## Phase 3 completion — Combat math
+
+- Date: 2026-05-17
+- Completed tasks: 3.1, 3.2, 3.3
+- Closed findings:
+  - CR-07: natural 6 / Lethal Hits semantics; AP applied exactly once; Devastating Wounds only on Critical Wounds; Sustained Hits extra hits now resolve through wound/save/damage as normal non-critical hits.
+  - CR-11: AP/cover/Ignores Cover interaction regression evidence recorded; Sustained Hits closure recorded because Task 3.3 is co-owned by CR-11 in the remediation plan.
+- Still open:
+  - CR-07/CR-11 original review artifacts remain Request Changes until all non-Phase-3 findings are separately fixed or explicitly accepted.
+- Accepted debt: none.
+- Tests run:
+  - `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q` → 50 passed in 10.38s.
+  - `uv run python -m pytest tests/ -q` → 583 passed, 3 skipped, 60 warnings in 56.40s.
+- Lint/format run:
+  - `uv run ruff check backend/engine/combat.py backend/engine/modifiers.py tests/test_combat.py tests/test_modifiers.py` → All checks passed.
+  - `uv run ruff format --check backend/engine/combat.py backend/engine/modifiers.py tests/test_combat.py tests/test_modifiers.py` → 4 files already formatted.
+  - `git diff --check -- <Task 3.3 touched docs/code files>` → clean.
+- Browser/API smoke evidence: none required for backend combat math phase.
+- Remaining blockers before next phase: none for Phase 3 checkpoint.

@@ -112,4 +112,11 @@ Current triage verdict: not release-ready. CR-24 executable gates passed, but re
 
 Date: 2026-05-17
 
-Phase 2 roster-validator remediation is complete and verified: 68 scoped roster tests passed; full suite 562 passed, 3 skipped; Ruff lint/format clean for Phase 2 Python files.
+Phase 2 roster-validator remediation is back to REQUEST CHANGES after the 2026-05-17 Task 2.2 check. Blockers: keyword-only `CHARACTER` units are not Warlord-eligible in the shared helper, Team Builder treats zero eligible Characters as UI-valid, and closure evidence still has stale full-suite counts. Current observed gates during the check: scoped roster suite `68 passed, 48 warnings`; full suite `593 passed, 3 skipped, 60 warnings`; Ruff lint/format clean for the checked Phase 2 Python files.
+
+
+## Phase 3 checkpoint evidence
+
+Date: 2026-05-17
+
+Phase 3 combat-math remediation is complete and verified. Tasks 3.1, 3.2, and 3.3 are marked complete in the remediation task files and index. Focused combat/modifier suite passed (`50 passed in 10.38s`), full suite passed (`583 passed, 3 skipped, 60 warnings in 56.40s`), and Ruff lint/format plus diff-check are clean for the Task 3.3 touched code/docs. CR-07 and CR-11 artifacts contain Phase 3 regression evidence.

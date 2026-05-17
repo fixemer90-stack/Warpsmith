@@ -120,3 +120,20 @@ Verification:
 - `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings.
 - `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings.
 - Ruff lint/format clean for Phase 2 Python files.
+
+## Regression evidence — Task 2.2 check update
+
+Date: 2026-05-17
+
+Verdict: REQUEST CHANGES after independent Task 2.2 check.
+
+Findings:
+- Keyword-only `CHARACTER` units are not Warlord-eligible in `is_unit_eligible_warlord()` because the helper ignores `unit.keywords`.
+- Team Builder treats zero eligible Characters as UI-valid even though backend validation rejects zero eligible Characters under the corrected core-rule contract.
+- Regression coverage must be extended for keyword-only Character eligibility and frontend zero-eligible Warlord state.
+
+Observed verification during check:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings.
+- `uv run python -m pytest tests/ -q` → 593 passed, 3 skipped, 60 warnings.
+- Ruff check/format clean for the checked Phase 2 Python/test files.
+- `git diff --check` clean for the Task 2.2 review/update files.

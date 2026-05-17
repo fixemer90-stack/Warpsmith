@@ -95,6 +95,29 @@ def test_run_auto_game_basic():
     assert result.error is None
 
 
+def test_autoplay_full_turn_uses_only_canonical_five_phases():
+    """Auto-play round logs complete a full turn using only canonical 10e phases."""
+    from backend.state.game_state import GAME_PHASE_ORDER
+
+    result = run_auto_game(
+        make_test_roster(faction="orks"),
+        make_test_roster(faction="tau"),
+        config=AutoPlayConfig(seed=42, max_rounds=1),
+    )
+    assert result.error is None
+
+    phase_logs = [
+        entry for entry in result.round_logs[0]["phase_logs"] if entry.startswith("Phase: ")
+    ]
+    assert phase_logs == [f"Phase: {phase.value}" for phase in GAME_PHASE_ORDER]
+    assert all("morale" not in entry.lower() for entry in phase_logs)
+
+    start_phase = result.round_logs[0]["start_state"]["phase"]
+    end_phase = result.round_logs[0]["end_state"]["phase"]
+    assert start_phase == GAME_PHASE_ORDER[0].value
+    assert end_phase == GAME_PHASE_ORDER[0].value
+
+
 def test_auto_game_returns_result():
     """Result is an AutoPlayResult with proper fields."""
     result = run_auto_game(

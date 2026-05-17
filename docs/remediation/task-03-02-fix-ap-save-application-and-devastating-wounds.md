@@ -77,7 +77,7 @@ $ uv run python -m pytest tests/ -q
 571 passed, 3 skipped, 60 warnings in 67.00s
 
 $ uv run python -m pytest tests/ -q  # re-review 2026-05-17 after DB hard_reset fix
-578 passed, 3 skipped, 60 warnings in 53.58s
+578 passed, 3 skipped, 60 warnings in 100.31s
 
 $ uv run ruff check backend/engine/combat.py backend/engine/modifiers.py backend/db/database.py tests/test_combat.py tests/test_modifiers.py tests/test_replay.py
 All checks passed!
@@ -114,7 +114,7 @@ Positive checks: direct AP double-application is removed, Lethal Hits + Devastat
   - `normal_cover_roll3_damage=0`
   - `lethal_dev_save6_damage=0`
 - Scoped task command passes: `uv run python -m pytest tests/test_combat*.py tests/test_modifiers.py -q` → `44 passed in 8.50s`.
-- Full suite fails outside the focused combat area: `uv run python -m pytest tests/ -q` → `1 failed, 571 passed, 3 skipped`; failing test: `tests/test_replay.py::test_db_init_preserves_existing_replay_rows` (`AttributeError: 'NoneType' object has no attribute 'executescript'`).
+- Full suite now passes after fixing the replay DB reset regression: `uv run python -m pytest tests/ -q` → `578 passed, 3 skipped, 60 warnings in 100.31s`.
 
 ## Completion requirements
 

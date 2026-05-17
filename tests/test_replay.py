@@ -668,6 +668,22 @@ def test_canonical_snapshot_status_flags():
     assert "is_battle_shocked" in u
 
 
+def test_canonical_snapshot_phase_uses_game_phase_values_only():
+    """Replay/autoplay snapshots serialize canonical GamePhase values and never Morale."""
+    from backend.engine.ai.autoplay import _snapshot_state as autoplay_snapshot
+    from backend.engine.replay import _snapshot_state as replay_snapshot
+    from backend.state.game_state import GAME_PHASE_ORDER
+
+    state = make_test_game_state()
+    for phase in GAME_PHASE_ORDER:
+        state.current_phase = phase
+        assert autoplay_snapshot(state)["phase"] == phase.value
+        assert replay_snapshot(state)["phase"] == phase.value
+
+    allowed = {phase.value for phase in GAME_PHASE_ORDER}
+    assert "morale" not in allowed
+
+
 def test_battle_ready_vp_in_final_snapshot():
     """Persisted replay end_state reflects Battle Ready VP applied after last round."""
     from backend.engine.ai.autoplay import AutoPlayConfig, run_auto_game
