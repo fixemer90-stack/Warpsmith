@@ -808,3 +808,201 @@ def test_ignores_cover_tag_cancels_cover_bonus() -> None:
     assert damage == 0, (
         "Without ignores_cover, cover gives +1 save: expected 0 damage (save on 3+), got {damage}"
     )
+
+
+# ── Sustained Hits tests (task-03-03) ──
+
+
+def test_sustained_hits_no_crit_no_extra() -> None:
+    """No Critical Hit → Sustained Hits produces no extra hits."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    weapon = Weapon(
+        name="SH1 Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=4,
+        strength=4,
+        ap=-2,
+        damage_dice=(0, 0, 1),
+        tags=["sustained_hits_1"],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # Hit=4 (success, not crit → no sustained), Wound=4 (success), Save=2 (fail SV5+) → 1 damage
+    rng = SequenceRNG(4, 4, 2, 0)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, f"Non-crit SH1: expected 1 damage, got {damage}"
+
+
+def test_sustained_hits_1_crit_produces_two_hits() -> None:
+    """Critical Hit + SH1 → original hit + 1 extra hit through wound/save."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    weapon = Weapon(
+        name="SH1 Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=4,
+        strength=4,
+        ap=-2,
+        damage_dice=(0, 0, 1),
+        tags=["sustained_hits_1"],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # Hit=6 (crit → SH1). Original: Wound=4 (success), Save=2 (fail) → 1 damage
+    # Extra: Wound=2 (fail), save never rolled → 0 damage
+    rng = SequenceRNG(6, 4, 2, 0, 2)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, (
+        f"Crit+SH1: expected 1 damage (original hit in, extra wound failed), got {damage}"
+    )
+
+
+def test_sustained_hits_2_crit_produces_three_hits() -> None:
+    """Critical Hit + SH2 → original + 2 extra hits through wound/save."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    weapon = Weapon(
+        name="SH2 Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=4,
+        strength=4,
+        ap=-2,
+        damage_dice=(0, 0, 1),
+        tags=["sustained_hits_2"],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # Hit=6 (crit → SH2). Original: Wound=4, Save=2 → 1dmg. Extra1: W=4, S=2 → 1dmg. Extra2: W=1 → fail.
+    rng = SequenceRNG(6, 4, 2, 0, 4, 2, 0, 1)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 2, (
+        f"Crit+SH2: expected 2 damage (original + 1 extra wound in, 1 extra wound failed), got {damage}"
+    )
+
+
+def test_sustained_hits_extra_are_normal_hits_no_auto_wound() -> None:
+    """Sustained Hits extra hits are normal hits — they do NOT auto-wound (no Lethal Hits)."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    # S2 vs T10 → wound on 6+. SH1 on crit → extra hit should NOT auto-wound.
+    weapon = Weapon(
+        name="SH1 Weak Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=4,
+        strength=2,
+        ap=0,
+        damage_dice=(0, 0, 1),
+        tags=["sustained_hits_1"],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 10
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # Hit=6 (crit → SH1). Original: Wound=6 (success, barely), Save=6 (pass SV3+) → 0
+    # Extra: Wound=1 (fail) → 0
+    rng = SequenceRNG(6, 6, 6, 1)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 0, (
+        f"Sustained extra hit should NOT be auto-wound: expected 0 (both saved or failed), got {damage}"
+    )
+
+
+def test_sustained_hits_with_lethal_hits_coexist() -> None:
+    """Sustained Hits + Lethal Hits on same natural 6:
+    Original crit auto-wounds via Lethal, extra hits wound normally."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    weapon = Weapon(
+        name="SH+Lethal Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=4,
+        strength=4,
+        ap=-2,
+        damage_dice=(0, 0, 1),
+        tags=["sustained_hits_1", "lethal_hits"],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 10  # Would need 6+ to wound, but Lethal skips wound roll
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # Hit=6 (crit → SH1 + Lethal). Original: auto-wound (no wound roll), Save=2 (fail SV5+) → 1dmg
+    # Extra: auto_wound=False → Wound=6 (success, S4 vs T10→6+), Save=2 (fail) → 1dmg
+    rng = SequenceRNG(6, 2, 6, 2)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 2, (
+        f"SH+Lethal: expected 2 damage (original auto-wound + extra normal wound), got {damage}"
+    )
+
+    # Same setup but extra hit wound fails:
+    rng = SequenceRNG(6, 2, 1)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, (
+        f"SH+Lethal: expected 1 damage (original auto-wound, extra wound failed), got {damage}"
+    )
+
+
+def test_sustained_hits_extra_not_critical_no_devastating() -> None:
+    """Sustained Hits extra hits are NOT Critical Hits — Devastating Wounds does NOT trigger."""
+    from backend.engine.combat import _resolve_attack_chain
+
+    weapon = Weapon(
+        name="SH+Dev Gun",
+        type="ranged",
+        range_max=24,
+        attacks_dice=(0, 0, 1),
+        skill=4,
+        strength=4,
+        ap=0,
+        damage_dice=(0, 0, 1),
+        tags=["sustained_hits_1", "devastating_wounds"],
+    )
+    attacker = make_unit("Attacker")
+    defender = make_unit("Defender")
+    defender.toughness = 4
+    all_mods = build_weapon_modifiers(weapon)
+    ctx = ModifierContext(attacker, defender, weapon, 12, False, 1)
+
+    # Hit=6 (crit → SH1 + wound is critical → DevWounds bypasses save).
+    # Original: Wound=6 (crit → DevWounds ignores save) → 1dmg
+    # Extra: auto_wound=False, Wound=1 (fail) → 0dmg
+    rng = SequenceRNG(6, 6, 1)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, (
+        f"SH+Dev: extra hits not crit, expected 1 damage (only original bypasses), got {damage}"
+    )
+
+    # Extra hit wound succeeds but is NOT critical → save applies normally
+    # Original: Wound=6 (crit, DevWounds), no save roll
+    # Extra: Wound=4 (success, not crit), Save=6 (passes SV3+) → 0
+    rng = SequenceRNG(6, 6, 4, 6)
+    damage = _resolve_attack_chain(rng, weapon, defender, all_mods, ctx)
+    assert damage == 1, (
+        f"SH+Dev: extra hit wound success but not crit, save applies: expected 1, got {damage}"
+    )

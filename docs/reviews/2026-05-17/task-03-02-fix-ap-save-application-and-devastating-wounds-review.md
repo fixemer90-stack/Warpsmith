@@ -125,3 +125,48 @@ PY
 - Replace or satisfy the stale `tests/test_terrain*.py` verification command.
 - Add Task 3.2 regression evidence to CR-11 as well as CR-07, with latest passing command output.
 - Re-run scoped tests, full suite, ruff, format check, and `git diff --check` before marking complete again.
+
+## Re-review — 2026-05-17
+
+Verdict: REQUEST CHANGES after re-review.
+
+The Task 3.2 combat implementation is now substantially fixed, but the task still cannot be closed because the latest full suite is red.
+
+### Previous finding: `ignores_cover` weapon modifier no-op — Fixed
+
+- `_resolve_wound_chain()` now derives `effective_ignores_cover` from either `context.ignores_cover` or a `save_roll`/`ignore_cover` modifier built from weapon tags.
+- Added regression test `test_ignores_cover_tag_cancels_cover_bonus()` covering AP -1, cover, `tags=["ignores_cover"]`, and a borderline save roll.
+
+Deterministic probe now passes:
+
+```text
+ignores_cover_tag_roll3_damage=1
+normal_cover_roll3_damage=0
+lethal_dev_save6_damage=0
+```
+
+### Previous finding: stale scoped verification command — Fixed
+
+- Task verification now uses existing scoped test files: `tests/test_combat*.py tests/test_modifiers.py`.
+
+```bash
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_combat*.py tests/test_modifiers.py -q
+44 passed in 8.50s
+```
+
+### Previous finding: missing CR-11 evidence — Fixed
+
+- `docs/requirements/code-review/cr-11-terrain-cover-and-los-review.md` now has `Regression evidence — Task 3.2`.
+- CR-07 also records Task 3.2 resolution, including AP, Devastating Wounds, and Ignores Cover notes.
+
+### Remaining blocker: latest full suite fails
+
+```bash
+$ uv run python -m pytest tests/ -q
+1 failed, 571 passed, 3 skipped, 59 warnings in 59.03s
+
+FAILED tests/test_replay.py::test_db_init_preserves_existing_replay_rows
+AttributeError: 'NoneType' object has no attribute 'executescript'
+```
+
+Focused combat implementation is approved from a Task 3.2 behavior standpoint, but project closure remains REQUEST CHANGES until the full-suite failure is resolved or explicitly accepted as unrelated baseline debt.

@@ -146,10 +146,22 @@ def _resolve_attack_chain(
 
     # Wound roll — auto_wound only if this was a Critical Hit AND Lethal Hits is active
     critical_effect = handle_critical_hit(hit_result, "hit_roll", modifiers, context)
-    wound_result = _resolve_wound_chain(
+
+    total_damage = 0
+
+    # Resolve the original hit
+    total_damage += _resolve_wound_chain(
         rng, weapon, defender, modifiers, context, critical_effect.auto_wound
     )
-    return wound_result
+
+    # Sustained Hits: each extra hit is an automatic normal hit (not critical).
+    # Resolved through full wound → save → damage chain.
+    for _ in range(critical_effect.extra_attacks):
+        total_damage += _resolve_wound_chain(
+            rng, weapon, defender, modifiers, context, auto_wound=False
+        )
+
+    return min(total_damage, defender.wounds)
 
 
 def _resolve_hit_roll(
@@ -246,13 +258,9 @@ def _roll_with_modifiers(
     success = roll >= modifier_result.target_value
     is_crit = roll == 6
 
-    # Sustained hits
-    if step == "hit_roll" and is_crit:
-        sustained_count = modifier_result.extra_rolls
-        for _ in range(sustained_count):
-            extra_roll = rng.integers(1, 7)
-            if extra_roll >= modifier_result.target_value:
-                success = True  # Extra hits count as successes
+    # Sustained Hits is NOT resolved here — extra hits must go through
+    # wound/save/damage. Resolved in _resolve_attack_chain via
+    # handle_critical_hit().extra_attacks.
 
     return RollResult(success=success, roll=original_roll, is_crit=is_crit)
 

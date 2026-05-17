@@ -78,7 +78,18 @@ tags: [requirements, code-review, atomic-review]
   - `apply_modifiers`: `devastating_wounds` no longer sets `ignore_save` unconditionally — only `handle_critical_hit` sets it when the roll is a Critical Wound.
 - **Ignores Cover weapon tag → FIXED.** `_resolve_wound_chain` now checks weapon modifiers for `ignore_cover` operation in addition to `context.ignores_cover`.
   - Added 9 new tests.
-  - Full test suite: 571 passed, 3 skipped.
+  - Focused tests: 44 passed.
+  - Full test suite: 578 passed, 3 skipped.
+
+## Task-03-03 Resolution (2026-05-17)
+
+- **Sustained Hits extra hits now resolve through wound/save/damage → FIXED.**
+  - Removed Sustained Hits from `_roll_with_modifiers` (wrong layer — it only flipped a success flag without creating downstream attacks).
+  - `_resolve_attack_chain` now uses `handle_critical_hit().extra_attacks` to spawn additional wound chains for each Sustained Hit extra hit.
+  - Extra hits are normal hits (auto_wound=False), NOT Critical Hits — Lethal/Devastating Wounds do not trigger on them.
+  - SH+Lethal coexistence: original crit auto-wounds, extra hits wound normally.
+  - Added 6 new tests.
+  - Full test suite: 578 passed, 3 skipped.
 
 ## Triage summary
 

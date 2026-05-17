@@ -102,6 +102,10 @@ $ uv run python -m pytest tests/test_combat.py tests/test_modifiers.py -q
 
 $ uv run python -m pytest tests/ -q
 571 passed, 3 skipped, 60 warnings in 71.50s
+
+$ uv run python -m pytest tests/ -q  # re-review 2026-05-17
+1 failed, 571 passed, 3 skipped, 59 warnings in 59.03s
+FAILED tests/test_replay.py::test_db_init_preserves_existing_replay_rows
 ```
 
 Lint/format/diff-check: clean.

@@ -56,6 +56,10 @@ class Database:
             if os.path.exists(p):
                 with contextlib.suppress(OSError):
                     os.remove(p)
+        # Reopen after cleanup
+        self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
+        self._conn.row_factory = sqlite3.Row
+        self._conn.execute("PRAGMA journal_mode=WAL")
 
     def migrate(self):
         """Автомиграция: создаёт таблицы при первом запуске."""
