@@ -60,6 +60,15 @@ tags: [requirements, code-review, atomic-review]
 - **Report:** `docs/reviews/2026-05-09/CR-07-combat-engine-review.md`
 - **Outcome:** Verdict: REQUEST CHANGES. Critical 3, Important 4, Suggestions 1. Natural 6 auto-wounds without Lethal Hits, Devastating Wounds bypasses all saves, AP applied twice, Sustained Hits does not add resolved hits.
 
+## Task-03-01 Resolution (2026-05-17)
+
+- **Natural 6 auto-wounds without Lethal Hits → FIXED.**
+  - `apply_modifiers`: removed `lethal_hits` from `auto_success` group (it no longer makes hits auto-succeed).
+  - `_resolve_attack_chain`: now uses `handle_critical_hit()` to determine `auto_wound` based on Lethal Hits presence, not `hit_result.is_crit` directly.
+  - Updated `test_shoota_vs_marine` expected range (0.20-0.30 → 0.15-0.20) to reflect correct non-Lethal-Hits damage.
+  - Added 6 new tests in `test_modifiers.py`: `test_lethal_hits_does_not_auto_succeed`, `test_plain_natural_6_requires_wound_roll`, `test_lethal_hits_natural_6_auto_wounds`, `test_lethal_hits_non_6_normal_wound_roll`, `test_plain_critical_hit_no_auto_wound_without_lethal`, `test_lethal_hits_bypasses_wound_but_proceeds_to_save`, `test_mixed_attack_pool_lethal_hits`.
+  - Full test suite: 550 passed, 3 skipped.
+
 ## Triage summary
 
 - [CR-07 triage entry](../../reviews/2026-05-10/triage-summary.md#cr-07)

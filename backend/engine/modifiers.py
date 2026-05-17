@@ -172,7 +172,7 @@ def apply_modifiers(
         elif modifier.operation == "blast_bonus":
             blast_bonus = min(4, context.squad_size // 5)
             total_delta += blast_bonus
-        elif modifier.operation in {"lethal_hits", "auto_hit", "auto_wound"}:
+        elif modifier.operation in {"auto_hit", "auto_wound"}:
             result.auto_success = True
         elif modifier.operation == "devastating_wounds":
             result.ignore_save = True

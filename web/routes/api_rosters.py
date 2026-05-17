@@ -108,17 +108,48 @@ class SynergyCheck(BaseModel):
     action_url: str | None = None
 
 
+def _check_roster_limits(
+    user: User,
+    is_public: bool = False,
+    check_count: bool = True,
+) -> None:
+    """Shared server-side roster gates.
+
+    Called before create-like mutations and before updates that change gated fields.
+    UI checks are advisory only; this function is authoritative.
+
+    Race-condition limitation: concurrent create-like requests can both pass the
+    count check before either commits. This is accepted for the current SQLite
+    pet-project scope; production hardening should move the limit enforcement
+    into a transaction or database constraint.
+    """
+    features = UserFeatures.for_user(user)
+
+    max_rosters = features.get("max_rosters")
+    if check_count and max_rosters is not None:
+        current = db.fetchone("SELECT COUNT(*) as cnt FROM rosters WHERE user_id = ?", (user.id,))[
+            "cnt"
+        ]
+
+        if current >= max_rosters:
+            raise HTTPException(
+                status_code=403,
+                detail=f"Max rosters limit ({max_rosters}) reached. Upgrade to Premium.",
+            )
+
+    if is_public and not features.get("public_rosters_create", False):
+        raise HTTPException(
+            status_code=403,
+            detail="Public rosters require Premium. Upgrade to create public rosters.",
+        )
+
+
 @router.post("/rosters")
 async def create_roster(data: RosterCreate, user: User = Depends(get_current_user)):
     """Создать новый ростер."""
 
-    # Check Free tier limit
-    features = UserFeatures.for_user(user)
-    current = db.fetchone("SELECT COUNT(*) as cnt FROM rosters WHERE user_id = ?", (user.id,))[
-        "cnt"
-    ]
-    if current >= features["max_rosters"]:
-        raise HTTPException(403, detail="Max rosters limit reached. Upgrade to Premium.")
+    # Check Free tier limit and public roster gate (shared)
+    _check_roster_limits(user, is_public=data.is_public)
 
     # Load wiki and validate
     with contextlib.suppress(Exception):
@@ -410,6 +441,8 @@ async def update_roster(roster_id: int, data: RosterCreate, user: User = Depends
         raise HTTPException(404, "Roster not found")
     if row["user_id"] != user.id:
         raise HTTPException(403, "Not your roster")
+    # Проверить public roster gate (shared, без count check — это update)
+    _check_roster_limits(user, is_public=data.is_public, check_count=False)
     # Валидация как в create_roster
     with contextlib.suppress(Exception):
         wiki.load()
@@ -438,13 +471,14 @@ async def update_roster(roster_id: int, data: RosterCreate, user: User = Depends
 
     db.execute(
         """UPDATE rosters SET name=?, faction=?, pts_limit=?, detachment=?,
-           units=?, updated_at=datetime('now') WHERE id=?""",
+           units=?, is_public=?, updated_at=datetime('now') WHERE id=?""",
         (
             data.name,
             data.faction,
             data.pts_limit,
             data.detachment or "",
             json.dumps([u.model_dump() for u in data.units]),
+            int(data.is_public) if data.is_public is not None else 0,
             roster_id,
         ),
     )
@@ -465,6 +499,9 @@ async def duplicate_roster(roster_id: int, user: User = Depends(get_current_user
     row = db.fetchone("SELECT * FROM rosters WHERE id = ?", (roster_id,))
     if not row or (row["user_id"] != user.id and not row["is_public"]):
         raise HTTPException(404, "Roster not found")
+
+    # Check Free tier limit (shared — duplicate counts as a new roster)
+    _check_roster_limits(user)
 
     new_name = row["name"] + " (copy)"
     result = db.execute(

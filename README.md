@@ -2,13 +2,28 @@
 
 > Симулятор боёв Warhammer 40,000 — Monte Carlo анализ, AI, веб-интерфейс.
 
-**Версия:** 0.7.9 | **Статус:** Phase 1 ✅ | Phase 2 🔧 | Phase 3 🔧 | Phase 4 ✅ | Phase 5 ✅
+**Версия:** 0.7.9 | **Статус:** Phase 1 ✅ | Phase 2 🔧 | Phase 3 🔧 | Phase 4 ✅ | Phase 5 ✅ | Remediation: 10/32 done
 
-Warpsmith — симулятор боёв по правилам Warhammer 40,000 10-й редакции. Wiki-driven: фракции, юниты, оружие, стратагемы — всё из YAML frontmatter в ~490 .md файлах. Monorepo: данные в `simulator/wiki/`, попадают в Docker-образ автоматически.
+Warpsmith — симулятор боёв по правилам Warhammer 40,000 10-й редакции. Wiki-driven: фракции, юниты, оружие, стратагемы — всё из YAML frontmatter в 467 .md файлах. Monorepo: данные в `simulator/wiki/`, попадают в Docker-образ автоматически.
 
 🌐 **Live:** [warpsmith-production.up.railway.app](https://warpsmith-production.up.railway.app/)
 
 📋 [DEV_INDEX.md](DEV_INDEX.md) — хаб разработчика | 🛣️ [ROADMAP.md](ROADMAP.md) — дорожная карта
+
+## 🔧 Remediation status
+
+Актуально на 2026-05-17 после re-review Phase 2:
+
+| Статус | Кол-во | Что входит |
+|--------|--------|------------|
+| ✅ Completed | 10 | Phase 0, Phase 1, Task 2.1, Task 2.3 |
+| 🔴 Changes requested | 1 | Task 2.2 — Warlord validation/generator/doc-sync blockers |
+| ⏳ Pending | 21 | Tasks 3.1–9.1 |
+| **Осталось до финального gate** | **22** | 21 pending + 1 task на исправлении |
+
+Ближайшие блокеры:
+- `task-02-02-enforce-exactly-one-warlord-when-required.md` — validator всё ещё принимает несколько eligible Characters без Warlord в auto-mode; generated roster Warlord eligibility расходится с validator; docs/CR evidence нужно синхронизировать.
+- Phase 3 combat semantics ещё не начата: Lethal Hits, AP/save + Devastating Wounds, Sustained Hits.
 
 ## ✨ Возможности
 
@@ -81,7 +96,7 @@ Warpsmith — симулятор боёв по правилам Warhammer 40,000
 ```bash
 cd simulator
 uv run python -m pytest tests/ -q
-# → 454 теста (41 файл), 3 skipped
+# → 543 passed, 3 skipped (43 test files)
 ```
 
 ## 📁 Структура
@@ -111,7 +126,7 @@ simulator/
 │   │   └── pages.py          HTML pages
 │   ├── templates/            Jinja2 + HTMX partials
 │   └── static/               JS (Alpine.js), SVG icons (18)
-├── tests/                    41 файл, 454 теста
+├── tests/                    43 файла, 543 passed / 3 skipped
 └── docs/                     architecture · requirements · features (62 specs)
 ```
 
@@ -134,9 +149,9 @@ simulator/
 
 ## 📊 Статистика
 
-- **Тестов:** 454 (41 файл), 3 skipped
+- **Тестов:** 543 passed / 3 skipped (43 файла)
 - **Юнитов:** 160 (Orks 81, Tau 40, AdMech 39)
-- **Wiki:** ~490 .md — в репозитории (`simulator/wiki/`)
+- **Wiki:** 467 .md — в репозитории (`simulator/wiki/`)
 - **Стратагем:** 114 (Core 13, Orks 42, AdMech 42, Tau 19)
 - **Энхансментов:** 88
 - **Детачментов:** 23

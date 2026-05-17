@@ -53,16 +53,16 @@ flowchart LR
 | Done | Task | File | Primary CRs | Depends on | Verification |
 | --- | --- | --- | --- | --- | --- |
 | [x] | 2.1 — Lock the canonical PTS formula | [task-02-01-lock-the-canonical-pts-formula.md](task-02-01-lock-the-canonical-pts-formula.md) | CR-12, CR-16, CR-17, CR-19. | [1.4 — Emit canonical JSON artifacts](task-01-04-emit-canonical-json-artifacts.md), Phase 1 checkpoint | `uv run python -m pytest tests/test_roster*.py -q`<br>Browser/API smoke if frontend changed. |
-| [x] | 2.2 — Enforce exactly one Warlord when required | [task-02-02-enforce-exactly-one-warlord-when-required.md](task-02-02-enforce-exactly-one-warlord-when-required.md) | CR-12, CR-16, CR-17, CR-19. | [2.1 — Lock the canonical PTS formula](task-02-01-lock-the-canonical-pts-formula.md) | `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q`<br>Browser smoke `/team-builder` for crown/warning/save-disabled state. |
-| [ ] | 2.3 — Enforce plan/feature gates consistently | [task-02-03-enforce-plan-feature-gates-consistently.md](task-02-03-enforce-plan-feature-gates-consistently.md) | CR-12, CR-16, CR-17, CR-19. | [2.2 — Enforce exactly one Warlord when required](task-02-02-enforce-exactly-one-warlord-when-required.md) | `uv run python -m pytest tests/test_api_rosters.py tests/test_billing*.py -q` |
+| [ ] | 2.2 — Enforce exactly one Warlord when required | [task-02-02-enforce-exactly-one-warlord-when-required.md](task-02-02-enforce-exactly-one-warlord-when-required.md) | CR-12, CR-16, CR-17, CR-19. | [2.1 — Lock the canonical PTS formula](task-02-01-lock-the-canonical-pts-formula.md) | `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q`<br>Browser smoke `/team-builder` for crown/warning/save-disabled state. |
+| [ ] | 2.3 — Enforce plan/feature gates consistently | [task-02-03-enforce-plan-feature-gates-consistently.md](task-02-03-enforce-plan-feature-gates-consistently.md) | CR-12, CR-16, CR-17, CR-19. | [2.2 — Enforce exactly one Warlord when required](task-02-02-enforce-exactly-one-warlord-when-required.md) | `uv run python -m pytest tests/test_rosters.py -q` |
 
 ### Phase 3 — Combat math
 
-| Task | File | Primary CRs | Depends on | Verification |
-| --- | --- | --- | --- | --- |
-| 3.1 — Fix natural 6 / Lethal Hits semantics | [task-03-01-fix-natural-6-lethal-hits-semantics.md](task-03-01-fix-natural-6-lethal-hits-semantics.md) | CR-07, CR-11. | [1.4 — Emit canonical JSON artifacts](task-01-04-emit-canonical-json-artifacts.md), Phase 1 checkpoint | `uv run python -m pytest tests/test_combat*.py tests/test_modifiers.py -q` |
-| 3.2 — Fix AP/save application and Devastating Wounds | [task-03-02-fix-ap-save-application-and-devastating-wounds.md](task-03-02-fix-ap-save-application-and-devastating-wounds.md) | CR-07, CR-11. | [3.1 — Fix natural 6 / Lethal Hits semantics](task-03-01-fix-natural-6-lethal-hits-semantics.md) | `uv run python -m pytest tests/test_combat*.py tests/test_terrain*.py -q` |
-| 3.3 — Fix Sustained Hits resolution | [task-03-03-fix-sustained-hits-resolution.md](task-03-03-fix-sustained-hits-resolution.md) | CR-07, CR-11. | [3.2 — Fix AP/save application and Devastating Wounds](task-03-02-fix-ap-save-application-and-devastating-wounds.md) | `uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q` |
+| Done | Task | File | Primary CRs | Depends on | Verification |
+| --- | --- | --- | --- | --- | --- |
+| [x] | 3.1 — Fix natural 6 / Lethal Hits semantics | [task-03-01-fix-natural-6-lethal-hits-semantics.md](task-03-01-fix-natural-6-lethal-hits-semantics.md) | CR-07, CR-11. | [1.4 — Emit canonical JSON artifacts](task-01-04-emit-canonical-json-artifacts.md), Phase 1 checkpoint | `uv run python -m pytest tests/test_combat*.py tests/test_modifiers.py -q` |
+| [ ] | 3.2 — Fix AP/save application and Devastating Wounds | [task-03-02-fix-ap-save-application-and-devastating-wounds.md](task-03-02-fix-ap-save-application-and-devastating-wounds.md) | CR-07, CR-11. | [3.1 — Fix natural 6 / Lethal Hits semantics](task-03-01-fix-natural-6-lethal-hits-semantics.md) | `uv run python -m pytest tests/test_combat*.py tests/test_terrain*.py -q` |
+| [ ] | 3.3 — Fix Sustained Hits resolution | [task-03-03-fix-sustained-hits-resolution.md](task-03-03-fix-sustained-hits-resolution.md) | CR-07, CR-11. | [3.2 — Fix AP/save application and Devastating Wounds](task-03-02-fix-ap-save-application-and-devastating-wounds.md) | `uv run python -m pytest tests/test_modifiers.py tests/test_combat*.py -q` |
 
 ### Phase 4 — Game state / VP / phase invariants
 
@@ -87,6 +87,7 @@ flowchart LR
 | 6.1 — Persist authoritative final snapshot | [task-06-01-persist-authoritative-final-snapshot.md](task-06-01-persist-authoritative-final-snapshot.md) | CR-14, CR-18, CR-24. | Phase 5 checkpoint | `uv run python -m pytest tests/test_replay.py tests/test_result_screen.py -q`<br>Deterministic generated replay smoke. |
 | 6.2 — Fix event parsing and summary attribution | [task-06-02-fix-event-parsing-and-summary-attribution.md](task-06-02-fix-event-parsing-and-summary-attribution.md) | CR-14, CR-18, CR-24. | [6.1 — Persist authoritative final snapshot](task-06-01-persist-authoritative-final-snapshot.md) | `uv run python -m pytest tests/test_result_screen.py tests/test_replay.py -q` |
 | 6.3 — Add repeatable final gate smoke script | [task-06-03-add-repeatable-final-gate-smoke-script.md](task-06-03-add-repeatable-final-gate-smoke-script.md) | CR-14, CR-18, CR-24. | [6.2 — Fix event parsing and summary attribution](task-06-02-fix-event-parsing-and-summary-attribution.md) | `uv run python scripts/smoke_final_gate.py` |
+| 6.4 — Convert api_replays and result runtime to canonical unit IDs | [task-06-04-convert-replay-to-canonical-ids.md](task-06-04-convert-replay-to-canonical-ids.md) | CR-14, CR-18, CR-24. | [6.3 — Add repeatable final gate smoke script](task-06-03-add-repeatable-final-gate-smoke-script.md), Phase 5 checkpoint | `uv run python -m pytest tests/test_replay.py tests/test_result_screen.py -q` |
 
 ### Phase 7 — API/auth/persistence hardening
 

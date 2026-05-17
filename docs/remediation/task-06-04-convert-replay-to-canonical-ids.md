@@ -15,23 +15,25 @@ source: gap-analysis
 ## Phase context
 
 **Phase:** 6 — Replay/result authoritative state
-**Purpose:** replay and result rendering use runtime IDs, not display names.
+**Purpose:** replay and result rendering use proper runtime/canonical IDs, not display names.
 **Primary CRs:** CR-14, CR-18, CR-24.
 **Dependencies:** Phase 5 checkpoint, Phase 1 checkpoint (canonical IDs exist)
 
 ## Objective
 
-Convert `api_replays.py` (auto-play simulation launcher and replay persistence) and the result rendering path to use canonical unit IDs rather than wiki display-name lookups. This ensures replays survive display-name changes, two same-name units from different factions don't collide, and the replay layer is decoupled from the mutable wiki loader.
+Convert `api_replays.py` (auto-play simulation launcher and replay persistence) and the result rendering path to use `canonical_unit_id` and `runtime_unit_id` rather than wiki display-name lookups.
+
+Critical: do NOT replace display-name identity with canonical-id-only identity for runtime events. Replay events need `runtime_unit_id` to disambiguate duplicated unit instances (e.g. two copies of the same unit in one roster).
 
 ## Scope
 
 In scope:
 
-- `api_replays.py`: `units_from_db()` — lookup units by canonical id (via `CanonicalContentRegistry`) instead of `wiki.get_unit(display_name)`.
-- `api_replays.py`: `auto_play_simulation()` — construct `Unit` copies with `unit_id` metadata for runtime use.
-- `api_replays.py`: replay persistence — store `unit_id` in replay payloads alongside or replacing display names.
-- Result page (`result.html` + `result_chart.js`): consume `unit_id` from replay payload, resolve display labels from canonical registry.
-- Tests: verify auto-play with same-name units across factions works; replay survives unit rename; result page reads `unit_id`.
+- `api_replays.py`: `units_from_db()` — resolve unit content by `canonical_unit_id` (via `CanonicalContentRegistry`) instead of `wiki.get_unit(display_name)`.
+- `api_replays.py`: `auto_play_simulation()` — construct `Unit` copies with `canonical_unit_id` and generate `runtime_unit_id` for battle instance disambiguation.
+- `api_replays.py`: replay persistence — store `canonical_unit_id` and `runtime_unit_id` per unit in replay payloads alongside display names (as denormalized UI metadata only).
+- Result page (`result.html` + `result_chart.js`): consume IDs from replay payload, resolve display labels from canonical registry.
+- Tests covering duplicate unit instances, cross-faction same-name, legacy replay backward compat.
 
 Out of scope:
 
@@ -40,22 +42,36 @@ Out of scope:
 - Frontend roster display (Phase 2 scope).
 - Canonical registry population (Phase 1, already done).
 
-## Contract
+## Replay unit identity contract
 
-- Replay payloads include `unit_id` (canonical id, e.g. `unit:orks:warboss`) as the authoritative unit reference.
-- Display names remain in replay payloads as denormalized UI metadata only.
-- `wiki.get_unit(display_name)` lookups in the auto-play path are replaced with `CanonicalContentRegistry.get_unit(unit_id)`.
-- Replay viewer and result page consume `unit_id` for identity, display name for labels.
+Replay payloads MUST include for every unit:
+
+| Field | Format | Purpose |
+|-------|--------|---------|
+| `runtime_unit_id` | `p1:unit:orks:warboss:0` | Authoritative battle-instance identity |
+| `canonical_unit_id` | `unit:orks:warboss` | Stable content lookup identity |
+| `display_name` | `"Warboss"` | Denormalized UI metadata only |
+
+Rules:
+- `canonical_unit_id` is used for registry lookup (content/stats).
+- `runtime_unit_id` is used for replay events, result aggregation, and same-unit-instance disambiguation.
+- `display_name` MUST NOT be used as a lookup key.
+- Two copies of the same canonical unit in one roster remain distinct by `runtime_unit_id`.
+- Two same-name units from different factions remain distinct by `canonical_unit_id` and `runtime_unit_id`.
 
 ## Acceptance criteria
 
-- [ ] `units_from_db()` resolves units by canonical id, not wiki display-name lookup.
-- [ ] Auto-play constructed `Unit` objects carry `unit_id` metadata.
-- [ ] Replay payloads include `unit_id` per unit.
-- [ ] Result page renders correctly using `unit_id` from replay payload.
-- [ ] Two same-name units from different factions do not collide in replay/result.
+- [ ] `units_from_db()` resolves units by `canonical_unit_id` via `CanonicalContentRegistry`, not wiki display-name lookup.
+- [ ] Auto-play constructed `Unit` objects carry `canonical_unit_id` metadata.
+- [ ] Replay payloads include `canonical_unit_id` and `runtime_unit_id` per unit.
+- [ ] Display names remain in replay payloads as denormalized UI metadata only.
+- [ ] Result page renders correctly using IDs from replay payload.
+- [ ] Two copies of the same canonical unit in one roster remain distinct by `runtime_unit_id`.
+- [ ] Two same-name units from different factions remain distinct by `canonical_unit_id` and `runtime_unit_id`.
 - [ ] Replay survives unit display-name rename in wiki.
-- [ ] Existing replays continue to load and display (backward compat).
+- [ ] Existing legacy replays without `canonical_unit_id`/`runtime_unit_id` still load through a backward-compatible fallback path.
+- [ ] Fallback path is marked legacy and does NOT become the primary lookup path.
+- [ ] New replay does NOT call `wiki.get_unit(display_name)` on the primary path.
 
 ## Files likely touched
 
@@ -66,8 +82,11 @@ Out of scope:
 
 ## Test requirements
 
-- Two rosters with same-named units from different factions → auto-play → distinct unit_ids in replay.
-- Rename a wiki unit's display name → old replay still loads and resolves.
+- Same canonical unit duplicated twice in one roster → distinct `runtime_unit_id`s in replay payload.
+- Two same-name units from different factions → distinct `canonical_unit_id` and `runtime_unit_id`.
+- Legacy replay with only `unit_name` still renders via fallback (not primary lookup path).
+- New replay does not call `wiki.get_unit(display_name)` on the primary path.
+- Rename a wiki unit's display name → old replay still loads and resolves via `canonical_unit_id`.
 - Existing replay fixture loads with backward compat.
 
 ## Verification

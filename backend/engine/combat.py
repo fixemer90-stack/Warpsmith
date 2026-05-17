@@ -144,9 +144,10 @@ def _resolve_attack_chain(
     if not hit_result.success:
         return 0
 
-    # Wound roll
+    # Wound roll — auto_wound only if this was a Critical Hit AND Lethal Hits is active
+    critical_effect = handle_critical_hit(hit_result, "hit_roll", modifiers, context)
     wound_result = _resolve_wound_chain(
-        rng, weapon, defender, modifiers, context, hit_result.is_crit
+        rng, weapon, defender, modifiers, context, critical_effect.auto_wound
     )
     return wound_result
 
@@ -171,7 +172,9 @@ def _resolve_wound_chain(
     auto_wound: bool,
 ) -> int:
     if auto_wound:
-        wound_result = RollResult(success=True, roll=6, is_crit=True)
+        wound_result = RollResult(success=True, roll=6, is_crit=False)
+        # is_crit=False: auto-wounds from Lethal Hits are NOT Critical Wounds.
+        # Devastating Wounds only triggers on actual Critical Wound rolls (per 10e).
         wound_modifiers = ModifierResult(target_value=2)
     else:
         wound_target = defender.effective_toughness(weapon.strength)

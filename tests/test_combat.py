@@ -61,7 +61,7 @@ def test_shoota_vs_marine() -> None:
         n_iterations=50000,
     )
 
-    assert 0.20 < result.stats.mean < 0.30
+    assert 0.15 < result.stats.mean < 0.20
 
 
 def test_heavy_bolter_vs_marine() -> None:

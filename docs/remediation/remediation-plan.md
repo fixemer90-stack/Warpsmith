@@ -832,6 +832,33 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Verification:**
 - `uv run python scripts/smoke_final_gate.py`
 
+### Task 6.4 — Convert api_replays and result runtime to canonical unit IDs
+
+**Objective:** Replace display-name wiki lookups in the auto-play/replay path with `canonical_unit_id` and `runtime_unit_id`.
+
+**Replay unit identity contract:**
+- [ ] Replay payloads MUST include `runtime_unit_id` (battle-instance), `canonical_unit_id` (content lookup), `display_name` (UI metadata only).
+- [ ] `display_name` MUST NOT be used as a lookup key.
+- [ ] Two copies of the same canonical unit → distinct `runtime_unit_id`.
+- [ ] Two same-name units from different factions → distinct by both IDs.
+
+**Acceptance criteria:**
+- [ ] `units_from_db()` resolves by `canonical_unit_id` via `CanonicalContentRegistry`.
+- [ ] Replay payloads include `canonical_unit_id` and `runtime_unit_id` per unit.
+- [ ] Two copies of the same unit in one roster → distinct `runtime_unit_id`s.
+- [ ] Two same-name units from different factions → distinct IDs.
+- [ ] Legacy replays without IDs load via backward-compat fallback (marked legacy, not primary path).
+- [ ] New replay does not call `wiki.get_unit(display_name)` on the primary path.
+
+**Files likely touched:**
+- `web/routes/api_replays.py`
+- `web/static/result_chart.js`
+- `web/templates/result.html`
+- `tests/test_replay.py`
+
+**Verification:**
+- `uv run python -m pytest tests/test_replay.py tests/test_result_screen.py -q`
+
 ### Checkpoint 6
 
 - [ ] Replay/result identity and final state are authoritative.

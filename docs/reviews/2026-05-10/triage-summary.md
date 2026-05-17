@@ -322,3 +322,16 @@ All five Phase 1 remediation tasks done (1.1-1.5).
 
 Verification: 509+ tests pass (36 content contracts), lint/formatter clean.
 CR evidence: CR-06, CR-11, CR-12, CR-21.
+
+## Phase 2 — Roster validator — COMPLETE
+
+All three Phase 2 remediation tasks done (2.1-2.3).
+
+| Task | Status | Key result |
+|------|--------|-----------|
+| 2.1 — Lock canonical PTS formula | ✅ | `calculate_squad_pts()`, loadout/nob support, shared parity fixture |
+| 2.2 — Enforce exactly one Warlord | ✅ | Shared Warlord validation, `is_warlord` param, `is_unit_eligible_warlord()` |
+| 2.3 — Enforce plan/feature gates | ✅ | Shared `_check_roster_limits()` — create/duplicate/update all enforced |
+
+Verification: 544 tests pass, lint/formatter clean.
+CR evidence: CR-12, CR-16, CR-17, CR-19.

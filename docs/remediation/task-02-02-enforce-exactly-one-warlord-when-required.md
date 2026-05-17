@@ -43,7 +43,7 @@ saved and generated rosters have valid Warlord semantics.
 - Only units with `CHARACTER` keyword/tag are eligible to be Warlord.
 - If roster has exactly one eligible Character, generated rosters MAY auto-select it.
 - If roster has multiple eligible Characters, saved/user-created rosters MUST explicitly select exactly one.
-- If roster has zero eligible Characters, Warlord requirement is not enforced unless faction/rules data explicitly requires otherwise.
+- If roster has zero eligible Characters, the roster is invalid — every army must include at least one Character to be Warlord (core WH40k 10e rules).
 
 ## Non-goals
 
@@ -62,7 +62,7 @@ saved and generated rosters have valid Warlord semantics.
 
 ## Verification
 
-- [x] `uv run python -m pytest tests/test_roster*.py tests/test_api_rosters.py -q` → 41 passed (test_roster) + API tests
+- [x] `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 57 passed, 26 warnings (2026-05-17 re-review)
 - [x] `uv run python -m pytest tests/ -q` → 543 passed, 3 skipped
 - [x] Ruff lint: clean
 - [x] Ruff format: clean
@@ -109,17 +109,22 @@ Regression evidence added to CR-12, CR-16, CR-17, CR-19.
 
 **Verdict:** REQUEST CHANGES
 **Report:** `docs/reviews/2026-05-17/task-02-02-enforce-exactly-one-warlord-when-required-review.md`
+**Re-review:** `docs/reviews/2026-05-17/task-02-02-enforce-exactly-one-warlord-when-required-rereview.md`
 
-### Blocking findings
+### Current re-review status
 
-1. Shared backend `validate_roster()` still accepts multiple eligible Characters with no Warlord when `is_warlord=None`; the new test currently asserts this invalid state is valid.
-2. Generated roster Warlord selection uses only `unit.can_be_warlord`, while validation also treats `is_leader`, `category == "character"`, and `character` tag as eligible; generated rosters can therefore miss eligible Warlords and do not validate the final generated payload.
-3. Closure docs/evidence are not synced: `remediation-plan.md` still has Task 2.2 unchecked, `index.md` has no completed status, CR-12/16/17/19 contain no `Regression evidence — Task 2.2`, and the claimed `tests/test_api_rosters.py` verification command fails because that file does not exist.
+Code-level Warlord behavior is fixed: deterministic probe confirms zero eligible Characters, multiple eligible Characters in auto mode, two Warlords, and non-Character Warlord are rejected; one eligible Character auto mode and exactly one explicit Warlord pass.
+
+Task closure is still blocked by documentation hygiene:
+
+1. Frontmatter remains `status: changes_requested` until all closure docs are synchronized.
+2. The previous review file still mixes `FIXED` at the top with old `REQUEST CHANGES` findings/body at the bottom.
+3. Full suite re-review did not pass clean: `uv run python -m pytest tests/ -q` → 6 failed, 544 passed, 3 skipped.
 
 ### Review verification
 
-- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster.py tests/test_rosters.py -q` → 56 passed, 26 warnings.
-- `uv run python -m pytest tests/test_roster*.py tests/test_api_rosters.py -q` → failed, exit 4 (`tests/test_api_rosters.py` not found).
-- `uv run ruff check backend/state/roster.py web/routes/api_rosters.py tests/test_roster.py tests/test_rosters.py` → clean.
-- `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py tests/test_roster.py tests/test_rosters.py` → clean.
-- `git diff --check -- backend/state/roster.py web/routes/api_rosters.py tests/test_roster.py tests/test_rosters.py docs/remediation/task-02-02-enforce-exactly-one-warlord-when-required.md` → clean.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 57 passed, 26 warnings.
+- Deterministic Warlord probe → expected pass/fail behavior observed for zero eligible, one eligible, two eligible/no Warlord, exactly one Warlord, two Warlords, and non-Character Warlord.
+- `uv run python -m pytest tests/ -q` → failed: 6 failed, 544 passed, 3 skipped, 38 warnings.
+- `uv run ruff check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py tests/test_roster.py tests/test_rosters.py` → clean.
+- `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py tests/test_roster.py tests/test_rosters.py` → clean.
