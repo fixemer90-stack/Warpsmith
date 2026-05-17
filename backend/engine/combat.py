@@ -144,11 +144,24 @@ def _resolve_attack_chain(
     if not hit_result.success:
         return 0
 
-    # Wound roll
-    wound_result = _resolve_wound_chain(
-        rng, weapon, defender, modifiers, context, hit_result.is_crit
+    # Wound roll — auto_wound only if this was a Critical Hit AND Lethal Hits is active
+    critical_effect = handle_critical_hit(hit_result, "hit_roll", modifiers, context)
+
+    total_damage = 0
+
+    # Resolve the original hit
+    total_damage += _resolve_wound_chain(
+        rng, weapon, defender, modifiers, context, critical_effect.auto_wound
     )
-    return wound_result
+
+    # Sustained Hits: each extra hit is an automatic normal hit (not critical).
+    # Resolved through full wound → save → damage chain.
+    for _ in range(critical_effect.extra_attacks):
+        total_damage += _resolve_wound_chain(
+            rng, weapon, defender, modifiers, context, auto_wound=False
+        )
+
+    return min(total_damage, defender.wounds)
 
 
 def _resolve_hit_roll(
@@ -171,7 +184,9 @@ def _resolve_wound_chain(
     auto_wound: bool,
 ) -> int:
     if auto_wound:
-        wound_result = RollResult(success=True, roll=6, is_crit=True)
+        wound_result = RollResult(success=True, roll=6, is_crit=False)
+        # is_crit=False: auto-wounds from Lethal Hits are NOT Critical Wounds.
+        # Devastating Wounds only triggers on actual Critical Wound rolls (per 10e).
         wound_modifiers = ModifierResult(target_value=2)
     else:
         wound_target = defender.effective_toughness(weapon.strength)
@@ -186,11 +201,15 @@ def _resolve_wound_chain(
     wound_critical = handle_critical_hit(wound_result, "wound_roll", modifiers, context)
     ignore_save = wound_modifiers.ignore_save or wound_critical.ignore_save
     if not ignore_save:
-        # Save with Cover: +1 SV if has_cover and not ignores_cover
+        # Save resolution: best_save(weapon.ap) applies AP once and checks invuln.
+        # Cover gives +1 to the save roll (lowers target), applied after AP.
+        # Check context AND weapon modifiers for ignore_cover (weapon tag "ignores_cover").
+        effective_ignores_cover = context.ignores_cover or any(
+            m.target == "save_roll" and m.operation == "ignore_cover" for m in modifiers
+        )
         save_target = defender.best_save(weapon.ap)
-        if context.has_cover and not context.ignores_cover:
+        if context.has_cover and not effective_ignores_cover:
             save_target = max(2, save_target - 1)  # +1 save = lower target (SV3+ → SV2+)
-        save_target = max(1, min(6, save_target - weapon.ap))
         save_modifiers = apply_modifiers("save_roll", save_target, modifiers, context, rng)
         save_result = _roll_with_modifiers(rng, save_modifiers, modifiers, "save_roll")
         if save_result.success:
@@ -239,13 +258,9 @@ def _roll_with_modifiers(
     success = roll >= modifier_result.target_value
     is_crit = roll == 6
 
-    # Sustained hits
-    if step == "hit_roll" and is_crit:
-        sustained_count = modifier_result.extra_rolls
-        for _ in range(sustained_count):
-            extra_roll = rng.integers(1, 7)
-            if extra_roll >= modifier_result.target_value:
-                success = True  # Extra hits count as successes
+    # Sustained Hits is NOT resolved here — extra hits must go through
+    # wound/save/damage. Resolved in _resolve_attack_chain via
+    # handle_critical_hit().extra_attacks.
 
     return RollResult(success=success, roll=original_roll, is_crit=is_crit)
 

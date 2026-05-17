@@ -432,8 +432,8 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Non-goals:** Changing canonical points source data is not in scope; implementing full roster legality validation is not in scope; frontend redesign is not in scope.
 
 **Verification:**
-- `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 56 passed
-- Full suite: 544 passed
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings
+- `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings
 
 ### Task 2.2 — Enforce exactly one Warlord when required
 
@@ -460,25 +460,29 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Non-goals:** Full detachment/faction-specific Warlord trait logic is not in scope; enhancement legality is not in scope; Commander/Leader attachment rules are not in scope.
 
 **Verification:**
-- `uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 56 passed
-- Full suite: 544 passed
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings
+- `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings
 
 ### Task 2.3 — Enforce plan/feature gates consistently
 
 **Objective:** Free/Premium roster limits cannot be bypassed through duplicate/import paths.
 
 **Acceptance criteria:**
-- [ ] Create, duplicate, import/generate-save paths share one validator.
-- [ ] Free limit matches product requirement and UI.
-- [ ] Public roster creation respects feature flags.
+- [x] Create, duplicate, import/generate-save paths share one validator.
+- [x] Free limit matches product requirement and UI.
+- [x] Public roster creation respects feature flags.
 
 **Verification:**
-- `uv run python -m pytest tests/test_api_rosters.py tests/test_billing*.py -q`
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings
+- `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings
+- `uv run ruff check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean
+- `uv run ruff format --check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean
+- `git diff --check -- backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean
 
 ### Checkpoint 2
 
-- [ ] Roster validation is shared and test-covered.
-- [ ] UI/API/generated roster behavior matches.
+- [x] Roster validation is shared and test-covered.
+- [x] UI/API/generated roster behavior matches.
 
 ## Phase 3 — Combat math
 
@@ -831,6 +835,33 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 **Verification:**
 - `uv run python scripts/smoke_final_gate.py`
+
+### Task 6.4 — Convert api_replays and result runtime to canonical unit IDs
+
+**Objective:** Replace display-name wiki lookups in the auto-play/replay path with `canonical_unit_id` and `runtime_unit_id`.
+
+**Replay unit identity contract:**
+- [ ] Replay payloads MUST include `runtime_unit_id` (battle-instance), `canonical_unit_id` (content lookup), `display_name` (UI metadata only).
+- [ ] `display_name` MUST NOT be used as a lookup key.
+- [ ] Two copies of the same canonical unit → distinct `runtime_unit_id`.
+- [ ] Two same-name units from different factions → distinct by both IDs.
+
+**Acceptance criteria:**
+- [ ] `units_from_db()` resolves by `canonical_unit_id` via `CanonicalContentRegistry`.
+- [ ] Replay payloads include `canonical_unit_id` and `runtime_unit_id` per unit.
+- [ ] Two copies of the same unit in one roster → distinct `runtime_unit_id`s.
+- [ ] Two same-name units from different factions → distinct IDs.
+- [ ] Legacy replays without IDs load via backward-compat fallback (marked legacy, not primary path).
+- [ ] New replay does not call `wiki.get_unit(display_name)` on the primary path.
+
+**Files likely touched:**
+- `web/routes/api_replays.py`
+- `web/static/result_chart.js`
+- `web/templates/result.html`
+- `tests/test_replay.py`
+
+**Verification:**
+- `uv run python -m pytest tests/test_replay.py tests/test_result_screen.py -q`
 
 ### Checkpoint 6
 

@@ -4,6 +4,7 @@ import contextlib
 import os
 import sqlite3
 from pathlib import Path
+from typing import Optional
 
 
 class Database:
@@ -11,49 +12,18 @@ class Database:
         if not db_path:
             db_path = os.getenv("DB_PATH", str(Path.cwd() / "simulator.db"))
         self.db_path = db_path
-        self._conn: sqlite3.Connection | None = None
+        self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
+        self._conn.row_factory = sqlite3.Row
+        self._conn.execute("PRAGMA journal_mode=WAL")
 
-    def connect(self) -> sqlite3.Connection:
-        if self._conn is None:
-            # Ensure parent directory exists
-            db_dir = os.path.dirname(self.db_path)
-            if db_dir:
-                os.makedirs(db_dir, exist_ok=True)
-            try:
-                self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
-                self._conn.row_factory = sqlite3.Row
-                self._conn.execute("PRAGMA journal_mode=WAL")
-            except sqlite3.OperationalError:
-                # Stale WAL files (corrupted by git, fs sync, etc.)
-                # Clean them up and fall back to DELETE journal mode
-                db_dir = os.path.dirname(self.db_path) or "."
-                for f in os.listdir(db_dir):
-                    if f.startswith(os.path.basename(self.db_path)) and (
-                        f.endswith(("-shm", "-wal"))
-                    ):
-                        with contextlib.suppress(OSError):
-                            os.remove(os.path.join(db_dir, f))
-                self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
-                self._conn.row_factory = sqlite3.Row
-                self._conn.execute("PRAGMA journal_mode=DELETE")
-        return self._conn
-
-    def hard_reset(self):
-        """Close connection and remove stale journal files. Use after git operations."""
-        self.close()
-        db_dir = os.path.dirname(self.db_path) or "."
-        base = os.path.basename(self.db_path)
-        for suffix in ("-shm", "-wal"):
-            p = os.path.join(db_dir, base + suffix)
-            if os.path.exists(p):
-                with contextlib.suppress(OSError):
-                    os.remove(p)
+    def checkpoint_wal(self) -> None:
+        """Flush WAL into main DB. Safe before backup/copy."""
+        self.conn.commit()
+        self.conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")
 
     @property
     def conn(self) -> sqlite3.Connection:
-        conn = self.connect()
-        assert conn is not None
-        return conn
+        return self._conn
 
     def execute(self, sql: str, params=()):
         return self.conn.execute(sql, params)
@@ -72,8 +42,24 @@ class Database:
 
     def close(self):
         if self._conn:
+            self._conn.commit()
             self._conn.close()
             self._conn = None
+
+    def hard_reset(self):
+        """Close connection and remove stale journal files. Use after git operations only."""
+        self.close()
+        db_dir = os.path.dirname(self.db_path) or "."
+        base = os.path.basename(self.db_path)
+        for suffix in ("-shm", "-wal"):
+            p = os.path.join(db_dir, base + suffix)
+            if os.path.exists(p):
+                with contextlib.suppress(OSError):
+                    os.remove(p)
+        # Reopen after cleanup
+        self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
+        self._conn.row_factory = sqlite3.Row
+        self._conn.execute("PRAGMA journal_mode=WAL")
 
     def migrate(self):
         """Автомиграция: создаёт таблицы при первом запуске."""

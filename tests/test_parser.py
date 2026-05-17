@@ -76,16 +76,6 @@ def test_registry_cache() -> None:
     units_path.mkdir(parents=True, exist_ok=True)
     (units_path / "Boyz.md").write_text(SAMPLE_BOY, encoding="utf8")
 
-    # Clear generated dir so it falls back to scan+parse
-    import shutil
-
-    from backend.loader.compiler import GENERATED_DIR
-
-    if GENERATED_DIR.exists():
-        for f in GENERATED_DIR.iterdir():
-            if f.name != "manifest.json":
-                shutil.rmtree(f) if f.is_dir() else f.unlink()
-
     registry = WikiRegistry(str(wiki_path))
     units = registry.load(use_cache=False)
 

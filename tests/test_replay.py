@@ -6,6 +6,7 @@ import contextlib
 import json
 import os
 import sqlite3
+import tempfile
 from datetime import datetime
 
 import pytest
@@ -1021,3 +1022,63 @@ def test_production_startup_no_destructive_reset():
     source = inspect.getsource(Database.migrate)
     assert "DROP TABLE IF EXISTS replays" not in source
     assert "CREATE TABLE IF NOT EXISTS replays" in source
+
+
+def test_db_close_reopen_preserves_data():
+    """Replay rows survive Database close/reopen cycle."""
+    from backend.db.database import Database
+
+    tmp = tempfile.mkstemp(suffix=".db")
+    os.close(tmp[0])
+    db_path = tmp[1]
+    try:
+        # Open, migrate, insert
+        db1 = Database(db_path)
+        db1.migrate()
+        db1.execute(
+            "INSERT INTO replays (game_id, created_at, roster_a, roster_b, mission, deployment, seed, replay_json) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                "test-close-reopen",
+                "2026-05-17T00:00:00",
+                "{}",
+                "{}",
+                "Only War",
+                "Dawn of War",
+                42,
+                json.dumps({"rounds": []}),
+            ),
+        )
+        db1.commit()
+        row_count_before = db1.fetchone("SELECT COUNT(*) as cnt FROM replays")["cnt"]
+        db1.close()
+
+        # Reopen — data must survive
+        db2 = Database(db_path)
+        db2.migrate()
+        row_count_after = db2.fetchone("SELECT COUNT(*) as cnt FROM replays")["cnt"]
+        game = db2.fetchone(
+            "SELECT game_id, mission FROM replays WHERE game_id = ?", ("test-close-reopen",)
+        )
+
+        assert row_count_before == 1
+        assert row_count_after == 1, f"Row count changed: {row_count_before} → {row_count_after}"
+        assert game is not None, "Replay row missing after close/reopen"
+        assert game["game_id"] == "test-close-reopen"
+        assert game["mission"] == "Only War"
+        db2.close()
+
+        # checkpoint_wal does not delete data
+        db3 = Database(db_path)
+        db3.migrate()
+        db3.checkpoint_wal()
+        after_ck = db3.fetchone("SELECT COUNT(*) as cnt FROM replays")["cnt"]
+        assert after_ck == 1, f"checkpoint_wal deleted rows: {after_ck}"
+        db3.close()
+    finally:
+        with contextlib.suppress(OSError):
+            os.unlink(db_path)
+            for suffix in ("-shm", "-wal"):
+                p = db_path + suffix
+                if os.path.exists(p):
+                    os.unlink(p)

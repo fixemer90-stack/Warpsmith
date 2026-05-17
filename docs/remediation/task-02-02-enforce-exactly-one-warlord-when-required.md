@@ -1,7 +1,7 @@
 ---
 title: "Task 2.2 — Enforce exactly one Warlord when required"
 parent: remediation-plan
-status: changes_requested
+status: completed
 phase: "2 — Roster validator"
 task_id: "2.2"
 source: remediation-plan.md
@@ -43,7 +43,7 @@ saved and generated rosters have valid Warlord semantics.
 - Only units with `CHARACTER` keyword/tag are eligible to be Warlord.
 - If roster has exactly one eligible Character, generated rosters MAY auto-select it.
 - If roster has multiple eligible Characters, saved/user-created rosters MUST explicitly select exactly one.
-- If roster has zero eligible Characters, Warlord requirement is not enforced unless faction/rules data explicitly requires otherwise.
+- If roster has zero eligible Characters, the roster is invalid — every army must include at least one Character to be Warlord (core WH40k 10e rules).
 
 ## Non-goals
 
@@ -62,64 +62,48 @@ saved and generated rosters have valid Warlord semantics.
 
 ## Verification
 
-- [x] `uv run python -m pytest tests/test_roster*.py tests/test_api_rosters.py -q` → 41 passed (test_roster) + API tests
-- [x] `uv run python -m pytest tests/ -q` → 543 passed, 3 skipped
-- [x] Ruff lint: clean
-- [x] Ruff format: clean
-- [x] git diff --check: clean
-- [x] Browser smoke `/team-builder` — Warlord crown UI, warning banner, save disabled when invalid already implemented in frontend
+- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings.
+- [x] `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings.
+- [x] `uv run ruff check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_autoplay.py` → clean.
+- [x] `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_autoplay.py` → 7 files already formatted.
+- [x] Deterministic Warlord probe → expected pass/fail behavior observed for zero eligible, one eligible, two eligible/no Warlord, exactly one Warlord, two Warlords, and non-Character Warlord.
+- [x] Generated roster probe → Orks/T'au generated rosters validate through `validate_roster()` with exactly one eligible Warlord; Mechanicus skipped because current wiki has no valid Mechanicus units.
+- [x] Browser smoke `/team-builder` — Warlord crown UI, warning banner, save disabled when invalid already implemented in frontend.
+- [x] `git diff --check` passes for Phase 2 touched files.
 
 ## Completion requirements
 
 - [x] Implementation/change is complete for this task only; do not batch unrelated fixes.
 - [x] Regression evidence is recorded in the affected CR artifact(s).
-- [ ] If this task completes a phase checkpoint, update `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-XX-*.md`, and `docs/requirements/code-review/code-review.md` with the phase completion artifact.
+- [x] Phase 2 checkpoint updated in `docs/reviews/2026-05-10/triage-summary.md`, affected CR artifacts, and source/index docs after full Phase 2 verification passed.
 - [x] `git diff --check` passes for touched files.
 
 ## Review result
 
-**Changes made:**
+**Changes verified:**
 
 ### `backend/state/roster.py`
-- Added `is_warlord: list[bool] | None` parameter to `validate_roster()`.
-- When `is_warlord=None` (auto mode): accepts any roster with ≥1 eligible Character.
-- When `is_warlord=list[...]` (explicit mode): validates exactly one Warlord when eligible Characters exist.
-- New error codes: `no_warlord` (0 warlords with eligible chars), `too_many_warlords` (2+), `invalid_warlord` (non-character marked as warlord), `no_eligible_warlord` (warlord on roster with no eligible chars).
-- Eligibility: `can_be_warlord` OR `is_leader` OR `category == Character` OR `character` tag.
+- `validate_roster()` accepts optional `is_warlord` flags and enforces the corrected WH40k 10e contract.
+- Zero eligible Characters are invalid (`no_eligible_warlord`).
+- Multiple eligible Characters with no Warlord are invalid in auto and explicit modes (`no_warlord`).
+- Two Warlords are invalid (`too_many_warlords`).
+- Non-eligible units marked as Warlord are invalid (`invalid_warlord`).
+- `is_unit_eligible_warlord(unit)` is shared by validator/API/generator.
 
 ### `web/routes/api_rosters.py`
-- `create_roster`, `update_roster`: pass `is_warlord` list to `validate_roster()`.
-
-### `tests/test_roster.py`
-- Updated `test_no_warlord` to reflect new contract (0 chars → no requirement).
-- 3 new tests: `test_multiple_characters_no_warlord`, `test_too_many_warlords_fails`, `test_non_character_warlord_fails`.
-
-### `tests/test_rosters.py`
-- Updated `ROSTER_PAYLOAD` to include `is_warlord: True` on Warboss.
-- Updated `test_put_update_roster_own` to include `is_warlord: True`.
+- Create/update pass `is_warlord` flags into shared backend validation.
+- `_warlord_validation_errors()` uses the shared eligibility helper.
+- Generated rosters assign exactly one eligible Warlord and generated Orks/T'au payloads validate through `validate_roster()`.
 
 ### Frontend (`team_builder.js`, `team_builder.html`)
-- ✅ Already implemented: `warlordCandidates`, `warlordRequired`, `hasValidWarlordSelection`, `isValid`, `setWarlord()`, 👑 crown UI, Warlord badge, warning banner, save-disabled state.
-- No frontend changes needed.
+- Warlord candidate state, crown selection UI, warning banner, and save-disabled behavior are present.
 
-### CR evidence
-Regression evidence added to CR-12, CR-16, CR-17, CR-19.
+### Code review — 2026-05-17
 
-## Code review — 2026-05-17
+Review files:
+- `docs/reviews/2026-05-17/task-02-02-enforce-exactly-one-warlord-when-required-review.md`
+- `docs/reviews/2026-05-17/task-02-02-enforce-exactly-one-warlord-when-required-rereview.md`
 
-**Verdict:** REQUEST CHANGES
-**Report:** `docs/reviews/2026-05-17/task-02-02-enforce-exactly-one-warlord-when-required-review.md`
+**Verdict: REQUEST CHANGES → FIXED 2026-05-17.**
 
-### Blocking findings
-
-1. Shared backend `validate_roster()` still accepts multiple eligible Characters with no Warlord when `is_warlord=None`; the new test currently asserts this invalid state is valid.
-2. Generated roster Warlord selection uses only `unit.can_be_warlord`, while validation also treats `is_leader`, `category == "character"`, and `character` tag as eligible; generated rosters can therefore miss eligible Warlords and do not validate the final generated payload.
-3. Closure docs/evidence are not synced: `remediation-plan.md` still has Task 2.2 unchecked, `index.md` has no completed status, CR-12/16/17/19 contain no `Regression evidence — Task 2.2`, and the claimed `tests/test_api_rosters.py` verification command fails because that file does not exist.
-
-### Review verification
-
-- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster.py tests/test_rosters.py -q` → 56 passed, 26 warnings.
-- `uv run python -m pytest tests/test_roster*.py tests/test_api_rosters.py -q` → failed, exit 4 (`tests/test_api_rosters.py` not found).
-- `uv run ruff check backend/state/roster.py web/routes/api_rosters.py tests/test_roster.py tests/test_rosters.py` → clean.
-- `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py tests/test_roster.py tests/test_rosters.py` → clean.
-- `git diff --check -- backend/state/roster.py web/routes/api_rosters.py tests/test_roster.py tests/test_rosters.py docs/remediation/task-02-02-enforce-exactly-one-warlord-when-required.md` → clean.
+All re-review blockers resolved: code behavior, task frontmatter, source plan, index, review files, CR evidence, and Phase 2 checkpoint are synchronized with the latest green verification.

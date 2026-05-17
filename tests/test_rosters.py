@@ -5,6 +5,7 @@ from typing import ClassVar
 import pytest
 from fastapi.testclient import TestClient
 
+from backend.auth import decode_jwt
 from backend.db.database import db
 from main import app
 
@@ -19,14 +20,8 @@ def _extract_token(resp) -> str | None:
     return None
 
 
-@pytest.fixture
-def client():
-    return TestClient(app)
-
-
-@pytest.fixture
-def auth_headers(client):
-    """Register a user and return auth headers. Each call = fresh user."""
+def _register_user(client: TestClient, *, tier: str = "premium") -> dict:
+    """Register a fresh user, force their billing tier, and return auth headers."""
     import uuid
 
     suffix = uuid.uuid4().hex[:8]
@@ -44,7 +39,23 @@ def auth_headers(client):
 
     token = _extract_token(resp)
     assert token is not None, f"Register failed: {resp.status_code}"
+    payload = decode_jwt(token)
+    assert payload is not None
+    user_id = payload["user_id"]
+    db.execute("UPDATE users SET tier = ? WHERE id = ?", (tier, user_id))
+    db.commit()
     return {"Cookie": f"token={token}"}
+
+
+@pytest.fixture
+def client():
+    return TestClient(app)
+
+
+@pytest.fixture
+def auth_headers(client):
+    """Register a user and return auth headers. Each call = fresh user."""
+    return _register_user(client, tier="premium")
 
 
 class TestRosterCRUD:
@@ -224,3 +235,200 @@ class TestRosterCRUD:
         """Duplicate non-existent roster returns 404."""
         resp = client.post("/api/rosters/99999/duplicate", headers=auth_headers)
         assert resp.status_code == 404
+
+    def test_free_create_at_limit_returns_403(self, client):
+        """Free users can create one roster; a second create-like save is blocked."""
+        headers = _register_user(client, tier="free")
+        first = client.post("/api/rosters", json=self.ROSTER_PAYLOAD, headers=headers)
+        assert first.status_code == 200, first.text
+
+        second = client.post(
+            "/api/rosters",
+            json={**self.ROSTER_PAYLOAD, "name": "Second Ork Horde"},
+            headers=headers,
+        )
+
+        assert second.status_code == 403
+        assert "Max rosters limit (1) reached" in second.json()["detail"]
+
+    def test_free_duplicate_at_limit_returns_403(self, client):
+        """Duplicate is a create-like mutation and cannot bypass the Free limit."""
+        headers = _register_user(client, tier="free")
+        create = client.post("/api/rosters", json=self.ROSTER_PAYLOAD, headers=headers)
+        assert create.status_code == 200, create.text
+        roster_id = create.json()["id"]
+
+        duplicate = client.post(f"/api/rosters/{roster_id}/duplicate", headers=headers)
+
+        assert duplicate.status_code == 403
+        assert "Max rosters limit (1) reached" in duplicate.json()["detail"]
+
+    def test_free_generated_roster_save_at_limit_returns_403(self, client):
+        """Saving a generated roster uses the same create gate and respects Free limit."""
+        headers = _register_user(client, tier="free")
+        first = client.post("/api/rosters", json=self.ROSTER_PAYLOAD, headers=headers)
+        assert first.status_code == 200, first.text
+
+        generated = client.post("/api/rosters/generate", json={"faction": "orks"})
+        assert generated.status_code == 200, generated.text
+        generated_payload = generated.json()["roster"]
+
+        save = client.post("/api/rosters", json=generated_payload, headers=headers)
+
+        assert save.status_code == 403
+        assert "Max rosters limit (1) reached" in save.json()["detail"]
+
+    def test_free_update_private_roster_at_limit_is_allowed(self, client):
+        """Updating an existing private roster does not re-check max_rosters count."""
+        headers = _register_user(client, tier="free")
+        create = client.post("/api/rosters", json=self.ROSTER_PAYLOAD, headers=headers)
+        assert create.status_code == 200, create.text
+        roster_id = create.json()["id"]
+
+        update = client.put(
+            f"/api/rosters/{roster_id}",
+            json={**self.ROSTER_PAYLOAD, "name": "Updated Private", "is_public": False},
+            headers=headers,
+        )
+
+        assert update.status_code == 200, update.text
+        assert update.json()["name"] == "Updated Private"
+        assert not update.json()["is_public"]
+
+    def test_free_update_roster_to_public_returns_403(self, client):
+        """Updating gated fields still checks the authoritative public roster gate."""
+        headers = _register_user(client, tier="free")
+        create = client.post("/api/rosters", json=self.ROSTER_PAYLOAD, headers=headers)
+        assert create.status_code == 200, create.text
+        roster_id = create.json()["id"]
+
+        update = client.put(
+            f"/api/rosters/{roster_id}",
+            json={**self.ROSTER_PAYLOAD, "is_public": True},
+            headers=headers,
+        )
+
+        assert update.status_code == 403
+        assert (
+            update.json()["detail"]
+            == "Public rosters require Premium. Upgrade to create public rosters."
+        )
+
+    def test_premium_max_rosters_none_is_unlimited(self, client):
+        """Premium max_rosters=None skips the count gate instead of crashing."""
+        headers = _register_user(client, tier="premium")
+
+        first = client.post("/api/rosters", json=self.ROSTER_PAYLOAD, headers=headers)
+        second = client.post(
+            "/api/rosters",
+            json={**self.ROSTER_PAYLOAD, "name": "Second Premium Roster"},
+            headers=headers,
+        )
+
+        assert first.status_code == 200, first.text
+        assert second.status_code == 200, second.text
+
+
+class TestFeatureGates:
+    """Focused tests for Free/Premium feature gates (Task 2.3)."""
+
+    @staticmethod
+    def _register_and_set_tier(client, tier: str) -> tuple[dict, str]:
+        """Register a new user and force-set their tier. Returns (auth_headers, email)."""
+        import uuid
+
+        suffix = uuid.uuid4().hex[:8]
+        email = f"gate{suffix}@test.dev"
+        resp = client.post(
+            "/auth/register",
+            data={
+                "email": email,
+                "password": "StrongP4ss!",
+                "display_name": "GateTester",
+            },
+            follow_redirects=False,
+        )
+        token = _extract_token(resp)
+        assert token is not None, f"Register failed: {resp.status_code}"
+        headers = {"Cookie": f"token={token}"}
+        db.execute("UPDATE users SET tier = ? WHERE email = ?", (tier, email))
+        db.commit()
+        return headers, email
+
+    def test_free_user_max_one_roster(self, client):
+        """Free user can create exactly 1 roster; 2nd is rejected."""
+        headers, _ = self._register_and_set_tier(client, "free")
+        payload = TestRosterCRUD.ROSTER_PAYLOAD
+
+        # 1st roster — OK
+        r1 = client.post("/api/rosters", json=payload, headers=headers)
+        assert r1.status_code == 200, f"1st roster should succeed: {r1.text}"
+
+        # 2nd roster — rejected (Free limit = 1)
+        r2 = client.post("/api/rosters", json=payload, headers=headers)
+        assert r2.status_code == 403, f"2nd roster should be rejected: {r2.status_code}"
+        assert "max" in r2.json()["detail"].lower()
+
+    def test_free_user_duplicate_at_limit_blocked(self, client):
+        """Free user at max_rosters cannot duplicate (would exceed limit)."""
+        headers, _ = self._register_and_set_tier(client, "free")
+        payload = TestRosterCRUD.ROSTER_PAYLOAD
+
+        r1 = client.post("/api/rosters", json=payload, headers=headers)
+        assert r1.status_code == 200
+        roster_id = r1.json()["id"]
+
+        # Duplicate at limit — rejected
+        r2 = client.post(f"/api/rosters/{roster_id}/duplicate", headers=headers)
+        assert r2.status_code == 403, f"Duplicate at limit should be rejected: {r2.status_code}"
+
+    def test_free_user_public_create_rejected(self, client):
+        """Free user cannot create public rosters."""
+        headers, _ = self._register_and_set_tier(client, "free")
+        payload = {**TestRosterCRUD.ROSTER_PAYLOAD, "is_public": True}
+
+        resp = client.post("/api/rosters", json=payload, headers=headers)
+        assert resp.status_code == 403, f"Free public create should be rejected: {resp.status_code}"
+        assert "public" in resp.json()["detail"].lower()
+
+    def test_premium_user_public_update_persisted(self, client):
+        """Premium user can update a roster to public and GET reflects it."""
+        headers, _ = self._register_and_set_tier(client, "premium")
+        payload = TestRosterCRUD.ROSTER_PAYLOAD
+
+        # Create private
+        r1 = client.post("/api/rosters", json={**payload, "is_public": False}, headers=headers)
+        assert r1.status_code == 200, r1.text
+        roster_id = r1.json()["id"]
+        assert r1.json().get("is_public") == 0
+
+        # Update to public
+        update_payload = {**payload, "is_public": True}
+        r2 = client.put(f"/api/rosters/{roster_id}", json=update_payload, headers=headers)
+        assert r2.status_code == 200, f"Update failed: {r2.text}"
+        assert r2.json().get("is_public") == 1, (
+            f"Expected is_public=1 after update, got {r2.json().get('is_public')}"
+        )
+
+        # GET confirms persistence
+        r3 = client.get(f"/api/rosters/{roster_id}", headers=headers)
+        assert r3.status_code == 200
+        assert r3.json().get("is_public") == 1, (
+            f"Expected is_public=1 on GET, got {r3.json().get('is_public')}"
+        )
+
+    def test_free_user_public_update_rejected(self, client):
+        """Free user cannot update roster to public."""
+        headers, _ = self._register_and_set_tier(client, "free")
+        payload = TestRosterCRUD.ROSTER_PAYLOAD
+
+        # Create private
+        r1 = client.post("/api/rosters", json={**payload, "is_public": False}, headers=headers)
+        assert r1.status_code == 200
+        roster_id = r1.json()["id"]
+
+        # Try to update to public
+        update_payload = {**payload, "is_public": True}
+        r2 = client.put(f"/api/rosters/{roster_id}", json=update_payload, headers=headers)
+        assert r2.status_code == 403, f"Free public update should be rejected: {r2.status_code}"
+        assert "public" in r2.json()["detail"].lower()

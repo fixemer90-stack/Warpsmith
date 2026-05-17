@@ -392,7 +392,7 @@ def run_auto_game(
     6. Сбор логов и summary
     7. Возврат результата
     """
-    start = time.time()
+    start = time.monotonic()
     config = config or AutoPlayConfig()
 
     # Generate seed if not provided (logged for reproducibility)
@@ -479,7 +479,7 @@ def run_auto_game(
         # Run rounds through Scenario
         for r in range(config.max_rounds):
             # Time check
-            elapsed = (time.time() - start) * 1000
+            elapsed = (time.monotonic() - start) * 1000
             if elapsed > config.time_limit_seconds * 1000:
                 raise TimeoutError(f"Simulation exceeded {config.time_limit_seconds}s")
 
@@ -525,7 +525,7 @@ def run_auto_game(
             game_state=state,
             round_logs=round_logs,
             placements=placements,
-            total_duration_ms=(time.time() - start) * 1000,
+            total_duration_ms=(time.monotonic() - start) * 1000,
             summary=summary,
         )
 
@@ -535,7 +535,7 @@ def run_auto_game(
             round_logs=round_logs if "round_logs" in locals() else [],
             placements=placements if "placements" in locals() else {},
             error=str(e),
-            total_duration_ms=(time.time() - start) * 1000,
+            total_duration_ms=(time.monotonic() - start) * 1000,
         )
 
     except Exception as e:
@@ -544,5 +544,5 @@ def run_auto_game(
             round_logs=[],
             placements={},
             error=f"Unexpected error during simulation: {e!s}",
-            total_duration_ms=(time.time() - start) * 1000,
+            total_duration_ms=(time.monotonic() - start) * 1000,
         )
