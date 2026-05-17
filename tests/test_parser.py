@@ -78,6 +78,7 @@ def test_registry_cache() -> None:
 
     # Clear generated dir so it falls back to scan+parse
     import shutil
+
     from backend.loader.compiler import GENERATED_DIR
 
     if GENERATED_DIR.exists():

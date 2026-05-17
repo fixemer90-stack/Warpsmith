@@ -1,4 +1,4 @@
-with open('/mnt/d/Python/Balthier/simulator/web/routes/api_replays.py', 'r', newline='') as f:
+with open('/mnt/d/Python/Balthier/simulator/web/routes/api_replays.py', newline='') as f:
     content = f.read()
 
 print(f"Before: {content.count('actor_id=m.group(1).strip()')} old-style refs")
@@ -35,6 +35,6 @@ content = content.replace(
 
 print(f"After: {content.count('actor_id=m.group(1).strip()')} old-style refs")
 
-with open('/mnt/d/Python/Balthier/simulator/web/routes/api_replays.py', 'w', newline='') as f:
+with open('/mnt/d/Python/Balthier/simulator/web/routes/api_replays.py', newline='') as f:
     f.write(content)
 print("Done")
