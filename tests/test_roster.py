@@ -132,7 +132,9 @@ class TestValidateRoster:
         # Auto mode (is_warlord=None): 2+ eligible chars → error
         units = [("Warboss", 1), ("Weirdboy", 1)]
         result = validate_roster(units, registry)
-        assert not result.is_valid, f"Expected invalid (2 eligible chars need explicit Warlord), errors: {result.errors}"
+        assert not result.is_valid, (
+            f"Expected invalid (2 eligible chars need explicit Warlord), errors: {result.errors}"
+        )
         assert any(e.code == "no_warlord" for e in result.errors)
 
         # Explicit mode (is_warlord=[]): zero warlords flagged → error
