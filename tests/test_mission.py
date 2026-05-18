@@ -1058,6 +1058,7 @@ def test_mission_name_normalization() -> None:
 
     game = create_empty_game("mm-test")
     from backend.state.game_state import PlayerState
+
     game.players = {"p1": PlayerState("p1", "P1", "marines"), "p2": PlayerState("p2", "P2", "orks")}
 
     # All these variants should resolve to the same mission
@@ -1082,6 +1083,7 @@ def test_dynamic_objective_counts() -> None:
 
     game = create_empty_game("obj-test")
     from backend.state.game_state import PlayerState
+
     game.players = {"p1": PlayerState("p1", "P1", "marines"), "p2": PlayerState("p2", "P2", "orks")}
 
     m1 = create_mission("Only War", game)
@@ -1090,11 +1092,15 @@ def test_dynamic_objective_counts() -> None:
 
     m2 = create_mission("Take and Hold", game)
     assert m2 is not None
-    assert len(m2.config.objectives) == 5, f"Take and Hold: expected 5, got {len(m2.config.objectives)}"
+    assert len(m2.config.objectives) == 5, (
+        f"Take and Hold: expected 5, got {len(m2.config.objectives)}"
+    )
 
     m3 = create_mission("Purge the Foe", game)
     assert m3 is not None
-    assert len(m3.config.objectives) == 5, f"Purge the Foe: expected 5, got {len(m3.config.objectives)}"
+    assert len(m3.config.objectives) == 5, (
+        f"Purge the Foe: expected 5, got {len(m3.config.objectives)}"
+    )
 
 
 def test_game_does_not_end_at_vp_10() -> None:
@@ -1126,16 +1132,30 @@ def test_game_ends_by_round_cap_or_wipe() -> None:
 
     p1 = PlayerState("p1", "P1", "marines")
     unit = UnitState(
-        unit_id="u1", name="M", faction="m", position=(0, 0),
-        current_wounds=4, max_wounds=4, models_remaining=1, models_total=1,
-        leadership=6, objective_control=1,
+        unit_id="u1",
+        name="M",
+        faction="m",
+        position=(0, 0),
+        current_wounds=4,
+        max_wounds=4,
+        models_remaining=1,
+        models_total=1,
+        leadership=6,
+        objective_control=1,
     )
     p1.units = {"u1": unit}
     p2 = PlayerState("p2", "P2", "orks")
     unit2 = UnitState(
-        unit_id="u2", name="O", faction="o", position=(1, 1),
-        current_wounds=4, max_wounds=4, models_remaining=1, models_total=1,
-        leadership=6, objective_control=1,
+        unit_id="u2",
+        name="O",
+        faction="o",
+        position=(1, 1),
+        current_wounds=4,
+        max_wounds=4,
+        models_remaining=1,
+        models_total=1,
+        leadership=6,
+        objective_control=1,
     )
     p2.units = {"u2": unit2}
     game.players = {"p1": p1, "p2": p2}
