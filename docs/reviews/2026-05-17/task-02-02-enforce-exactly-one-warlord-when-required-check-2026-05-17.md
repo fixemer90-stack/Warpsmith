@@ -25,8 +25,15 @@ All findings resolved.
 
 ### Important 4 — Stale verification counts (Fixed)
 
-- Full suite: 599 passed, 3 skipped.
+- Full suite: 604 passed, 3 skipped, 60 warnings.
 - Task 2.2 closure verification updated.
+
+### 2026-05-18 follow-up verification
+
+- Team Builder now shows a specific zero-eligible Character warning and keeps save invalid until a Character Warlord candidate exists.
+- Frontend Warlord eligibility includes keyword-only `CHARACTER` parity with the backend helper.
+- Added frontend static regression coverage in `tests/test_team_builder.py` for zero-eligible warning/save-disabled logic and keyword eligibility.
+- Verification: scoped Warlord/roster/team-builder suite `82 passed, 48 warnings`; full suite `604 passed, 3 skipped, 60 warnings`; Ruff lint/format and diff-check clean.
 
 ## Scope
 

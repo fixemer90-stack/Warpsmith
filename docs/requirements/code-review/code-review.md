@@ -110,9 +110,16 @@ Current triage verdict: not release-ready. CR-24 executable gates passed, but re
 
 ## Phase 2 checkpoint evidence
 
-Date: 2026-05-17
+Date: 2026-05-18
 
-Phase 2 roster-validator remediation is back to REQUEST CHANGES after the 2026-05-17 Task 2.2 check. Blockers: keyword-only `CHARACTER` units are not Warlord-eligible in the shared helper, Team Builder treats zero eligible Characters as UI-valid, and closure evidence still has stale full-suite counts. Current observed gates during the check: scoped roster suite `68 passed, 48 warnings`; full suite `593 passed, 3 skipped, 60 warnings`; Ruff lint/format clean for the checked Phase 2 Python files.
+Phase 2 roster-validator remediation is complete after Task 2.2 and Task 2.3 closure re-check sync. Shared Warlord validation/backend-frontend parity and feature-gate enforcement are aligned across task, review, source plan, index, and CR artifacts.
+
+Latest observed verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py -q` → 82 passed, 48 warnings.
+- `uv run python -m pytest tests/ -q` → 604 passed, 3 skipped, 60 warnings.
+- `uv run ruff check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py` → All checks passed.
+- `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py` → 8 files already formatted.
+- `git diff --check -- docs/remediation/task-02-02-enforce-exactly-one-warlord-when-required.md docs/remediation/task-02-03-enforce-plan-feature-gates-consistently.md docs/remediation/remediation-plan.md docs/remediation/index.md docs/reviews/2026-05-18/task-02-03-enforce-plan-feature-gates-consistently-review.md docs/requirements/code-review/code-review.md` → clean.
 
 
 ## Phase 3 checkpoint evidence
@@ -120,3 +127,28 @@ Phase 2 roster-validator remediation is back to REQUEST CHANGES after the 2026-0
 Date: 2026-05-17
 
 Phase 3 combat-math remediation is complete and verified. Tasks 3.1, 3.2, and 3.3 are marked complete in the remediation task files and index. Focused combat/modifier suite passed (`50 passed in 10.38s`), full suite passed (`583 passed, 3 skipped, 60 warnings in 56.40s`), and Ruff lint/format plus diff-check are clean for the Task 3.3 touched code/docs. CR-07 and CR-11 artifacts contain Phase 3 regression evidence.
+
+## Phase 4 checkpoint evidence — 2026-05-18
+
+Status: REOPENED / REQUEST CHANGES after Task 4.3 check on 2026-05-18. Tasks 4.1 and 4.2 remain completed, but Task 4.3 is not closed.
+
+Closed scope:
+- CR-08: 10e phase loop, CP generation, battle-shock reset timing, round/turn reset invariants.
+- CR-10: Task 4.3 re-check found VP/objective scoring blockers; closure pending fixed mission-defined 3/5/5 scoring evidence.
+- CR-14: Task 4.3 re-check found replay/result-facing VP sync risk; closure pending fixed authoritative final VP evidence.
+- CR-24: executable full suite is green, but Task 4.3 lint/format and closure gates are red.
+
+Verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q` → 28 passed.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py -q` → 42 passed.
+- `uv run python -m pytest tests/ -q` → 602 passed, 3 skipped, 60 warnings.
+- `uv run ruff check backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py` → All checks passed.
+- `uv run ruff format --check backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py` → 4 files already formatted.
+- Health smoke: `curl -sS http://127.0.0.1:8000/api/health` → `{"status":"ok","version":"0.7.9"}`.
+
+
+### Task 4.3 re-check — REQUEST CHANGES (2026-05-18)
+
+Review: `docs/reviews/2026-05-18/task-04-03-lock-vp-objectives-mission-normalization-battle-ready-check.md`
+
+Blockers: mission scoring values are not mission-defined (Take and Hold observed 1 VP, Purge the Foe observed 0 VP for one controlled objective), Scenario VP sync can omit or multiply final VP, `check_end_game()` still has a generic `vp_cap`, Task 4.3 tests do not cover claimed Battle Ready/final-snapshot/idempotence behavior, and `uv run ruff check tests/test_mission.py` plus `uv run ruff format --check tests/test_mission.py` fail.

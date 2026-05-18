@@ -333,8 +333,7 @@ def test_both_players_start_with_zero_cp() -> None:
 
 
 def test_active_player_gains_cp_on_command() -> None:
-    """Player gains +1 CP during Command phase execution (both active sides get CP
-    since the game uses simultaneous-turn model within each phase)."""
+    """Active player gains +1 CP during their own Command phase."""
     from backend.engine.scenario import Scenario
     from backend.state.game_state import PlayerState, create_empty_game
 
@@ -342,10 +341,49 @@ def test_active_player_gains_cp_on_command() -> None:
     p1 = PlayerState("p1", "P1", "marines", command_points=0)
     p2 = PlayerState("p2", "P2", "orks", command_points=0)
     game.players = {"p1": p1, "p2": p2}
+    game.active_player = "p1"
     scenario = Scenario(game)
+
     scenario._command_phase()
-    # In the game's simultaneous-turn model, both players act per phase
-    # so both gain CP (equivalent to each gaining CP on their own turn in 10e)
+
+    assert p1.command_points == 1
+    assert p2.command_points == 0
+
+
+def test_opponent_does_not_gain_cp_during_active_command() -> None:
+    """Opponent does not gain CP during the active player's Command phase."""
+    from backend.engine.scenario import Scenario
+    from backend.state.game_state import PlayerState, create_empty_game
+
+    game = create_empty_game("cp-opponent")
+    p1 = PlayerState("p1", "P1", "marines", command_points=3)
+    p2 = PlayerState("p2", "P2", "orks", command_points=4)
+    game.players = {"p1": p1, "p2": p2}
+    game.active_player = "p1"
+    scenario = Scenario(game)
+
+    scenario._command_phase()
+
+    assert p1.command_points == 4
+    assert p2.command_points == 4
+
+
+def test_explicit_next_player_command_can_award_cp_same_round() -> None:
+    """Changing active_player is an explicit player-turn boundary for Command CP."""
+    from backend.engine.scenario import Scenario
+    from backend.state.game_state import PlayerState, create_empty_game
+
+    game = create_empty_game("cp-next-player")
+    p1 = PlayerState("p1", "P1", "marines", command_points=0)
+    p2 = PlayerState("p2", "P2", "orks", command_points=0)
+    game.players = {"p1": p1, "p2": p2}
+    scenario = Scenario(game)
+
+    game.active_player = "p1"
+    scenario._command_phase()
+    game.active_player = "p2"
+    scenario._command_phase()
+
     assert p1.command_points == 1
     assert p2.command_points == 1
 
@@ -363,8 +401,7 @@ def test_no_warlord_cp_bonus() -> None:
 
 
 def test_cp_not_double_awarded_on_repeated_command() -> None:
-    """Repeated Command phase execution is idempotent for CP — the phase
-    should only be called once per round by the scenario loop."""
+    """Repeated Command phase processing is idempotent for CP."""
     from backend.engine.scenario import Scenario
     from backend.state.game_state import PlayerState, create_empty_game
 
@@ -372,20 +409,15 @@ def test_cp_not_double_awarded_on_repeated_command() -> None:
     p1 = PlayerState("p1", "P1", "marines", command_points=0)
     p2 = PlayerState("p2", "P2", "orks", command_points=0)
     game.players = {"p1": p1, "p2": p2}
+    game.active_player = "p1"
     scenario = Scenario(game)
 
     scenario._command_phase()
-    cp_after_first = p1.command_points
+    cp_after_first = (p1.command_points, p2.command_points)
 
-    # Calling _command_phase again would double-award — the scenario
-    # loop only calls it once per round. This test documents that
-    # contract: if called a second time, CP increases again.
-    # (This is by design — the loop manager prevents double-call.)
     scenario._command_phase()
-    assert p1.command_points == cp_after_first + 1, (
-        "_command_phase is NOT idempotent by itself — "
-        "the scenario loop guarantees single call per round"
-    )
+
+    assert (p1.command_points, p2.command_points) == cp_after_first
 
 
 def test_battle_shock_clears_in_command_phase() -> None:
@@ -414,6 +446,51 @@ def test_battle_shock_clears_in_command_phase() -> None:
     assert unit.is_battle_shocked
     scenario._command_phase()
     assert not unit.is_battle_shocked, "Battle-shock should be cleared during Command phase"
+
+
+def test_battle_shock_clears_only_for_active_owner_command_phase() -> None:
+    """Battle-shock clears only for the owner whose Command phase is processed."""
+    from backend.engine.scenario import Scenario
+    from backend.state.game_state import PlayerState, UnitState, create_empty_game
+
+    game = create_empty_game("bs-owner-scoped")
+    p1_unit = UnitState(
+        unit_id="p1-u1",
+        name="Marine",
+        faction="marines",
+        position=(0, 0),
+        current_wounds=4,
+        max_wounds=4,
+        models_remaining=1,
+        models_total=1,
+        leadership=6,
+        objective_control=1,
+        is_battle_shocked=True,
+    )
+    p2_unit = UnitState(
+        unit_id="p2-u1",
+        name="Ork",
+        faction="orks",
+        position=(5, 3),
+        current_wounds=4,
+        max_wounds=4,
+        models_remaining=1,
+        models_total=1,
+        leadership=6,
+        objective_control=1,
+        is_battle_shocked=True,
+    )
+    game.players = {
+        "p1": PlayerState("p1", "P1", "marines", units={"p1-u1": p1_unit}),
+        "p2": PlayerState("p2", "P2", "orks", units={"p2-u1": p2_unit}),
+    }
+    game.active_player = "p1"
+    scenario = Scenario(game)
+
+    scenario._command_phase()
+
+    assert not p1_unit.is_battle_shocked
+    assert p2_unit.is_battle_shocked
 
 
 def test_battle_shock_persists_through_non_command_phases() -> None:

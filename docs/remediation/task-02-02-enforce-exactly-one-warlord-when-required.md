@@ -1,7 +1,7 @@
 ---
 title: "Task 2.2 — Enforce exactly one Warlord when required"
 parent: remediation-plan
-status: changes_requested
+status: completed
 phase: "2 — Roster validator"
 task_id: "2.2"
 source: remediation-plan.md
@@ -33,9 +33,9 @@ saved and generated rosters have valid Warlord semantics.
 - [x] Validator rejects `is_warlord: true` on a non-Character unit.
 - [x] API save path uses the same backend validator as generated roster validation.
 - [x] Generated rosters always persist exactly one valid Warlord when eligible Characters exist.
-- [ ] Team Builder disables or warns on save when Warlord state is invalid. *(Request changes: zero eligible Characters are invalid by the task contract, but frontend treats `warlordCandidates.length <= 1` as valid.)*
+- [x] Team Builder disables or warns on save when Warlord state is invalid.
 - [x] Team Builder UI visibly exposes Warlord selection and warnings.
-- [ ] Tests cover zero Characters, one Character auto/valid Warlord, multiple Characters with no Warlord invalid, multiple Characters with exactly one Warlord valid, two Warlords invalid, non-Character marked as Warlord invalid, generated roster setting exactly one valid Warlord, and API rejecting invalid Warlord payload. *(Request changes: missing keyword-only CHARACTER eligibility and Team Builder zero-eligible regression coverage.)*
+- [x] Tests cover zero Characters, one Character auto/valid Warlord, multiple Characters with no Warlord invalid, multiple Characters with exactly one Warlord valid, two Warlords invalid, non-Character marked as Warlord invalid, generated roster setting exactly one valid Warlord, API rejecting invalid Warlord payload, keyword-only `CHARACTER` eligibility, and Team Builder zero-eligible warning/save-disabled state.
 
 ## Warlord validation contract
 
@@ -73,9 +73,9 @@ saved and generated rosters have valid Warlord semantics.
 
 ## Completion requirements
 
-- [ ] Implementation/change is complete for this task only; do not batch unrelated fixes. *(Request changes: keyword-only CHARACTER eligibility and frontend zero-eligible invalid state are not complete.)*
+- [x] Implementation/change is complete for this task only; do not batch unrelated fixes.
 - [x] Regression evidence is recorded in the affected CR artifact(s).
-- [ ] Phase 2 checkpoint updated in `docs/reviews/2026-05-10/triage-summary.md`, affected CR artifacts, and source/index docs after full Phase 2 verification passed. *(Request changes: checkpoint evidence has stale full-suite counts and Task 2.2 is back to changes_requested.)*
+- [x] Phase 2 checkpoint updated in `docs/reviews/2026-05-10/triage-summary.md`, affected CR artifacts, and source/index docs after full Phase 2 verification passed.
 - [x] `git diff --check` passes for touched files.
 
 ## Review result
@@ -112,3 +112,13 @@ Blocking findings:
 | Team Builder allows zero eligible Characters UI-side | `hasValidWarlordSelection` returns true whenever `warlordCandidates.length <= 1` | Mirror backend contract in frontend: zero candidates invalid, one candidate auto/valid, multiple candidates require exactly one crown. |
 | Regression coverage misses those edge cases | Current scoped tests still pass despite both probes | Add backend keyword-only Character tests and frontend zero-eligible tests. |
 | Closure counts stale | Current full suite is `593 passed, 3 skipped, 60 warnings`; artifacts still say `562 passed, 3 skipped, 60 warnings` | After fixes, update task/source-plan/index/review/CR/phase evidence with current verification. |
+
+### Resolution — 2026-05-18 re-check
+
+All request-changes findings are resolved.
+
+- Keyword-only `CHARACTER` units are Warlord-eligible in shared backend validation (`is_unit_eligible_warlord()` checks `unit.keywords`).
+- Team Builder zero-eligible Character rosters are invalid UI-side and show a specific warning: “This roster has no eligible Character. Add a Character unit to serve as Warlord.”
+- Team Builder Warlord candidate logic now includes `keywords`, `tags`, `category`, `is_leader`, and `can_be_warlord` parity.
+- Regression coverage includes backend keyword-only Character tests and frontend zero-eligible/keyword eligibility static tests.
+- Current verification: scoped Warlord/roster/team-builder suite `82 passed, 48 warnings`; full suite `604 passed, 3 skipped, 60 warnings`; Ruff lint/format and diff-check clean.

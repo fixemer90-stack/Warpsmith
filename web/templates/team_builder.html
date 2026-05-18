@@ -148,7 +148,7 @@
             <!-- Unit List -->
             <template x-if="warlordRequired && !hasValidWarlordSelection">
                 <div class="mb-3 bg-amber-900/30 border border-amber-700 rounded p-2 text-amber-200 text-xs">
-                    Multiple Characters detected. Click one 👑 crown in the roster to choose the Warlord.
+                    <span x-text="warlordWarningMessage"></span>
                 </div>
             </template>
             <div class="space-y-2 max-h-80 overflow-y-auto">

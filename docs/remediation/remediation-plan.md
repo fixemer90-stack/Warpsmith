@@ -446,13 +446,13 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - [x] Validator rejects `is_warlord: true` on a non-Character unit.
 - [x] API save path uses the same backend validator as generated roster validation.
 - [x] Generated rosters always persist exactly one valid Warlord when eligible Characters exist.
-- [ ] Team Builder disables or warns on save when Warlord state is invalid. *(Request changes: zero eligible Characters are invalid by the task contract, but frontend treats `warlordCandidates.length <= 1` as valid.)*
+- [x] Team Builder disables or warns on save when Warlord state is invalid.
 - [x] Team Builder UI visibly exposes Warlord selection and warnings.
-- [ ] Tests cover zero Characters, one Character auto/valid Warlord, multiple Characters with no Warlord invalid, multiple Characters with exactly one Warlord valid, two Warlords invalid, non-Character marked as Warlord invalid, generated roster setting exactly one valid Warlord, and API rejecting invalid Warlord payload. *(Request changes: missing keyword-only CHARACTER eligibility and Team Builder zero-eligible regression coverage.)*
+- [x] Tests cover zero Characters, one Character auto/valid Warlord, multiple Characters with no Warlord invalid, multiple Characters with exactly one Warlord valid, two Warlords invalid, non-Character marked as Warlord invalid, generated roster setting exactly one valid Warlord, API rejecting invalid Warlord payload, keyword-only `CHARACTER` eligibility, and Team Builder zero-eligible warning/save-disabled state.
 
 **Warlord validation contract:**
 - [x] Roster MUST have exactly one Warlord when at least one eligible Character exists.
-- [ ] Only units with `CHARACTER` keyword/tag are eligible to be Warlord. *(Request changes: shared helper currently ignores `unit.keywords`, so keyword-only Characters are not eligible.)*
+- [x] Only units with `CHARACTER` keyword/tag are eligible to be Warlord.
 - [x] If roster has exactly one eligible Character, generated rosters MAY auto-select it.
 - [x] If roster has multiple eligible Characters, saved/user-created rosters MUST explicitly select exactly one.
 - [x] If roster has zero eligible Characters, the roster is invalid — every army must include at least one Character to be Warlord (core WH40k 10e rules).
@@ -460,8 +460,11 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Non-goals:** Full detachment/faction-specific Warlord trait logic is not in scope; enhancement legality is not in scope; Commander/Leader attachment rules are not in scope.
 
 **Verification:**
-- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings
-- `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py -q` → 82 passed, 48 warnings
+- `uv run python -m pytest tests/ -q` → 604 passed, 3 skipped, 60 warnings
+- `uv run ruff check backend/state/roster.py web/routes/api_rosters.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py` → clean
+- `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py` → clean
+- `git diff --check -- backend/state/roster.py web/routes/api_rosters.py web/static/team_builder.js web/templates/team_builder.html tests/test_roster.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py docs/remediation/task-02-02-enforce-exactly-one-warlord-when-required.md docs/remediation/remediation-plan.md` → clean
 
 ### Task 2.3 — Enforce plan/feature gates consistently
 
@@ -473,16 +476,16 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - [x] Public roster creation respects feature flags.
 
 **Verification:**
-- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings
-- `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 70 passed, 48 warnings
+- `uv run python -m pytest tests/ -q` → 604 passed, 3 skipped, 60 warnings
 - `uv run ruff check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean
 - `uv run ruff format --check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean
 - `git diff --check -- backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean
 
 ### Checkpoint 2
 
-- [ ] Roster validation is shared and test-covered. *(Request changes: Task 2.2 regression coverage missing keyword-only CHARACTER and frontend zero-eligible cases.)*
-- [ ] UI/API/generated roster behavior matches. *(Request changes: Team Builder zero-eligible behavior does not match backend invalid contract.)*
+- [x] Roster validation is shared and test-covered.
+- [x] UI/API/generated roster behavior matches.
 
 ## Phase 3 — Combat math
 
@@ -643,92 +646,101 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** CP starts at 0, each player gains CP only at the start of their own Command phase, and reset semantics are split across explicit turn and round boundaries.
 
 **CP / reset semantics contract:**
-- [ ] Both players start the game with 0 CP.
-- [ ] Each player gains exactly +1 CP at the start of their own Command phase unless a future explicit rule modifies this.
-- [ ] CP gain happens once per player turn, not once per phase transition and not once per full battle round.
-- [ ] Repeated Command phase processing is idempotent for CP unless the call explicitly advances turn state.
-- [ ] The opponent does not gain CP during the active player’s Command phase.
-- [ ] There is no Warlord-based starting CP and no Warlord-based bonus CP.
-- [ ] `is_battle_shocked` is cleared only during that unit owner’s Command phase reset step.
-- [ ] Battle-shock reset does not occur during Movement, Shooting, Charge, or Fight.
-- [ ] `has_advanced` is cleared at the start of a new battle round before any unit acts.
-- [ ] Round-level flags and turn-level flags are reset at separate explicit boundaries.
-- [ ] Do not hide old Warlord CP behavior behind default config or compatibility paths.
+- [x] Both players start the game with 0 CP.
+- [x] Each player gains exactly +1 CP at the start of their own Command phase unless a future explicit rule modifies this.
+- [x] CP gain happens once per player turn, not once per phase transition and not once per full battle round.
+- [x] Repeated Command phase processing is idempotent for CP unless the call explicitly advances turn state.
+- [x] The opponent does not gain CP during the active player’s Command phase.
+- [x] There is no Warlord-based starting CP and no Warlord-based bonus CP.
+- [x] `is_battle_shocked` is cleared only during that unit owner’s Command phase reset step.
+- [x] Battle-shock reset does not occur during Movement, Shooting, Charge, or Fight.
+- [x] `has_advanced` is cleared at the start of a new battle round before any unit acts.
+- [x] Round-level flags and turn-level flags are reset at separate explicit boundaries.
+- [x] Do not hide old Warlord CP behavior behind default config or compatibility paths.
 
 **Acceptance criteria:**
-- [ ] Both players start with 0 CP.
-- [ ] Active player gains +1 CP on their own Command phase.
-- [ ] Opponent does not gain CP during active player Command phase.
-- [ ] No Warlord CP bonus is applied.
-- [ ] CP gain happens once per player turn, not once per phase transition or full round.
-- [ ] Repeated Command phase processing is idempotent for CP unless explicitly advancing turn state.
-- [ ] `is_battle_shocked` clears in Command only, during that unit owner’s Command phase reset step.
-- [ ] `is_battle_shocked` remains set through Movement, Shooting, Charge, and Fight.
-- [ ] `has_advanced` resets at the new battle-round boundary before any unit acts.
-- [ ] Round-level flags and turn-level flags are reset at separate explicit boundaries.
+- [x] Both players start with 0 CP.
+- [x] Active player gains +1 CP on their own Command phase.
+- [x] Opponent does not gain CP during active player Command phase.
+- [x] No Warlord CP bonus is applied.
+- [x] CP gain happens once per player turn, not once per phase transition or full round.
+- [x] Repeated Command phase processing is idempotent for CP unless explicitly advancing turn state.
+- [x] `is_battle_shocked` clears in Command only, during that unit owner’s Command phase reset step.
+- [x] `is_battle_shocked` remains set through Movement, Shooting, Charge, and Fight.
+- [x] `has_advanced` resets at the new battle-round boundary before any unit acts.
+- [x] Round-level flags and turn-level flags are reset at separate explicit boundaries.
 
 **Tests:**
-- [ ] Both players start with 0 CP.
-- [ ] Player gains +1 CP on own Command phase.
-- [ ] Opponent does not gain CP during active player Command phase.
-- [ ] No Warlord CP bonus is applied.
-- [ ] Battle-shock clears in Command only.
-- [ ] Battle-shock remains set through non-Command phases.
-- [ ] `has_advanced` clears at new round boundary.
-- [ ] CP is not double-awarded when snapshots, replay, or autoplay touch Command logic.
+- [x] Both players start with 0 CP.
+- [x] Player gains +1 CP on own Command phase.
+- [x] Opponent does not gain CP during active player Command phase.
+- [x] No Warlord CP bonus is applied.
+- [x] Battle-shock clears in Command only.
+- [x] Battle-shock remains set through non-Command phases.
+- [x] `has_advanced` clears at new round boundary.
+- [x] CP is not double-awarded when snapshots, replay, or autoplay touch Command logic.
 
 **Non-goals:**
-- [ ] Stratagem CP spending/refund rules are not in scope.
-- [ ] Faction-specific CP generation is not in scope.
-- [ ] Full battle-shock test/rules implementation is not in scope.
+- [x] Stratagem CP spending/refund rules are not in scope.
+- [x] Faction-specific CP generation is not in scope.
+- [x] Full battle-shock test/rules implementation is not in scope.
 
 **Verification:**
-- `uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q`
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q` → 28 passed in 0.62s.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py -q` → 42 passed in 0.78s.
+- `uv run python -m pytest tests/ -q` → 602 passed, 3 skipped, 60 warnings in 52.82s.
+- `uv run ruff check backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py` → All checks passed.
+- `uv run ruff format --check backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py` → 4 files already formatted.
+- `curl -sS http://127.0.0.1:8000/api/health` → `{ "status": "ok", "version": "0.7.9" }`.
 
 ### Task 4.3 — Lock VP, objectives, mission normalization, Battle Ready
+
+**Status:** REQUEST CHANGES 2026-05-18 — mission scoring values/VP sync/VP-cap/tests/Ruff gates incomplete. See `docs/reviews/2026-05-18/task-04-03-lock-vp-objectives-mission-normalization-battle-ready-check.md`.
 
 **Objective:** VP source is deterministic, 10e-aligned, and shared by runtime, replay, result screen, and autoplay.
 
 **VP / mission scoring contract:**
-- [ ] Primary/dynamic VP scoring uses one canonical scoring pipeline shared by runtime, replay, result screen, and autoplay.
-- [ ] Mission names are normalized before lookup/comparison using a deterministic normalization function.
-- [ ] Battle Ready is a post-game bonus applied exactly once to the final authoritative VP state.
-- [ ] Intermediate snapshots MAY omit Battle Ready, but final authoritative state MUST include it.
-- [ ] Final authoritative VP state is the single source of truth for result screens and replay summaries.
-- [ ] Do not solve mission normalization by duplicating alias maps independently across runtime/UI/replay layers.
+- [ ] Primary/dynamic VP scoring uses one canonical scoring pipeline shared by runtime, replay, result screen, and autoplay. *(Request changes 2026-05-18: Scenario VP sync can omit or multiply PlayerState VP.)*
+- [x] Mission names are normalized before lookup/comparison using a deterministic normalization function.
+- [x] Battle Ready is a post-game bonus applied exactly once to the final authoritative VP state.
+- [x] Intermediate snapshots MAY omit Battle Ready, but final authoritative state MUST include it.
+- [x] Final authoritative VP state is the single source of truth for result screens and replay summaries.
+- [x] Do not solve mission normalization by duplicating alias maps independently across runtime/UI/replay layers.
 
 **Acceptance criteria:**
-- [ ] Mission normalization treats whitespace, casing, underscores, and hyphens consistently.
-- [ ] Objective scoring values are sourced from normalized mission definitions, not hardcoded ad-hoc comparisons.
-- [ ] Dynamic objectives: Only War 3 VP, Take and Hold 5 VP, Purge the Foe 5 VP.
-- [ ] Battle Ready +10 VP is applied exactly once and visible in final authoritative state.
-- [ ] Replay, result screen, and final snapshot display the same final VP totals.
-- [ ] Game termination is driven by round cap, army wipe/table state, and explicit mission-end conditions, not arbitrary VP thresholds.
-- [ ] Game does not end early at `VP >= 10`.
+- [x] Mission normalization treats whitespace, casing, underscores, and hyphens consistently.
+- [ ] Objective scoring values are sourced from normalized mission definitions, not hardcoded ad-hoc comparisons. *(Request changes 2026-05-18: scoring value source missing.)*
+- [ ] Dynamic objectives: Only War 3 VP, Take and Hold 5 VP, Purge the Foe 5 VP. *(Request changes 2026-05-18: Take and Hold/Purge values fail probe.)*
+- [x] Battle Ready +10 VP is applied exactly once and visible in final authoritative state.
+- [x] Replay, result screen, and final snapshot display the same final VP totals.
+- [ ] Game termination is driven by round cap, army wipe/table state, and explicit mission-end conditions, not arbitrary VP thresholds. *(Request changes 2026-05-18: generic vp_cap remains.)*
+- [x] Game does not end early at `VP >= 10`.
 
 **Tests:**
-- [ ] Mission name normalization with spaces, hyphens, underscores, and case variants.
-- [ ] Only War dynamic objective awards 3 VP.
-- [ ] Take and Hold awards 5 VP.
-- [ ] Purge the Foe awards 5 VP.
-- [ ] Battle Ready applies exactly once.
-- [ ] Repeated finalization does not duplicate Battle Ready.
-- [ ] Final replay/result snapshot includes Battle Ready VP.
-- [ ] Game does not end at `VP >= 10`.
-- [ ] Game ends correctly by round cap or wipe condition.
+- [x] Mission name normalization with spaces, hyphens, underscores, and case variants.
+- [x] Only War dynamic objective awards 3 VP.
+- [ ] Take and Hold awards 5 VP. *(Request changes 2026-05-18.)*
+- [ ] Purge the Foe awards 5 VP. *(Request changes 2026-05-18.)*
+- [ ] Battle Ready applies exactly once. *(Request changes 2026-05-18: missing test.)*
+- [ ] Repeated finalization does not duplicate Battle Ready. *(Request changes 2026-05-18: missing idempotence test.)*
+- [ ] Final replay/result snapshot includes Battle Ready VP. *(Request changes 2026-05-18: missing final parity test.)*
+- [x] Game does not end at `VP >= 10`.
+- [x] Game ends correctly by round cap or wipe condition.
 
 **Non-goals:**
-- [ ] Secondary objective system redesign is not in scope.
-- [ ] Tournament scoring variants are not in scope.
-- [ ] UI redesign for result presentation is not in scope.
+- [x] Secondary objective system redesign is not in scope.
+- [x] Tournament scoring variants are not in scope.
+- [x] UI redesign for result presentation is not in scope.
 
 **Verification:**
-- `uv run python -m pytest tests/test_mission*.py tests/test_autoplay.py tests/test_result_screen.py -q`
+- `uv run python -m pytest tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q` → 52 passed in 8.48s.
+- `uv run python -m pytest tests/ -q` → 597 passed, 3 skipped, 60 warnings in 53.67s (Task 4.3 closure run).
+- `uv run python -m pytest tests/ -q` → 602 passed, 3 skipped, 60 warnings in 52.82s (Phase 4 re-check after Task 4.2 fix).
 
 ### Checkpoint 4
 
-- [ ] Game loop invariants pass.
-- [ ] VP/final score agrees across runtime, API, and planned replay contract.
+- [x] Game loop invariants pass.
+- [ ] VP/final score agrees across runtime, API, and planned replay contract. *(Request changes 2026-05-18: Task 4.3 reopened; VP sync/final snapshot tests missing.)*
 
 ## Phase 5 — Movement / charge / melee identity
 

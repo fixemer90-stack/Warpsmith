@@ -29,6 +29,7 @@ class Scenario:
         self.vp_tracker = VPTracker()  # Per-round VP history (F2.8)
         self._faction_profiles = faction_ai_profiles or {}  # faction_id → FactionAIProfile
         self._active_faction_weights: dict[str, dict] = {}  # player_id → active weights per round
+        self._processed_command_turns: set[tuple[int, str]] = set()
 
     def run_game(self, max_rounds: int | None = None) -> None:
         """Run the game until completion or max_rounds reached."""
@@ -82,12 +83,43 @@ class Scenario:
         elif phase == GamePhase.FIGHT:
             self._fight_phase()
 
+    def _command_phase_player_id(self) -> str | None:
+        """Return the player whose Command phase is currently being processed."""
+        if self.state.active_player in self.state.players:
+            return self.state.active_player
+
+        priority_player = next(
+            (pid for pid, player in self.state.players.items() if player.command_priority), None
+        )
+        if priority_player is not None:
+            self.state.active_player = priority_player
+            return priority_player
+
+        first_player = next(iter(self.state.players), None)
+        self.state.active_player = first_player
+        return first_player
+
     def _command_phase(self) -> None:
         """Command phase logic: generate CP, check mission objectives, etc."""
-        # Clear battle-shock from previous round (per 10ed: effects end at start of Command phase)
-        for player in self.state.players.values():
-            for unit in player.units.values():
-                unit.is_battle_shocked = False
+        active_player_id = self._command_phase_player_id()
+        if active_player_id is None:
+            return
+
+        command_turn = (self.state.current_round, active_player_id)
+        if command_turn in self._processed_command_turns:
+            self.state.game_log.append(
+                f"Command phase already processed for {active_player_id} "
+                f"in round {self.state.current_round}; skipping duplicate CP/reset"
+            )
+            return
+        self._processed_command_turns.add(command_turn)
+
+        active_player = self.state.players[active_player_id]
+
+        # Clear battle-shock only for the owner whose Command phase is being processed
+        # (per 10ed: effects end at the start of that unit owner's Command phase).
+        for unit in active_player.units.values():
+            unit.is_battle_shocked = False
 
         # Clear engagement for units no longer within 1" of any enemy
         for player in self.state.players.values():
@@ -110,23 +142,23 @@ class Scenario:
                 if not still_engaged:
                     unit.is_engaged = False
 
-        # Generate command points for each player (10ed: 1 CP per Command Phase, no warlord bonus)
-        for player in self.state.players.values():
-            cp_gain = 1
-            # Apply cap: max 10 CP per player
-            if player.command_points + cp_gain > 10:
-                cp_gain = 10 - player.command_points
-            player.command_points += cp_gain
-            self.state.game_log.append(
-                f"{player.name} gained {cp_gain} CP (total: {player.command_points})"
-            )
+        # Generate command points for the active player only
+        # (10ed: 1 CP at the start of each player's own Command phase, no warlord bonus).
+        cp_gain = 1
+        # Apply cap: max 10 CP per player
+        if active_player.command_points + cp_gain > 10:
+            cp_gain = 10 - active_player.command_points
+        active_player.command_points += cp_gain
+        self.state.game_log.append(
+            f"{active_player.name} gained {cp_gain} CP (total: {active_player.command_points})"
+        )
 
-            # Update mission scoring at end of Command phase
+        # Update mission scoring at end of Command phase
         if self.state.mission:
             apply_scoring(self.state, self.state.mission, self.vp_tracker)
 
-        # Battle-shock tests (10ed: tested during Command phase for units below half-strength)
-        self._battle_shock_tests()
+        # Battle-shock tests (10ed: tested during that owner's Command phase for units below half-strength)
+        self._battle_shock_tests(active_player_id)
 
         # Activate faction AI behaviors for this round
         for player_id, profile in self._faction_profiles.items():
@@ -749,11 +781,16 @@ class Scenario:
                 f"{enemy_unit.name} hits {attacking_unit.name} for {damage_to_attacker} damage{identity}"
             )
 
-    def _battle_shock_tests(self) -> None:
-        """Battle-shock tests during Command phase (10ed)."""
+    def _battle_shock_tests(self, player_id: str | None = None) -> None:
+        """Battle-shock tests during the active player's Command phase (10ed)."""
         import random
 
-        for player in self.state.players.values():
+        players = (
+            [self.state.players[player_id]]
+            if player_id in self.state.players
+            else list(self.state.players.values())
+        )
+        for player in players:
             for unit in player.units.values():
                 if unit.is_alive and not unit.is_above_half_strength:
                     die1 = random.randint(1, 6)
