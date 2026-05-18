@@ -104,3 +104,19 @@ $ uv run ruff format --check backend/state/game_state.py backend/engine/scenario
 $ git diff --check -- backend/state/game_state.py backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_autoplay.py tests/test_replay.py
 (clean)
 ```
+
+## Regression evidence — Task 4.3 (VP, mission normalization, Battle Ready)
+
+**2026-05-17.** Locked VP, mission name normalization, dynamic objective counts, Battle Ready timing, and game-end conditions.
+
+Changes:
+- No code changes needed — mission normalization handled by `.replace(" ", "_").replace("-", "_") + `.lower()` in `create_mission`; Battle Ready +10 VP applied in `autoplay.py` after game loop; `is_game_over` uses round cap only.
+- Added 4 contract tests: `test_mission_name_normalization`, `test_dynamic_objective_counts`, `test_game_does_not_end_at_vp_10`, `test_game_ends_by_round_cap_or_wipe`.
+
+```
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q
+52 passed in 8.48s
+
+$ uv run python -m pytest tests/ -q
+597 passed, 3 skipped, 60 warnings in 53.67s
+```

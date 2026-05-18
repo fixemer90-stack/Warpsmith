@@ -67,10 +67,13 @@ function teamBuilder() {
                 .filter(entry => entry.can_be_warlord || entry.category === 'Character' || (entry.tags || []).includes('character'));
         },
         get warlordRequired() {
-            return this.warlordCandidates.length > 1;
+            // Per 10e: every army must have a Warlord. 0 candidates = invalid, 1 = auto-select, 2+ = pick one.
+            return this.warlordCandidates.length !== 1;
         },
         get hasValidWarlordSelection() {
-            if (!this.warlordRequired) return true;
+            const count = this.warlordCandidates.length;
+            if (count === 0) return false;  // No eligible unit = impossible to have a Warlord
+            if (count === 1) return true;   // Exactly one candidate = auto-valid
             return this.warlordCandidates.filter(entry => entry.is_warlord).length === 1;
         },
         get isValid() {

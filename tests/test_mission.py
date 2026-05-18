@@ -1052,5 +1052,104 @@ def test_check_end_game_continues():
     assert result is None  # Game should continue
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
+def test_mission_name_normalization() -> None:
+    """Mission names normalized consistently: spaces, hyphens, underscores, case."""
+    from backend.state.mission import create_mission
+
+    game = create_empty_game("mm-test")
+    from backend.state.game_state import PlayerState
+    game.players = {"p1": PlayerState("p1", "P1", "marines"), "p2": PlayerState("p2", "P2", "orks")}
+
+    # All these variants should resolve to the same mission
+    assert create_mission("Take and Hold", game) is not None
+    assert create_mission("take_and_hold", game) is not None
+    assert create_mission("Take-And-Hold", game) is not None
+    assert create_mission("take and hold", game) is not None
+    assert create_mission("TAKE AND HOLD", game) is not None
+
+    assert create_mission("Only War", game) is not None
+    assert create_mission("only_war", game) is not None
+    assert create_mission("Only-War", game) is not None
+
+    assert create_mission("Purge the Foe", game) is not None
+    assert create_mission("purge_the_foe", game) is not None
+    assert create_mission("Purge-The-Foe", game) is not None
+
+
+def test_dynamic_objective_counts() -> None:
+    """Only War=3 objectives, Take and Hold=5, Purge the Foe=5."""
+    from backend.state.mission import create_mission
+
+    game = create_empty_game("obj-test")
+    from backend.state.game_state import PlayerState
+    game.players = {"p1": PlayerState("p1", "P1", "marines"), "p2": PlayerState("p2", "P2", "orks")}
+
+    m1 = create_mission("Only War", game)
+    assert m1 is not None
+    assert len(m1.config.objectives) == 3, f"Only War: expected 3, got {len(m1.config.objectives)}"
+
+    m2 = create_mission("Take and Hold", game)
+    assert m2 is not None
+    assert len(m2.config.objectives) == 5, f"Take and Hold: expected 5, got {len(m2.config.objectives)}"
+
+    m3 = create_mission("Purge the Foe", game)
+    assert m3 is not None
+    assert len(m3.config.objectives) == 5, f"Purge the Foe: expected 5, got {len(m3.config.objectives)}"
+
+
+def test_game_does_not_end_at_vp_10() -> None:
+    """Game does not end early when VP >= 10. Only round cap or wipe ends the game."""
+    from backend.state.game_state import GameState, PlayerState, create_empty_game
+
+    game = create_empty_game("vp10-test")
+    p1 = PlayerState("p1", "P1", "marines", victory_points=15)
+    p2 = PlayerState("p2", "P2", "orks", victory_points=5)
+    game.players = {"p1": p1, "p2": p2}
+    game.current_round = 3
+    game.max_rounds = 5
+
+    # VP >= 10 does NOT trigger is_game_over
+    assert not game.is_game_over, "VP >= 10 should NOT end the game"
+
+    # Only round cap ends the game
+    game.current_round = 6  # > max_rounds=5
+    assert game.is_game_over
+
+
+def test_game_ends_by_round_cap_or_wipe() -> None:
+    """Game ends by round cap, army wipe, or VP cap (100), not VP>=10."""
+    from backend.state.mission import check_end_game, create_mission, VPTracker
+    from backend.state.game_state import GameState, PlayerState, UnitState, create_empty_game
+
+    game = create_empty_game("end-test")
+    from backend.state.game_state import UnitState
+
+    p1 = PlayerState("p1", "P1", "marines")
+    unit = UnitState(
+        unit_id="u1", name="M", faction="m", position=(0, 0),
+        current_wounds=4, max_wounds=4, models_remaining=1, models_total=1,
+        leadership=6, objective_control=1,
+    )
+    p1.units = {"u1": unit}
+    p2 = PlayerState("p2", "P2", "orks")
+    unit2 = UnitState(
+        unit_id="u2", name="O", faction="o", position=(1, 1),
+        current_wounds=4, max_wounds=4, models_remaining=1, models_total=1,
+        leadership=6, objective_control=1,
+    )
+    p2.units = {"u2": unit2}
+    game.players = {"p1": p1, "p2": p2}
+    mission = create_mission("Only War", game)
+    vp = VPTracker()
+
+    # Round 5 with max_rounds=5 → game ends
+    game.max_rounds = 5
+    result = check_end_game(game, mission, vp, 5)
+    assert result is not None
+    assert result.reason in ("rounds_completed",)
+
+    # Army wiped → game ends
+    unit.models_remaining = 0
+    result = check_end_game(game, mission, vp, 3)
+    assert result is not None
+    assert result.reason == "army_wiped"

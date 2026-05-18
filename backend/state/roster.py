@@ -110,11 +110,13 @@ def is_unit_eligible_warlord(unit: "Unit") -> bool:
     validators use the same definition.
     """
     tag_set = {str(t).lower() for t in (getattr(unit, "tags", []) or [])}
+    keyword_set = {str(k).lower() for k in (getattr(unit, "keywords", []) or [])}
     return (
         unit.can_be_warlord
         or unit.is_leader
         or unit.category.lower() == "character"
         or "character" in tag_set
+        or "character" in keyword_set
     )
 
 
