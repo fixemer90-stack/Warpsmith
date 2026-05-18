@@ -138,8 +138,8 @@ def test_mission_score_vp():
     player1.units = {"marine1": unit1}
 
     # Now player 1 should control objective(s) within range
-    # Unit at (2,1) controls all 5 objectives within 3" range
-    assert mission.score_vp("p1") == 5
+    # Unit at (2,1) controls all 5 objectives within 3" range (5 obj × 5 VP = 25)
+    assert mission.score_vp("p1") == 25
     assert mission.score_vp("p2") == 0
 
     # Place enemy unit on same position — all objectives become contested
@@ -159,7 +159,7 @@ def test_mission_score_vp():
 
     # p1 OC=2 > p2 OC=1 → p1 controls objectives (not contested)
     mission.update_objective_control()
-    assert mission.score_vp("p1") == 5
+    assert mission.score_vp("p1") == 25
     assert mission.score_vp("p2") == 0
 
 
@@ -262,7 +262,7 @@ def test_calculate_victory_points():
     player1.units = {"marine1": unit1}
 
     vp = mission.calculate_victory_points()
-    assert vp["p1"] == 5  # Unit at (2,1) controls all 5 objectives within 3"
+    assert vp["p1"] == 25  # Unit at (2,1) controls all 5 objectives → 5×5 VP
     assert vp["p2"] == 0
 
     # Add unit to another objective
@@ -281,7 +281,7 @@ def test_calculate_victory_points():
     player1.units["marine2"] = unit2
 
     vp = mission.calculate_victory_points()
-    assert vp["p1"] == 5  # Still controls all 5 (same player)
+    assert vp["p1"] == 25  # Still controls all 5 (same player)
     assert vp["p2"] == 0
 
 
@@ -346,8 +346,8 @@ def test_progressive_scoring():
     player2.units = {"ork1": unit3}
 
     vp = mission.calculate_victory_points()
-    # p1 OC=4 (2×2) > p2 OC=1 → p1 controls all 3
-    assert vp["p1"] == 5  # 3 objectives + 2 progressive bonus
+    # p1 OC=4 (2×2) > p2 OC=1 → p1 controls all 3 (3×3 + 2 bonus = 11)
+    assert vp["p1"] == 11
     assert vp["p2"] == 0
 
 
@@ -841,8 +841,8 @@ def test_apply_scoring():
     assert updated_vp.history[2] == [0]
 
 
-def test_check_end_game_vp_cap():
-    """Test end game check for VP cap."""
+def test_check_end_game_vp_cap_removed() -> None:
+    """VP cap (>= 100 VP) has been removed; only round cap or army wipe ends the game."""
     game_state = create_empty_game("test_game", "Test Mission")
 
     player1 = PlayerState("p1", "Player 1", "Space Marines")
@@ -860,17 +860,42 @@ def test_check_end_game_vp_cap():
         state=game_state,
     )
 
-    # Create VP tracker with player 1 at 100 VP
+    # Add one unit each so army_wiped doesn't trigger
+    marine = UnitState(
+        unit_id="marine1",
+        name="Tactical Marine",
+        faction="Space Marines",
+        position=(0, 0),
+        current_wounds=4,
+        max_wounds=4,
+        models_remaining=1,
+        models_total=1,
+        leadership=6,
+        objective_control=2,
+    )
+    ork = UnitState(
+        unit_id="ork1",
+        name="Ork Boy",
+        faction="Orks",
+        position=(5, 3),
+        current_wounds=4,
+        max_wounds=4,
+        models_remaining=1,
+        models_total=1,
+        leadership=5,
+        objective_control=1,
+    )
+    player1.units = {"marine1": marine}
+    player2.units = {"ork1": ork}
+
+    # Create VP tracker with player 1 at 100 VP — should NOT end the game
     vp_tracker = VPTracker()
     vp_tracker.add(1, 100)
     vp_tracker.add(2, 50)
 
     result = check_end_game(game_state, mission, vp_tracker, 3)
-
-    assert result is not None
-    assert result.winner == "1"
-    assert result.reason == "vp_cap"
-    assert result.total_rounds == 3
+    # Game continues — VP cap is removed
+    assert result is None, "VP >= 100 should no longer auto-end the game"
 
 
 def test_check_end_game_army_wiped():
@@ -1105,7 +1130,7 @@ def test_dynamic_objective_counts() -> None:
 
 def test_game_does_not_end_at_vp_10() -> None:
     """Game does not end early when VP >= 10. Only round cap or wipe ends the game."""
-    from backend.state.game_state import GameState, PlayerState, create_empty_game
+    from backend.state.game_state import PlayerState, create_empty_game
 
     game = create_empty_game("vp10-test")
     p1 = PlayerState("p1", "P1", "marines", victory_points=15)
@@ -1123,12 +1148,11 @@ def test_game_does_not_end_at_vp_10() -> None:
 
 
 def test_game_ends_by_round_cap_or_wipe() -> None:
-    """Game ends by round cap, army wipe, or VP cap (100), not VP>=10."""
-    from backend.state.mission import check_end_game, create_mission, VPTracker
-    from backend.state.game_state import GameState, PlayerState, UnitState, create_empty_game
+    """Game ends by round cap or army wipe, not VP cap."""
+    from backend.state.game_state import PlayerState, UnitState, create_empty_game
+    from backend.state.mission import VPTracker, check_end_game, create_mission
 
     game = create_empty_game("end-test")
-    from backend.state.game_state import UnitState
 
     p1 = PlayerState("p1", "P1", "marines")
     unit = UnitState(

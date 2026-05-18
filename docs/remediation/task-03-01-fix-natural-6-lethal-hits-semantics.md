@@ -86,7 +86,7 @@ FAILED during re-review: touched files report trailing-whitespace/CRLF noise; se
 - [x] Implementation/change is complete for this task only; do not batch unrelated fixes.
 - [x] Regression evidence is recorded in the affected CR artifact(s).
 - [x] If this task completes a phase checkpoint, update `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-XX-*.md`, and `docs/requirements/code-review/code-review.md` with the phase completion artifact.
-- [ ] `git diff --check` passes for touched files. *(Request changes: observed `git diff --check -- <touched files>` fails with trailing-whitespace/CRLF noise.)*
+- [x] `git diff --check` passes for touched files.
 
 ## Code review — 2026-05-17
 

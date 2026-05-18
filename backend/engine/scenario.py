@@ -157,6 +157,12 @@ class Scenario:
         if self.state.mission:
             apply_scoring(self.state, self.state.mission, self.vp_tracker)
 
+            # Sync PlayerState.victory_points from authoritative vp_tracker totals
+            # (idempotent — setting, not accumulating, so no double-count on rerun)
+            for player_id in self.state.players:
+                pn = 1 if player_id in ("p1", "1") else 2
+                self.state.players[player_id].victory_points = self.vp_tracker.total[pn]
+
         # Battle-shock tests (10ed: tested during that owner's Command phase for units below half-strength)
         self._battle_shock_tests(active_player_id)
 
@@ -168,16 +174,6 @@ class Scenario:
 
                     weights = get_weights(profile, GamePhase.COMMAND, self.state.current_round)
                     self._active_faction_weights[player_id] = weights
-            # Also update PlayerState.victory_points for backwards compat
-            for i, player_id in enumerate(self.state.players):
-                pn = i + 1  # 1-indexed
-                vp_gained = self.vp_tracker.round_vp(pn, self.state.current_round)
-                if vp_gained:
-                    player = self.state.players[player_id]
-                    player.victory_points += vp_gained
-                    self.state.game_log.append(
-                        f"{player.name} gained {vp_gained} VP (total: {player.victory_points})"
-                    )
 
     def _movement_phase(self) -> None:
         """Movement phase: Normal Move / Advance / Fall Back / Remain Stationary.

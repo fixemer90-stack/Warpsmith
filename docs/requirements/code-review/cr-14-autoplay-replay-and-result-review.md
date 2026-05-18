@@ -189,3 +189,11 @@ Observed verification during check:
 - `git diff --check -- tests/test_mission.py` → clean.
 
 Review file: `docs/reviews/2026-05-18/task-04-03-lock-vp-objectives-mission-normalization-battle-ready-check.md`.
+
+## Regression evidence — Task 4.3 (fixed)
+
+Date: 2026-05-18
+
+All Task 4.3 blocking findings resolved: mission-defined scoring, VP cap removed, VP sync idempotent, lint/formatter green, tests updated.
+
+Verification: focused `52 passed`, full `604 passed, 3 skipped, 60 warnings`. Ruff/format/diff-check clean.

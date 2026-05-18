@@ -148,3 +148,9 @@ Observed verification during check:
 - `git diff --check -- tests/test_mission.py` → clean.
 
 Review file: `docs/reviews/2026-05-18/task-04-03-lock-vp-objectives-mission-normalization-battle-ready-check.md`.
+
+## Regression evidence — Task 4.3 (fixed)
+
+Date: 2026-05-18
+
+Task 4.3 fixed and Phase 4 checkpoint closed. Full suite: `604 passed, 3 skipped`. Ruff/format/diff-check clean.
