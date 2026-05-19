@@ -1432,7 +1432,7 @@
     ],
     "movement": 12,
     "objective_control": 3,
-    "points": 85,
+    "points": 70,
     "ranged_weapons": [
       {
         "abilities": [
@@ -8252,7 +8252,7 @@
     ],
     "movement": 12,
     "objective_control": 2,
-    "points": 65,
+    "points": 70,
     "ranged_weapons": [],
     "save": 4,
     "source_path": "/mnt/d/Python/Balthier/simulator/wiki/units/orks/Trukk.md",

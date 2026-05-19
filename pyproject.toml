@@ -23,6 +23,7 @@ dependencies = [
     "sentry-sdk[fastapi]",
     "slowapi",
     "requests>=2.34.2",
+    "pymupdf>=1.27.2.3",
 ]
 
 [project.optional-dependencies]

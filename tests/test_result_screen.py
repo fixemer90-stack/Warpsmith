@@ -65,6 +65,16 @@ def test_result_page_contains_stat_cards(client):
     assert "Charges" in response.text
 
 
+def test_result_page_charge_cards_use_owner_lookup_not_player2_prefix(client):
+    """Player 2 charge cards must work with runtime ids like p2:Boyz:0."""
+    response = client.get("/result/charge-card-test")
+    assert response.status_code == 200
+
+    assert "chargeCount(0)" in response.text
+    assert "chargeCount(1)" in response.text
+    assert "startsWith('player2')" not in response.text
+
+
 def test_result_page_shows_destroyed_units_sections(client):
     """Test that the destroyed units columns are present."""
     response = client.get("/result/destroyed-test")
@@ -88,7 +98,7 @@ def test_results_api_exposes_authoritative_final_state(monkeypatch, client):
             ReplayRound(
                 round=1,
                 start_state={"victory_points": {"1": 3, "2": 3}},
-                end_state={"victory_points": {"1": 5, "2": 4}},
+                end_state={"victory_points": {"1": 15, "2": 14}},
                 events=[],
             )
         ],
@@ -104,3 +114,41 @@ def test_results_api_exposes_authoritative_final_state(monkeypatch, client):
     assert data["final_state"]["victory_points"] == {"1": 15, "2": 14}
     assert data["summary"]["final_victory_points"] == {"1": 15, "2": 14}
     assert data["summary"]["winner"] == 1
+
+
+def test_results_api_overrides_stale_summary_vp_and_winner(monkeypatch, client):
+    """Persisted stale summary fields cannot outrank authoritative final_state."""
+    from web.routes import api_replays
+
+    replay = Replay(
+        game_id="stale-summary-final",
+        created_at="2026-05-19T12:00:00Z",
+        rosters={"roster_a": {"name": "A"}, "roster_b": {"name": "B"}},
+        mission="only_war",
+        deployment="standard",
+        seed=42,
+        rounds=[
+            ReplayRound(
+                round=1,
+                start_state={"victory_points": {"1": 3, "2": 3}},
+                end_state={"victory_points": {"1": 15, "2": 24}},
+                events=[],
+            )
+        ],
+        summary={
+            "winner": 1,
+            "final_victory_points": {"1": 15, "2": 14},
+            "final_state": {"victory_points": {"1": 15, "2": 14}},
+        },
+    )
+
+    monkeypatch.setattr(api_replays, "load_replay", lambda _conn, _gid: replay)
+
+    response = client.get("/api/results/stale-summary-final")
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["final_state"]["victory_points"] == {"1": 15, "2": 24}
+    assert data["summary"]["final_state"]["victory_points"] == {"1": 15, "2": 24}
+    assert data["summary"]["final_victory_points"] == {"1": 15, "2": 24}
+    assert data["summary"]["winner"] == 2

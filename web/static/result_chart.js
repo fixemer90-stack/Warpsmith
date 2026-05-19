@@ -264,6 +264,21 @@ function resultScreen() {
             return vpMap[ids[index]] || 0;
         },
 
+        chargeCount(index) {
+            if (!this.replay || !this.replay.rounds) return 0;
+
+            let total = 0;
+            this.replay.rounds.forEach((round) => {
+                (round.events || []).forEach((evt) => {
+                    if (evt.event_type !== 'charge' || !(evt.result_value > 0)) return;
+                    if (this._actorPlayerId(evt.actor_id) === index) {
+                        total++;
+                    }
+                });
+            });
+            return total;
+        },
+
         _getPlayerName(index) {
             if (!this.replay || !this.replay.rosters) return '';
             const keys = this._getPlayerKeys();
@@ -288,7 +303,12 @@ function resultScreen() {
                     for (let i = 0; i < pids.length; i++) {
                         const units = state.units[pids[i]] || [];
                         for (const u of units) {
-                            if (u.id === actorId || u.name === actorId) {
+                            if (
+                                u.id === actorId
+                                || u.runtime_unit_id === actorId
+                                || u.name === actorId
+                                || u.display_name === actorId
+                            ) {
                                 return i;
                             }
                         }

@@ -114,6 +114,23 @@ def test_parses_vp():
     assert vp[0].result_value == 5.0
 
 
+def test_parses_vp_logs_with_totals_and_battle_ready_wording():
+    events = _parse_log_events(
+        [
+            "orks roster gained 3 VP (total: 3)",
+            "tau roster gains 10 Battle Ready VP (total: 10)",
+        ],
+        1,
+    )
+
+    vp = [e for e in events if e.event_type == "vp"]
+    assert len(vp) == 2
+    assert [(e.actor_name, e.result_value) for e in vp] == [
+        ("orks roster", 3.0),
+        ("tau roster", 10.0),
+    ]
+
+
 def test_parses_phase_and_info():
     events = _parse_log_events(SAMPLE, 1)
     phases = [e for e in events if e.event_type == "phase"]

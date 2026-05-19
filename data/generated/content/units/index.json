@@ -309,7 +309,7 @@
     "display_name": "Boomdakka Snazzwagon",
     "faction_id": "faction:orks",
     "file": "units/orks.json",
-    "hash": "sha256:04689bcf6e3cd8e9d2c000390f7d39ca99c389edd69c1a47febaaf321e905ca2"
+    "hash": "sha256:54ae9dd687bc2abc855aeb61619b0163434ea2850082c85a8d41a1a89bee957f"
   },
   "unit:orks:boss-snikrot": {
     "display_name": "Boss Snikrot",
@@ -651,7 +651,7 @@
     "display_name": "Trukk",
     "faction_id": "faction:orks",
     "file": "units/orks.json",
-    "hash": "sha256:b5fed24a9585141d6e0e185260b53924bbf2f10a9482eb433a0b6aa2e7e84d6d"
+    "hash": "sha256:1c427229a917d67012c20ff614c8c597e05168509d83510cf055a579e7424f6e"
   },
   "unit:orks:ufthak-blackhawk": {
     "display_name": "Ufthak Blackhawk",
