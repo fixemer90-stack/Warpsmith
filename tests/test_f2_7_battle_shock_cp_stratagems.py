@@ -187,8 +187,8 @@ def test_battle_shock_normal_roll():
         random.randint = original_randint
 
 
-def test_cp_generation_both_players():
-    """Test that both players generate 1 CP per Command Phase (10ed)."""
+def test_cp_generation_active_player_only():
+    """Test that only the active player generates 1 CP in their Command phase (10ed)."""
     game_state = create_empty_game("test_game")
 
     player1 = PlayerState("p1", "Player 1", "Space Marines")
@@ -200,15 +200,16 @@ def test_cp_generation_both_players():
     player2.units = {}
 
     game_state.players = {"p1": player1, "p2": player2}
+    game_state.active_player = "p1"
 
     scenario = Scenario(game_state)
 
-    # Execute command phase
+    # Execute p1's command phase
     scenario._command_phase()
 
-    # Both players get 1 CP (10ed: no warlord bonus)
+    # Only the active player gets 1 CP (10ed: no warlord bonus)
     assert player1.command_points == 1
-    assert player2.command_points == 1
+    assert player2.command_points == 0
 
 
 def test_cp_generation_with_leviant_cap():
@@ -255,14 +256,20 @@ def test_cp_generation_with_leviant_cap():
     player2.command_points = 9  # Already high
 
     game_state.players = {"p1": player1, "p2": player2}
+    game_state.active_player = "p1"
 
     scenario = Scenario(game_state)
 
-    # Execute command phase
+    # Execute p1's command phase
     scenario._command_phase()
 
-    # Both should be capped at 10 (1 CP each, 9+1=10)
+    # Active player is capped at 10; opponent does not gain CP outside their own Command.
     assert player1.command_points == 10
+    assert player2.command_points == 9
+
+    # Explicitly advancing to p2's Command phase awards p2's capped CP.
+    game_state.active_player = "p2"
+    scenario._command_phase()
     assert player2.command_points == 10
 
 

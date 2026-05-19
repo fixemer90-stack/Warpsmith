@@ -39,6 +39,16 @@ A quick scan of per-CR artifacts found a mismatch against the tracker because so
 | Review debt gate | Fail | 38 Critical / 112 Important still open |
 | Result VP consistency | Fail | `/result/auto_242424` showed 28/4 while runtime result was 38/14 |
 
+
+## Phase 2 remediation re-check — 2026-05-18
+
+Task 2.2 Warlord semantics are complete after follow-up fixes. Keyword-only `CHARACTER` eligibility, Team Builder zero-eligible warning/save-disabled behavior, generated/API/backend validation parity, and regression coverage were re-verified. Phase 2 checkpoint is marked complete in the remediation plan.
+
+Verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py -q` → 82 passed, 48 warnings.
+- `uv run python -m pytest tests/ -q` → 604 passed, 3 skipped, 60 warnings.
+- Ruff lint/format and `git diff --check` clean for Task 2.2 code, tests, and docs.
+
 ## Finding groups
 
 Remediation plan: [docs/requirements/code-review/remediation-plan.md](remediation-plan.md)
@@ -375,3 +385,23 @@ Verification during Task 2.2 check:
   - `git diff --check -- <Task 3.3 touched docs/code files>` → clean.
 - Browser/API smoke evidence: none required for backend combat math phase.
 - Remaining blockers before next phase: none for Phase 3 checkpoint.
+
+## Phase 4 — REOPENED / REQUEST CHANGES
+
+Date: 2026-05-18
+
+| Task | Status | Key changes |
+| --- | --- | --- |
+| 4.1 — Assert 5-phase 10e loop invariants | completed | Locked Command → Movement → Shooting → Charge → Fight phase order and canonical phase consumers. |
+| 4.2 — Lock CP and battle-shock reset semantics | completed | Active-player-only CP, CP idempotency per player turn, owner-scoped battle-shock reset/tests. |
+| 4.3 — Lock VP, objectives, mission normalization, Battle Ready | changes_requested | 2026-05-18 check found mission scoring values not mission-defined, VP sync drift, generic VP-cap end condition, missing Battle Ready/final snapshot tests, and red Ruff/format gates. |
+
+Verification summary:
+- Task 4.2 scoped: `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q` → 28 passed.
+- Task 4.2 extended CP/battle-shock: `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py -q` → 42 passed.
+- Full suite: `uv run python -m pytest tests/ -q` → 602 passed, 3 skipped, 60 warnings.
+- Ruff: `uv run ruff check backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py` → All checks passed.
+- Format: `uv run ruff format --check backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py` → 4 files already formatted.
+- Health smoke: `/api/health` → `{"status":"ok","version":"0.7.9"}`.
+
+Remaining blockers before Phase 5: Task 4.3 is reopened; Phase 4 checkpoint is not complete until scoring/VP sync/VP-cap/tests/Ruff findings are fixed and re-verified.

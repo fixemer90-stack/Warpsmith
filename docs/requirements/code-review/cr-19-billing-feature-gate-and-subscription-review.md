@@ -133,3 +133,43 @@ Observed verification during check:
 - `uv run python -m pytest tests/ -q` → 593 passed, 3 skipped, 60 warnings.
 - Ruff check/format clean for the checked Phase 2 Python/test files.
 - `git diff --check` clean for the Task 2.2 review/update files.
+
+## Regression evidence — Task 2.3 check update
+
+Date: 2026-05-18
+
+Verdict: REQUEST CHANGES on closure metadata only after independent Task 2.3 check. The feature-gate behavior itself passed re-review, but Task 2.3 cannot claim Phase 2 checkpoint completion while Task 2.2 remains REQUEST CHANGES. This section supersedes the older Phase 2 checkpoint evidence that said Phase 2 was complete.
+
+Observed Task 2.3 behavior:
+- Free limits: first create `200`, second create `403`, duplicate at limit `403`, update-to-public `403`, generated-save at limit `403`.
+- Premium limits: multiple creates `200`, update-to-public `200`, GET confirms `is_public=1`.
+
+Observed verification during check:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 70 passed, 48 warnings.
+- `uv run python -m pytest tests/ -q` → 604 passed, 3 skipped, 60 warnings.
+- `uv run ruff check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean.
+- `uv run ruff format --check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → 3 files already formatted.
+- `git diff --check -- backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py docs/remediation/task-02-03-enforce-plan-feature-gates-consistently.md docs/remediation/remediation-plan.md docs/remediation/index.md` → clean.
+
+## Regression evidence — Phase 2 closure sync
+
+Date: 2026-05-18
+
+Phase 2 closure is complete for monetization/feature-gate scope: Task 2.3 is restored to `completed`, dependency Task 2.2 is closed, and source/index/CR surfaces now agree on checkpoint 2 completion.
+
+Latest verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py -q` → 82 passed, 48 warnings.
+- `uv run python -m pytest tests/ -q` → 604 passed, 3 skipped, 60 warnings.
+
+## Regression evidence — Task 2.2 re-check resolution
+
+Date: 2026-05-18
+
+Verdict: COMPLETE after follow-up fixes. Keyword-only `CHARACTER` units are Warlord-eligible in shared validation, Team Builder zero-eligible Character rosters are invalid with a specific warning, frontend candidate logic includes keywords/tags/category/is_leader/can_be_warlord parity, and regression coverage now includes backend keyword-only and frontend zero-eligible/keyword cases.
+
+Verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py -q` → 82 passed, 48 warnings.
+- `uv run python -m pytest tests/ -q` → 604 passed, 3 skipped, 60 warnings.
+- `uv run ruff check backend/state/roster.py web/routes/api_rosters.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py` → clean.
+- `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py` → clean.
+- `git diff --check` → clean for Task 2.2 touched code, tests, and docs.

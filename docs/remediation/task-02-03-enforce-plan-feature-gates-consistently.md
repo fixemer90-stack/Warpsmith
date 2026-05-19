@@ -33,9 +33,9 @@ Free/Premium roster limits cannot be bypassed through duplicate/import paths.
 
 ## Verified
 
-- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings.
+- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 70 passed, 48 warnings.
 - [x] `uv run python -m pytest tests/test_rosters.py -q` → 26 passed, 48 warnings.
-- [x] `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings.
+- [x] `uv run python -m pytest tests/ -q` → 604 passed, 3 skipped, 60 warnings.
 - [x] `uv run ruff check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean.
 - [x] `uv run ruff format --check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → 3 files already formatted.
 - [x] `git diff --check -- backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean.
@@ -67,7 +67,24 @@ All blocking findings resolved:
 | Free roster limit contradicted product/UI | Free backend limit is `1`; regression tests assert second Free create returns 403. |
 | Premium public update was checked but not persisted | Update SQL now writes `is_public`; tests assert Premium update and subsequent GET return public. |
 | Missing feature-gate tests / stale commands | Added focused tests in `tests/test_rosters.py`; Verification now uses existing commands. |
-| Closure docs incomplete | Task, review, source plan, index, and CR evidence are synchronized for Task 2.3; Phase 2 checkpoint is now complete after Task 2.2 re-check. |
+| Closure docs incomplete | Task, review, source plan, index, and CR evidence were synchronized on 2026-05-17; 2026-05-18 re-check reopened the phase-checkpoint requirement because Task 2.2 is still REQUEST CHANGES. |
+
+## Code review — 2026-05-18
+
+**Verdict:** REQUEST CHANGES → FIXED 2026-05-18 (closure metadata sync).
+**Report:** `docs/reviews/2026-05-18/task-02-03-enforce-plan-feature-gates-consistently-review.md`
+
+Behavioral feature-gate implementation passed re-review: Free create/duplicate/generated-save/public-update gates return the expected 403 responses, Premium unlimited count behavior works, and Premium public update persists `is_public=1`.
+
+Closure findings resolved in this re-review cycle:
+
+| Finding | Resolution |
+| --- | --- |
+| Phase-checkpoint completion claim was stale | Initially corrected by keeping checkpoint open during Task 2.2 REQUEST CHANGES; after Task 2.2 closure re-check, the checkpoint requirement is now correctly marked complete. |
+| Verification counts were stale | Updated to latest observed values: focused `70 passed`, full `604 passed, 3 skipped`. |
+| Primary CR phase-checkpoint evidence was stale | CR-12/16/17/19 include `Task 2.3 check update` sections superseding old phase-complete wording. |
+
+Task 2.3 behavioral AC remain satisfied, closure metadata is synchronized, and Phase 2 checkpoint prerequisites are now satisfied after Task 2.2 re-check closure.
 
 ## Files likely touched
 
@@ -80,9 +97,9 @@ All blocking findings resolved:
 
 ## Verification
 
-- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 68 passed, 48 warnings.
+- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py -q` → 70 passed, 48 warnings.
 - [x] `uv run python -m pytest tests/test_rosters.py -q` → 26 passed, 48 warnings.
-- [x] `uv run python -m pytest tests/ -q` → 562 passed, 3 skipped, 60 warnings.
+- [x] `uv run python -m pytest tests/ -q` → 604 passed, 3 skipped, 60 warnings.
 - [x] `uv run ruff check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean.
 - [x] `uv run ruff format --check backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → 3 files already formatted.
 - [x] `git diff --check -- backend/billing/plans.py web/routes/api_rosters.py tests/test_rosters.py` → clean.

@@ -1,7 +1,39 @@
 # Check — Task 2.2: Enforce exactly one Warlord when required
 
 Date: 2026-05-17
-Verdict: REQUEST CHANGES
+Verdict: REQUEST CHANGES → FIXED 2026-05-17
+
+## Resolution
+
+All findings resolved.
+
+### Important 1 — Keyword-only CHARACTER eligibility (Fixed)
+
+- `is_unit_eligible_warlord()` in `backend/state/roster.py` now also checks `unit.keywords` for `"character"`.
+- Added tests: `test_is_unit_eligible_warlord_keyword_only`, `test_validate_roster_keyword_only_character`.
+
+### Important 2 — Team Builder zero-eligible invalid state (Fixed)
+
+- `warlordRequired`: now returns `true` when `length !== 1` (0 or 2+).
+- `hasValidWarlordSelection`: returns `false` for 0 eligible, `true` for 1 eligible (auto-select), requires exactly one crown for 2+.
+- JS syntax check (`node -c team_builder.js`) passes.
+
+### Important 3 — Test coverage (Fixed)
+
+- Added 2 backend tests for keyword-only Character eligibility and full validation.
+- Frontend zero-eligible behavior tested via JS logic review and syntax check.
+
+### Important 4 — Stale verification counts (Fixed)
+
+- Full suite: 604 passed, 3 skipped, 60 warnings.
+- Task 2.2 closure verification updated.
+
+### 2026-05-18 follow-up verification
+
+- Team Builder now shows a specific zero-eligible Character warning and keeps save invalid until a Character Warlord candidate exists.
+- Frontend Warlord eligibility includes keyword-only `CHARACTER` parity with the backend helper.
+- Added frontend static regression coverage in `tests/test_team_builder.py` for zero-eligible warning/save-disabled logic and keyword eligibility.
+- Verification: scoped Warlord/roster/team-builder suite `82 passed, 48 warnings`; full suite `604 passed, 3 skipped, 60 warnings`; Ruff lint/format and diff-check clean.
 
 ## Scope
 

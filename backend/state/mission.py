@@ -67,18 +67,7 @@ def check_end_game(
 ) -> GameResult | None:
     """Проверить условия окончания игры."""
 
-    # 1. Victory Point cap (100 VP)
-    for player_num in [1, 2]:
-        if vp.total[player_num] >= 100:
-            return GameResult(
-                winner=_int_to_player(player_num),
-                reason="vp_cap",
-                vp_tracker=vp,
-                total_rounds=round_num,
-                summary=vp.summary(),
-            )
-
-    # 2. Army wiped
+    # 1. Army wiped
     for player_id, player_state in state.players.items():
         if player_state and all(u.models_remaining <= 0 for u in player_state.units.values()):
             winner = "2" if player_id in ("p1", "1") else "1"
@@ -90,7 +79,7 @@ def check_end_game(
                 summary=vp.summary(),
             )
 
-    # 3. Max rounds reached
+    # 2. Max rounds reached
     if round_num >= mission.config.max_rounds:
         leader = vp.leader()
         if vp.is_tied():
@@ -140,21 +129,23 @@ def _resolve_tie(state: GameState) -> int:
 
 
 def score_standard(mission: Mission) -> dict[int, int]:
-    """Standard scoring: VP = number of objectives controlled."""
+    """Standard scoring: VP = number of objectives controlled × vp_per_objective."""
     mission.update_objective_control()
 
+    vp_per_obj = mission.config.vp_per_objective
     vp = {player_id: 0 for player_id in mission.state.players}
     for player_id in mission.state.players:
         for obj in mission.config.objectives:
             if obj.controlled_by == player_id and not obj.is_contested:
-                vp[player_id] += 1  # 1 VP per objective controlled
+                vp[player_id] += vp_per_obj
     return vp
 
 
 def score_progressive(mission: Mission) -> dict[int, int]:
-    """Progressive scoring: VP = objectives controlled + bonus for controlling more than opponent."""
+    """Progressive scoring: VP = (objectives controlled × vp_per_objective) + bonus for controlling more than opponent."""
     mission.update_objective_control()
 
+    vp_per_obj = mission.config.vp_per_objective
     vp = {player_id: 0 for player_id in mission.state.players}
     player_ids = list(mission.state.players.keys())
 
@@ -168,8 +159,8 @@ def score_progressive(mission: Mission) -> dict[int, int]:
             elif obj.controlled_by == player_ids[1] and not obj.is_contested:
                 p2_obj += 1
 
-        vp[player_ids[0]] = p1_obj
-        vp[player_ids[1]] = p2_obj
+        vp[player_ids[0]] = p1_obj * vp_per_obj
+        vp[player_ids[1]] = p2_obj * vp_per_obj
 
         # Bonus for controlling more objectives
         if p1_obj > p2_obj:
@@ -286,6 +277,7 @@ class MissionConfig:
     objectives: list[MissionObjective]
     max_rounds: int = 5
     scoring_rule: str = "standard"  # standard, progressive, only_war, kill_points
+    vp_per_objective: int = 1  # VP awarded per controlled uncontested objective
     deployment_zone_rows: int = 24  # 24" from edge
     no_mans_land_start: int = 24
     no_mans_land_end: int = 36
@@ -299,14 +291,17 @@ class Mission:
     state: GameState
 
     def score_vp(self, player_id: str) -> int:
-        """Calculate VP for player at end of Command phase."""
-        # Update objective control first
+        """Calculate VP for player at end of Command phase.
+
+        Each controlled uncontested objective awards config.vp_per_objective VP.
+        """
         self.update_objective_control()
 
+        vp_per_obj = self.config.vp_per_objective
         vp = 0
         for obj in self.config.objectives:
             if obj.controlled_by == player_id and not obj.is_contested:
-                vp += 1  # 1 VP per objective controlled
+                vp += vp_per_obj
         return vp
 
     def update_objective_control(self, control_range: float = 3.0):
@@ -558,35 +553,38 @@ def create_mission(mission_name: str, game_state: GameState) -> Mission | None:
 
 
 def _only_war() -> MissionConfig:
-    """Only War: progressive-scoring mission. Objectives placed dynamically by create_mission()."""
+    """Only War: progressive-scoring mission. 3 VP per objective (3 objectives)."""
     return MissionConfig(
         name="Only War",
         deployment=DeploymentType.DAWN_OF_WAR,
         description="Control objectives to score VP each round.",
-        objectives=[],  # placed dynamically based on map size
+        objectives=[],  # placed dynamically based on map size (3 objectives)
         scoring_rule="progressive",
+        vp_per_objective=3,
     )
 
 
 def _purge_the_foe() -> MissionConfig:
-    """Purge the Foe: Slay the Warlord + kill points."""
+    """Purge the Foe: Slay the Warlord + kill points. 5 VP per objective (5 objectives)."""
     return MissionConfig(
         name="Purge the Foe",
         deployment=DeploymentType.SEARCH_AND_DESTROY,
         description="Kill more pts than opponent each round.",
-        objectives=[],
+        objectives=[],  # placed dynamically based on map size (5 objectives)
         scoring_rule="kill_points",
+        vp_per_objective=5,
     )
 
 
 def _take_and_hold() -> MissionConfig:
-    """Take and Hold: 5 objectives, score end of each Command phase."""
+    """Take and Hold: 5 objectives, 5 VP per objective, score end of each Command phase."""
     return MissionConfig(
         name="Take and Hold",
         deployment=DeploymentType.CRUCIBLE_OF_BATTLE,
         description="Control objectives to score at end of Command phase.",
         objectives=[],  # placed dynamically based on map size (5 objectives)
         scoring_rule="standard",
+        vp_per_objective=5,
     )
 
 

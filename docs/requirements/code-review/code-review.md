@@ -110,13 +110,37 @@ Current triage verdict: not release-ready. CR-24 executable gates passed, but re
 
 ## Phase 2 checkpoint evidence
 
-Date: 2026-05-17
+Date: 2026-05-18
 
-Phase 2 roster-validator remediation is back to REQUEST CHANGES after the 2026-05-17 Task 2.2 check. Blockers: keyword-only `CHARACTER` units are not Warlord-eligible in the shared helper, Team Builder treats zero eligible Characters as UI-valid, and closure evidence still has stale full-suite counts. Current observed gates during the check: scoped roster suite `68 passed, 48 warnings`; full suite `593 passed, 3 skipped, 60 warnings`; Ruff lint/format clean for the checked Phase 2 Python files.
+Phase 2 roster-validator remediation is complete after Task 2.2 and Task 2.3 closure re-check sync. Shared Warlord validation/backend-frontend parity and feature-gate enforcement are aligned across task, review, source plan, index, and CR artifacts.
+
+Latest observed verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_roster*.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py -q` → 82 passed, 48 warnings.
+- `uv run python -m pytest tests/ -q` → 604 passed, 3 skipped, 60 warnings.
+- `uv run ruff check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py` → All checks passed.
+- `uv run ruff format --check backend/state/roster.py web/routes/api_rosters.py backend/billing/plans.py backend/engine/ai/autoplay.py tests/test_roster.py tests/test_rosters.py tests/test_generate_roster.py tests/test_team_builder.py` → 8 files already formatted.
+- `git diff --check -- docs/remediation/task-02-02-enforce-exactly-one-warlord-when-required.md docs/remediation/task-02-03-enforce-plan-feature-gates-consistently.md docs/remediation/remediation-plan.md docs/remediation/index.md docs/reviews/2026-05-18/task-02-03-enforce-plan-feature-gates-consistently-review.md docs/requirements/code-review/code-review.md` → clean.
 
 
 ## Phase 3 checkpoint evidence
 
-Date: 2026-05-17
+Date: 2026-05-18
 
-Phase 3 combat-math remediation is complete and verified. Tasks 3.1, 3.2, and 3.3 are marked complete in the remediation task files and index. Focused combat/modifier suite passed (`50 passed in 10.38s`), full suite passed (`583 passed, 3 skipped, 60 warnings in 56.40s`), and Ruff lint/format plus diff-check are clean for the Task 3.3 touched code/docs. CR-07 and CR-11 artifacts contain Phase 3 regression evidence.
+Phase 3 combat-math remediation is complete and verified. Tasks 3.1, 3.2, and 3.3 are marked complete with all requirements checked. Focused combat/modifier suite: `50 passed in 10.38s`. Full suite: `604 passed, 3 skipped, 60 warnings`. Ruff lint/format and diff-check clean for Phase 3 touched files. CR-07 and CR-11 artifacts contain Phase 3 regression evidence.
+
+## Phase 4 checkpoint evidence — 2026-05-18
+
+Status: COMPLETE for Phase 4 remediation tasks 4.1, 4.2, and 4.3.
+
+Closed scope:
+- CR-08: 10e phase loop, CP generation, battle-shock reset timing, round/turn reset invariants.
+- CR-10: VP/objective scoring and mission normalization invariants — Task 4.3 fixed mission-defined 3/5/5 scoring, removed VP cap, and synced VP tracker to PlayerState.
+- CR-14: replay/result-facing phase/VP state remains aligned with canonical runtime state.
+- CR-24: full regression gate remains green after Phase 4 fixes.
+
+Verification (Task 4.3 fix run):
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q` → 52 passed.
+- `uv run python -m pytest tests/ -q` → 604 passed, 3 skipped, 60 warnings.
+- `uv run ruff check backend/state/mission.py backend/engine/scenario.py tests/test_mission.py` → All checks passed.
+- `uv run ruff format --check backend/state/mission.py backend/engine/scenario.py tests/test_mission.py` → 3 files already formatted.
+- `git diff --check -- backend/state/mission.py backend/engine/scenario.py tests/test_mission.py` → clean.

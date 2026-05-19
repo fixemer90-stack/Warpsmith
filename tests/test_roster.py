@@ -655,3 +655,59 @@ def test_pts_formula_parity_fixture():
             f"calculate_squad_pts({points}, {min_sq}, {squad_size}, "
             f"{loadout}, {nob}) = {result}, expected {expected}"
         )
+
+
+def test_is_unit_eligible_warlord_keyword_only() -> None:
+    """Unit with keywords=['Character'] (no tag/category/can_be_warlord) is eligible."""
+    from backend.state.roster import is_unit_eligible_warlord
+
+    unit = Unit(
+        name="Keyword Char",
+        faction="test",
+        category="Infantry",
+        movement=6,
+        toughness=4,
+        save=3,
+        wounds=2,
+        leadership=6,
+        objective_control=1,
+        points=50,
+        model_count=(1, 1),
+        tags=[],
+        can_be_warlord=False,
+        is_leader=False,
+        keywords=["Character"],
+    )
+    assert is_unit_eligible_warlord(unit), "Unit with keywords=['Character'] must be eligible"
+
+
+def test_validate_roster_keyword_only_character() -> None:
+    """Roster with only a keyword-only Character as Warlord passes validation."""
+    from backend.state.roster import validate_roster
+
+    units = {
+        "Keyword Char": Unit(
+            name="Keyword Char",
+            faction="test",
+            category="Infantry",
+            movement=6,
+            toughness=4,
+            save=3,
+            wounds=2,
+            leadership=6,
+            objective_control=1,
+            points=50,
+            model_count=(1, 1),
+            tags=[],
+            can_be_warlord=False,
+            is_leader=False,
+            keywords=["Character"],
+        ),
+    }
+    result = validate_roster(
+        [("Keyword Char", 1)],
+        units,
+        pts_limit=1000,
+        is_warlord=[True],
+    )
+    assert result.is_valid, f"Keyword-only Character roster should be valid: {result.errors}"

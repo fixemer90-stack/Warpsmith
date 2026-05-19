@@ -47,12 +47,13 @@ def test_run_round():
 
 
 def test_command_phase_cp_generation():
-    """Test that command phase generates command points."""
+    """Test that Command phase generates CP only for the active player."""
     game_state = create_empty_game("test_game")
 
     player1 = PlayerState("p1", "Player 1", "Space Marines")
     player2 = PlayerState("p2", "Player 2", "Orks")
     game_state.players = {"p1": player1, "p2": player2}
+    game_state.active_player = "p1"
 
     scenario = Scenario(game_state)
 
@@ -62,9 +63,9 @@ def test_command_phase_cp_generation():
     # Execute command phase directly
     scenario._command_phase()
 
-    # Each player should have gained 1 CP
+    # Only the active player gains CP during their own Command phase.
     assert player1.command_points == initial_cp_p1 + 1
-    assert player2.command_points == initial_cp_p2 + 1
+    assert player2.command_points == initial_cp_p2
 
 
 def test_get_state_summary():

@@ -1,7 +1,7 @@
 ---
 title: "Task 4.2 — Lock CP and battle-shock reset semantics"
 parent: remediation-plan
-status: complete
+status: completed
 phase: "4 — Game state / VP / phase invariants"
 task_id: "4.2"
 source: remediation-plan.md
@@ -65,9 +65,9 @@ CP starts at 0, each player gains CP only at the start of their own Command phas
 
 ## Non-goals
 
-- [ ] Stratagem CP spending/refund rules are not in scope.
-- [ ] Faction-specific CP generation is not in scope.
-- [ ] Full battle-shock test/rules implementation is not in scope.
+- [x] Stratagem CP spending/refund rules are not in scope.
+- [x] Faction-specific CP generation is not in scope.
+- [x] Full battle-shock test/rules implementation is not in scope.
 
 ## Files likely touched
 
@@ -82,25 +82,53 @@ CP starts at 0, each player gains CP only at the start of their own Command phas
 
 ## Verification
 
-- [x] `uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q`
+- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q`
+- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py -q`
+- [x] `uv run python -m pytest tests/ -q`
+- [x] `uv run ruff check backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py`
+- [x] `uv run ruff format --check backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py`
+- [x] `git diff --check -- backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py docs/remediation/task-04-02-lock-cp-and-battle-shock-reset-semantics.md docs/remediation/remediation-plan.md docs/remediation/index.md docs/reviews/2026-05-18/task-04-02-lock-cp-and-battle-shock-reset-semantics-review.md docs/reviews/2026-05-10/triage-summary.md docs/requirements/code-review/code-review.md docs/requirements/code-review/cr-08-game-state-and-phase-machine-review.md docs/requirements/code-review/cr-10-mission-objectives-and-vp-review.md docs/requirements/code-review/cr-14-autoplay-replay-and-result-review.md docs/requirements/code-review/cr-24-final-integration-regression-gate.md`
+- [x] `curl -sS http://127.0.0.1:8000/api/health`
 
-### Verification results (2026-05-17)
+### Verification results (2026-05-18)
 
-```
-$ uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q
-24 passed in 0.57s
+```text
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py -q
+28 passed in 0.62s
+
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py -q
+42 passed in 0.78s
 
 $ uv run python -m pytest tests/ -q
-590 passed, 3 skipped, 60 warnings in 56.18s
+602 passed, 3 skipped, 60 warnings in 52.82s
 
-$ uv run ruff check tests/test_game_state.py
+$ uv run ruff check backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py
 All checks passed!
 
-$ uv run ruff format --check tests/test_game_state.py
-1 file already formatted
+$ uv run ruff format --check backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py
+4 files already formatted
 
-$ git diff --check -- tests/test_game_state.py
+$ git diff --check -- backend/engine/scenario.py tests/test_game_state.py tests/test_scenario.py tests/test_f2_7_battle_shock_cp_stratagems.py docs/remediation/task-04-02-lock-cp-and-battle-shock-reset-semantics.md docs/remediation/task-04-03-lock-vp-objectives-mission-normalization-battle-ready.md docs/remediation/remediation-plan.md docs/remediation/index.md docs/reviews/2026-05-18/task-04-02-lock-cp-and-battle-shock-reset-semantics-review.md docs/reviews/2026-05-10/triage-summary.md docs/requirements/code-review/code-review.md docs/requirements/code-review/cr-08-game-state-and-phase-machine-review.md docs/requirements/code-review/cr-10-mission-objectives-and-vp-review.md docs/requirements/code-review/cr-14-autoplay-replay-and-result-review.md docs/requirements/code-review/cr-24-final-integration-regression-gate.md
 (clean)
+
+$ curl -sS http://127.0.0.1:8000/api/health
+{"status":"ok","version":"0.7.9"}
+```
+
+Deterministic probe after fix:
+
+```text
+start_cp 0 0
+after_command_cp 1 0
+after_command_shock False True
+after_repeated_command_cp 1 0
+after_repeated_command_shock False True
+shock_after_movement True True
+shock_after_shooting True True
+shock_after_charge True True
+shock_after_fight True True
+after_p2_command_cp 1 1
+after_p2_command_shock True False
 ```
 
 ## Completion requirements
@@ -109,3 +137,19 @@ $ git diff --check -- tests/test_game_state.py
 - [x] Regression evidence is recorded in the affected CR artifact(s).
 - [x] If this task completes a phase checkpoint, update `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-XX-*.md`, and `docs/requirements/code-review/code-review.md` with the phase completion artifact.
 - [x] `git diff --check` passes for touched files.
+
+## Code review — 2026-05-18
+
+Review file: `docs/reviews/2026-05-18/task-04-02-lock-cp-and-battle-shock-reset-semantics-review.md`
+
+**Verdict: REQUEST CHANGES → FIXED 2026-05-18.**
+
+All 5 findings resolved:
+
+| Finding | Fix |
+| --- | --- |
+| Command phase awarded CP to all players | `Scenario._command_phase()` now resolves a single active command owner via `GameState.active_player`, command priority, or first player fallback; CP is awarded only to that owner. |
+| Command CP was not idempotent | `Scenario` tracks processed `(round, active_player)` Command turns and skips duplicate CP/reset processing until the active player or round changes. |
+| Battle-shock reset cleared all owners | Command reset now clears `is_battle_shocked` only on the active owner's units; `_battle_shock_tests()` is scoped to the active owner. |
+| Tests encoded the bug | Replaced contradictory expectations and added regressions for opponent CP, explicit next-player Command CP, owner-scoped battle-shock reset, and CP cap behavior. |
+| Closure artifacts were stale | Synced task file, review resolution, source plan, index, CR-08/10/14/24 evidence, triage summary, and code-review checkpoint evidence with current verification. |
