@@ -578,7 +578,7 @@ class Scenario:
                     terrain = self.state.terrain_map if hasattr(self.state, "terrain_map") else None
                     target_cat = getattr(defender_model, "category", "infantry")
                     has_cover = (
-                        _has_cover(unit.position, target.position, terrain, target_cat)
+                        _has_cover(target.position, unit.position, terrain, target_cat)
                         if terrain is not None
                         else False
                     )
@@ -644,28 +644,50 @@ class Scenario:
                 # Roll 2D6
                 roll = random.randint(1, 6) + random.randint(1, 6)
                 if roll >= dist:
-                    # Charge succeeds — move unit adjacent to closest enemy
-                    # (can't move directly onto enemy's cell — that's occupied)
-                    charge_pos = (
-                        closest.position[0] - 1
-                        if closest.position[0] > unit.position[0]
-                        else closest.position[0] + 1
-                        if closest.position[0] < unit.position[0]
-                        else closest.position[0],
-                        closest.position[1],
+                    # Charge succeeds — find a valid adjacent cell to the target.
+                    # Must NOT occupy the enemy's cell; must be within map bounds.
+                    candidates = []
+                    for dx, dy in [
+                        (-1, 0),
+                        (1, 0),
+                        (0, -1),
+                        (0, 1),
+                        (-1, -1),
+                        (-1, 1),
+                        (1, -1),
+                        (1, 1),
+                    ]:
+                        cx = closest.position[0] + dx
+                        cy = closest.position[1] + dy
+                        if 0 <= cx < self.state.map_width and 0 <= cy < self.state.map_height:
+                            candidates.append((cx, cy))
+                    # Sort by distance from charging unit
+                    candidates.sort(
+                        key=lambda pos: (
+                            (unit.position[0] - pos[0]) ** 2 + (unit.position[1] - pos[1]) ** 2
+                        )
                     )
-                    # Clamp to map bounds
-                    charge_pos = (
-                        max(0, min(charge_pos[0], self.state.map_width - 1)),
-                        max(0, min(charge_pos[1], self.state.map_height - 1)),
-                    )
+                    charge_pos = None
+                    for cand in candidates:
+                        if self.state.get_unit_at_position(cand[0], cand[1]) is None:
+                            charge_pos = cand
+                            break
+                    if charge_pos is None:
+                        identity = format_event_identity(
+                            actor_id=unit.unit_id, target_id=closest.unit_id
+                        )
+                        self.state.game_log.append(
+                            f"{unit.name} fails charge — no valid adjacent cell to {closest.name}{identity}"
+                        )
+                        unit.has_charged = True
+                        continue
                     if self.state.move_unit(unit.unit_id, charge_pos):
                         unit.is_engaged = True
                         identity = format_event_identity(
                             actor_id=unit.unit_id, target_id=closest.unit_id
                         )
                         self.state.game_log.append(
-                            f"{unit.name} charges {closest.name} (rolled {roll} ≥ {dist:.0f}) — engaged!{identity}"
+                            f"{unit.name} charges {closest.name} to {charge_pos} (rolled {roll} ≥ {dist:.0f}) — engaged!{identity}"
                         )
                 else:
                     identity = format_event_identity(
@@ -730,51 +752,102 @@ class Scenario:
                 unit.is_fighting = False
 
     def _resolve_melee_combat(self, attacking_unit) -> None:
-        """Resolve melee combat for a unit.
-        This is a simplified implementation - in reality this would use the combat engine.
+        """Resolve melee combat for a unit against its engaged opponent.
+
+        Uses the combat engine (hit → wound → save → damage) via melee weapons
+        from the unit model. Falls back to simplified damage if no model/weapons.
         """
-        # Find an enemy unit engaged with this unit (within 1 cell, i.e. adjacent or same)
+        # Find the opponent player — only enemy units, not friendly
+        own_player_id = None
+        for pid, player in self.state.players.items():
+            if attacking_unit.unit_id in player.units:
+                own_player_id = pid
+                break
+        if own_player_id is None:
+            return
+
+        opponent_pid = next((pid for pid in self.state.players if pid != own_player_id), None)
+        if opponent_pid is None:
+            return
+        opponent = self.state.players[opponent_pid]
+
+        # Find an enemy unit within melee range (adjacent or within 1 cell)
         enemy_unit = None
-        for player in self.state.players.values():
-            for unit in player.units.values():
-                if (
-                    unit.is_alive
-                    and unit != attacking_unit
-                    and abs(unit.position[0] - attacking_unit.position[0]) <= 1
-                    and abs(unit.position[1] - attacking_unit.position[1]) <= 1
-                ):
-                    enemy_unit = unit
-                    break
-            if enemy_unit:
+        for unit in opponent.units.values():
+            if (
+                unit.is_alive
+                and abs(unit.position[0] - attacking_unit.position[0]) <= 1
+                and abs(unit.position[1] - attacking_unit.position[1]) <= 1
+            ):
+                enemy_unit = unit
                 break
 
         if enemy_unit is None:
             # No enemy found to fight with
             return
 
-        # Simple melee resolution: each unit does damage to the other
-        # In reality, we would use Weapon skill, attacks, etc. from the combat engine
-        # For now, we'll do a simple exchange of damage
+        # Try to use combat engine with melee weapons from the unit models
+        attacker_model = self._unit_models.get(attacking_unit.unit_id)
+        defender_model = self._unit_models.get(enemy_unit.unit_id)
 
-        # Attacking unit damages enemy
-        damage_to_enemy = 1  # Simplified: 1 damage per attack
-        self.state.deal_damage(enemy_unit.unit_id, damage_to_enemy)
+        if attacker_model and defender_model:
+            # Build a melee-only version of the attacker so only melee weapons are used.
+            # simulate_unit_attack() picks both ranged + melee; we want melee only.
+            melee_weapons = getattr(attacker_model, "melee_weapons", []) or []
+            if melee_weapons:
+                from backend.engine.combat import simulate_unit_attack
+
+                # Melee: distance=1 (adjacent), no cover, not stationary
+                result = simulate_unit_attack(
+                    attacker=attacker_model,
+                    defender=defender_model,
+                    n_iterations=1000,
+                    squad_size=attacking_unit.models_remaining,
+                    distance=1,
+                    has_cover=False,
+                    ignores_cover=False,
+                )
+                damage = int(result.total_stats.mean)
+            else:
+                # No melee weapons in model — fall back to simplified damage
+                damage = max(1, attacking_unit.models_remaining // 2)
+        else:
+            # No unit models available — simplified damage fallback
+            damage = max(1, attacking_unit.models_remaining // 2)
+
+        # Apply damage and log with runtime identity
+        self.state.deal_damage(enemy_unit.unit_id, damage)
         identity = format_event_identity(
             actor_id=attacking_unit.unit_id, target_id=enemy_unit.unit_id
         )
         self.state.game_log.append(
-            f"{attacking_unit.name} hits {enemy_unit.name} for {damage_to_enemy} damage{identity}"
+            f"{attacking_unit.name} hits {enemy_unit.name} for {damage} damage in melee{identity}"
         )
 
-        # Enemy unit damages attacking unit (if still alive)
-        if enemy_unit.is_alive:
-            damage_to_attacker = 1  # Simplified: 1 damage per attack
-            self.state.deal_damage(attacking_unit.unit_id, damage_to_attacker)
+        # Counter-attack: enemy strikes back (if still alive)
+        if enemy_unit.is_alive and defender_model and attacker_model:
+            melee_weapons = getattr(defender_model, "melee_weapons", []) or []
+            if melee_weapons:
+                from backend.engine.combat import simulate_unit_attack
+
+                result = simulate_unit_attack(
+                    attacker=defender_model,
+                    defender=attacker_model,
+                    n_iterations=1000,
+                    squad_size=enemy_unit.models_remaining,
+                    distance=1,
+                    has_cover=False,
+                    ignores_cover=False,
+                )
+                counter_damage = int(result.total_stats.mean)
+            else:
+                counter_damage = max(1, enemy_unit.models_remaining // 2)
+            self.state.deal_damage(attacking_unit.unit_id, counter_damage)
             identity = format_event_identity(
                 actor_id=enemy_unit.unit_id, target_id=attacking_unit.unit_id
             )
             self.state.game_log.append(
-                f"{enemy_unit.name} hits {attacking_unit.name} for {damage_to_attacker} damage{identity}"
+                f"{enemy_unit.name} hits {attacking_unit.name} for {counter_damage} damage in melee{identity}"
             )
 
     def _battle_shock_tests(self, player_id: str | None = None) -> None:

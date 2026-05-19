@@ -95,11 +95,12 @@ class BattlefieldMap:
         return battlefield
 
     def set_terrain(self, x: int, y: int, terrain_type: TerrainType):
-        """Set terrain type at a specific position."""
+        """Set terrain type at a specific position and invalidate LoS cache."""
         if not self._is_valid_position(x, y):
             msg = f"Position ({x}, {y}) is out of bounds"
             raise ValueError(msg)
         self.terrain[y, x] = terrain_type
+        self.clear_los_cache()
 
     def get_terrain(self, x: int, y: int) -> TerrainType:
         """Get terrain type at a specific position."""

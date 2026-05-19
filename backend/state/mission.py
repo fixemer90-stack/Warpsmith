@@ -142,7 +142,12 @@ def score_standard(mission: Mission) -> dict[int, int]:
 
 
 def score_progressive(mission: Mission) -> dict[int, int]:
-    """Progressive scoring: VP = (objectives controlled × vp_per_objective) + bonus for controlling more than opponent."""
+    """Progressive scoring: VP = objectives controlled × vp_per_objective.
+
+    NOTE: no extra lead-bonus is applied here. Mission-specific values must come
+    from MissionConfig (vp_per_objective / scoring_rule), not hardcoded additions
+    in the scorer.
+    """
     mission.update_objective_control()
 
     vp_per_obj = mission.config.vp_per_objective
@@ -161,12 +166,6 @@ def score_progressive(mission: Mission) -> dict[int, int]:
 
         vp[player_ids[0]] = p1_obj * vp_per_obj
         vp[player_ids[1]] = p2_obj * vp_per_obj
-
-        # Bonus for controlling more objectives
-        if p1_obj > p2_obj:
-            vp[player_ids[0]] += 2
-        elif p2_obj > p1_obj:
-            vp[player_ids[1]] += 2
 
     return vp
 
@@ -362,7 +361,7 @@ class Mission:
                 vp[player_id] = self.score_vp(player_id)
 
         elif self.config.scoring_rule == "progressive":
-            # VP = objectives controlled + bonus for controlling more than opponent
+            # VP = objectives controlled × vp_per_objective (mission-defined)
             player_ids = list(self.state.players.keys())
             if len(player_ids) >= 2:
                 p1_obj = self.score_vp(player_ids[0])
@@ -370,12 +369,6 @@ class Mission:
 
                 vp[player_ids[0]] = p1_obj
                 vp[player_ids[1]] = p2_obj
-
-                # Bonus for controlling more objectives
-                if p1_obj > p2_obj:
-                    vp[player_ids[0]] += 2
-                elif p2_obj > p1_obj:
-                    vp[player_ids[1]] += 2
 
         elif self.config.scoring_rule == "kill_points":
             # VP = percentage of opponent's army destroyed
@@ -532,22 +525,24 @@ def create_mission(mission_name: str, game_state: GameState) -> Mission | None:
             w = game_state.map_width
             h = game_state.map_height
             cx, cy = w // 2, h // 2
-            if config.scoring_rule in ("standard", "progressive", "kill_points"):
-                # 5 objectives for standard/Take-and-Hold/kill_points, 3 for progressive/Only War
-                if config.scoring_rule in ("standard", "kill_points"):
-                    config.objectives = [
-                        MissionObjective(cx, cy, "Center"),
-                        MissionObjective(cx // 2, cy, "Flank Left"),
-                        MissionObjective(cx + cx // 2, cy, "Flank Right"),
-                        MissionObjective(cx, cy // 2, "Home A"),
-                        MissionObjective(cx, cy + cy // 2, "Home B"),
-                    ]
-                else:
-                    config.objectives = [
-                        MissionObjective(cx, cy, "Center"),
-                        MissionObjective(cx // 2, cy, "Flank Left"),
-                        MissionObjective(cx + cx // 2, cy, "Flank Right"),
-                    ]
+            mission_key = mission_name.lower().replace(" ", "_").replace("-", "_")
+
+            if mission_key == "only_war":
+                # Contract: Only War uses 3 dynamic objectives.
+                config.objectives = [
+                    MissionObjective(cx, cy, "Center"),
+                    MissionObjective(cx // 2, cy, "Flank Left"),
+                    MissionObjective(cx + cx // 2, cy, "Flank Right"),
+                ]
+            else:
+                # Take and Hold / Purge the Foe: 5 dynamic objectives.
+                config.objectives = [
+                    MissionObjective(cx, cy, "Center"),
+                    MissionObjective(cx // 2, cy, "Flank Left"),
+                    MissionObjective(cx + cx // 2, cy, "Flank Right"),
+                    MissionObjective(cx, cy // 2, "Home A"),
+                    MissionObjective(cx, cy + cy // 2, "Home B"),
+                ]
         return Mission(config=config, state=game_state)
     return None
 
@@ -565,13 +560,13 @@ def _only_war() -> MissionConfig:
 
 
 def _purge_the_foe() -> MissionConfig:
-    """Purge the Foe: Slay the Warlord + kill points. 5 VP per objective (5 objectives)."""
+    """Purge the Foe: objective-control mission with 5 VP per objective."""
     return MissionConfig(
         name="Purge the Foe",
         deployment=DeploymentType.SEARCH_AND_DESTROY,
         description="Kill more pts than opponent each round.",
         objectives=[],  # placed dynamically based on map size (5 objectives)
-        scoring_rule="kill_points",
+        scoring_rule="standard",
         vp_per_objective=5,
     )
 

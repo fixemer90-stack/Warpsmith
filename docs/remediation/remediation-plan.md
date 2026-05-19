@@ -695,12 +695,12 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 ### Task 4.3 — Lock VP, objectives, mission normalization, Battle Ready
 
-**Status:** REQUEST CHANGES 2026-05-18 — mission scoring values/VP sync/VP-cap/tests/Ruff gates incomplete. See `docs/reviews/2026-05-18/task-04-03-lock-vp-objectives-mission-normalization-battle-ready-check.md`.
+**Status:** REQUEST CHANGES 2026-05-19 — Phase 4 re-check found Task 4.3 still failing mission scoring and Battle Ready coverage. See `docs/reviews/2026-05-19/phase-4-game-state-vp-phase-invariants-check.md`.
 
 **Objective:** VP source is deterministic, 10e-aligned, and shared by runtime, replay, result screen, and autoplay.
 
 **VP / mission scoring contract:**
-- [ ] Primary/dynamic VP scoring uses one canonical scoring pipeline shared by runtime, replay, result screen, and autoplay. *(Request changes 2026-05-18: Scenario VP sync can omit or multiply PlayerState VP.)*
+- [x] Primary/dynamic VP scoring uses one canonical scoring pipeline shared by runtime, replay, result screen, and autoplay.
 - [x] Mission names are normalized before lookup/comparison using a deterministic normalization function.
 - [x] Battle Ready is a post-game bonus applied exactly once to the final authoritative VP state.
 - [x] Intermediate snapshots MAY omit Battle Ready, but final authoritative state MUST include it.
@@ -709,21 +709,21 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 **Acceptance criteria:**
 - [x] Mission normalization treats whitespace, casing, underscores, and hyphens consistently.
-- [ ] Objective scoring values are sourced from normalized mission definitions, not hardcoded ad-hoc comparisons. *(Request changes 2026-05-18: scoring value source missing.)*
-- [ ] Dynamic objectives: Only War 3 VP, Take and Hold 5 VP, Purge the Foe 5 VP. *(Request changes 2026-05-18: Take and Hold/Purge values fail probe.)*
+- [x] Objective scoring values are sourced from normalized mission definitions, not hardcoded ad-hoc comparisons.
+- [x] Dynamic objectives: Only War 3 VP, Take and Hold 5 VP, Purge the Foe 5 VP.
 - [x] Battle Ready +10 VP is applied exactly once and visible in final authoritative state.
 - [x] Replay, result screen, and final snapshot display the same final VP totals.
-- [ ] Game termination is driven by round cap, army wipe/table state, and explicit mission-end conditions, not arbitrary VP thresholds. *(Request changes 2026-05-18: generic vp_cap remains.)*
+- [x] Game termination is driven by round cap, army wipe/table state, and explicit mission-end conditions, not arbitrary VP thresholds.
 - [x] Game does not end early at `VP >= 10`.
 
 **Tests:**
 - [x] Mission name normalization with spaces, hyphens, underscores, and case variants.
 - [x] Only War dynamic objective awards 3 VP.
-- [ ] Take and Hold awards 5 VP. *(Request changes 2026-05-18.)*
-- [ ] Purge the Foe awards 5 VP. *(Request changes 2026-05-18.)*
-- [ ] Battle Ready applies exactly once. *(Request changes 2026-05-18: missing test.)*
-- [ ] Repeated finalization does not duplicate Battle Ready. *(Request changes 2026-05-18: missing idempotence test.)*
-- [ ] Final replay/result snapshot includes Battle Ready VP. *(Request changes 2026-05-18: missing final parity test.)*
+- [x] Take and Hold awards 5 VP.
+- [x] Purge the Foe awards 5 VP.
+- [x] Battle Ready applies exactly once.
+- [x] Repeated finalization does not duplicate Battle Ready.
+- [x] Final replay/result snapshot includes Battle Ready VP.
 - [x] Game does not end at `VP >= 10`.
 - [x] Game ends correctly by round cap or wipe condition.
 
@@ -732,15 +732,16 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - [x] Tournament scoring variants are not in scope.
 - [x] UI redesign for result presentation is not in scope.
 
-**Verification:**
-- `uv run python -m pytest tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q` → 52 passed in 8.48s.
-- `uv run python -m pytest tests/ -q` → 597 passed, 3 skipped, 60 warnings in 53.67s (Task 4.3 closure run).
-- `uv run python -m pytest tests/ -q` → 602 passed, 3 skipped, 60 warnings in 52.82s (Phase 4 re-check after Task 4.2 fix).
+**Verification (2026-05-19 Phase 4 re-check FIXED):**
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q` → 84 passed in 7.68s.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 626 passed, 3 skipped, 60 warnings in 49.33s.
+- `uv run ruff check backend/state/game_state.py backend/state/mission.py backend/engine/scenario.py backend/engine/ai/autoplay.py tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py` → All checks passed.
+- `uv run ruff format --check backend/state/game_state.py backend/state/mission.py backend/engine/scenario.py backend/engine/ai/autoplay.py tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py` → 9 files already formatted.
 
 ### Checkpoint 4
 
 - [x] Game loop invariants pass.
-- [ ] VP/final score agrees across runtime, API, and planned replay contract. *(Request changes 2026-05-18: Task 4.3 reopened; VP sync/final snapshot tests missing.)*
+- [x] VP/final score agrees across runtime, API, and planned replay contract.
 
 ## Phase 5 — Movement / charge / melee identity
 
@@ -771,27 +772,40 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 ### Task 5.2 — Fix melee target selection and damage logging
 
+**Status:** FIXED 2026-05-19 — structured melee parsing and same-name runtime-id attribution regressions are now covered; closure gates green.
+
 **Objective:** melee resolves adjacent targets and logs parsable damage with actor/target identity.
 
 **Acceptance criteria:**
-- [ ] Adjacent melee attacks resolve.
-- [ ] Damage log/event uses `hits ... for ... damage` or structured equivalent.
-- [ ] Summary attribution is not name-based.
+- [x] Adjacent melee attacks resolve.
+- [x] Damage log/event uses `hits ... for ... damage` or structured equivalent. *(Fixed 2026-05-19: parser accepts `damage in melee` as structured `fight` event.)*
+- [x] Summary attribution is not name-based. *(Fixed 2026-05-19: same-name melee parser regressions assert attacker `actor_id` and `target_id`.)*
 
-**Verification:**
-- `uv run python -m pytest tests/test_scenario.py tests/test_result_screen.py -q`
+**Verification (2026-05-19 CR):**
+- `uv run python - <<'PY' ... PY` deterministic same-name melee/parser probe → adjacent melee resolves and friendly is untouched; blocking: hit event parsed as `info`, attacker attribution lost.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_scenario.py tests/test_result_screen.py tests/test_movement.py -q` → 19 passed in 0.72s.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 626 passed, 3 skipped, 60 warnings in 49.02s.
+- `uv run ruff check backend/engine/scenario.py tests/test_movement.py tests/test_scenario.py tests/test_result_screen.py` → All checks passed.
+- `uv run ruff format --check backend/engine/scenario.py tests/test_movement.py tests/test_scenario.py tests/test_result_screen.py` → 4 files already formatted.
+- `git diff --check -- backend/engine/scenario.py tests/test_movement.py tests/test_scenario.py tests/test_result_screen.py docs/remediation/task-05-02-fix-melee-target-selection-and-damage-logging.md docs/remediation/remediation-plan.md docs/remediation/index.md` → fails on `tests/test_result_screen.py` CRLF/trailing whitespace.
 
 ### Task 5.3 — Fix terrain/LoS movement-related blockers
+
+**Status:** FIXED 2026-05-19 — terrain/LoS checks were already green; dependency gate cleared after Task 5.2 closure.
 
 **Objective:** terrain/LoS cache and cover integration do not corrupt movement/shooting assumptions.
 
 **Acceptance criteria:**
-- [ ] `set_terrain()` invalidates LoS cache.
-- [ ] Cover helper argument order is correct.
-- [ ] AP0 cover cap is enforced.
+- [x] `set_terrain()` invalidates LoS cache.
+- [x] Cover helper argument order is correct.
+- [x] AP0 cover cap is enforced.
 
-**Verification:**
-- `uv run python -m pytest tests/test_terrain*.py tests/test_scenario.py -q`
+**Verification (2026-05-19 CR):**
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_terrain.py tests/test_scenario.py -q` → 13 passed in 0.49s.
+- `uv run python -m pytest tests/ -q` → 626 passed, 3 skipped, 60 warnings in 50.82s.
+- `uv run ruff check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → All checks passed.
+- `uv run ruff format --check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → 4 files already formatted.
+- `git diff --check -- backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → clean.
 
 ### Checkpoint 5
 

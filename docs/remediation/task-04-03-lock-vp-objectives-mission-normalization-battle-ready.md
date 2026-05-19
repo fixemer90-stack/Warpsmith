@@ -76,30 +76,32 @@ VP source is deterministic, 10e-aligned, and shared by runtime, replay, result s
 
 - [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q`
 
-### Verification results (2026-05-18 — Task 4.3 fix)
+### Verification results (2026-05-19 — Phase 4 re-check FIXED)
 
-```
-$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q
-52 passed in 7.98s
+```text
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q
+84 passed in 7.68s
 
-$ uv run python -m pytest tests/ -q
-604 passed, 3 skipped, 60 warnings in 51.20s
+$ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q
+626 passed, 3 skipped, 60 warnings in 49.33s
 
-$ uv run ruff check backend/state/mission.py backend/engine/scenario.py tests/test_mission.py
+$ uv run ruff check backend/state/game_state.py backend/state/mission.py backend/engine/scenario.py backend/engine/ai/autoplay.py tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py
 All checks passed!
 
-$ uv run ruff format --check backend/state/mission.py backend/engine/scenario.py tests/test_mission.py
-3 files already formatted
-
-$ git diff --check -- backend/state/mission.py backend/engine/scenario.py tests/test_mission.py
-clean
+$ uv run ruff format --check backend/state/game_state.py backend/state/mission.py backend/engine/scenario.py backend/engine/ai/autoplay.py tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py
+9 files already formatted
 ```
+
+Deterministic mission scoring and Battle Ready regression coverage are now present:
+- Only War isolated objective = 3 VP (`tests/test_mission.py::test_only_war_isolated_objective_scores_3_vp`)
+- Purge the Foe isolated objective = 5 VP (`tests/test_mission.py::test_purge_the_foe_isolated_objective_scores_5_vp`)
+- Battle Ready exact-once + final snapshot parity (`tests/test_autoplay.py`)
 
 ## Completion requirements
 
 - [x] Implementation/change is complete for this task only; do not batch unrelated fixes.
 - [x] Regression evidence is recorded in the affected CR artifact(s).
-- [x] Phase checkpoint synced: `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-NN-*.md`, and `docs/requirements/code-review/code-review.md` updated.
+- [x] Phase checkpoint complete: Phase 4 VP/final score contract now consistent across runtime/tests and closure artifacts synchronized.
 - [x] `git diff --check` passes for touched files.
 
 ## Code review — 2026-05-18
@@ -118,3 +120,19 @@ All blocking findings resolved:
 | Ruff/format gates red | Fixed F811 redefinitions and unsorted imports in `tests/test_mission.py`. |
 | Missing regression tests | Updated tests for new scoring values (25 VP for 5-objective T&H, 11 VP for 3-objective progressive, etc.). VP cap test converted to verify cap is removed. |
 | Stale closure artifacts | Synced task file, index, plan, code-review, and CR-08/10/14/24 evidence. |
+
+
+## Code review — 2026-05-19
+
+Review file: `docs/reviews/2026-05-19/phase-4-game-state-vp-phase-invariants-check.md`
+
+**Verdict: REQUEST CHANGES → FIXED 2026-05-19.**
+
+All phase-4 blockers from the re-check are resolved:
+
+| Finding | Fix |
+| --- | --- |
+| Only War isolated objective value wrong | Removed hardcoded progressive lead bonus from canonical progressive scoring paths (`score_progressive()` and `Mission.calculate_victory_points()`), preserving mission-defined `vp_per_objective=3`. |
+| Purge the Foe isolated objective value wrong | Switched Purge the Foe mission config to objective-control scoring (`scoring_rule="standard"`, `vp_per_objective=5`) and kept 5-objective mission shape. |
+| Battle Ready regression coverage missing | Added Battle Ready exact-once/idempotence + final snapshot parity regressions in `tests/test_autoplay.py`. |
+| Closure inconsistency | Synced Task 4.3/task index/source plan and re-check review artifact to fixed state with fresh verification counts. |

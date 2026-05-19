@@ -374,6 +374,24 @@ def _snapshot_state(state: GameState) -> dict[str, Any]:
     return snapshot_game_state(state)
 
 
+def _apply_battle_ready_once(state: GameState) -> bool:
+    """Apply Battle Ready +10 VP once per game state.
+
+    Returns True when applied in this call; False when already applied.
+    """
+    if state.victory_conditions.get("battle_ready_applied", False):
+        return False
+
+    for player in state.players.values():
+        player.victory_points += 10
+        state.game_log.append(
+            f"{player.name} gains 10 Battle Ready VP (total: {player.victory_points})"
+        )
+
+    state.victory_conditions["battle_ready_applied"] = True
+    return True
+
+
 def run_auto_game(
     roster_a: RosterState,
     roster_b: RosterState,
@@ -507,12 +525,8 @@ def run_auto_game(
             if _check_game_end(state):
                 break
 
-        # 8. Battle Ready points — 10 VP each (painted army bonus, 10ed)
-        for player in state.players.values():
-            player.victory_points += 10
-            state.game_log.append(
-                f"{player.name} gains 10 Battle Ready VP (total: {player.victory_points})"
-            )
+        # 8. Battle Ready points — 10 VP each (painted army bonus, 10ed), exactly once
+        _apply_battle_ready_once(state)
 
         # Re-snapshot final state so persisted replay/result reflects Battle Ready VP
         if round_logs:

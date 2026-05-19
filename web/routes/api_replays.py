@@ -63,6 +63,22 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
                 result_value=float(m.group(3)),
             ),
         ),
+        # "X hits Y for N damage in melee"
+        (
+            r"^(.+?)\s+hits\s+(.+?)\s+for\s+([\d.]+)\s+damage\s+in\s+melee$",
+            lambda m, r, meta: ReplayEvent(
+                round=r,
+                phase="fight",
+                turn=0,
+                event_type="fight",
+                actor_id=meta.get("actor_id", m.group(1).strip()),
+                actor_name=m.group(1).strip(),
+                target_id=meta.get("target_id", m.group(2).strip()),
+                target_name=m.group(2).strip(),
+                result_value=float(m.group(3)),
+                detail="melee_hit",
+            ),
+        ),
         # "X hits Y for N damage"
         (
             r"^(.+?)\s+hits\s+(.+?)\s+for\s+([\d.]+)\s+damage$",
