@@ -30,7 +30,7 @@
     },
     {
       "filename": "units/orks.json",
-      "sha256": "sha256:357f8a89e9504ce587f1216e65ba74fe05717d86bf0bf5ca841ab10d5a99841d"
+      "sha256": "sha256:cf475090cdf2a6976495feda19c201b127f9fdf513d5666298502ffeb7ef1874"
     },
     {
       "filename": "units/tau.json",
@@ -38,7 +38,7 @@
     },
     {
       "filename": "units/index.json",
-      "sha256": "sha256:b97585babaa7e028e679d3969e79a0b7543611201c5831dd3de0f78d33ec8c54"
+      "sha256": "sha256:d2245341dd1febe8a7329dc1629768e4531621b457b154e6f568c4bf3b057606"
     },
     {
       "filename": "faction_units/adeptus-mechanicus.json",
@@ -62,12 +62,12 @@
     },
     {
       "filename": "manifest.json",
-      "sha256": "sha256:1a7c3679f2763f9699c14c39073479bc7c9ea2d06a6f095908972973a18b0a98"
+      "sha256": "sha256:925afa6c7558c3fe0abe9cb8d5a1e452abbcf6db33d8738c632ba48252fbdeee"
     }
   ],
   "collisions": [],
-  "content_hash": "57c0bf6833f4409db41c8497927f8948ae45d4a48d6335524f0694b1ff6c3b5c",
-  "generated_at": "2026-05-17T18:03:41.306419+00:00",
+  "content_hash": "4be804ba7b0a75b342f5880089805b2689bd3632a041396a841c591fe59c0a66",
+  "generated_at": "2026-05-19T07:58:58.574923+00:00",
   "schema_version": "content.v1",
   "source_hashes": {
     "wiki/SCHEMA.md": "e04c9fcf80e58c8f46158ed53f3e3965d9c6c297479679c71e10e65bb1f708e7",
@@ -420,7 +420,7 @@
     "wiki/units/orks/Big Mek with Kustom Force Field.md": "e1d7fe012d75ca5c0d80740327b4d1e77c76b5541d10f85b35471c92d0857f28",
     "wiki/units/orks/Big Mek.md": "4b3848d6fb40bef0d6616ec33f7d759620d61b12c25a08927592a418a300b98a",
     "wiki/units/orks/Blitza-bommer.md": "07c98d81a40c846e0788ce99375aac35fc3ecd0543275d89e302e7ba57de17d2",
-    "wiki/units/orks/Boomdakka Snazzwagon.md": "fba83d46148713df57bfd0b17ca389ee797b44110a54985cf1565e26169ff06d",
+    "wiki/units/orks/Boomdakka Snazzwagon.md": "d69cacdaee82cef88d60805bb8a985ad3ca09b9b920ff57edf05c83cafa965d3",
     "wiki/units/orks/Boss Snikrot.md": "90660346a9311237b23d5c860ff0b41c470373e2211dddb0f92cf39183cb3935",
     "wiki/units/orks/Boss Zagstruk.md": "d8a9c87a08e0f354cd1643a9c1e39b2c833cd668fc9cfebb988cb9d6ab6fabfc",
     "wiki/units/orks/Boyz.md": "abbc3a1602c63707cdb817638672df56dcfc4e6fe89f6f0bbe45c627bd018ac5",
@@ -484,7 +484,7 @@
     "wiki/units/orks/Stompa.md": "2cdf91fdaa2a27b3bfaff532f33b21cfb27f56c8446726e8b1dba8513189be93",
     "wiki/units/orks/Stormboyz.md": "6640e16c1ddc6e599b9aa017698f09375e1c152f2a04fd540544edb72f06ff11",
     "wiki/units/orks/Tankbustas.md": "6a74f14398dbaabf97fba5ba26cba51aa36eb6de9e87ced086a2bbf7c9187e0c",
-    "wiki/units/orks/Trukk.md": "6b0144627f905cf60d084d97170544712142747bdc500e8607359407fc011f8d",
+    "wiki/units/orks/Trukk.md": "8d9b361a3306ebd99ca230497b3b255305309086f70e344a24ddbfdf211a4989",
     "wiki/units/orks/Ufthak Blackhawk.md": "3dcfbed2d49d51cfef846fc1a24c8ccb503c6330e862d348b36b3bbfe0739a3b",
     "wiki/units/orks/Warbikers.md": "085fd5c4fec08dc6d2b4af6ede0eb642185af6f310e51ab6074acad568b4a3c2",
     "wiki/units/orks/Warboss In Mega Armour.md": "724a4acb5a236a3343ba6ea83fb2efe0654ed4b0a325a933e2d4a2be8884bdaf",
