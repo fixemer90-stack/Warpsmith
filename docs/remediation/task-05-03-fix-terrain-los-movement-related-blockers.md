@@ -1,7 +1,7 @@
 ---
 title: "Task 5.3 — Fix terrain/LoS movement-related blockers"
 parent: remediation-plan
-status: completed
+status: changes_requested
 phase: "5 — Movement / charge / melee identity"
 task_id: "5.3"
 source: remediation-plan.md
@@ -55,7 +55,7 @@ In both `_resolve_wound_chain` and `compute_save`: when AP=0, cover cannot impro
 ## Verification
 
 - [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_terrain.py tests/test_scenario.py -q` → 13 passed.
-- [x] `uv run python -m pytest tests/ -q` → 622 passed, 3 skipped, 60 warnings.
+- [x] `uv run python -m pytest tests/ -q` → 626 passed, 3 skipped, 60 warnings.
 - [x] `uv run ruff check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → All checks passed.
 - [x] `uv run ruff format --check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → 4 files already formatted.
 - [x] `git diff --check -- backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → clean.
@@ -64,5 +64,20 @@ In both `_resolve_wound_chain` and `compute_save`: when AP=0, cover cannot impro
 
 - [x] Implementation/change is complete for this task only; do not batch unrelated fixes.
 - [x] Regression evidence is recorded in the affected CR artifact(s).
-- [x] Phase checkpoint synced — Task 5.3 completes Phase 5. Updated `code-review.md`, CR-09/11/14/15, triage summary.
+- [ ] Phase checkpoint synced — Task 5.3 completes Phase 5. *(Request changes 2026-05-19: Task 5.2 is reopened, so Phase 5 is not closed; source plan/index/CR checkpoint claims must not say complete yet.)*
 - [x] `git diff --check` passes for touched files.
+
+## Code review — 2026-05-19
+
+Review file: `../reviews/2026-05-19/task-05-03-fix-terrain-los-movement-related-blockers-review.md`
+
+**Verdict: REQUEST CHANGES.**
+
+Behavioral AC pass, but closure metadata is stale/dependency-gated:
+
+| Finding | Severity | Evidence | Required fix |
+| --- | --- | --- | --- |
+| Phase 5 checkpoint claim is invalid while Task 5.2 is reopened | Important | Task 5.2 is `changes_requested` with parser/attribution/diff-check blockers; Task 5.3 completion requirement claimed it completed Phase 5. | Keep Task 5.3 in `changes_requested` until Task 5.2 is fixed and the Phase 5 checkpoint can be synced. |
+| Verification count was stale | Important | Current full suite is 626 passed, 3 skipped, 60 warnings; task recorded 622 passed. | Updated this task verification to the current run. |
+
+Re-check results: scoped 13 passed; full 626 passed, 3 skipped; Ruff/format/diff-check clean for Task 5.3 touched files.

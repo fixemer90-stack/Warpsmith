@@ -141,6 +141,7 @@ def test_parse_log_events_uses_runtime_ids_when_metadata_present():
     events = _parse_log_events(
         [
             "Boyz hits Boyz for 3 damage [actor_id=p1:Boyz:0; target_id=p2:Boyz:0]",
+            "Boyz hits Boyz for 1 damage in melee [actor_id=p1:Boyz:0; target_id=p2:Boyz:0]",
             "Boyz was destroyed [target_id=p2:Boyz:0]",
         ],
         round_num=1,
@@ -150,8 +151,16 @@ def test_parse_log_events_uses_runtime_ids_when_metadata_present():
     assert events[0].actor_name == "Boyz"
     assert events[0].target_id == "p2:Boyz:0"
     assert events[0].target_name == "Boyz"
+
+    assert events[1].event_type == "fight"
+    assert events[1].phase == "fight"
+    assert events[1].actor_id == "p1:Boyz:0"
+    assert events[1].actor_name == "Boyz"
     assert events[1].target_id == "p2:Boyz:0"
     assert events[1].target_name == "Boyz"
+
+    assert events[2].target_id == "p2:Boyz:0"
+    assert events[2].target_name == "Boyz"
 
 
 def test_replay_round_creation():

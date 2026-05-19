@@ -20,6 +20,7 @@ SAMPLE = [
     'Tau Fire Warriors fails charge (rolled 4 < 8")',
     "Fight phase: units may fight",
     "Ork Boyz fought in melee",
+    "Ork Boyz hits Space Marine for 1 damage in melee [actor_id=p1:Boyz:0; target_id=p2:Boyz:0]",
     "Ork Boyz moved to (12, 8)",
     "Ork Boyz took 2 damage",
     "Player 1 gained 5 VP",
@@ -79,9 +80,9 @@ def test_parses_move_events():
 
 def test_parses_fight():
     events = _parse_log_events(SAMPLE, 1)
-    fights = [e for e in events if e.event_type == "fight"]
-    assert len(fights) == 1
-    assert fights[0].actor_name == "Ork Boyz"
+    fought_events = [e for e in events if e.event_type == "fight" and e.detail != "melee_hit"]
+    assert len(fought_events) == 1
+    assert fought_events[0].actor_name == "Ork Boyz"
 
 
 def test_parses_damage():
@@ -90,6 +91,19 @@ def test_parses_damage():
     assert len(dmg) == 1
     assert dmg[0].actor_name == "Ork Boyz"
     assert dmg[0].result_value == 2.0
+
+
+def test_parses_melee_hits_as_structured_fight_events_with_runtime_ids():
+    events = _parse_log_events(SAMPLE, 1)
+    melee_hits = [e for e in events if e.event_type == "fight" and e.detail == "melee_hit"]
+    assert len(melee_hits) == 1
+    event = melee_hits[0]
+    assert event.phase == "fight"
+    assert event.actor_name == "Ork Boyz"
+    assert event.target_name == "Space Marine"
+    assert event.actor_id == "p1:Boyz:0"
+    assert event.target_id == "p2:Boyz:0"
+    assert event.result_value == 1.0
 
 
 def test_parses_vp():

@@ -772,27 +772,40 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 ### Task 5.2 — Fix melee target selection and damage logging
 
+**Status:** FIXED 2026-05-19 — structured melee parsing and same-name runtime-id attribution regressions are now covered; closure gates green.
+
 **Objective:** melee resolves adjacent targets and logs parsable damage with actor/target identity.
 
 **Acceptance criteria:**
-- [ ] Adjacent melee attacks resolve.
-- [ ] Damage log/event uses `hits ... for ... damage` or structured equivalent.
-- [ ] Summary attribution is not name-based.
+- [x] Adjacent melee attacks resolve.
+- [x] Damage log/event uses `hits ... for ... damage` or structured equivalent. *(Fixed 2026-05-19: parser accepts `damage in melee` as structured `fight` event.)*
+- [x] Summary attribution is not name-based. *(Fixed 2026-05-19: same-name melee parser regressions assert attacker `actor_id` and `target_id`.)*
 
-**Verification:**
-- `uv run python -m pytest tests/test_scenario.py tests/test_result_screen.py -q`
+**Verification (2026-05-19 CR):**
+- `uv run python - <<'PY' ... PY` deterministic same-name melee/parser probe → adjacent melee resolves and friendly is untouched; blocking: hit event parsed as `info`, attacker attribution lost.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_scenario.py tests/test_result_screen.py tests/test_movement.py -q` → 19 passed in 0.72s.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 626 passed, 3 skipped, 60 warnings in 49.02s.
+- `uv run ruff check backend/engine/scenario.py tests/test_movement.py tests/test_scenario.py tests/test_result_screen.py` → All checks passed.
+- `uv run ruff format --check backend/engine/scenario.py tests/test_movement.py tests/test_scenario.py tests/test_result_screen.py` → 4 files already formatted.
+- `git diff --check -- backend/engine/scenario.py tests/test_movement.py tests/test_scenario.py tests/test_result_screen.py docs/remediation/task-05-02-fix-melee-target-selection-and-damage-logging.md docs/remediation/remediation-plan.md docs/remediation/index.md` → fails on `tests/test_result_screen.py` CRLF/trailing whitespace.
 
 ### Task 5.3 — Fix terrain/LoS movement-related blockers
+
+**Status:** FIXED 2026-05-19 — terrain/LoS checks were already green; dependency gate cleared after Task 5.2 closure.
 
 **Objective:** terrain/LoS cache and cover integration do not corrupt movement/shooting assumptions.
 
 **Acceptance criteria:**
-- [ ] `set_terrain()` invalidates LoS cache.
-- [ ] Cover helper argument order is correct.
-- [ ] AP0 cover cap is enforced.
+- [x] `set_terrain()` invalidates LoS cache.
+- [x] Cover helper argument order is correct.
+- [x] AP0 cover cap is enforced.
 
-**Verification:**
-- `uv run python -m pytest tests/test_terrain*.py tests/test_scenario.py -q`
+**Verification (2026-05-19 CR):**
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_terrain.py tests/test_scenario.py -q` → 13 passed in 0.49s.
+- `uv run python -m pytest tests/ -q` → 626 passed, 3 skipped, 60 warnings in 50.82s.
+- `uv run ruff check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → All checks passed.
+- `uv run ruff format --check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → 4 files already formatted.
+- `git diff --check -- backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → clean.
 
 ### Checkpoint 5
 

@@ -181,3 +181,39 @@ Date: 2026-05-18 (Phase 5 checkpoint)
 set_terrain() now invalidates LoS cache. Cover argument order fixed in scenario shooting (target first). AP0 cover cap: SV3+ with cover vs AP0 stays at SV3+ (SV2+ unaffected). Added 9 regression tests.
 
 Phase 5 closed: 22 scoped passed, 622 full passed. Ruff/format/diff-check clean.
+
+## Superseding evidence — Task 5.2 CR — 2026-05-19
+
+Verdict: REQUEST CHANGES. Task 5.2 is not ready to close.
+
+Behavior observed:
+- Adjacent melee resolves and opponent-only target scoping works in the deterministic probe; friendly adjacent unit remains undamaged.
+- Blocking: `_resolve_melee_combat()` logs `hits ... for ... damage in melee`, but `_parse_log_events()` only parses `hits ... for ... damage`; the authoritative melee hit line becomes generic `info`.
+- Blocking: same-name melee damage attribution is not proven non-name-based because parsed events lose the attacker runtime ID and only retain a target-side damage event.
+- Blocking: `git diff --check` for the claimed touched set fails on `tests/test_result_screen.py` CRLF/trailing-whitespace lines.
+
+Verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_scenario.py tests/test_result_screen.py tests/test_movement.py -q` → 19 passed in 0.72s.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 626 passed, 3 skipped, 60 warnings in 49.02s.
+- `uv run ruff check backend/engine/scenario.py tests/test_movement.py tests/test_scenario.py tests/test_result_screen.py` → All checks passed.
+- `uv run ruff format --check backend/engine/scenario.py tests/test_movement.py tests/test_scenario.py tests/test_result_screen.py` → 4 files already formatted.
+- `git diff --check -- backend/engine/scenario.py tests/test_movement.py tests/test_scenario.py tests/test_result_screen.py docs/remediation/task-05-02-fix-melee-target-selection-and-damage-logging.md docs/remediation/remediation-plan.md docs/remediation/index.md` → failed on `tests/test_result_screen.py` CRLF/trailing whitespace.
+
+## Superseding evidence — Task 5.3 CR — 2026-05-19
+
+Verdict: REQUEST CHANGES for closure metadata only. Terrain/LoS/cover behavior passes, but Task 5.3 cannot claim Phase 5 checkpoint completion while Task 5.2 remains `changes_requested`.
+
+Behavior observed:
+- `set_terrain()` invalidates the LoS cache.
+- Scenario shooting calls `_has_cover()` with defender/target position first and shooter position second.
+- AP0 cover cap uses pre-cover save state in both runtime and expected-value save paths.
+
+Verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_terrain.py tests/test_scenario.py -q` → 13 passed in 0.49s.
+- `uv run python -m pytest tests/ -q` → 626 passed, 3 skipped, 60 warnings in 50.82s.
+- `uv run ruff check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → All checks passed.
+- `uv run ruff format --check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → 4 files already formatted.
+- `git diff --check -- backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → clean.
+
+
+- Task 5.2 re-check FIXED (2026-05-19): `_parse_log_events` parses melee hit lines as structured `fight` events with runtime IDs; same-name attribution regressions added; scoped/full/ruff/format/diff gates green.
