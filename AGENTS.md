@@ -301,7 +301,7 @@ graph TB
 
 | Ресурс | Free | Premium | Guest |
 |--------|------|---------|-------|
-| Team Builder | ✅ 1 roster | ✅ unlimited | ✅ localStorage |
+| Team Builder | ✅ 3 rosters | ✅ unlimited | ✅ localStorage |
 | Simulation | ✅ basic AI | ✅ full AI | ❌ |
 | Export | ❌ | ✅ | ❌ |
 | Public rosters | view only | create + view | view only |

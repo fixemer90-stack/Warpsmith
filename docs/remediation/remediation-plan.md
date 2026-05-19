@@ -809,8 +809,8 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 ### Checkpoint 5
 
-- [ ] Melee units can move, charge, engage, and deal damage.
-- [ ] Duplicate unit names do not corrupt movement/melee/result attribution.
+- [x] Melee units can move, charge, engage, and deal damage.
+- [x] Duplicate unit names do not corrupt movement/melee/result attribution.
 
 ## Phase 6 — Replay/result authoritative state
 
@@ -831,16 +831,22 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 ### Task 6.1 — Persist authoritative final snapshot
 
+**Status:** FIXED 2026-05-19.
+
 **Objective:** final replay/result state includes all post-game scoring and final unit state.
 
 **Acceptance criteria:**
-- [ ] Battle Ready VP is included in final persisted state.
-- [ ] `/api/results/{game_id}` and `/result/{game_id}` show same final VP.
-- [ ] VP chart/stat cards use the same authoritative source.
+- [x] Battle Ready VP is included in final persisted state.
+- [x] `/api/results/{game_id}` and `/result/{game_id}` show same final VP.
+- [x] VP chart/stat cards use the same authoritative source.
 
-**Verification:**
-- `uv run python -m pytest tests/test_replay.py tests/test_result_screen.py -q`
-- Deterministic generated replay smoke.
+**Verification (2026-05-19 CR):**
+- `uv run python -m pytest tests/test_autoplay.py tests/test_replay.py tests/test_result_screen.py -q` → 65 passed.
+- `uv run python -m pytest tests/ -q` → 629 passed, 3 skipped, 60 warnings.
+- `uv run ruff check backend/engine/ai/autoplay.py web/routes/api_replays.py tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → All checks passed.
+- `uv run ruff format --check backend/engine/ai/autoplay.py web/routes/api_replays.py tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → already formatted.
+- `node -c web/static/result_chart.js` → syntax OK.
+- `git diff --check -- backend/engine/ai/autoplay.py web/routes/api_replays.py web/static/result_chart.js web/templates/result.html tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → clean.
 
 ### Task 6.2 — Fix event parsing and summary attribution
 

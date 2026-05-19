@@ -9,9 +9,9 @@ All findings resolved.
 
 ### Important 1 — Free limit now matches product/UI (Fixed)
 
-- `backend/billing/plans.py`: `UserFeatures.FREE["max_rosters"] = 1` (was 3).
-- UI (`my_rosters.html`) shows `Free tier: .../1 roster` — now consistent.
-- `test_free_user_max_one_roster`: 1st roster OK, 2nd → 403.
+- `backend/billing/plans.py`: `UserFeatures.FREE["max_rosters"] = 3` (current product limit).
+- UI (`my_rosters.html`) shows `Free tier: .../3 rosters` — now consistent.
+- `test_free_user_max_three_rosters`: 1st-3rd rosters OK, 4th → 403.
 
 ### Important 2 — Premium public update now persisted (Fixed)
 
@@ -56,8 +56,8 @@ $ git diff --check -- backend/billing/plans.py web/routes/api_rosters.py tests/t
 
 ### Free roster limit parity (Fixed)
 
-- Free backend `max_rosters` is aligned to the product/UI limit of 1 roster.
-- Added API regression coverage that a Free user's second create returns 403.
+- Free backend `max_rosters` is aligned to the product/UI limit of 3 rosters.
+- Added API regression coverage that a Free user's fourth create returns 403.
 
 ### Public update persistence (Fixed)
 

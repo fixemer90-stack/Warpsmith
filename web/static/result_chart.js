@@ -46,12 +46,13 @@ function resultScreen() {
             if (!ctx) return;
             if (!this.replay || !this.replay.rounds) return;
 
-            // Build VP timeline data from round snapshots
+            // Build VP timeline data from round snapshots,
+            // but force the final point to the authoritative final_state VP.
             const labels = [];
             const vp1Data = [];
             const vp2Data = [];
 
-            const playerKeys = this._getPlayerKeys();
+            const playerIds = this._getPlayerIds();
 
             this.replay.rounds.forEach((round, idx) => {
                 const roundNum = round.round || idx + 1;
@@ -59,10 +60,14 @@ function resultScreen() {
 
                 const endState = round.end_state || round.start_state || {};
                 const vps = endState.victory_points || {};
-                const keys = Object.keys(vps);
-                vp1Data.push(keys.length > 0 ? (vps[keys[0]] || 0) : 0);
-                vp2Data.push(keys.length > 1 ? (vps[keys[1]] || 0) : 0);
+                vp1Data.push(vps[playerIds[0]] || 0);
+                vp2Data.push(vps[playerIds[1]] || 0);
             });
+
+            if (vp1Data.length > 0) {
+                vp1Data[vp1Data.length - 1] = this.finalVp(0);
+                vp2Data[vp2Data.length - 1] = this.finalVp(1);
+            }
 
             // If no rounds, show empty
             if (labels.length === 0) {
@@ -236,6 +241,27 @@ function resultScreen() {
             if (!this.replay || !this.replay.rosters) return ['0', '1'];
             const keys = Object.keys(this.replay.rosters);
             return keys.length >= 2 ? keys : ['roster_a', 'roster_b'];
+        },
+
+        _getPlayerIds() {
+            const finalVp = this.replay?.summary?.final_victory_points
+                || this.replay?.final_state?.victory_points
+                || this.replay?.summary?.final_state?.victory_points
+                || this.replay?.rounds?.[this.replay.rounds.length - 1]?.end_state?.victory_points
+                || {};
+            const ids = Object.keys(finalVp).sort();
+            if (ids.length >= 2) return [ids[0], ids[1]];
+            return ['1', '2'];
+        },
+
+        finalVp(index) {
+            const ids = this._getPlayerIds();
+            const vpMap = this.replay?.summary?.final_victory_points
+                || this.replay?.final_state?.victory_points
+                || this.replay?.summary?.final_state?.victory_points
+                || this.replay?.rounds?.[this.replay.rounds.length - 1]?.end_state?.victory_points
+                || {};
+            return vpMap[ids[index]] || 0;
         },
 
         _getPlayerName(index) {

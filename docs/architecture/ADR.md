@@ -447,7 +447,7 @@ class UserFeatures:
     """Единый источник правды — какие функции доступны пользователю."""
 
     FREE = {
-        "max_rosters": 1,
+        "max_rosters": 3,
         "simulation_ai": "basic",
         "export_enabled": False,
         "public_rosters": False,     # может только смотреть

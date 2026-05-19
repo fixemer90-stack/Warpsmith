@@ -521,15 +521,34 @@ async def get_result(game_id: str):
     if replay is None:
         raise HTTPException(status_code=404, detail=f"Result {game_id} not found")
     data = json.loads(json.dumps(asdict(replay), default=str))
-    # Compute winner from VP if summary.winner is None
-    if data.get("summary", {}).get("winner") is None and data.get("rounds"):
-        last_round = data["rounds"][-1]
-        end_state = last_round.get("end_state") or last_round.get("start_state") or {}
-        vp = end_state.get("victory_points", {})
-        if vp:
-            pids = sorted(vp.keys())
-            if len(pids) >= 2 and (vp[pids[0]] != vp[pids[1]]):
-                data["summary"]["winner"] = (
-                    int(pids[0]) if vp[pids[0]] > vp[pids[1]] else int(pids[1])
-                )
+
+    summary = data.setdefault("summary", {})
+    rounds = data.get("rounds") or []
+
+    # Authoritative final snapshot precedence:
+    # 1) summary.final_state (if persisted explicitly),
+    # 2) last round end_state,
+    # 3) last round start_state.
+    final_state = summary.get("final_state")
+    if not final_state and rounds:
+        last_round = rounds[-1]
+        final_state = last_round.get("end_state") or last_round.get("start_state") or {}
+
+    if final_state:
+        data["final_state"] = final_state
+        summary.setdefault("final_state", final_state)
+
+    # Expose final VP from the same authoritative final snapshot.
+    final_vp = (final_state or {}).get("victory_points", {})
+    if final_vp:
+        summary.setdefault("final_victory_points", final_vp)
+
+    # Compute winner from authoritative final VP if summary.winner is None.
+    if summary.get("winner") is None and final_vp:
+        pids = sorted(final_vp.keys())
+        if len(pids) >= 2 and (final_vp[pids[0]] != final_vp[pids[1]]):
+            summary["winner"] = (
+                int(pids[0]) if final_vp[pids[0]] > final_vp[pids[1]] else int(pids[1])
+            )
+
     return data
