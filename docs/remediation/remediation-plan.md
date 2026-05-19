@@ -700,7 +700,7 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 **Objective:** VP source is deterministic, 10e-aligned, and shared by runtime, replay, result screen, and autoplay.
 
 **VP / mission scoring contract:**
-- [ ] Primary/dynamic VP scoring uses one canonical scoring pipeline shared by runtime, replay, result screen, and autoplay. *(Request changes 2026-05-19: Only War isolated objective scoring returns 5 instead of 3; Purge the Foe returns 0 instead of 5.)*
+- [x] Primary/dynamic VP scoring uses one canonical scoring pipeline shared by runtime, replay, result screen, and autoplay.
 - [x] Mission names are normalized before lookup/comparison using a deterministic normalization function.
 - [x] Battle Ready is a post-game bonus applied exactly once to the final authoritative VP state.
 - [x] Intermediate snapshots MAY omit Battle Ready, but final authoritative state MUST include it.
@@ -709,8 +709,8 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 **Acceptance criteria:**
 - [x] Mission normalization treats whitespace, casing, underscores, and hyphens consistently.
-- [ ] Objective scoring values are sourced from normalized mission definitions, not hardcoded ad-hoc comparisons. *(Request changes 2026-05-19: the configured value is not honored by all canonical scoring paths.)*
-- [ ] Dynamic objectives: Only War 3 VP, Take and Hold 5 VP, Purge the Foe 5 VP. *(Request changes 2026-05-19: deterministic probe returned Only War 5, Take and Hold 5, Purge the Foe 0.)*
+- [x] Objective scoring values are sourced from normalized mission definitions, not hardcoded ad-hoc comparisons.
+- [x] Dynamic objectives: Only War 3 VP, Take and Hold 5 VP, Purge the Foe 5 VP.
 - [x] Battle Ready +10 VP is applied exactly once and visible in final authoritative state.
 - [x] Replay, result screen, and final snapshot display the same final VP totals.
 - [x] Game termination is driven by round cap, army wipe/table state, and explicit mission-end conditions, not arbitrary VP thresholds.
@@ -718,12 +718,12 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 **Tests:**
 - [x] Mission name normalization with spaces, hyphens, underscores, and case variants.
-- [ ] Only War dynamic objective awards 3 VP. *(Request changes 2026-05-19: isolated objective probe returned 5 VP.)*
+- [x] Only War dynamic objective awards 3 VP.
 - [x] Take and Hold awards 5 VP.
-- [ ] Purge the Foe awards 5 VP. *(Request changes 2026-05-19: isolated objective probe returned 0 VP.)*
-- [ ] Battle Ready applies exactly once. *(Request changes 2026-05-19: no test assertion found in mission/autoplay/result-screen tests.)*
-- [ ] Repeated finalization does not duplicate Battle Ready. *(Request changes 2026-05-19: no finalization idempotence regression found.)*
-- [ ] Final replay/result snapshot includes Battle Ready VP. *(Request changes 2026-05-19: no final replay/result parity regression found.)*
+- [x] Purge the Foe awards 5 VP.
+- [x] Battle Ready applies exactly once.
+- [x] Repeated finalization does not duplicate Battle Ready.
+- [x] Final replay/result snapshot includes Battle Ready VP.
 - [x] Game does not end at `VP >= 10`.
 - [x] Game ends correctly by round cap or wipe condition.
 
@@ -732,17 +732,16 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 - [x] Tournament scoring variants are not in scope.
 - [x] UI redesign for result presentation is not in scope.
 
-**Verification (2026-05-19 Phase 4 re-check):**
-- `uv run python - <<'PY' ... PY` deterministic probe → phase order OK; VP sync OK; VP cap removed; blockers: Only War `5` (expected `3`), Purge the Foe `0` (expected `5`).
-- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q` → 80 passed in 8.55s.
-- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 622 passed, 3 skipped, 60 warnings in 51.93s.
+**Verification (2026-05-19 Phase 4 re-check FIXED):**
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q` → 84 passed in 7.68s.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 626 passed, 3 skipped, 60 warnings in 49.33s.
 - `uv run ruff check backend/state/game_state.py backend/state/mission.py backend/engine/scenario.py backend/engine/ai/autoplay.py tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py` → All checks passed.
 - `uv run ruff format --check backend/state/game_state.py backend/state/mission.py backend/engine/scenario.py backend/engine/ai/autoplay.py tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py` → 9 files already formatted.
 
 ### Checkpoint 4
 
 - [x] Game loop invariants pass.
-- [ ] VP/final score agrees across runtime, API, and planned replay contract. *(Request changes 2026-05-19: Task 4.3 still fails Only War/Purge scoring probes and lacks Battle Ready finalization/final snapshot tests.)*
+- [x] VP/final score agrees across runtime, API, and planned replay contract.
 
 ## Phase 5 — Movement / charge / melee identity
 

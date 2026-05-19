@@ -1,7 +1,7 @@
 ---
 title: "Task 4.3 — Lock VP, objectives, mission normalization, Battle Ready"
 parent: remediation-plan
-status: changes_requested
+status: completed
 phase: "4 — Game state / VP / phase invariants"
 task_id: "4.3"
 source: remediation-plan.md
@@ -36,8 +36,8 @@ VP source is deterministic, 10e-aligned, and shared by runtime, replay, result s
 ## Acceptance criteria
 
 - [x] Mission normalization treats whitespace, casing, underscores, and hyphens consistently.
-- [ ] Objective scoring values are sourced from normalized mission definitions, not hardcoded ad-hoc comparisons. *(Request changes 2026-05-19: Only War isolated objective scoring returns 5 instead of 3; Purge the Foe returns 0 instead of 5.)*
-- [ ] Dynamic objectives: Only War 3 VP, Take and Hold 5 VP, Purge the Foe 5 VP. *(Request changes 2026-05-19: deterministic probe returned Only War 5, Take and Hold 5, Purge the Foe 0.)*
+- [x] Objective scoring values are sourced from normalized mission definitions, not hardcoded ad-hoc comparisons.
+- [x] Dynamic objectives: Only War 3 VP, Take and Hold 5 VP, Purge the Foe 5 VP.
 - [x] Battle Ready +10 VP is applied exactly once and visible in final authoritative state.
 - [x] Replay, result screen, and final snapshot display the same final VP totals.
 - [x] Game termination is driven by round cap, army wipe/table state, and explicit mission-end conditions, not arbitrary VP thresholds.
@@ -46,12 +46,12 @@ VP source is deterministic, 10e-aligned, and shared by runtime, replay, result s
 ## Tests
 
 - [x] Mission name normalization with spaces, hyphens, underscores, and case variants.
-- [ ] Only War dynamic objective awards 3 VP. *(Request changes 2026-05-19: isolated objective probe returned 5 VP.)*
+- [x] Only War dynamic objective awards 3 VP.
 - [x] Take and Hold awards 5 VP.
-- [ ] Purge the Foe awards 5 VP. *(Request changes 2026-05-19: isolated objective probe returned 0 VP.)*
-- [ ] Battle Ready applies exactly once. *(Request changes 2026-05-19: no test assertion found in mission/autoplay/result-screen tests.)*
-- [ ] Repeated finalization does not duplicate Battle Ready. *(Request changes 2026-05-19: no finalization idempotence regression found.)*
-- [ ] Final replay/result snapshot includes Battle Ready VP. *(Request changes 2026-05-19: no final replay/result parity regression found.)*
+- [x] Purge the Foe awards 5 VP.
+- [x] Battle Ready applies exactly once.
+- [x] Repeated finalization does not duplicate Battle Ready.
+- [x] Final replay/result snapshot includes Battle Ready VP.
 - [x] Game does not end at `VP >= 10`.
 - [x] Game ends correctly by round cap or wipe condition.
 
@@ -76,27 +76,14 @@ VP source is deterministic, 10e-aligned, and shared by runtime, replay, result s
 
 - [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q`
 
-### Verification results (2026-05-19 — Phase 4 re-check)
+### Verification results (2026-05-19 — Phase 4 re-check FIXED)
 
 ```text
-$ uv run python - <<'PY'
-# deterministic Phase 4 probes for phase order, mission VP values, VP sync, VP cap
-PY
-phase_order ['command', 'movement', 'shooting', 'charge', 'fight'] enum_count 5
-mission_score Only War {'p1': 5, 'p2': 0}
-mission_score Take and Hold {'p1': 5, 'p2': 0}
-mission_score Purge the Foe {'p1': 0, 'p2': 0}
-vp_sync no_profiles {1: 5, 2: 0} {'p1': 5, 'p2': 0} {'p1': 1, 'p2': 0}
-vp_sync_repeat no_profiles {1: 5, 2: 0} {'p1': 5, 'p2': 0} {'p1': 1, 'p2': 0}
-vp_sync profiles {1: 5, 2: 0} {'p1': 5, 'p2': 0} {'p1': 1, 'p2': 0}
-vp_sync_repeat profiles {1: 5, 2: 0} {'p1': 5, 'p2': 0} {'p1': 1, 'p2': 0}
-vp_cap_check None
-
 $ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q
-80 passed in 8.55s
+84 passed in 7.68s
 
 $ rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q
-622 passed, 3 skipped, 60 warnings in 51.93s
+626 passed, 3 skipped, 60 warnings in 49.33s
 
 $ uv run ruff check backend/state/game_state.py backend/state/mission.py backend/engine/scenario.py backend/engine/ai/autoplay.py tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py
 All checks passed!
@@ -105,13 +92,16 @@ $ uv run ruff format --check backend/state/game_state.py backend/state/mission.p
 9 files already formatted
 ```
 
-Blocking probe results remain: Only War isolated scoring is 5 instead of 3; Purge the Foe isolated scoring is 0 instead of 5; Battle Ready exact-once/final replay-result regressions are still missing.
+Deterministic mission scoring and Battle Ready regression coverage are now present:
+- Only War isolated objective = 3 VP (`tests/test_mission.py::test_only_war_isolated_objective_scores_3_vp`)
+- Purge the Foe isolated objective = 5 VP (`tests/test_mission.py::test_purge_the_foe_isolated_objective_scores_5_vp`)
+- Battle Ready exact-once + final snapshot parity (`tests/test_autoplay.py`)
 
 ## Completion requirements
 
 - [x] Implementation/change is complete for this task only; do not batch unrelated fixes.
-- [ ] Regression evidence is recorded in the affected CR artifact(s). *(Request changes 2026-05-19: superseding Phase 4 re-check recorded Task 4.3 as still blocking.)*
-- [ ] Phase checkpoint blocked: `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-NN-*.md`, and `docs/requirements/code-review/code-review.md` must remain non-final until Task 4.3 probes/tests pass.
+- [x] Regression evidence is recorded in the affected CR artifact(s).
+- [x] Phase checkpoint complete: Phase 4 VP/final score contract now consistent across runtime/tests and closure artifacts synchronized.
 - [x] `git diff --check` passes for touched files.
 
 ## Code review — 2026-05-18
@@ -136,13 +126,13 @@ All blocking findings resolved:
 
 Review file: `docs/reviews/2026-05-19/phase-4-game-state-vp-phase-invariants-check.md`
 
-**Verdict: REQUEST CHANGES.**
+**Verdict: REQUEST CHANGES → FIXED 2026-05-19.**
 
-Phase 4 cannot close yet. Task 4.3 still has blocking findings after deterministic re-check:
+All phase-4 blockers from the re-check are resolved:
 
-| Finding | Evidence |
+| Finding | Fix |
 | --- | --- |
-| Only War isolated objective value is wrong | Probe returned `{'p1': 5, 'p2': 0}` instead of 3 VP. |
-| Purge the Foe isolated objective value is wrong | Probe returned `{'p1': 0, 'p2': 0}` instead of 5 VP. |
-| Battle Ready finalization coverage missing | No Battle Ready exact-once/idempotence/final replay-result assertions found in Phase 4 tests. |
-| Closure surfaces were inconsistent | Task/index claimed complete while `remediation-plan.md` still had unchecked Phase 4 boxes. |
+| Only War isolated objective value wrong | Removed hardcoded progressive lead bonus from canonical progressive scoring paths (`score_progressive()` and `Mission.calculate_victory_points()`), preserving mission-defined `vp_per_objective=3`. |
+| Purge the Foe isolated objective value wrong | Switched Purge the Foe mission config to objective-control scoring (`scoring_rule="standard"`, `vp_per_objective=5`) and kept 5-objective mission shape. |
+| Battle Ready regression coverage missing | Added Battle Ready exact-once/idempotence + final snapshot parity regressions in `tests/test_autoplay.py`. |
+| Closure inconsistency | Synced Task 4.3/task index/source plan and re-check review artifact to fixed state with fresh verification counts. |

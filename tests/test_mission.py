@@ -346,8 +346,8 @@ def test_progressive_scoring():
     player2.units = {"ork1": unit3}
 
     vp = mission.calculate_victory_points()
-    # p1 OC=4 (2×2) > p2 OC=1 → p1 controls all 3 (3×3 + 2 bonus = 11)
-    assert vp["p1"] == 11
+    # p1 OC=4 (2×2) > p2 OC=1 → p1 controls all 3 (3×3 = 9)
+    assert vp["p1"] == 9
     assert vp["p2"] == 0
 
 
@@ -422,7 +422,7 @@ def test_create_mission_function():
     mission = create_mission("Purge the Foe", game_state)
     assert mission is not None
     assert mission.config.name == "Purge the Foe"
-    assert mission.config.scoring_rule == "kill_points"
+    assert mission.config.scoring_rule == "standard"
 
     mission = create_mission("Take and Hold", game_state)
     assert mission is not None
@@ -447,7 +447,7 @@ def test_mission_registry():
 
     purge_config = MISSIONS["purge_the_foe"]()
     assert purge_config.name == "Purge the Foe"
-    assert purge_config.scoring_rule == "kill_points"
+    assert purge_config.scoring_rule == "standard"
 
     take_hold_config = MISSIONS["take_and_hold"]()
     assert take_hold_config.name == "Take and Hold"
@@ -716,7 +716,7 @@ def test_score_progressive():
 
     vp = score_progressive(mission)
     # p1 OC=4 (2×2) > p2 OC=1 → p1 controls all 3
-    assert vp["p1"] == 5  # 3 base + 2 progressive bonus
+    assert vp["p1"] == 3
     assert vp["p2"] == 0
 
 
@@ -1197,3 +1197,78 @@ def test_game_ends_by_round_cap_or_wipe() -> None:
     result = check_end_game(game, mission, vp, 3)
     assert result is not None
     assert result.reason == "army_wiped"
+
+
+def test_only_war_isolated_objective_scores_3_vp() -> None:
+    """Only War isolated control must award exactly 3 VP per objective."""
+    game = create_empty_game("only-war-isolated")
+    game.map_width = 12
+    game.map_height = 12
+
+    p1 = PlayerState("p1", "P1", "marines")
+    p2 = PlayerState("p2", "P2", "orks")
+    game.players = {"p1": p1, "p2": p2}
+
+    mission = create_mission("Only War", game)
+    assert mission is not None
+
+    # isolate to one objective for deterministic contract probe
+    center = mission.config.objectives[0]
+    mission.config.objectives = [MissionObjective(center.x, center.y, "Center")]
+
+    p1.units = {
+        "u1": UnitState(
+            unit_id="u1",
+            name="M",
+            faction="marines",
+            position=(center.x, center.y),
+            current_wounds=4,
+            max_wounds=4,
+            models_remaining=1,
+            models_total=1,
+            leadership=6,
+            objective_control=2,
+        )
+    }
+    p2.units = {}
+
+    vp = mission.calculate_victory_points()
+    assert vp["p1"] == 3
+    assert vp["p2"] == 0
+
+
+def test_purge_the_foe_isolated_objective_scores_5_vp() -> None:
+    """Purge the Foe isolated control must award exactly 5 VP per objective."""
+    game = create_empty_game("purge-isolated")
+    game.map_width = 12
+    game.map_height = 12
+
+    p1 = PlayerState("p1", "P1", "marines")
+    p2 = PlayerState("p2", "P2", "orks")
+    game.players = {"p1": p1, "p2": p2}
+
+    mission = create_mission("Purge the Foe", game)
+    assert mission is not None
+
+    center = mission.config.objectives[0]
+    mission.config.objectives = [MissionObjective(center.x, center.y, "Center")]
+
+    p1.units = {
+        "u1": UnitState(
+            unit_id="u1",
+            name="M",
+            faction="marines",
+            position=(center.x, center.y),
+            current_wounds=4,
+            max_wounds=4,
+            models_remaining=1,
+            models_total=1,
+            leadership=6,
+            objective_control=2,
+        )
+    }
+    p2.units = {}
+
+    vp = mission.calculate_victory_points()
+    assert vp["p1"] == 5
+    assert vp["p2"] == 0

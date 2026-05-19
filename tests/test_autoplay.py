@@ -9,6 +9,7 @@ from backend.engine.ai.autoplay import (
     AutoPlayResult,
     InvalidRosterError,
     TimeoutError,
+    _apply_battle_ready_once,
     _build_summary,
     _roster_to_player_state,
     resolve_ai_for_faction,
@@ -304,3 +305,37 @@ def test_melee_only_unit():
     )
     result = run_auto_game(roster, make_test_roster(faction="tau"))
     assert result.error is None
+
+
+def test_battle_ready_applies_exactly_once() -> None:
+    """Battle Ready bonus is idempotent on a single GameState."""
+    result = run_auto_game(
+        make_test_roster(faction="orks"),
+        make_test_roster(faction="tau"),
+        config=AutoPlayConfig(seed=42, max_rounds=1),
+    )
+    assert result.error is None
+
+    state = result.game_state
+    before = {pid: p.victory_points for pid, p in state.players.items()}
+
+    applied = _apply_battle_ready_once(state)
+    assert applied is False
+
+    after = {pid: p.victory_points for pid, p in state.players.items()}
+    assert after == before
+
+
+def test_final_snapshot_contains_battle_ready_vp() -> None:
+    """Final authoritative round snapshot matches post-Battle-Ready VP totals."""
+    result = run_auto_game(
+        make_test_roster(faction="orks"),
+        make_test_roster(faction="tau"),
+        config=AutoPlayConfig(seed=42, max_rounds=1),
+    )
+    assert result.error is None
+    assert result.round_logs
+
+    final_snapshot_vp = result.round_logs[-1]["end_state"]["victory_points"]
+    state_vp = {pid: player.victory_points for pid, player in result.game_state.players.items()}
+    assert final_snapshot_vp == state_vp
