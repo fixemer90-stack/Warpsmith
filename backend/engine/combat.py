@@ -209,7 +209,12 @@ def _resolve_wound_chain(
         )
         save_target = defender.best_save(weapon.ap)
         if context.has_cover and not effective_ignores_cover:
+            pre_cover_target = save_target
             save_target = max(2, save_target - 1)  # +1 save = lower target (SV3+ → SV2+)
+            # AP0 cover cap: cover cannot improve save beyond 3+ when AP=0
+            # Only affects saves originally 3+ or worse; SV2+ already beats the cap.
+            if weapon.ap == 0 and pre_cover_target > 2:
+                save_target = max(3, save_target)
         save_modifiers = apply_modifiers("save_roll", save_target, modifiers, context, rng)
         save_result = _roll_with_modifiers(rng, save_modifiers, modifiers, "save_roll")
         if save_result.success:
@@ -295,7 +300,7 @@ def _expected_steps(
 
     # Expected unsaved wounds — with Cover
     save_target = defender.best_save(weapon.ap)
-    save_prob = compute_save(save_target, has_cover, ignores_cover)
+    save_prob = compute_save(save_target, has_cover, ignores_cover, weapon_ap=weapon.ap)
     avg_unsaved = avg_wounds * (1 - save_prob)
 
     return avg_hits, avg_wounds, avg_unsaved
@@ -625,17 +630,24 @@ def compute_save(
     effective_sv: int,  # already adjusted for AP (from best_save)
     has_cover: bool,
     ignores_cover: bool,
+    weapon_ap: int = 0,  # AP of the weapon, for AP0 cover cap
 ) -> float:
     """Probability of successful save roll with Cover and Ignores Cover.
 
     effective_sv is the post-AP save value (e.g., SV3+ with AP-1 = SV4+).
     Cover: +1 SV (improves save by 1, e.g., SV4+ → SV3+)
     Ignores Cover: cancels Cover benefit
+    AP0 cover cap: cover cannot improve save beyond 3+ against AP0 weapons
     """
     if has_cover and not ignores_cover:
+        pre_cover = effective_sv
         effective_sv = max(2, effective_sv - 1)  # +1 save = lower target
+        # AP0 cover cap: cannot improve save beyond 3+ when AP=0
+        # Only affects saves originally 3+ or worse; SV2+ already beats the cap.
+        if weapon_ap == 0 and pre_cover > 2:
+            effective_sv = max(3, effective_sv)
 
-    effective = max(1, min(6, effective_sv))
+    effective = max(2, min(6, effective_sv))
     return (7 - effective) / 6
 
 

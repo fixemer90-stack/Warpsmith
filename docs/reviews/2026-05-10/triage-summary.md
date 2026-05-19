@@ -405,3 +405,16 @@ Verification summary:
 - Health smoke: `/api/health` → `{"status":"ok","version":"0.7.9"}`.
 
 Remaining blockers before Phase 5: Task 4.3 is reopened; Phase 4 checkpoint is not complete until scoring/VP sync/VP-cap/tests/Ruff findings are fixed and re-verified.
+
+## Phase 4 — REQUEST CHANGES after re-check — 2026-05-19
+
+Phase 4 is not closed. Task 4.1 and Task 4.2 remain supported by the current re-check, but Task 4.3 blocks the checkpoint.
+
+| Task | Status | Evidence |
+| --- | --- | --- |
+| 4.1 — Assert 5-phase 10e loop invariants | Passing | Phase order probe reports `command -> movement -> shooting -> charge -> fight`, enum count 5. |
+| 4.2 — Lock CP and battle-shock reset semantics | Passing | Scenario Command probe shows active player CP/VP only and idempotent repeated processing. |
+| 4.3 — Lock VP, objectives, mission normalization, Battle Ready | REQUEST CHANGES | Only War probe returns 5 VP instead of 3; Purge the Foe returns 0 instead of 5; Battle Ready finalization/final snapshot regressions missing. |
+
+Verification: scoped Phase 4 suite 80 passed in 8.55s; full suite 622 passed, 3 skipped, 60 warnings in 51.93s; Ruff check and format check passed for Phase 4 files.
+

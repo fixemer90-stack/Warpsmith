@@ -144,3 +144,33 @@ Verification (Task 4.3 fix run):
 - `uv run ruff check backend/state/mission.py backend/engine/scenario.py tests/test_mission.py` → All checks passed.
 - `uv run ruff format --check backend/state/mission.py backend/engine/scenario.py tests/test_mission.py` → 3 files already formatted.
 - `git diff --check -- backend/state/mission.py backend/engine/scenario.py tests/test_mission.py` → clean.
+
+## Phase 5 checkpoint evidence — 2026-05-18
+
+Status: COMPLETE for Phase 5 remediation tasks 5.1, 5.2, and 5.3.
+
+Closed scope:
+- CR-09: charge destination (8-cell adjacency, no enemy-occupy), engagement identity, melee opponent-scoping, melee combat-engine resolution.
+- CR-11: terrain/LoS cache invalidation, cover argument order fix, AP0 cover cap enforcement.
+- CR-14: melee damage log format (`hits ... for ... damage`) with runtime IDs; cover fixes ensure correct shooting results.
+- CR-15: engagement and melee fixes ensure AI decisions have correct combat context.
+
+Verification (Phase 5 closure):
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_movement.py tests/test_terrain.py tests/test_scenario.py tests/test_result_screen.py -q` → 22 passed.
+- `uv run python -m pytest tests/ -q` → 622 passed, 3 skipped, 60 warnings.
+- `uv run ruff check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_movement.py tests/test_terrain.py` → All checks passed.
+- `uv run ruff format --check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_movement.py tests/test_terrain.py` → 5 files already formatted.
+- `git diff --check -- backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_movement.py tests/test_terrain.py` → clean.
+
+## Phase 4 checkpoint evidence — 2026-05-19 re-check
+
+Verdict: REQUEST CHANGES. Do not treat earlier Phase 4 completion evidence as final. Task 4.3 still blocks the checkpoint:
+
+- Only War isolated objective probe: 5 VP, expected 3.
+- Take and Hold isolated objective probe: 5 VP, expected 5.
+- Purge the Foe isolated objective probe: 0 VP, expected 5.
+- Scenario VP sync and VP-cap removal probes pass.
+- Battle Ready exact-once/idempotence/final replay-result tests are still missing.
+
+Latest gates: scoped Phase 4 suite 80 passed in 8.55s; full suite 622 passed, 3 skipped, 60 warnings in 51.93s; Ruff check passed; Ruff format check passed.
+

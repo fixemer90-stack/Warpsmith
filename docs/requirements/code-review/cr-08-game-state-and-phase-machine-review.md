@@ -173,3 +173,22 @@ Date: 2026-05-18
 All Task 4.3 blocking findings resolved. `MissionConfig` now carries `vp_per_objective` (Only War=3, Take and Hold=5, Purge the Foe=5). `check_end_game()` VP cap removed. VP sync in `_command_phase()` is now idempotent (direct assignment from vp_tracker.total). Ruff/format gates green. Tests updated for new scoring values.
 
 Verification: focused `52 passed`, full `604 passed, 3 skipped, 60 warnings`. Ruff check/format clean. `git diff --check` clean.
+
+## Superseding evidence — Phase 4 re-check — 2026-05-19
+
+Verdict: REQUEST CHANGES. Phase 4 is not closed because Task 4.3 still fails deterministic VP/Battle Ready review despite green pytest/lint gates.
+
+Evidence:
+- Phase order remains canonical: `command -> movement -> shooting -> charge -> fight` and GamePhase count is 5.
+- CP/battle-shock/VP sync probes pass for no-profile and multi-profile Scenario Command processing; repeated Command processing does not duplicate CP/VP.
+- VP cap removal probe passes: `check_end_game(..., vp.total={1:100,2:0}, round_num=1)` returns `None`.
+- Blocking: isolated Only War objective scoring returns 5 VP, expected 3 VP.
+- Blocking: isolated Purge the Foe objective scoring returns 0 VP, expected 5 VP.
+- Blocking: no Battle Ready exact-once, repeated finalization idempotence, or final replay/result snapshot parity regression was found in Phase 4 tests.
+
+Verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q` → 80 passed in 8.55s.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 622 passed, 3 skipped, 60 warnings in 51.93s.
+- `uv run ruff check backend/state/game_state.py backend/state/mission.py backend/engine/scenario.py backend/engine/ai/autoplay.py tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py` → All checks passed.
+- `uv run ruff format --check backend/state/game_state.py backend/state/mission.py backend/engine/scenario.py backend/engine/ai/autoplay.py tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py` → 9 files already formatted.
+

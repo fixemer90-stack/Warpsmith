@@ -197,3 +197,46 @@ Date: 2026-05-18
 All Task 4.3 blocking findings resolved: mission-defined scoring, VP cap removed, VP sync idempotent, lint/formatter green, tests updated.
 
 Verification: focused `52 passed`, full `604 passed, 3 skipped, 60 warnings`. Ruff/format/diff-check clean.
+
+## Regression evidence — Task 5.1 (charge destination + engagement identity)
+
+Date: 2026-05-18
+
+Fixed charge destination to enumerate all 8 adjacent cells (not just left/right X-axis). Same-X/different-Y scenarios now find valid adjacent cells. Melee combat scoped to opponent units only. Added 6 regression tests (charge cell avoidance, occupied alternate, same-X, opponent-only targeting, same-name mirrored units, runtime ID logging).
+
+Verification: focused 10 passed, full 610 passed, 3 skipped. Ruff/format/diff-check clean.
+
+## Regression evidence — Task 5.2 (melee target selection + damage logging)
+
+Date: 2026-05-18
+
+Melee combat now uses the combat engine via `simulate_unit_attack()` with melee weapons. Counter-attack also uses proper combat resolution. Damage logs use `hits ... for ... damage` pattern with runtime unit IDs. Added 3 regression tests (adjacent resolution, log format, same-name attribution).
+
+Verification: scoped 19 passed, full 613 passed, 3 skipped. Ruff/format/diff-check clean.
+
+## Regression evidence — Task 5.3 (terrain/LoS/cover blockers)
+
+Date: 2026-05-18 (Phase 5 checkpoint)
+
+set_terrain() now invalidates LoS cache. Cover argument order fixed in scenario shooting (target first). AP0 cover cap: SV3+ with cover vs AP0 stays at SV3+ (SV2+ unaffected). Added 9 regression tests.
+
+Phase 5 closed: 22 scoped passed, 622 full passed. Ruff/format/diff-check clean.
+
+## Superseding evidence — Phase 4 re-check — 2026-05-19
+
+Verdict: REQUEST CHANGES. Phase 4 is not closed because Task 4.3 still fails deterministic VP/Battle Ready review despite green pytest/lint gates.
+
+Evidence:
+- Phase order remains canonical: `command -> movement -> shooting -> charge -> fight` and GamePhase count is 5.
+- CP/battle-shock/VP sync probes pass for no-profile and multi-profile Scenario Command processing; repeated Command processing does not duplicate CP/VP.
+- VP cap removal probe passes: `check_end_game(..., vp.total={1:100,2:0}, round_num=1)` returns `None`.
+- Blocking: isolated Only War objective scoring returns 5 VP, expected 3 VP.
+- Blocking: isolated Purge the Foe objective scoring returns 0 VP, expected 5 VP.
+- Blocking: no Battle Ready exact-once, repeated finalization idempotence, or final replay/result snapshot parity regression was found in Phase 4 tests.
+
+Verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py -q` → 80 passed in 8.55s.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 622 passed, 3 skipped, 60 warnings in 51.93s.
+- `uv run ruff check backend/state/game_state.py backend/state/mission.py backend/engine/scenario.py backend/engine/ai/autoplay.py tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py` → All checks passed.
+- `uv run ruff format --check backend/state/game_state.py backend/state/mission.py backend/engine/scenario.py backend/engine/ai/autoplay.py tests/test_game_state.py tests/test_scenario.py tests/test_mission.py tests/test_autoplay.py tests/test_result_screen.py` → 9 files already formatted.
+

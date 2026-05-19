@@ -1,7 +1,7 @@
 ---
 title: "Task 5.3 — Fix terrain/LoS movement-related blockers"
 parent: remediation-plan
-status: pending
+status: completed
 phase: "5 — Movement / charge / melee identity"
 task_id: "5.3"
 source: remediation-plan.md
@@ -27,27 +27,42 @@ terrain/LoS cache and cover integration do not corrupt movement/shooting assumpt
 
 ## Acceptance criteria
 
-- [ ] `set_terrain()` invalidates LoS cache.
-- [ ] Cover helper argument order is correct.
-- [ ] AP0 cover cap is enforced.
+- [x] `set_terrain()` invalidates LoS cache.
+- [x] Cover helper argument order is correct.
+- [x] AP0 cover cap is enforced.
+
+## Resolution
+
+### AC 1 — `set_terrain()` invalidates LoS cache
+
+`BattlefieldMap.set_terrain()` now calls `self.clear_los_cache()` after modifying the terrain array. This ensures cached LoS results are invalidated when terrain changes, preventing stale LoS responses.
+
+### AC 2 — cover helper argument order
+
+`_has_cover(target_pos, shooter_pos, terrain_map, target_category)` was called with swapped arguments in `scenario.py`'s shooting phase. Fixed: `_has_cover(target.position, unit.position, terrain, target_cat)` — target (defender) position first, shooter (attacker) position second.
+
+### AC 3 — AP0 cover cap
+
+In both `_resolve_wound_chain` and `compute_save`: when AP=0, cover cannot improve the save beyond 3+. SV2+ already beats the cap so it's unaffected. SV3+ with cover vs AP0 stays at 3+. SV4+ with cover vs AP0 becomes 3+. The cap only restricts saves originally 3+ or worse from being improved to 2+.
 
 ## Files likely touched
 
-- `backend/engine/scenario.py`
-- `backend/state/game_state.py`
-- `backend/state/map.py`
-- `backend/engine/ai/decision.py`
-- `tests/test_movement*.py`
-- `tests/test_scenario.py`
-- `tests/test_autoplay.py`
+- `backend/state/map.py` — `set_terrain()` → `clear_los_cache()`
+- `backend/engine/combat.py` — AP0 cover cap, `compute_save` arg
+- `backend/engine/scenario.py` — cover arg order fix
+- `tests/test_terrain.py` — 9 new regression tests
 
 ## Verification
 
-- [ ] `uv run python -m pytest tests/test_terrain*.py tests/test_scenario.py -q`
+- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_terrain.py tests/test_scenario.py -q` → 13 passed.
+- [x] `uv run python -m pytest tests/ -q` → 622 passed, 3 skipped, 60 warnings.
+- [x] `uv run ruff check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → All checks passed.
+- [x] `uv run ruff format --check backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → 4 files already formatted.
+- [x] `git diff --check -- backend/state/map.py backend/engine/combat.py backend/engine/scenario.py tests/test_terrain.py` → clean.
 
 ## Completion requirements
 
-- [ ] Implementation/change is complete for this task only; do not batch unrelated fixes.
-- [ ] Regression evidence is recorded in the affected CR artifact(s).
-- [ ] If this task completes a phase checkpoint, update `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-XX-*.md`, and `docs/requirements/code-review/code-review.md` with the phase completion artifact.
-- [ ] `git diff --check` passes for touched files.
+- [x] Implementation/change is complete for this task only; do not batch unrelated fixes.
+- [x] Regression evidence is recorded in the affected CR artifact(s).
+- [x] Phase checkpoint synced — Task 5.3 completes Phase 5. Updated `code-review.md`, CR-09/11/14/15, triage summary.
+- [x] `git diff --check` passes for touched files.
