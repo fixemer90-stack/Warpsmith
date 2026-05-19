@@ -42,7 +42,7 @@ Meaning:
 
 Implementation notes:
 
-- `UserFeatures.FREE["max_rosters"] == 1` and `UserFeatures.PREMIUM["max_rosters"] is None`.
+- `UserFeatures.FREE["max_rosters"] == 3` and `UserFeatures.PREMIUM["max_rosters"] is None`.
 - `create_roster()` and `duplicate_roster()` call shared `_check_roster_limits()` for create-like mutations.
 - generated-save path routes through `create_roster()`, so the save operation uses the same gate.
 - `update_roster()` calls `_check_roster_limits(..., check_count=False)` for public roster gating and persists `is_public` in SQL.

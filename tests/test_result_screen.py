@@ -5,6 +5,8 @@ import json
 import pytest
 from fastapi.testclient import TestClient
 
+from backend.engine.replay import Replay, ReplayRound
+
 
 def test_result_page_loads(client):
     """Test that the result page returns 200 and renders correct content."""
@@ -69,3 +71,36 @@ def test_result_page_shows_destroyed_units_sections(client):
     assert response.status_code == 200
     assert "Lost" in response.text
     assert "No units lost" in response.text or "destroyedUnits" in response.text
+
+
+def test_results_api_exposes_authoritative_final_state(monkeypatch, client):
+    """/api/results returns final_state + final_victory_points from authoritative source."""
+    from web.routes import api_replays
+
+    replay = Replay(
+        game_id="authoritative-final",
+        created_at="2026-05-19T12:00:00Z",
+        rosters={"roster_a": {"name": "A"}, "roster_b": {"name": "B"}},
+        mission="only_war",
+        deployment="standard",
+        seed=42,
+        rounds=[
+            ReplayRound(
+                round=1,
+                start_state={"victory_points": {"1": 3, "2": 3}},
+                end_state={"victory_points": {"1": 5, "2": 4}},
+                events=[],
+            )
+        ],
+        summary={"winner": None, "final_state": {"victory_points": {"1": 15, "2": 14}}},
+    )
+
+    monkeypatch.setattr(api_replays, "load_replay", lambda _conn, _gid: replay)
+
+    response = client.get("/api/results/authoritative-final")
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["final_state"]["victory_points"] == {"1": 15, "2": 14}
+    assert data["summary"]["final_victory_points"] == {"1": 15, "2": 14}
+    assert data["summary"]["winner"] == 1

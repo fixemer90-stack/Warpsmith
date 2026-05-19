@@ -272,7 +272,7 @@ graph LR
 │  Free                   │  │  Premium         🔥 POPULAR  │
 │  $0/month               │  │  $7/month                    │
 │                         │  │                               │
-│  ✅ 1 saved roster      │  │  ✅ Unlimited rosters         │
+│  ✅ 3 saved rosters     │  │  ✅ Unlimited rosters         │
 │  ✅ Basic AI simulation │  │  ✅ Full AI simulation        │
 │  ✅ Browse public       │  │  ✅ Export CSV/JSON           │
 │  ❌ Export              │  │  ✅ Public rosters            │
@@ -333,7 +333,7 @@ graph LR
 В Team Builder — Alpine.js проверяет `user.features.max_rosters`:
 
 ```
-Free:  Rosters  [1/1]  ⚠️ Upgrade to Premium unlimited
+Free:  Rosters  [3/3]  ⚠️ Upgrade to Premium unlimited
        ████████████████░░░░  1000/2000 pts              ✅
 
 Premium:  Rosters  [3/∞]
@@ -345,7 +345,7 @@ Premium:  Rosters  [3/∞]
 ```
 ┌─── ⚠️ Roster Limit Reached ───────────┐
 │                                         │
-│  Free plan includes only 1 roster.      │
+│  Free plan includes up to 3 rosters.    │
 │                                         │
 │  [Upgrade to Premium]  [Cancel]         │
 └─────────────────────────────────────────┘
@@ -394,7 +394,7 @@ Feature dict приходит с сервера через `/api/me`:
   "display_name": "Balthier",
   "tier": "free",
   "features": {
-    "max_rosters": 1,
+    "max_rosters": 3,
     "ads_enabled": true,
     "export_enabled": false,
     "public_rosters_create": false,

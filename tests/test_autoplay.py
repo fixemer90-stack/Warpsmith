@@ -339,3 +339,19 @@ def test_final_snapshot_contains_battle_ready_vp() -> None:
     final_snapshot_vp = result.round_logs[-1]["end_state"]["victory_points"]
     state_vp = {pid: player.victory_points for pid, player in result.game_state.players.items()}
     assert final_snapshot_vp == state_vp
+
+
+def test_autoplay_persists_final_state_even_without_rounds() -> None:
+    """When no rounds run, authoritative final_state is still persisted for result/replay."""
+    result = run_auto_game(
+        make_test_roster(faction="orks"),
+        make_test_roster(faction="tau"),
+        config=AutoPlayConfig(seed=42, max_rounds=0),
+    )
+    assert result.error is None
+    assert result.round_logs
+
+    final_state = result.summary.get("final_state")
+    assert final_state is not None
+    assert result.summary.get("final_victory_points") == final_state.get("victory_points", {})
+    assert result.round_logs[-1]["end_state"] == final_state

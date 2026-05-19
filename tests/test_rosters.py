@@ -237,37 +237,57 @@ class TestRosterCRUD:
         assert resp.status_code == 404
 
     def test_free_create_at_limit_returns_403(self, client):
-        """Free users can create one roster; a second create-like save is blocked."""
+        """Free users can create three rosters; a fourth create-like save is blocked."""
         headers = _register_user(client, tier="free")
-        first = client.post("/api/rosters", json=self.ROSTER_PAYLOAD, headers=headers)
-        assert first.status_code == 200, first.text
 
-        second = client.post(
+        for idx in range(1, 4):
+            create = client.post(
+                "/api/rosters",
+                json={**self.ROSTER_PAYLOAD, "name": f"Free Ork Horde {idx}"},
+                headers=headers,
+            )
+            assert create.status_code == 200, create.text
+
+        fourth = client.post(
             "/api/rosters",
-            json={**self.ROSTER_PAYLOAD, "name": "Second Ork Horde"},
+            json={**self.ROSTER_PAYLOAD, "name": "Fourth Ork Horde"},
             headers=headers,
         )
 
-        assert second.status_code == 403
-        assert "Max rosters limit (1) reached" in second.json()["detail"]
+        assert fourth.status_code == 403
+        assert "Max rosters limit (3) reached" in fourth.json()["detail"]
 
     def test_free_duplicate_at_limit_returns_403(self, client):
         """Duplicate is a create-like mutation and cannot bypass the Free limit."""
         headers = _register_user(client, tier="free")
-        create = client.post("/api/rosters", json=self.ROSTER_PAYLOAD, headers=headers)
-        assert create.status_code == 200, create.text
-        roster_id = create.json()["id"]
+
+        roster_id = None
+        for idx in range(1, 4):
+            create = client.post(
+                "/api/rosters",
+                json={**self.ROSTER_PAYLOAD, "name": f"Free Duplicate Source {idx}"},
+                headers=headers,
+            )
+            assert create.status_code == 200, create.text
+            roster_id = create.json()["id"]
+        assert roster_id is not None
 
         duplicate = client.post(f"/api/rosters/{roster_id}/duplicate", headers=headers)
 
         assert duplicate.status_code == 403
-        assert "Max rosters limit (1) reached" in duplicate.json()["detail"]
+        assert "Max rosters limit (3) reached" in duplicate.json()["detail"]
 
     def test_free_generated_roster_save_at_limit_returns_403(self, client):
         """Saving a generated roster uses the same create gate and respects Free limit."""
         headers = _register_user(client, tier="free")
-        first = client.post("/api/rosters", json=self.ROSTER_PAYLOAD, headers=headers)
-        assert first.status_code == 200, first.text
+
+        for idx in range(1, 4):
+            create = client.post(
+                "/api/rosters",
+                json={**self.ROSTER_PAYLOAD, "name": f"Free Generated Gate {idx}"},
+                headers=headers,
+            )
+            assert create.status_code == 200, create.text
 
         generated = client.post("/api/rosters/generate", json={"faction": "orks"})
         assert generated.status_code == 200, generated.text
@@ -276,7 +296,7 @@ class TestRosterCRUD:
         save = client.post("/api/rosters", json=generated_payload, headers=headers)
 
         assert save.status_code == 403
-        assert "Max rosters limit (1) reached" in save.json()["detail"]
+        assert "Max rosters limit (3) reached" in save.json()["detail"]
 
     def test_free_update_private_roster_at_limit_is_allowed(self, client):
         """Updating an existing private roster does not re-check max_rosters count."""
@@ -355,28 +375,42 @@ class TestFeatureGates:
         db.commit()
         return headers, email
 
-    def test_free_user_max_one_roster(self, client):
-        """Free user can create exactly 1 roster; 2nd is rejected."""
+    def test_free_user_max_three_rosters(self, client):
+        """Free user can create exactly 3 rosters; 4th is rejected."""
         headers, _ = self._register_and_set_tier(client, "free")
         payload = TestRosterCRUD.ROSTER_PAYLOAD
 
-        # 1st roster — OK
-        r1 = client.post("/api/rosters", json=payload, headers=headers)
-        assert r1.status_code == 200, f"1st roster should succeed: {r1.text}"
+        for idx in range(1, 4):
+            resp = client.post(
+                "/api/rosters",
+                json={**payload, "name": f"Gate Roster {idx}"},
+                headers=headers,
+            )
+            assert resp.status_code == 200, f"roster {idx} should succeed: {resp.text}"
 
-        # 2nd roster — rejected (Free limit = 1)
-        r2 = client.post("/api/rosters", json=payload, headers=headers)
-        assert r2.status_code == 403, f"2nd roster should be rejected: {r2.status_code}"
-        assert "max" in r2.json()["detail"].lower()
+        fourth = client.post(
+            "/api/rosters",
+            json={**payload, "name": "Gate Roster 4"},
+            headers=headers,
+        )
+        assert fourth.status_code == 403, f"4th roster should be rejected: {fourth.status_code}"
+        assert "max" in fourth.json()["detail"].lower()
 
     def test_free_user_duplicate_at_limit_blocked(self, client):
         """Free user at max_rosters cannot duplicate (would exceed limit)."""
         headers, _ = self._register_and_set_tier(client, "free")
         payload = TestRosterCRUD.ROSTER_PAYLOAD
 
-        r1 = client.post("/api/rosters", json=payload, headers=headers)
-        assert r1.status_code == 200
-        roster_id = r1.json()["id"]
+        roster_id = None
+        for idx in range(1, 4):
+            r1 = client.post(
+                "/api/rosters",
+                json={**payload, "name": f"Duplicate Gate {idx}"},
+                headers=headers,
+            )
+            assert r1.status_code == 200
+            roster_id = r1.json()["id"]
+        assert roster_id is not None
 
         # Duplicate at limit — rejected
         r2 = client.post(f"/api/rosters/{roster_id}/duplicate", headers=headers)

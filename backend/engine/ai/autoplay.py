@@ -528,12 +528,26 @@ def run_auto_game(
         # 8. Battle Ready points — 10 VP each (painted army bonus, 10ed), exactly once
         _apply_battle_ready_once(state)
 
-        # Re-snapshot final state so persisted replay/result reflects Battle Ready VP
+        # Persist authoritative final snapshot after all post-game scoring.
+        final_state = _snapshot_state(state)
         if round_logs:
-            round_logs[-1]["end_state"] = _snapshot_state(state)
+            round_logs[-1]["end_state"] = final_state
+        else:
+            # max_rounds=0 or early exit before any round: still persist final authority snapshot
+            round_logs.append(
+                {
+                    "round": state.current_round,
+                    "events": [],
+                    "phase_logs": state.game_log[last_log_len:],
+                    "start_state": final_state,
+                    "end_state": final_state,
+                }
+            )
 
         # 9. Summary
         summary = _build_summary(state, round_logs, placements)
+        summary["final_state"] = final_state
+        summary["final_victory_points"] = final_state.get("victory_points", {})
 
         return AutoPlayResult(
             game_state=state,

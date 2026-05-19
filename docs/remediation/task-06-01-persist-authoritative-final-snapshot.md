@@ -1,7 +1,7 @@
 ---
 title: "Task 6.1 — Persist authoritative final snapshot"
 parent: remediation-plan
-status: pending
+status: completed
 phase: "6 — Replay/result authoritative state"
 task_id: "6.1"
 source: remediation-plan.md
@@ -27,9 +27,9 @@ final replay/result state includes all post-game scoring and final unit state.
 
 ## Acceptance criteria
 
-- [ ] Battle Ready VP is included in final persisted state.
-- [ ] `/api/results/{game_id}` and `/result/{game_id}` show same final VP.
-- [ ] VP chart/stat cards use the same authoritative source.
+- [x] Battle Ready VP is included in final persisted state.
+- [x] `/api/results/{game_id}` and `/result/{game_id}` show same final VP.
+- [x] VP chart/stat cards use the same authoritative source.
 
 ## Files likely touched
 
@@ -45,12 +45,16 @@ final replay/result state includes all post-game scoring and final unit state.
 
 ## Verification
 
-- [ ] `uv run python -m pytest tests/test_replay.py tests/test_result_screen.py -q`
-- [ ] Deterministic generated replay smoke.
+- [x] `uv run python -m pytest tests/test_autoplay.py tests/test_replay.py tests/test_result_screen.py -q` → 65 passed.
+- [x] `uv run python -m pytest tests/ -q` → 629 passed, 3 skipped.
+- [x] `uv run ruff check backend/engine/ai/autoplay.py web/routes/api_replays.py tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → All checks passed.
+- [x] `uv run ruff format --check backend/engine/ai/autoplay.py web/routes/api_replays.py tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → already formatted.
+- [x] `node -c web/static/result_chart.js` → syntax OK.
+- [x] `git diff --check -- backend/engine/ai/autoplay.py web/routes/api_replays.py web/static/result_chart.js web/templates/result.html tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → clean.
 
 ## Completion requirements
 
-- [ ] Implementation/change is complete for this task only; do not batch unrelated fixes.
-- [ ] Regression evidence is recorded in the affected CR artifact(s).
+- [x] Implementation/change is complete for this task only; do not batch unrelated fixes.
+- [x] Regression evidence is recorded in the affected CR artifact(s).
 - [ ] If this task completes a phase checkpoint, update `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-XX-*.md`, and `docs/requirements/code-review/code-review.md` with the phase completion artifact.
-- [ ] `git diff --check` passes for touched files.
+- [x] `git diff --check` passes for touched files.

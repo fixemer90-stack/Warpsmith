@@ -68,12 +68,12 @@
             <!-- VP P1 -->
             <div class="card text-center">
                 <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">VP — <span x-text="_getPlayerName(0) || 'P1'"></span></div>
-                <div class="text-3xl font-bold text-blue-400" x-text="replay?.rounds?.[replay.rounds.length-1]?.end_state?.victory_points ? Object.values(replay.rounds[replay.rounds.length-1].end_state.victory_points)[0] || 0 : 0"></div>
+                <div class="text-3xl font-bold text-blue-400" x-text="finalVp(0)"></div>
             </div>
             <!-- VP P2 -->
             <div class="card text-center">
                 <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">VP — <span x-text="_getPlayerName(1) || 'P2'"></span></div>
-                <div class="text-3xl font-bold text-red-400" x-text="replay?.rounds?.[replay.rounds.length-1]?.end_state?.victory_points ? (Object.values(replay.rounds[replay.rounds.length-1].end_state.victory_points)[1] || 0) : 0"></div>
+                <div class="text-3xl font-bold text-red-400" x-text="finalVp(1)"></div>
             </div>
             <!-- Kills P1 -->
             <div class="card text-center">

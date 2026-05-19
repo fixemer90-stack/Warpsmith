@@ -60,7 +60,7 @@
   - `/my-rosters` страница с таблицей ростеров, кнопками действий (✏ Edit, 📋 Copy, ✕ Delete)
   - Team Builder edit mode: `?edit={id}` URL параметр загружает существующий ростер для редактирования
   - Delete confirmation modal с подтверждением удаления
-  - Tier limit banner: Free пользователи видят 1/1 лимит с ссылкой на Premium upgrade
+  - Tier limit banner: Free пользователи видят 3/3 лимит с ссылкой на Premium upgrade
   - Expandable roster preview: показ списка юнитов по нажатию ▼/▲
   - `web/templates/my_rosters.html` — Alpine.js страница с reactive UI
   - `web/static/my_rosters.js` — CRUD операции с fetch API и error handling

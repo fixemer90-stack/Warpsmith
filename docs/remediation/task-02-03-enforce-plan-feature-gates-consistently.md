@@ -27,8 +27,8 @@ Free/Premium roster limits cannot be bypassed through duplicate/import paths.
 
 ## Acceptance criteria
 
-- [x] Create, duplicate, import/generate-save paths share one validator. *(Fixed: Free limit set to 1; 5 feature-gate tests added.)*
-- [x] Free limit matches product requirement and UI. *(Fixed: `max_rosters: 3 → 1` in `backend/billing/plans.py`.)*
+- [x] Create, duplicate, import/generate-save paths share one validator. *(Updated: Free limit set to 3; feature-gate tests adjusted.)*
+- [x] Free limit matches product requirement and UI. *(Updated: `max_rosters: 1 → 3` in `backend/billing/plans.py`.)*
 - [x] Public roster creation respects feature flags. *(Fixed: Premium `update_roster` now persists `is_public` in SQL; Free update→public rejected.)*
 
 ## Verified
@@ -50,7 +50,7 @@ Free/Premium roster limits cannot be bypassed through duplicate/import paths.
   - Public roster updates still run the public gate with `check_count=False` and persist `is_public` in the update SQL.
   - Race condition for parallel create-like requests is documented as an accepted SQLite/pet-project limitation; production hardening should use a transaction or database constraint.
 - `backend/billing/plans.py`:
-  - Free `max_rosters` remains aligned to product/UI requirement: `1`.
+  - Free `max_rosters` remains aligned to product/UI requirement: `3`.
   - Premium `max_rosters` is `None` for unlimited.
 - `tests/test_rosters.py`:
   - Added feature-gate coverage for create at limit, duplicate at limit, generated roster save at limit, private update at limit, Free public update rejection, Premium public update persistence, and Premium unlimited count behavior.

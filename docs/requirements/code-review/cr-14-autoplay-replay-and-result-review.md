@@ -284,3 +284,18 @@ Verification:
 
 
 - Task 5.2 re-check FIXED (2026-05-19): `_parse_log_events` parses melee hit lines as structured `fight` events with runtime IDs; same-name attribution regressions added; scoped/full/ruff/format/diff gates green.
+
+## Regression evidence — Task 6.1 FIXED (2026-05-19)
+
+- `run_auto_game()` now persists an authoritative `final_state` after post-game scoring (including Battle Ready), and writes `summary.final_state` + `summary.final_victory_points`.
+- When no rounds execute (`max_rounds=0`), replay logs still contain a persisted final snapshot round to avoid result/replay authority gaps.
+- `/api/results/{game_id}` now emits authoritative `final_state` and computes/normalizes `summary.final_victory_points` + winner from that same authority path.
+- Result page VP cards and VP chart terminal point both consume the same authoritative final VP source (`final_victory_points`/`final_state`), removing round-tail divergence.
+
+Verification:
+- `uv run python -m pytest tests/test_autoplay.py tests/test_replay.py tests/test_result_screen.py -q` → 65 passed.
+- `uv run python -m pytest tests/ -q` → 629 passed, 3 skipped, 60 warnings.
+- `uv run ruff check backend/engine/ai/autoplay.py web/routes/api_replays.py tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → All checks passed.
+- `uv run ruff format --check backend/engine/ai/autoplay.py web/routes/api_replays.py tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → 5 files already formatted.
+- `node -c web/static/result_chart.js` → syntax OK.
+- `git diff --check -- backend/engine/ai/autoplay.py web/routes/api_replays.py web/static/result_chart.js web/templates/result.html tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → clean.
