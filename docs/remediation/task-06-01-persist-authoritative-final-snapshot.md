@@ -45,10 +45,10 @@ final replay/result state includes all post-game scoring and final unit state.
 
 ## Verification
 
-- [x] `uv run python -m pytest tests/test_autoplay.py tests/test_replay.py tests/test_result_screen.py -q` → 65 passed.
-- [x] `uv run python -m pytest tests/ -q` → 629 passed, 3 skipped.
+- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_autoplay.py tests/test_replay.py tests/test_result_screen.py -q` → 66 passed, 12 warnings.
+- [x] `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 630 passed, 3 skipped, 60 warnings.
 - [x] `uv run ruff check backend/engine/ai/autoplay.py web/routes/api_replays.py tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → All checks passed.
-- [x] `uv run ruff format --check backend/engine/ai/autoplay.py web/routes/api_replays.py tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → already formatted.
+- [x] `uv run ruff format --check backend/engine/ai/autoplay.py web/routes/api_replays.py tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → 5 files already formatted.
 - [x] `node -c web/static/result_chart.js` → syntax OK.
 - [x] `git diff --check -- backend/engine/ai/autoplay.py web/routes/api_replays.py web/static/result_chart.js web/templates/result.html tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → clean.
 
@@ -58,3 +58,22 @@ final replay/result state includes all post-game scoring and final unit state.
 - [x] Regression evidence is recorded in the affected CR artifact(s).
 - [ ] If this task completes a phase checkpoint, update `docs/reviews/2026-05-10/triage-summary.md`, affected `docs/requirements/code-review/cr-XX-*.md`, and `docs/requirements/code-review/code-review.md` with the phase completion artifact.
 - [x] `git diff --check` passes for touched files.
+
+## Re-check — 2026-05-19
+
+Verdict: FIXED after re-check.
+
+Finding fixed:
+- `/api/results/{game_id}` still preserved stale `summary.final_victory_points` and stale `summary.winner` when `summary.final_state` was authoritative. This could make API consumers and the result page prefer stale post-game scoring metadata even though the final snapshot was correct.
+
+Resolution:
+- `web/routes/api_replays.py` now overwrites `summary.final_victory_points` from authoritative `final_state.victory_points` and recomputes `summary.winner` from the same source, including draws.
+- Added `test_results_api_overrides_stale_summary_vp_and_winner` to lock the stale-summary regression.
+- Custom persistence probe confirmed `GameState` VP, last replay `end_state.victory_points`, `summary.final_victory_points`, saved replay, and loaded replay all match: `{"state_vp": {"1": 13, "2": 10}, "persisted_vp": {"1": 13, "2": 10}}`.
+
+Re-check verification:
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_autoplay.py tests/test_replay.py tests/test_result_screen.py -q` → 66 passed, 12 warnings.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 630 passed, 3 skipped, 60 warnings.
+- `uv run ruff check backend/engine/ai/autoplay.py web/routes/api_replays.py tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → All checks passed.
+- `uv run ruff format --check backend/engine/ai/autoplay.py web/routes/api_replays.py tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → 5 files already formatted.
+- `git diff --check -- backend/engine/ai/autoplay.py web/routes/api_replays.py web/static/result_chart.js web/templates/result.html tests/test_autoplay.py tests/test_result_screen.py tests/test_replay.py` → clean.

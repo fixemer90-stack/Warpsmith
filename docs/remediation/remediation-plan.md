@@ -850,31 +850,43 @@ Do not mark a phase complete in `code-review.md` unless this artifact exists in 
 
 ### Task 6.2 — Fix event parsing and summary attribution
 
+**Status:** FIXED 2026-05-19.
+
 **Objective:** result summaries derive from scoped ids/structured events, not ambiguous display names.
 
 **Acceptance criteria:**
-- [ ] Kills/damage/charges attributed correctly in same-faction/same-name games.
-- [ ] VP logs with totals and Battle Ready parse as VP events or are represented by structured final state.
-- [ ] Player 2 charge card can show non-zero normal events.
+- [x] Kills/damage/charges attributed correctly in same-faction/same-name games.
+- [x] VP logs with totals and Battle Ready parse as VP events or are represented by structured final state.
+- [x] Player 2 charge card can show non-zero normal events.
 
-**Verification:**
-- `uv run python -m pytest tests/test_result_screen.py tests/test_replay.py -q`
+**Verification (2026-05-19):**
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_result_screen.py tests/test_replay.py -q` → 43 passed, 0 failed.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_parse_log_events.py tests/test_result_screen.py tests/test_replay.py tests/test_round_viewer.py -q` → 59 passed, 0 failed.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 630 passed, 3 skipped, 0 failed.
+- `uv run ruff check backend/engine/ai/autoplay.py backend/engine/replay.py web/routes/api_replays.py tests/test_replay.py tests/test_round_viewer.py tests/test_result_screen.py` → All checks passed.
+- `uv run ruff format --check backend/engine/ai/autoplay.py backend/engine/replay.py web/routes/api_replays.py tests/test_replay.py tests/test_round_viewer.py tests/test_result_screen.py` → 6 files already formatted.
 
 ### Task 6.3 — Add repeatable final gate smoke script
+
+**Status:** FIXED 2026-05-19.
 
 **Objective:** replace ad-hoc `/tmp` CR-24 replay probes with repo-owned smoke.
 
 **Acceptance criteria:**
-- [ ] Script creates deterministic isolated replay/result smoke.
-- [ ] Script asserts runtime VP, API VP, and result payload/page VP match.
-- [ ] Script uses isolated DB or cleans up its data.
+- [x] Script creates deterministic isolated replay/result smoke.
+- [x] Script asserts runtime VP, API VP, and result payload/page VP match.
+- [x] Script uses isolated DB or cleans up its data.
 
 **Files likely touched:**
 - Create: `scripts/smoke_final_gate.py`
 - Test: `tests/test_final_gate_smoke.py` or direct script invocation documented in CR-24.
 
-**Verification:**
-- `uv run python scripts/smoke_final_gate.py`
+**Verification (2026-05-19):**
+- `rm -f *.db-shm *.db-wal && uv run python scripts/smoke_final_gate.py` → exit 0.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/test_final_gate_smoke.py tests/test_result_screen.py tests/test_replay.py -q` → 46 passed, 0 failed.
+- `rm -f *.db-shm *.db-wal && uv run python -m pytest tests/ -q` → 633 passed, 3 skipped, 0 failed.
+- `uv run ruff check scripts/smoke_final_gate.py tests/test_final_gate_smoke.py` → All checks passed.
+- `uv run ruff format --check scripts/smoke_final_gate.py tests/test_final_gate_smoke.py` → 2 files already formatted.
 
 ### Task 6.4 — Convert api_replays and result runtime to canonical unit IDs
 

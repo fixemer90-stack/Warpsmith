@@ -218,9 +218,10 @@ def _parse_log_events(phase_logs: list[str], round_num: int) -> list:
                 result_value=float(m.group(2)),
             ),
         ),
-        # "PlayerName gained N VP"
+        # "PlayerName gained N VP", "PlayerName gained N VP (total: M)",
+        # "PlayerName gains N Battle Ready VP (total: M)"
         (
-            r"^(.+?)\s+gained\s+([\d.]+)\s+VP$",
+            r"^(.+?)\s+gain(?:ed|s)\s+([\d.]+)\s+(?:Battle\s+Ready\s+)?VP(?:\s+\(total:\s+[\d.]+\))?$",
             lambda m, r, meta: ReplayEvent(
                 round=r,
                 phase="command",
@@ -526,29 +527,33 @@ async def get_result(game_id: str):
     rounds = data.get("rounds") or []
 
     # Authoritative final snapshot precedence:
-    # 1) summary.final_state (if persisted explicitly),
-    # 2) last round end_state,
-    # 3) last round start_state.
-    final_state = summary.get("final_state")
-    if not final_state and rounds:
+    # 1) last persisted replay end_state (the final snapshot shown by replay/result),
+    # 2) last persisted replay start_state,
+    # 3) summary.final_state fallback for legacy rows without round snapshots.
+    round_final_state = {}
+    if rounds:
         last_round = rounds[-1]
-        final_state = last_round.get("end_state") or last_round.get("start_state") or {}
+        round_final_state = last_round.get("end_state") or last_round.get("start_state") or {}
+    final_state = round_final_state or summary.get("final_state") or {}
 
     if final_state:
         data["final_state"] = final_state
-        summary.setdefault("final_state", final_state)
+        summary["final_state"] = final_state
 
-    # Expose final VP from the same authoritative final snapshot.
+    # Expose final VP from the same authoritative final snapshot. Do not preserve
+    # stale summary values: /api/results and /result must agree with final_state.
     final_vp = (final_state or {}).get("victory_points", {})
     if final_vp:
-        summary.setdefault("final_victory_points", final_vp)
+        summary["final_victory_points"] = final_vp
 
-    # Compute winner from authoritative final VP if summary.winner is None.
-    if summary.get("winner") is None and final_vp:
-        pids = sorted(final_vp.keys())
-        if len(pids) >= 2 and (final_vp[pids[0]] != final_vp[pids[1]]):
-            summary["winner"] = (
-                int(pids[0]) if final_vp[pids[0]] > final_vp[pids[1]] else int(pids[1])
-            )
+    # Compute winner from authoritative final VP, overriding any stale persisted
+    # summary winner that predates post-game scoring.
+    if final_vp:
+        sorted_scores = sorted(final_vp.items(), key=lambda item: item[1], reverse=True)
+        if len(sorted_scores) >= 2 and sorted_scores[0][1] != sorted_scores[1][1]:
+            winner_id = sorted_scores[0][0]
+            summary["winner"] = int(winner_id) if str(winner_id).isdigit() else winner_id
+        else:
+            summary["winner"] = None
 
     return data
